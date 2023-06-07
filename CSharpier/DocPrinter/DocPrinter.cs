@@ -86,6 +86,10 @@ internal class DocPrinter
                 this.Push(concat.Contents[x], mode, indent);
             }
         }
+        else if (doc is Fill fill)
+        {
+            this.ProcessFill(fill, mode, indent);
+        }
         else if (doc is IndentDoc indentDoc)
         {
             this.Push(indentDoc.Contents, mode, this.Indenter.IncreaseIndent(indent));
@@ -379,6 +383,82 @@ internal class DocPrinter
         if (group.GroupId != null)
         {
             this.GroupModeMap[group.GroupId] = this.RemainingCommands.Peek().Mode;
+        }
+    }
+
+    private void ProcessFill(Fill fill, PrintMode mode, Indent indent)
+    {
+        if (fill.Contents.Count == 0)
+        {
+            return;
+        }
+
+        var content = fill.Contents[0];
+        var contentFlatCmd = new PrintCommand(indent, PrintMode.Flat, content);
+        var contentBreakCmd = new PrintCommand(indent, PrintMode.Break, content);
+        bool contentFits = this.Fits(contentFlatCmd);
+
+        if (fill.Contents.Count == 1)
+        {
+            if (contentFits)
+            {
+                this.RemainingCommands.Push(contentFlatCmd);
+            }
+            else
+            {
+                this.RemainingCommands.Push(contentBreakCmd);
+            }
+            return;
+        }
+
+        var whitespace = fill.Contents[1];
+        var whitespaceFlatCmd = new PrintCommand(indent, PrintMode.Flat, whitespace);
+        var whitespaceBreakCmd = new PrintCommand(indent, PrintMode.Break, whitespace);
+
+        if (fill.Contents.Count == 2)
+        {
+            if (contentFits)
+            {
+                this.RemainingCommands.Push(whitespaceFlatCmd);
+            }
+            else
+            {
+                this.RemainingCommands.Push(whitespaceBreakCmd);
+            }
+            this.RemainingCommands.Push(contentFlatCmd);
+            return;
+        }
+
+        fill.Contents.RemoveAt(0);
+        fill.Contents.RemoveAt(0);
+
+        var remainingCmd = new PrintCommand(indent, mode, Doc.Fill(fill.Contents));
+        var secondContent = fill.Contents[0];
+
+        var firstAndSecondContentFlatCmd = new PrintCommand(
+            indent,
+            PrintMode.Flat,
+            Doc.Concat(new[] { content, whitespace, secondContent })
+        );
+        var firstAndSecondContentFits = this.Fits(firstAndSecondContentFlatCmd);
+
+        if (firstAndSecondContentFits)
+        {
+            this.RemainingCommands.Push(remainingCmd);
+            this.RemainingCommands.Push(whitespaceFlatCmd);
+            this.RemainingCommands.Push(contentFlatCmd);
+        }
+        else if (contentFits)
+        {
+            this.RemainingCommands.Push(remainingCmd);
+            this.RemainingCommands.Push(whitespaceBreakCmd);
+            this.RemainingCommands.Push(contentFlatCmd);
+        }
+        else
+        {
+            this.RemainingCommands.Push(remainingCmd);
+            this.RemainingCommands.Push(whitespaceBreakCmd);
+            this.RemainingCommands.Push(contentBreakCmd);
         }
     }
 

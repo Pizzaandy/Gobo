@@ -2,161 +2,163 @@ namespace CSharpier.DocTypes;
 
 internal abstract class Doc
 {
-    public override string ToString()
-    {
-        return DocSerializer.Serialize(this);
-    }
+	public override string ToString()
+	{
+		return DocSerializer.Serialize(this);
+	}
 
-    public static implicit operator Doc(string value)
-    {
-        return new StringDoc(value);
-    }
+	public static implicit operator Doc(string value)
+	{
+		return new StringDoc(value);
+	}
 
-    public static NullDoc Null => NullDoc.Instance;
+	public static NullDoc Null => NullDoc.Instance;
 
-    public static Doc BreakParent => new BreakParent();
+	public static Doc BreakParent => new BreakParent();
 
-    public static readonly HardLine HardLine = new();
+	public static readonly HardLine HardLine = new();
 
-    public static readonly HardLine HardLineSkipBreakIfFirstInGroup = new(false, true);
+	public static readonly HardLine HardLineSkipBreakIfFirstInGroup = new(false, true);
 
-    public static readonly HardLine HardLineIfNoPreviousLine = new(true);
+	public static readonly HardLine HardLineIfNoPreviousLine = new(true);
 
-    public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =
-        new(true, true);
+	public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =
+		new(true, true);
 
-    public static readonly LiteralLine LiteralLine = new();
+	public static readonly LiteralLine LiteralLine = new();
 
-    public static readonly LineDoc Line = new() { Type = LineDoc.LineType.Normal };
+	public static readonly LineDoc Line = new() { Type = LineDoc.LineType.Normal };
 
-    public static readonly LineDoc SoftLine = new() { Type = LineDoc.LineType.Soft };
+	public static readonly LineDoc SoftLine = new() { Type = LineDoc.LineType.Soft };
 
-    public static readonly Trim Trim = new();
+	public static readonly Trim Trim = new();
 
-    public static LeadingComment LeadingComment(string comment, CommentType commentType) =>
-        new() { Type = commentType, Comment = comment };
+	public static LeadingComment LeadingComment(string comment, CommentType commentType) =>
+		new() { Type = commentType, Comment = comment };
 
-    public static TrailingComment TrailingComment(string comment, CommentType commentType) =>
-        new() { Type = commentType, Comment = comment };
+	public static TrailingComment TrailingComment(string comment, CommentType commentType) =>
+		new() { Type = commentType, Comment = comment };
 
-    public static Doc Concat(List<Doc> contents) =>
-        contents.Count == 1 ? contents[0] : new Concat(contents);
+	public static Doc Concat(IList<Doc> contents) =>
+		contents.Count == 1 ? contents[0] : new Concat(contents);
 
-    // prevents allocating an array if there is only a single parameter
-    public static Doc Concat(Doc contents) => contents;
+	// prevents allocating an array if there is only a single parameter
+	public static Doc Concat(Doc contents) => contents;
 
-    public static Doc Concat(params Doc[] contents) => new Concat(contents);
+	public static Doc Concat(params Doc[] contents) => new Concat(contents);
 
-    public static Doc Join(Doc separator, IEnumerable<Doc> array)
-    {
-        var docs = new List<Doc>();
+	public static Doc Fill(IList<Doc> contents) => new Fill(contents);
 
-        var list = array.ToList();
+	public static Doc Join(Doc separator, IEnumerable<Doc> array)
+	{
+		var docs = new List<Doc>();
 
-        if (list.Count == 1)
-        {
-            return list[0];
-        }
+		var list = array.ToList();
 
-        for (var x = 0; x < list.Count; x++)
-        {
-            if (x != 0)
-            {
-                docs.Add(separator);
-            }
+		if (list.Count == 1)
+		{
+			return list[0];
+		}
 
-            docs.Add(list[x]);
-        }
+		for (var x = 0; x < list.Count; x++)
+		{
+			if (x != 0)
+			{
+				docs.Add(separator);
+			}
 
-        return Concat(docs);
-    }
+			docs.Add(list[x]);
+		}
 
-    public static ForceFlat ForceFlat(List<Doc> contents) =>
-        new() { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
+		return Concat(docs);
+	}
 
-    public static ForceFlat ForceFlat(params Doc[] contents) =>
-        new() { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
+	public static ForceFlat ForceFlat(List<Doc> contents) =>
+		new() { Contents = contents.Count == 0 ? contents[0] : Concat(contents) };
 
-    public static Group Group(List<Doc> contents) =>
-        new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
+	public static ForceFlat ForceFlat(params Doc[] contents) =>
+		new() { Contents = contents.Length == 0 ? contents[0] : Concat(contents) };
 
-    public static Group GroupWithId(string groupId, List<Doc> contents)
-    {
-        var group = Group(contents);
-        group.GroupId = groupId;
-        return group;
-    }
+	public static Group Group(List<Doc> contents) =>
+		new() { Contents = contents.Count == 1 ? contents[0] : Concat(contents) };
 
-    // prevents allocating an array if there is only a single parameter
-    public static Group GroupWithId(string groupId, Doc contents)
-    {
-        var group = Group(contents);
-        group.GroupId = groupId;
-        return group;
-    }
+	public static Group GroupWithId(string groupId, List<Doc> contents)
+	{
+		var group = Group(contents);
+		group.GroupId = groupId;
+		return group;
+	}
 
-    public static Group GroupWithId(string groupId, params Doc[] contents)
-    {
-        var group = Group(contents);
-        group.GroupId = groupId;
-        return group;
-    }
+	// prevents allocating an array if there is only a single parameter
+	public static Group GroupWithId(string groupId, Doc contents)
+	{
+		var group = Group(contents);
+		group.GroupId = groupId;
+		return group;
+	}
 
-    // prevents allocating an array if there is only a single parameter
-    public static Group Group(Doc contents) => new() { Contents = contents };
+	public static Group GroupWithId(string groupId, params Doc[] contents)
+	{
+		var group = Group(contents);
+		group.GroupId = groupId;
+		return group;
+	}
 
-    public static Group Group(params Doc[] contents) => new() { Contents = Concat(contents) };
+	// prevents allocating an array if there is only a single parameter
+	public static Group Group(Doc contents) => new() { Contents = contents };
 
-    // prevents allocating an array if there is only a single parameter
-    public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
+	public static Group Group(params Doc[] contents) => new() { Contents = Concat(contents) };
 
-    public static IndentDoc Indent(params Doc[] contents) => new() { Contents = Concat(contents) };
+	// prevents allocating an array if there is only a single parameter
+	public static IndentDoc Indent(Doc contents) => new() { Contents = contents };
 
-    public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
+	public static IndentDoc Indent(params Doc[] contents) => new() { Contents = Concat(contents) };
 
-    public static Doc IndentIf(bool condition, Doc contents)
-    {
-        return condition ? Indent(contents) : contents;
-    }
+	public static IndentDoc Indent(List<Doc> contents) => new() { Contents = Concat(contents) };
 
-    public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null) =>
-        new()
-        {
-            FlatContents = flatContents,
-            BreakContents = breakContents,
-            GroupId = groupId,
-        };
+	public static Doc IndentIf(bool condition, Doc contents)
+	{
+		return condition ? Indent(contents) : contents;
+	}
 
-    public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
-        new(contents, groupId);
+	public static IfBreak IfBreak(Doc breakContents, Doc flatContents, string? groupId = null) =>
+		new()
+		{
+			FlatContents = flatContents,
+			BreakContents = breakContents,
+			GroupId = groupId,
+		};
 
-    public static Doc Directive(string value) => new StringDoc(value, true);
+	public static IndentIfBreak IndentIfBreak(Doc contents, string groupId) =>
+		new(contents, groupId);
 
-    public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
+	public static Doc Directive(string value) => new StringDoc(value, true);
 
-    // prevents allocating an array if there is only a single parameter
-    public static Align Align(int alignment, Doc contents) => new(alignment, contents);
+	public static ConditionalGroup ConditionalGroup(params Doc[] options) => new(options);
 
-    public static Align Align(int alignment, params Doc[] contents) =>
-        new(alignment, Concat(contents));
+	// prevents allocating an array if there is only a single parameter
+	public static Align Align(int alignment, Doc contents) => new(alignment, contents);
 
-    public static AlwaysFits AlwaysFits(Doc printedTrivia)
-    {
-        return new AlwaysFits(printedTrivia);
-    }
+	public static Align Align(int alignment, params Doc[] contents) =>
+		new(alignment, Concat(contents));
 
-    public static Region BeginRegion(string text) => new(text);
+	public static AlwaysFits AlwaysFits(Doc printedTrivia)
+	{
+		return new AlwaysFits(printedTrivia);
+	}
 
-    public static Region EndRegion(string text) => new(text) { IsEnd = true };
+	public static Region BeginRegion(string text) => new(text);
+
+	public static Region EndRegion(string text) => new(text) { IsEnd = true };
 }
 
 internal enum CommentType
 {
-    SingleLine,
-    MultiLine
+	SingleLine,
+	MultiLine
 }
 
 interface IHasContents
 {
-    Doc Contents { get; }
+	Doc Contents { get; }
 }
