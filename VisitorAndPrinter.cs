@@ -1,10 +1,49 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 
-namespace GMLParser
+namespace PrettierGML
 {
     internal class VisitorAndPrinter : GameMakerLanguageParserBaseVisitor<Doc>
     {
+        private readonly CommonTokenStream _tokens;
+        private HashSet<int> _printedCommentGroups = new();
+
+        public VisitorAndPrinter(CommonTokenStream tokens)
+            : base()
+        {
+            _tokens = tokens;
+        }
+
+        public Doc Visit(ParserRuleContext tree)
+        {
+            // These rules are directly ripped off from Go's comment mapping :)
+            // A comment group g is associated with a node n if:
+            //
+            //   - g starts on the same line as n ends (trailing)
+            //   - g starts on the line immediately following n, and there is
+            //     at least one empty line after g and before the next node (
+            //   - g starts before n and is not associated to the node before n
+            //     via the previous rules
+            //
+
+            if (!CanAttachComments(tree))
+            {
+                return base.Visit(tree);
+            }
+
+            var trailingComments = PrintTrailingComments(tree);
+            var leadingComments = PrintLeadingComments(tree);
+
+            if (trailingComments is not NullDoc || leadingComments is not NullDoc)
+            {
+                return Doc.Concat(new[] { leadingComments, base.Visit(tree), trailingComments });
+            }
+            else
+            {
+                return base.Visit(tree);
+            }
+        }
+
         public override Doc VisitProgram([NotNull] GameMakerLanguageParser.ProgramContext context)
         {
             if (context.statementList() != null)
@@ -22,7 +61,7 @@ namespace GMLParser
         )
         {
             var statements = context.statement();
-            var result = new List<Doc>(statements.Length);
+            var parts = new List<Doc>(statements.Length);
 
             for (var i = 0; i < statements.Length; i++)
             {
@@ -31,11 +70,17 @@ namespace GMLParser
                 {
                     continue;
                 }
-                result.Add(statement);
-                result.Add(Doc.HardLine);
+
+                parts.Add(statement);
+                parts.Add(PrintTrailingComments(statements[i]));
+                parts.Add(Doc.HardLine);
+                if (i != statements.Length - 1 && IsNextLineBlank(statements[i]))
+                {
+                    parts.Add(Doc.HardLine);
+                }
             }
 
-            return Doc.Concat(result);
+            return Doc.Concat(parts);
         }
 
         public override Doc VisitStatement(
@@ -144,12 +189,14 @@ namespace GMLParser
             {
                 parts.Add(";");
             }
+
             return Doc.Concat(parts);
         }
 
         public override Doc VisitBlock([NotNull] GameMakerLanguageParser.BlockContext context)
         {
             Doc body;
+
             if (context.statementList() != null)
             {
                 body = Visit(context.statementList());
@@ -174,6 +221,7 @@ namespace GMLParser
                     context.statement()[0]
                 )
             };
+
             if (context.statement().Length > 1)
             {
                 parts.Add(" else ");
@@ -187,6 +235,7 @@ namespace GMLParser
                     parts.Add(PrintStatementInBlock(elseStatement));
                 }
             }
+
             return Doc.Concat(parts);
         }
 
@@ -256,6 +305,7 @@ namespace GMLParser
         )
         {
             Doc callee;
+
             if (context.callStatement() != null)
             {
                 callee = Visit(context.callStatement());
@@ -263,6 +313,11 @@ namespace GMLParser
             else
             {
                 callee = Visit(context.callableExpression());
+                // L value expressions handle printing arguments
+                if (context.callableExpression().lValueExpression() != null)
+                {
+                    return callee;
+                }
             }
 
             return Doc.Concat(new[] { callee, Visit(context.arguments()) });
@@ -276,17 +331,30 @@ namespace GMLParser
             if (context.expressionOrFunction() != null)
             {
                 var expressions = context.expressionOrFunction();
+
                 for (var i = 0; i < expressions.Length; i++)
                 {
+                    var trailingComments = PrintTrailingComments(expressions[i]);
                     parts.Add(Visit(expressions[i]));
+                    if (i != expressions.Length - 1)
+                    {
+                        parts.Add(",");
+                        if (trailingComments is not NullDoc)
+                        {
+                            parts.Add(" ");
+                            parts.Add(trailingComments);
+                        }
+
+                        parts.Add(Doc.Line);
+                    }
                 }
             }
-            var separator = Doc.Concat(new Doc[] { ",", Doc.Line });
+
             return Doc.Group(
                 new Doc[]
                 {
                     "(",
-                    Doc.Indent(new[] { Doc.SoftLine, Doc.Join(separator, parts) }),
+                    Doc.Indent(new[] { Doc.SoftLine, Doc.Concat(parts) }),
                     Doc.SoftLine,
                     ")"
                 }
@@ -305,54 +373,54 @@ namespace GMLParser
             if (context.lValueChainOperator() != null)
             {
                 var ops = context.lValueChainOperator();
-                bool foundFirstCall = false;
 
                 for (var i = 0; i < ops.Length; i++)
                 {
                     if (
-                        !foundFirstCall
-                        && i < ops.Length - 1
-                        && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
-                        && ops[i + 1] is GameMakerLanguageParser.CallLValueContext
-                    )
-                    {
-                        foundFirstCall = true;
-                        indentedParts.Add(Doc.Fill(currentGroup));
-                        indentedParts.Add(Doc.SoftLine);
-                        currentGroup = new List<Doc>();
-                    }
-
-                    if (
                         i > 0
-                        && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
                         && ops[i - 1] is GameMakerLanguageParser.CallLValueContext
+                        && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
                     )
                     {
-                        indentedParts.Add(Doc.Fill(currentGroup));
                         indentedParts.Add(Doc.SoftLine);
-                        currentGroup = new List<Doc>();
+                        indentedParts.Add(Doc.Fill(currentGroup));
+                        currentGroup = new();
                     }
 
                     currentGroup.Add(Visit(ops[i]));
+                    currentGroup.Add(Doc.SoftLine);
                 }
-            }
-
-            if (currentGroup.Count > 0)
-            {
-                indentedParts.Add(Doc.Fill(currentGroup));
             }
 
             if (context.lValueFinalOperator() != null)
             {
                 var op = context.lValueFinalOperator();
 
-                if (op.Parent?.Parent is not GameMakerLanguageParser.CallableExpressionContext)
+                if (context.Parent is GameMakerLanguageParser.CallableExpressionContext)
                 {
-                    // add a softline before a .call()
                     indentedParts.Add(Doc.SoftLine);
+                    indentedParts.Add(Doc.Fill(currentGroup));
+                    currentGroup = new();
                 }
 
-                indentedParts.Add(Visit(op));
+                currentGroup.Add(Visit(op));
+            }
+
+            if (context.Parent is GameMakerLanguageParser.CallableExpressionContext)
+            {
+                var currentContext = context.Parent;
+                while (currentContext is not GameMakerLanguageParser.CallStatementContext)
+                {
+                    currentContext = currentContext.Parent;
+                }
+                var callContext = currentContext as GameMakerLanguageParser.CallStatementContext;
+                currentGroup.Add(Visit(callContext.arguments()));
+            }
+
+            if (currentGroup.Count > 0)
+            {
+                indentedParts.Add(Doc.SoftLine);
+                indentedParts.Add(Doc.Fill(currentGroup));
             }
 
             return Doc.Concat(new Doc[] { root, Doc.Group(Doc.Indent(indentedParts)) });
@@ -369,7 +437,7 @@ namespace GMLParser
             [NotNull] GameMakerLanguageParser.MemberDotLValueContext context
         )
         {
-            return Doc.Concat(Doc.SoftLine, ".", Visit(context.identifier()));
+            return Doc.Concat(".", Visit(context.identifier()));
         }
 
         public override Doc VisitMemberDotLValueFinal(
@@ -467,6 +535,252 @@ namespace GMLParser
                     Doc.HardLine,
                     "}"
                 }
+            );
+        }
+
+        Doc PrintLeadingComments(ParserRuleContext context)
+        {
+            var hiddenTokens = _tokens.GetHiddenTokensToLeft(context.Start.TokenIndex);
+            bool leadingSingleLineComment = false;
+
+            if (hiddenTokens != null)
+            {
+                for (var i = 0; i < hiddenTokens.Count; i++)
+                {
+                    var type = hiddenTokens[i].Type;
+                    if (type == GameMakerLanguageLexer.WhiteSpaces)
+                    {
+                        continue;
+                    }
+                    else if (type == GameMakerLanguageLexer.SingleLineComment)
+                    {
+                        leadingSingleLineComment = true;
+                        break;
+                    }
+                }
+
+                if (!_printedCommentGroups.Add(hiddenTokens[0].TokenIndex))
+                {
+                    return Doc.Null;
+                }
+
+                var printed = PrintCommentsAndWhitespace(hiddenTokens, isTrailing: false);
+
+                Console.WriteLine("Leading Index: " + (hiddenTokens[0].TokenIndex));
+                Console.WriteLine(printed);
+
+                if (printed is not NullDoc)
+                {
+                    return leadingSingleLineComment
+                        ? Doc.Concat(new[] { printed, Doc.HardLine })
+                        : Doc.Concat(new[] { printed, " " });
+                }
+            }
+
+            return Doc.Null;
+        }
+
+        Doc PrintTrailingComments(ParserRuleContext context)
+        {
+            int index;
+            bool leadingSeparator = false;
+
+            if (IsSeparator(_tokens.Get(context.Stop.TokenIndex + 1)))
+            {
+                leadingSeparator = true;
+                index = context.Stop.TokenIndex + 1;
+            }
+            else
+            {
+                index = context.Stop.TokenIndex;
+            }
+
+            var hiddenTokens = _tokens.GetHiddenTokensToRight(index);
+
+            if (hiddenTokens != null)
+            {
+                for (var i = 0; i < hiddenTokens.Count; i++)
+                {
+                    var type = hiddenTokens[i].Type;
+                    if (type == GameMakerLanguageLexer.WhiteSpaces)
+                    {
+                        continue;
+                    }
+                    else if (type == GameMakerLanguageLexer.LineTerminator)
+                    {
+                        // comment group must start on same line as context
+                        return Doc.Null;
+                    }
+                    else if (leadingSeparator && type == GameMakerLanguageLexer.MultiLineComment)
+                    {
+                        // multi-line comments can't be attached through a separator
+                        return Doc.Null;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                if (!_printedCommentGroups.Add(hiddenTokens[0].TokenIndex))
+                {
+                    return Doc.Null;
+                }
+
+                var printed = PrintCommentsAndWhitespace(hiddenTokens, isTrailing: true);
+
+                Console.WriteLine("Trailing Index: " + (hiddenTokens[0].TokenIndex));
+                Console.WriteLine(printed);
+
+                return printed;
+            }
+
+            return Doc.Null;
+        }
+
+        static Doc PrintCommentsAndWhitespace(
+            IList<IToken> tokens,
+            bool isTrailing,
+            bool trim = true
+        )
+        {
+            var parts = new List<Doc>();
+
+            int firstCommentIndex = -1;
+            int lastCommentIndex = -1;
+            int consecutiveLineBreaks = 0;
+
+            if (tokens.Count == 0)
+            {
+                return Doc.Null;
+            }
+
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                var type = tokens[i].Type;
+
+                if (type == GameMakerLanguageLexer.WhiteSpaces)
+                {
+                    if (
+                        i < tokens.Count - 1
+                        && tokens[i + 1].Type != GameMakerLanguageLexer.LineTerminator
+                    )
+                    {
+                        parts.Add(" ");
+                    }
+                }
+
+                if (type == GameMakerLanguageLexer.LineTerminator)
+                {
+                    if (
+                        consecutiveLineBreaks < 2
+                        && tokens[i].Text.Replace("\r", @"\r").Contains(@"\r")
+                    )
+                    {
+                        parts.Add(Doc.HardLine);
+                        consecutiveLineBreaks++;
+                    }
+                }
+                else
+                {
+                    consecutiveLineBreaks = 0;
+                }
+
+                if (
+                    type == GameMakerLanguageLexer.SingleLineComment
+                    || type == GameMakerLanguageLexer.MultiLineComment
+                )
+                {
+                    var commentType =
+                        type == GameMakerLanguageLexer.SingleLineComment
+                            ? CommentType.SingleLine
+                            : CommentType.MultiLine;
+
+                    if (commentType == CommentType.SingleLine)
+                    {
+                        if (isTrailing)
+                        {
+                            parts.Add(Doc.TrailingComment(tokens[i].Text, commentType));
+                        }
+                        else
+                        {
+                            parts.Add(Doc.LeadingComment(tokens[i].Text, commentType));
+                        }
+                    }
+                    else
+                    {
+                        parts.Add(tokens[i].Text);
+                    }
+
+                    if (firstCommentIndex == -1)
+                    {
+                        firstCommentIndex = parts.Count;
+                    }
+                    lastCommentIndex = parts.Count;
+                }
+            }
+
+            if (firstCommentIndex == -1)
+            {
+                return Doc.Null;
+            }
+
+            var trimmedParts = parts.GetRange(
+                firstCommentIndex - 1,
+                lastCommentIndex - firstCommentIndex + 1
+            );
+
+            return Doc.Concat(trimmedParts);
+        }
+
+        bool IsNextLineBlank(ParserRuleContext context)
+        {
+            var hiddenTokens = _tokens.GetHiddenTokensToRight(context.Stop.TokenIndex);
+
+            if (hiddenTokens == null)
+            {
+                return false;
+            }
+
+            int lineCount = 0;
+            for (int i = 0; i < hiddenTokens.Count; i++)
+            {
+                if (
+                    lineCount == 1
+                    && (
+                        hiddenTokens[i].Type == GameMakerLanguageLexer.SingleLineComment
+                        || hiddenTokens[i].Type == GameMakerLanguageLexer.MultiLineComment
+                    )
+                )
+                {
+                    return false;
+                }
+
+                if (
+                    hiddenTokens[i].Type == GameMakerLanguageLexer.LineTerminator
+                    && !hiddenTokens[i].Text.Replace("\r", @"\r").Contains(@"\r")
+                )
+                {
+                    lineCount++;
+                }
+            }
+
+            return lineCount >= 2;
+        }
+
+        bool IsSeparator(IToken token)
+        {
+            return (
+                token.Type == GameMakerLanguageLexer.Comma
+                || token.Type == GameMakerLanguageLexer.SemiColon
+            );
+        }
+
+        bool CanAttachComments(ParserRuleContext context)
+        {
+            return !(
+                context is GameMakerLanguageParser.ProgramContext
+                || context is GameMakerLanguageParser.StatementListContext
             );
         }
     }

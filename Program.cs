@@ -3,7 +3,7 @@ using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Tree;
 using CSharpier;
 using CSharpier.DocPrinter;
-using GMLParser;
+using PrettierGML;
 using System.Diagnostics;
 
 void printTokens(string input)
@@ -25,19 +25,18 @@ void parse(string input)
 
     ICharStream stream = CharStreams.fromString(input);
     var lexer = new GameMakerLanguageLexer(stream);
-    ITokenStream tokens = new CommonTokenStream(lexer);
-    var parser = new GameMakerLanguageParser(tokens);
-    parser.BuildParseTree = true;
+    var tokens = new CommonTokenStream(lexer);
+    var parser = new GameMakerLanguageParser(tokens) { BuildParseTree = true };
     parser.Interpreter.PredictionMode = PredictionMode.SLL;
     IParseTree tree = parser.program();
     //Console.WriteLine(tree.ToStringTree());
 
-    var printer = new VisitorAndPrinter();
+    var printer = new VisitorAndPrinter(tokens);
     var doc = printer.Visit(tree);
 
     var serialized = DocSerializer.Serialize(doc);
 
-    PrinterOptions options = new() { Width = 80 };
+    PrinterOptions options = new() { Width = 70 };
 
     var printed = DocPrinter.Print(doc, options, "\n");
 
@@ -45,14 +44,26 @@ void parse(string input)
     Console.WriteLine(printed);
 
     sw.Stop();
-    Console.WriteLine($"Parse Time: {sw.ElapsedMilliseconds.ToString()} ms");
+    Console.WriteLine($"Total Time: {sw.ElapsedMilliseconds.ToString()} ms");
 }
 
 parse(
     @"
-if foo bar() else if bar() bar()
+x = asdfasdf.b(
+arg1,
+arg2,
+arg3
 
-var a = 1
-var b, c, d=2
+)
+    .foo
+    .bar(
+        argument1,
+        argument2,
+    )
+    .baz().ddddddddddd.eeee.fffffffffffffffffffffffffffff.f().ffffffffffffffffffffffffffffff.hhhhhhhhhhhhhhhhhhhhhhhhh(
+b
+).c;//comment
+
+y = a.bazzzzzzzzzzzzzzzz.c.ddddddddddd().fffffffffffffffffffffffffffff()()()
 "
 );
