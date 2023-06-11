@@ -36,7 +36,7 @@ void parse(string input)
 
     var serialized = DocSerializer.Serialize(doc);
 
-    PrinterOptions options = new() { Width = 70 };
+    PrinterOptions options = new() { Width = 80 };
 
     var printed = DocPrinter.Print(doc, options, "\n");
 
@@ -49,21 +49,16 @@ void parse(string input)
 
 parse(
     @"
-x = asdfasdf.b(
-arg1,
-arg2,
-arg3
-
-)
-    .foo
-    .bar(
+x = foo.bar(
         argument1,
-        argument2,
-    )
-    .baz().ddddddddddd.eeee.fffffffffffffffffffffffffffff.f().ffffffffffffffffffffffffffffff.hhhhhhhhhhhhhhhhhhhhhhhhh(
-b
-).c;//comment
+        argument2()
+            .bar().baz.fooooooooo //comment
+  .fooooooooooooooooooooooooooooooooooooooooooo
+            .baazzzzzz().x().y().z().fooooooooooooooooooooooooooooooooooooooooooo
+  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
+    .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz()
+    .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
+    );
 
-y = a.bazzzzzzzzzzzzzzzz.c.ddddddddddd().fffffffffffffffffffffffffffff()()()
 "
 );

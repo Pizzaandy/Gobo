@@ -350,6 +350,11 @@ namespace PrettierGML
                 }
             }
 
+            if (parts.Count == 0)
+            {
+                return "()";
+            }
+
             return Doc.Group(
                 new Doc[]
                 {
@@ -361,49 +366,97 @@ namespace PrettierGML
             );
         }
 
+        // TODO: simplify logic
         public override Doc VisitLValueExpression(
             [NotNull] GameMakerLanguageParser.LValueExpressionContext context
         )
         {
+            var flatParts = new List<Doc>();
+            var breakParts = new List<Doc>();
+            var indentedBreakParts = new List<Doc>();
+
             var root = Visit(context.lValueStartExpression());
-            var indentedParts = new List<Doc>();
-            var currentGroup = new List<Doc>();
+            var rootText = context.lValueStartExpression().GetText();
+            bool isRootCapitalized = char.IsUpper(rootText[0]);
+            bool isRootShort = rootText.Length <= 4;
+
+            flatParts.Add(root);
+            breakParts.Add(root);
+
+            bool indentStarted = false;
+            ParserRuleContext? lastChainOp = null;
+
+            var ops = context.lValueChainOperator();
 
             // accumulate operations
-            if (context.lValueChainOperator() != null)
+            if (ops != null && ops.Length > 0)
             {
-                var ops = context.lValueChainOperator();
-
                 for (var i = 0; i < ops.Length; i++)
                 {
+                    var opDoc = Visit(ops[i]);
+
                     if (
                         i > 0
                         && ops[i - 1] is GameMakerLanguageParser.CallLValueContext
                         && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
                     )
                     {
-                        indentedParts.Add(Doc.SoftLine);
-                        indentedParts.Add(Doc.Fill(currentGroup));
-                        currentGroup = new();
+                        indentStarted = true;
+                        indentedBreakParts.Add(Doc.HardLine);
                     }
 
-                    currentGroup.Add(Visit(ops[i]));
-                    currentGroup.Add(Doc.SoftLine);
+                    flatParts.Add(opDoc);
+
+                    if (indentStarted)
+                    {
+                        indentedBreakParts.Add(opDoc);
+                    }
+                    else
+                    {
+                        if (
+                            i < ops.Length - 1
+                            && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
+                            && ops[i + 1] is GameMakerLanguageParser.CallLValueContext
+                            && (i == 0 && !(isRootCapitalized || isRootShort))
+                        )
+                        {
+                            indentStarted = true;
+                            indentedBreakParts.Add(Doc.HardLine);
+                            indentedBreakParts.Add(opDoc);
+                        }
+                        else
+                        {
+                            breakParts.Add(opDoc);
+                        }
+                    }
                 }
+                lastChainOp = ops[ops.Length - 1];
             }
 
             if (context.lValueFinalOperator() != null)
             {
-                var op = context.lValueFinalOperator();
+                var opDoc = Visit(context.lValueFinalOperator());
+                flatParts.Add(opDoc);
 
-                if (context.Parent is GameMakerLanguageParser.CallableExpressionContext)
+                if (indentStarted)
                 {
-                    indentedParts.Add(Doc.SoftLine);
-                    indentedParts.Add(Doc.Fill(currentGroup));
-                    currentGroup = new();
+                    if (
+                        context.Parent is GameMakerLanguageParser.CallableExpressionContext
+                        || (
+                            context.lValueFinalOperator()
+                                is GameMakerLanguageParser.MemberDotLValueFinalContext
+                            && lastChainOp is GameMakerLanguageParser.CallLValueContext
+                        )
+                    )
+                    {
+                        indentedBreakParts.Add(Doc.HardLine);
+                    }
+                    indentedBreakParts.Add(opDoc);
                 }
-
-                currentGroup.Add(Visit(op));
+                else
+                {
+                    breakParts.Add(opDoc);
+                }
             }
 
             if (context.Parent is GameMakerLanguageParser.CallableExpressionContext)
@@ -414,16 +467,34 @@ namespace PrettierGML
                     currentContext = currentContext.Parent;
                 }
                 var callContext = currentContext as GameMakerLanguageParser.CallStatementContext;
-                currentGroup.Add(Visit(callContext.arguments()));
+                var argsDoc = Visit(callContext.arguments());
+
+                flatParts.Add(argsDoc);
+
+                if (indentStarted)
+                {
+                    indentedBreakParts.Add(argsDoc);
+                }
+                else
+                {
+                    breakParts.Add(argsDoc);
+                }
             }
 
-            if (currentGroup.Count > 0)
+            if (flatParts.Count == 1)
             {
-                indentedParts.Add(Doc.SoftLine);
-                indentedParts.Add(Doc.Fill(currentGroup));
+                return flatParts[0];
             }
 
-            return Doc.Concat(new Doc[] { root, Doc.Group(Doc.Indent(indentedParts)) });
+            var indentedBreakDoc = Doc.Fill(Doc.JoinList(Doc.SoftLine, indentedBreakParts));
+
+            return Doc.ConditionalGroup(
+                new Doc[]
+                {
+                    Doc.Concat(flatParts),
+                    Doc.Concat(new Doc[] { Doc.Concat(breakParts), Doc.Indent(indentedBreakDoc) }),
+                }
+            );
         }
 
         public override Doc VisitCallLValue(
