@@ -402,13 +402,31 @@ namespace PrettierGML
                     )
                     {
                         indentStarted = true;
-                        indentedBreakParts.Add(Doc.HardLine);
                     }
 
                     flatParts.Add(opDoc);
 
                     if (indentStarted)
                     {
+                        if (ops[i] is GameMakerLanguageParser.CallLValueContext)
+                        {
+                            indentedBreakParts.Add(Doc.Null);
+                        }
+                        else if (ops[i] is GameMakerLanguageParser.MemberDotLValueContext)
+                        {
+                            if (i > 0 && ops[i - 1] is GameMakerLanguageParser.CallLValueContext)
+                            {
+                                indentedBreakParts.Add(Doc.HardLine);
+                            }
+                            else
+                            {
+                                indentedBreakParts.Add(Doc.SoftLine);
+                            }
+                        }
+                        else
+                        {
+                            indentedBreakParts.Add(Doc.SoftLine);
+                        }
                         indentedBreakParts.Add(opDoc);
                     }
                     else
@@ -417,11 +435,18 @@ namespace PrettierGML
                             i < ops.Length - 1
                             && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
                             && ops[i + 1] is GameMakerLanguageParser.CallLValueContext
-                            && (i == 0 && !(isRootCapitalized || isRootShort))
                         )
                         {
                             indentStarted = true;
-                            indentedBreakParts.Add(Doc.HardLine);
+                            if (i == 0 && (isRootCapitalized || isRootShort))
+                            {
+                                indentedBreakParts.Add(Doc.Null);
+                            }
+                            else
+                            {
+                                indentedBreakParts.Add(Doc.HardLine);
+                            }
+
                             indentedBreakParts.Add(opDoc);
                         }
                         else
@@ -451,6 +476,10 @@ namespace PrettierGML
                     {
                         indentedBreakParts.Add(Doc.HardLine);
                     }
+                    else
+                    {
+                        indentedBreakParts.Add(Doc.SoftLine);
+                    }
                     indentedBreakParts.Add(opDoc);
                 }
                 else
@@ -466,7 +495,7 @@ namespace PrettierGML
                 {
                     currentContext = currentContext.Parent;
                 }
-                var callContext = currentContext as GameMakerLanguageParser.CallStatementContext;
+                var callContext = (GameMakerLanguageParser.CallStatementContext)currentContext;
                 var argsDoc = Visit(callContext.arguments());
 
                 flatParts.Add(argsDoc);
@@ -486,13 +515,13 @@ namespace PrettierGML
                 return flatParts[0];
             }
 
-            var indentedBreakDoc = Doc.Fill(Doc.JoinList(Doc.SoftLine, indentedBreakParts));
+            var indentedBreakDoc = Doc.Fill(indentedBreakParts);
 
             return Doc.ConditionalGroup(
                 new Doc[]
                 {
                     Doc.Concat(flatParts),
-                    Doc.Concat(new Doc[] { Doc.Concat(breakParts), Doc.Indent(indentedBreakDoc) }),
+                    Doc.Concat(new[] { Doc.Concat(breakParts), Doc.Indent(indentedBreakDoc) }),
                 }
             );
         }
@@ -637,9 +666,6 @@ namespace PrettierGML
 
                 var printed = PrintCommentsAndWhitespace(hiddenTokens, isTrailing: false);
 
-                Console.WriteLine("Leading Index: " + (hiddenTokens[0].TokenIndex));
-                Console.WriteLine(printed);
-
                 if (printed is not NullDoc)
                 {
                     return leadingSingleLineComment
@@ -699,9 +725,6 @@ namespace PrettierGML
                 }
 
                 var printed = PrintCommentsAndWhitespace(hiddenTokens, isTrailing: true);
-
-                Console.WriteLine("Trailing Index: " + (hiddenTokens[0].TokenIndex));
-                Console.WriteLine(printed);
 
                 return printed;
             }

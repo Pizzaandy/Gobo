@@ -40,25 +40,37 @@ void parse(string input)
 
     var printed = DocPrinter.Print(doc, options, "\n");
 
-    Console.WriteLine(serialized);
-    Console.WriteLine(printed);
-
     sw.Stop();
     Console.WriteLine($"Total Time: {sw.ElapsedMilliseconds.ToString()} ms");
+
+    Console.WriteLine(serialized);
+    Console.WriteLine(printed);
 }
 
 parse(
     @"
 x = foo.bar(
         argument1,
-        argument2()
+        Argument2.foooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz()
             .bar().baz.fooooooooo //comment
   .fooooooooooooooooooooooooooooooooooooooooooo
-            .baazzzzzz().x().y().z().fooooooooooooooooooooooooooooooooooooooooooo
+            .baazzzzzz().
+//this comment
+// another comment
+/*some suspect*//*formatting*/
+/*among other concerns*/
+x().y(
+                argument2()
+                .bar() // this is bar
+.baz.fooooooooo
+               ).z().foooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
   .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
     .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz()
     .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
     );
 
+x = Argument2.foooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
+  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 "
 );
