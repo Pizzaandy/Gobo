@@ -36,7 +36,7 @@ void parse(string input)
 
     var serialized = DocSerializer.Serialize(doc);
 
-    PrinterOptions options = new() { Width = 80 };
+    PrinterOptions options = new() { Width = 70 };
 
     var printed = DocPrinter.Print(doc, options, "\n");
 
@@ -49,28 +49,12 @@ void parse(string input)
 
 parse(
     @"
-x = foo.bar(
-        argument1,
-        Argument2.foooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz()
-            .bar().baz.fooooooooo //comment
-  .fooooooooooooooooooooooooooooooooooooooooooo
-            .baazzzzzz().
-//this comment
-// another comment
-/*some suspect*//*formatting*/
-/*among other concerns*/
-x().y(
-                argument2()
-                .bar() // this is bar
-.baz.fooooooooo
-               ).z().foooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
-    .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz()
-    .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
-    );
-
-x = Argument2.foooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
-  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+foo.barrrrrrrrrrrrrrrrrrrr.eeeeeeeeeeeeeeeeeeeeeeeeeeeee.ddddd().CustomVec(
+    a(1, 2, 3)
+        .iter()
+        .map(x)
+        .collect().foo.barrrrrrrrrrrrrrrrrrrr.eeeeeeeeeeeeeeeeeeeeeeeeeeeee.ddddd
+        .into()
+).barrrrrrrrrrrrrrr()
 "
 );

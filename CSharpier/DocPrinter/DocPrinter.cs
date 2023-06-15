@@ -15,6 +15,7 @@ internal class DocPrinter
     protected readonly PrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
     protected Stack<Indent> RegionIndents = new();
+    protected int ConsecutiveIndents = 0;
 
     protected DocPrinter(Doc doc, PrinterOptions printerOptions, string endOfLine)
     {
@@ -73,6 +74,11 @@ internal class DocPrinter
         if (doc == Doc.Null)
         {
             return;
+        }
+
+        if (doc is not IndentDoc)
+        {
+            ConsecutiveIndents = 0;
         }
 
         if (doc is StringDoc stringDoc)

@@ -73,10 +73,13 @@ namespace PrettierGML
 
                 parts.Add(statement);
                 parts.Add(PrintTrailingComments(statements[i]));
-                parts.Add(Doc.HardLine);
-                if (i != statements.Length - 1 && IsNextLineBlank(statements[i]))
+                if (i != statements.Length - 1)
                 {
                     parts.Add(Doc.HardLine);
+                    if (IsNextLineBlank(statements[i]))
+                    {
+                        parts.Add(Doc.HardLine);
+                    }
                 }
             }
 
@@ -206,7 +209,7 @@ namespace PrettierGML
                 body = Doc.Null;
             }
 
-            return Doc.Concat(new Doc[] { "{", body, "}" });
+            return Doc.Concat(new Doc[] { "{", Doc.Indent(Doc.HardLine, body), Doc.HardLine, "}" });
         }
 
         public override Doc VisitIfStatement(
@@ -215,11 +218,7 @@ namespace PrettierGML
         {
             var parts = new List<Doc>
             {
-                PrintSingleClauseStatement(
-                    "if",
-                    Visit(context.expression()),
-                    context.statement()[0]
-                )
+                PrintSingleClauseStatement("if", context.expression(), context.statement()[0])
             };
 
             if (context.statement().Length > 1)
@@ -237,6 +236,27 @@ namespace PrettierGML
             }
 
             return Doc.Concat(parts);
+        }
+
+        public override Doc VisitWithStatement(
+            [NotNull] GameMakerLanguageParser.WithStatementContext context
+        )
+        {
+            return PrintSingleClauseStatement("if", context.expression(), context.statement());
+        }
+
+        public override Doc VisitWhileStatement(
+            [NotNull] GameMakerLanguageParser.WhileStatementContext context
+        )
+        {
+            return PrintSingleClauseStatement("while", context.expression(), context.statement());
+        }
+
+        public override Doc VisitRepeatStatement(
+            [NotNull] GameMakerLanguageParser.RepeatStatementContext context
+        )
+        {
+            return PrintSingleClauseStatement("repeat", context.expression(), context.statement());
         }
 
         public override Doc VisitAssignmentExpression(
@@ -341,7 +361,6 @@ namespace PrettierGML
                         parts.Add(",");
                         if (trailingComments is not NullDoc)
                         {
-                            parts.Add(" ");
                             parts.Add(trailingComments);
                         }
 
@@ -352,6 +371,20 @@ namespace PrettierGML
 
             if (parts.Count == 0)
             {
+                var innerComments = PrintInnerComments(context, out bool containsSingleLineComment);
+                if (innerComments is not NullDoc)
+                {
+                    var lineDoc = containsSingleLineComment ? Doc.HardLine : Doc.SoftLine;
+                    return Doc.Group(
+                        new Doc[]
+                        {
+                            "(",
+                            Doc.Indent(new[] { lineDoc, innerComments }),
+                            lineDoc,
+                            ")"
+                        }
+                    );
+                }
                 return "()";
             }
 
@@ -371,19 +404,17 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.LValueExpressionContext context
         )
         {
-            var flatParts = new List<Doc>();
-            var breakParts = new List<Doc>();
+            var root = Visit(context.lValueStartExpression());
+
+            var flatParts = new List<Doc> { root };
+            var breakParts = new List<Doc> { root };
             var indentedBreakParts = new List<Doc>();
 
-            var root = Visit(context.lValueStartExpression());
             var rootText = context.lValueStartExpression().GetText();
             bool isRootCapitalized = char.IsUpper(rootText[0]);
             bool isRootShort = rootText.Length <= 4;
 
-            flatParts.Add(root);
-            breakParts.Add(root);
-
-            bool indentStarted = false;
+            bool isFirstCallHandled = false;
             ParserRuleContext? lastChainOp = null;
 
             var ops = context.lValueChainOperator();
@@ -395,18 +426,9 @@ namespace PrettierGML
                 {
                     var opDoc = Visit(ops[i]);
 
-                    if (
-                        i > 0
-                        && ops[i - 1] is GameMakerLanguageParser.CallLValueContext
-                        && ops[i] is GameMakerLanguageParser.MemberDotLValueContext
-                    )
-                    {
-                        indentStarted = true;
-                    }
-
                     flatParts.Add(opDoc);
 
-                    if (indentStarted)
+                    if (isFirstCallHandled)
                     {
                         if (ops[i] is GameMakerLanguageParser.CallLValueContext)
                         {
@@ -423,10 +445,11 @@ namespace PrettierGML
                                 indentedBreakParts.Add(Doc.SoftLine);
                             }
                         }
-                        else
+                        else if (i != 0)
                         {
                             indentedBreakParts.Add(Doc.SoftLine);
                         }
+
                         indentedBreakParts.Add(opDoc);
                     }
                     else
@@ -437,17 +460,12 @@ namespace PrettierGML
                             && ops[i + 1] is GameMakerLanguageParser.CallLValueContext
                         )
                         {
-                            indentStarted = true;
-                            if (i == 0 && (isRootCapitalized || isRootShort))
-                            {
-                                indentedBreakParts.Add(Doc.Null);
-                            }
-                            else
-                            {
-                                indentedBreakParts.Add(Doc.HardLine);
-                            }
+                            // keep the first call on the first line of the expression under certain circumstances
+                            indentedBreakParts.Add(Doc.Null);
+                            indentedBreakParts.Add(Doc.HardLine);
 
                             indentedBreakParts.Add(opDoc);
+                            isFirstCallHandled = true;
                         }
                         else
                         {
@@ -455,6 +473,7 @@ namespace PrettierGML
                         }
                     }
                 }
+
                 lastChainOp = ops[ops.Length - 1];
             }
 
@@ -463,7 +482,7 @@ namespace PrettierGML
                 var opDoc = Visit(context.lValueFinalOperator());
                 flatParts.Add(opDoc);
 
-                if (indentStarted)
+                if (isFirstCallHandled)
                 {
                     if (
                         context.Parent is GameMakerLanguageParser.CallableExpressionContext
@@ -480,6 +499,7 @@ namespace PrettierGML
                     {
                         indentedBreakParts.Add(Doc.SoftLine);
                     }
+
                     indentedBreakParts.Add(opDoc);
                 }
                 else
@@ -487,6 +507,8 @@ namespace PrettierGML
                     breakParts.Add(opDoc);
                 }
             }
+
+            //Doc finalBreakPart = Doc.Null;
 
             if (context.Parent is GameMakerLanguageParser.CallableExpressionContext)
             {
@@ -497,10 +519,9 @@ namespace PrettierGML
                 }
                 var callContext = (GameMakerLanguageParser.CallStatementContext)currentContext;
                 var argsDoc = Visit(callContext.arguments());
-
                 flatParts.Add(argsDoc);
 
-                if (indentStarted)
+                if (isFirstCallHandled)
                 {
                     indentedBreakParts.Add(argsDoc);
                 }
@@ -515,13 +536,14 @@ namespace PrettierGML
                 return flatParts[0];
             }
 
-            var indentedBreakDoc = Doc.Fill(indentedBreakParts);
+            var breakPartsDoc = Doc.Concat(breakParts);
+            var indentedBreakDoc = Doc.Indent(Doc.Fill(indentedBreakParts));
 
             return Doc.ConditionalGroup(
                 new Doc[]
                 {
                     Doc.Concat(flatParts),
-                    Doc.Concat(new[] { Doc.Concat(breakParts), Doc.Indent(indentedBreakDoc) }),
+                    Doc.Concat(new[] { breakPartsDoc, indentedBreakDoc }),
                 }
             );
         }
@@ -537,6 +559,11 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.MemberDotLValueContext context
         )
         {
+            var innerComments = PrintInnerComments(context, out bool _);
+            if (innerComments is not NullDoc)
+            {
+                return Doc.Concat(innerComments, Doc.HardLine, ".", Visit(context.identifier()));
+            }
             return Doc.Concat(".", Visit(context.identifier()));
         }
 
@@ -601,6 +628,21 @@ namespace PrettierGML
             }
         }
 
+        public override Doc VisitParenthesizedExpression(
+            [NotNull] GameMakerLanguageParser.ParenthesizedExpressionContext context
+        )
+        {
+            return Doc.Group(
+                new Doc[]
+                {
+                    "(",
+                    Doc.Indent(new[] { Doc.SoftLine, Visit(context.expression()) }),
+                    Doc.SoftLine,
+                    ")"
+                }
+            );
+        }
+
         public override Doc VisitLiteralExpression(
             [NotNull] GameMakerLanguageParser.LiteralExpressionContext context
         )
@@ -608,25 +650,39 @@ namespace PrettierGML
             return Visit(context.literal());
         }
 
-        Doc PrintSingleClauseStatement(string keyword, Doc clause, ParserRuleContext body)
+        Doc PrintSingleClauseStatement(
+            string keyword,
+            ParserRuleContext clause,
+            ParserRuleContext body
+        )
         {
+            while (clause is GameMakerLanguageParser.ParenthesizedExpressionContext clauseContext)
+            {
+                clause = clauseContext.expression();
+            }
+
             var parts = new Doc[]
             {
                 keyword,
                 " (",
-                Doc.Group(Doc.Indent(new Doc[] { Doc.SoftLine, clause })),
+                Doc.Group(Doc.Indent(new Doc[] { Doc.SoftLine, Visit(clause) })),
                 ") ",
                 PrintStatementInBlock(body)
             };
+
             return Doc.Concat(parts);
         }
 
         Doc PrintStatementInBlock(ParserRuleContext statementContext)
         {
-            if (statementContext is GameMakerLanguageParser.BlockContext)
+            if (
+                statementContext is GameMakerLanguageParser.StatementContext context
+                && context.block() != null
+            )
             {
-                return Visit(statementContext);
+                return Visit(context.block());
             }
+
             return Doc.Concat(
                 new Doc[]
                 {
@@ -636,6 +692,50 @@ namespace PrettierGML
                     "}"
                 }
             );
+        }
+
+        // only use to print comments in small, flat sequences of tokens
+        Doc PrintInnerComments(ParserRuleContext context, out bool containsSingleLineComment)
+        {
+            var tokens = _tokens.Get(context.Start.TokenIndex, context.Stop.TokenIndex);
+            var parts = new List<Doc>();
+            var currentGroup = new List<IToken>();
+            containsSingleLineComment = false;
+
+            for (var i = 0; i < tokens.Count; i++)
+            {
+                if (
+                    tokens[i].Type == GameMakerLanguageLexer.WhiteSpaces
+                    || tokens[i].Type == GameMakerLanguageLexer.LineTerminator
+                    || tokens[i].Type == GameMakerLanguageLexer.SingleLineComment
+                    || tokens[i].Type == GameMakerLanguageLexer.MultiLineComment
+                )
+                {
+                    if (tokens[i].Type == GameMakerLanguageLexer.SingleLineComment)
+                    {
+                        containsSingleLineComment = true;
+                    }
+                    currentGroup.Add(tokens[i]);
+                }
+                else
+                {
+                    if (
+                        currentGroup.Count > 0
+                        && _printedCommentGroups.Add(currentGroup[0].TokenIndex)
+                    )
+                    {
+                        parts.Add(PrintCommentsAndWhitespace(currentGroup, isTrailing: false));
+                    }
+                    currentGroup = new();
+                }
+            }
+
+            if (parts.Count == 0)
+            {
+                return Doc.Null;
+            }
+
+            return Doc.Join(" ", parts);
         }
 
         Doc PrintLeadingComments(ParserRuleContext context)
@@ -725,8 +825,7 @@ namespace PrettierGML
                 }
 
                 var printed = PrintCommentsAndWhitespace(hiddenTokens, isTrailing: true);
-
-                return printed;
+                return printed is NullDoc ? Doc.Null : Doc.Concat(new[] { " ", printed });
             }
 
             return Doc.Null;
@@ -763,8 +862,7 @@ namespace PrettierGML
                         parts.Add(" ");
                     }
                 }
-
-                if (type == GameMakerLanguageLexer.LineTerminator)
+                else if (type == GameMakerLanguageLexer.LineTerminator)
                 {
                     if (
                         consecutiveLineBreaks < 2
@@ -876,6 +974,24 @@ namespace PrettierGML
                 context is GameMakerLanguageParser.ProgramContext
                 || context is GameMakerLanguageParser.StatementListContext
             );
+        }
+
+        static bool IsInContext<T>(RuleContext context, int maxSearchDepth = 100)
+        {
+            for (var i = 0; i < maxSearchDepth; i++)
+            {
+                if (context.Parent == null)
+                {
+                    return false;
+                }
+
+                if (context.Parent is not T)
+                {
+                    context = context.Parent;
+                }
+            }
+
+            return context.Parent is T;
         }
     }
 }
