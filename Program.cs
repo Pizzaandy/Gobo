@@ -1,12 +1,11 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Tree;
-using CSharpier;
-using CSharpier.DocPrinter;
+using Newtonsoft.Json;
 using PrettierGML;
 using System.Diagnostics;
 
-void printTokens(string input)
+static void PrintTokens(string input)
 {
     ICharStream stream = CharStreams.fromString(input);
     var lexer = new GameMakerLanguageLexer(stream);
@@ -19,46 +18,36 @@ void printTokens(string input)
     lexer.Reset();
 }
 
-void parse(string input)
+static void Format(string input)
 {
     Stopwatch sw = Stopwatch.StartNew();
 
     ICharStream stream = CharStreams.fromString(input);
     var lexer = new GameMakerLanguageLexer(stream);
     var tokens = new CommonTokenStream(lexer);
-    var parser = new GameMakerLanguageParser(tokens) { BuildParseTree = true };
+    var parser = new GameMakerLanguageParser(tokens) { };
     parser.Interpreter.PredictionMode = PredictionMode.SLL;
     IParseTree tree = parser.program();
-    //Console.WriteLine(tree.ToStringTree());
 
-    var printer = new VisitorAndPrinter(tokens);
-    var doc = printer.Visit(tree);
+    var builder = new GameMakerASTBuilder();
+    var output = builder.Visit(tree);
 
-    var serialized = DocSerializer.Serialize(doc);
-
-    PrinterOptions options = new() { Width = 80 };
-
-    var printed = DocPrinter.Print(doc, options, "\n");
-
-    Console.WriteLine(serialized);
-    Console.WriteLine(printed);
+    Console.WriteLine(JsonConvert.SerializeObject(output, Formatting.Indented));
 
     sw.Stop();
-    Console.WriteLine($"Total Time: {sw.ElapsedMilliseconds.ToString()} ms");
+    Console.WriteLine($"Total Time: {sw.ElapsedMilliseconds} ms");
 }
 
-parse(
-    @"
-x = foo.bar(
-        argument1,
-        argument2()
-            .bar().baz.fooooooooo //comment
-  .fooooooooooooooooooooooooooooooooooooooooooo
-            .baazzzzzz().x().y().z().fooooooooooooooooooooooooooooooooooooooooooo
-  .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
-    .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz()
-    .barrrrrrrrrrrrrrrr.bazzzzzzzzzzzzzzz
-    );
+Format(
+    """ 
+switch a {
+    case "e":
+        a()
+        break;
+    case a:
+    case b:
+        bruh()
+}
 
-"
+"""
 );
