@@ -36,7 +36,7 @@ namespace PrettierGML
 
             if (trailingComments is not NullDoc || leadingComments is not NullDoc)
             {
-                return Doc.Concat(new[] { leadingComments, base.Visit(tree), trailingComments });
+                return Doc.Concat(leadingComments, base.Visit(tree), trailingComments);
             }
             else
             {
@@ -209,7 +209,7 @@ namespace PrettierGML
                 body = Doc.Null;
             }
 
-            return Doc.Concat(new Doc[] { "{", Doc.Indent(Doc.HardLine, body), Doc.HardLine, "}" });
+            return Doc.Concat("{", Doc.Indent(Doc.HardLine, body), Doc.HardLine, "}");
         }
 
         public override Doc VisitIfStatement(
@@ -263,15 +263,43 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.AssignmentExpressionContext context
         )
         {
-            return Doc.Group(
-                new Doc[]
+            var @operator = context.assignmentOperator().GetText();
+            if (@operator == ":=")
+            {
+                @operator = "=";
+            }
+
+            ParserRuleContext expressionContext = context.expressionOrFunction();
+
+            // trim unecessary parentheses
+            if (context.expressionOrFunction().expression() != null)
+            {
+                expressionContext = context.expressionOrFunction().expression();
+
+                while (
+                    expressionContext
+                        is GameMakerLanguageParser.ParenthesizedExpressionContext parenthesized
+                )
                 {
-                    Doc.Group(Visit(context.lValueExpression())),
-                    " ",
-                    context.assignmentOperator().GetText(),
-                    " ",
-                    Doc.Group(Visit(context.expressionOrFunction()))
+                    expressionContext = parenthesized.expression();
                 }
+            }
+
+            var shouldIndent = false;
+
+            //if (IsBinaryExpression(expressionContext))
+            //{
+            //    shouldIndent = true;
+            //}
+
+            return Doc.Group(
+                Doc.Group(Visit(context.lValueExpression())),
+                " ",
+                @operator,
+                " ",
+                shouldIndent
+                    ? Doc.Group(Doc.Indent(Visit(expressionContext)))
+                    : Doc.Group(Visit(expressionContext))
             );
         }
 
@@ -288,7 +316,7 @@ namespace PrettierGML
                 assignments.Add(Visit(variableDeclarations[i]));
             }
 
-            var separator = Doc.Concat(new Doc[] { ",", Doc.Line });
+            var separator = Doc.Concat(",", Doc.Line);
             parts.Add(Doc.Group(Doc.Indent(Doc.Join(separator, assignments))));
             return Doc.Concat(parts);
         }
@@ -340,7 +368,7 @@ namespace PrettierGML
                 }
             }
 
-            return Doc.Concat(new[] { callee, Visit(context.arguments()) });
+            return Doc.Concat(callee, Visit(context.arguments()));
         }
 
         public override Doc VisitArguments(
@@ -375,28 +403,12 @@ namespace PrettierGML
                 if (innerComments is not NullDoc)
                 {
                     var lineDoc = containsSingleLineComment ? Doc.HardLine : Doc.SoftLine;
-                    return Doc.Group(
-                        new Doc[]
-                        {
-                            "(",
-                            Doc.Indent(new[] { lineDoc, innerComments }),
-                            lineDoc,
-                            ")"
-                        }
-                    );
+                    return Doc.Group("(", Doc.Indent(lineDoc, innerComments), lineDoc, ")");
                 }
                 return "()";
             }
 
-            return Doc.Group(
-                new Doc[]
-                {
-                    "(",
-                    Doc.Indent(new[] { Doc.SoftLine, Doc.Concat(parts) }),
-                    Doc.SoftLine,
-                    ")"
-                }
-            );
+            return Doc.Group("(", Doc.Indent(Doc.SoftLine, Doc.Concat(parts)), Doc.SoftLine, ")");
         }
 
         // TODO: simplify logic
@@ -508,8 +520,6 @@ namespace PrettierGML
                 }
             }
 
-            //Doc finalBreakPart = Doc.Null;
-
             if (context.Parent is GameMakerLanguageParser.CallableExpressionContext)
             {
                 var currentContext = context.Parent;
@@ -540,11 +550,8 @@ namespace PrettierGML
             var indentedBreakDoc = Doc.Indent(Doc.Fill(indentedBreakParts));
 
             return Doc.ConditionalGroup(
-                new Doc[]
-                {
-                    Doc.Concat(flatParts),
-                    Doc.Concat(new[] { breakPartsDoc, indentedBreakDoc }),
-                }
+                Doc.Concat(flatParts),
+                Doc.Concat(breakPartsDoc, indentedBreakDoc)
             );
         }
 
@@ -633,13 +640,10 @@ namespace PrettierGML
         )
         {
             return Doc.Group(
-                new Doc[]
-                {
-                    "(",
-                    Doc.Indent(new[] { Doc.SoftLine, Visit(context.expression()) }),
-                    Doc.SoftLine,
-                    ")"
-                }
+                "(",
+                Doc.Indent(Doc.SoftLine, Visit(context.expression())),
+                Doc.SoftLine,
+                ")"
             );
         }
 
@@ -648,6 +652,206 @@ namespace PrettierGML
         )
         {
             return Visit(context.literal());
+        }
+
+        public override Doc VisitMultiplicativeExpression(
+            [NotNull] GameMakerLanguageParser.MultiplicativeExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitAdditiveExpression(
+            [NotNull] GameMakerLanguageParser.AdditiveExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitCoalesceExpression(
+            [NotNull] GameMakerLanguageParser.CoalesceExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitBitShiftExpression(
+            [NotNull] GameMakerLanguageParser.BitShiftExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitLogicalOrExpression(
+            [NotNull] GameMakerLanguageParser.LogicalOrExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitLogicalAndExpression(
+            [NotNull] GameMakerLanguageParser.LogicalAndExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitLogicalXorExpression(
+            [NotNull] GameMakerLanguageParser.LogicalXorExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitEqualityExpression(
+            [NotNull] GameMakerLanguageParser.EqualityExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitRelationalExpression(
+            [NotNull] GameMakerLanguageParser.RelationalExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitBitAndExpression(
+            [NotNull] GameMakerLanguageParser.BitAndExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitBitOrExpression(
+            [NotNull] GameMakerLanguageParser.BitOrExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        public override Doc VisitBitXOrExpression(
+            [NotNull] GameMakerLanguageParser.BitXOrExpressionContext context
+        )
+        {
+            return PrintBinaryExpressionGroup(context);
+        }
+
+        Doc PrintBinaryExpressionGroup(GameMakerLanguageParser.ExpressionContext context)
+        {
+            var parts = PrintBinaryExpression(context);
+            return Doc.Concat(parts[0], Doc.Indent(parts.Skip(1).ToList()));
+        }
+
+        List<Doc> PrintBinaryExpression(GameMakerLanguageParser.ExpressionContext context)
+        {
+            var parts = new List<Doc>();
+
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var left = expressions[0];
+            var right = expressions[1];
+
+            var @operator = context.children[1].GetText();
+            switch (@operator)
+            {
+                case "and":
+                    @operator = "&&";
+                    break;
+                case "or":
+                    @operator = "||";
+                    break;
+                case "xor":
+                    @operator = "^^";
+                    break;
+                case "<>":
+                    @operator = "!=";
+                    break;
+                case "mod":
+                    @operator = "%";
+                    break;
+                case "not":
+                    @operator = "!";
+                    break;
+            }
+
+            Console.WriteLine(
+                $"Node is {context.GetType()}, Precedence is {GetPrecedence(context)}"
+            );
+            Console.WriteLine(
+                $"Parent node is {context.Parent.GetType()}, Precedence is {GetPrecedence(context.Parent as ParserRuleContext)}"
+            );
+
+            var shouldGroup =
+                context.GetType() != context.Parent!.GetType()
+                && GetPrecedence(context) != GetPrecedence(context.Parent as ParserRuleContext)
+                && left.GetType() != context.GetType()
+                && right.GetType() != context.GetType();
+
+            var binaryOnTheRight = context is GameMakerLanguageParser.CoalesceExpressionContext;
+
+            if (binaryOnTheRight)
+            {
+                parts.Add(Visit(left));
+                parts.Add(Doc.Line);
+                parts.Add(@operator);
+                parts.Add(" ");
+            }
+
+            var possibleBinary = binaryOnTheRight ? right : left;
+            var shouldInline = context is GameMakerLanguageParser.EqualityExpressionContext;
+
+            if (
+                IsBinaryExpression(possibleBinary)
+                && (GetPrecedence(context) == GetPrecedence(possibleBinary))
+            )
+            {
+                parts.AddRange(PrintBinaryExpression(possibleBinary));
+            }
+            else
+            {
+                parts.Add(Visit(possibleBinary));
+            }
+
+            if (binaryOnTheRight)
+            {
+                return shouldGroup
+                    ? new List<Doc> { parts[0], Doc.Group(parts.Skip(1).ToList()) }
+                    : parts;
+            }
+
+            var rightDoc = Doc.Concat(shouldInline ? " " : Doc.Line, @operator, " ", Visit(right));
+
+            parts.Add(shouldGroup ? Doc.Group(rightDoc) : rightDoc);
+
+            return parts;
+        }
+
+        static int GetPrecedence(ParserRuleContext context)
+        {
+            return context switch
+            {
+                GameMakerLanguageParser.BitXOrExpressionContext => 1,
+                GameMakerLanguageParser.BitOrExpressionContext => 2,
+                GameMakerLanguageParser.BitAndExpressionContext => 3,
+                GameMakerLanguageParser.RelationalExpressionContext => 4,
+                GameMakerLanguageParser.EqualityExpressionContext => 5,
+                GameMakerLanguageParser.LogicalXorExpressionContext => 6,
+                GameMakerLanguageParser.LogicalAndExpressionContext => 7,
+                GameMakerLanguageParser.LogicalOrExpressionContext => 8,
+                GameMakerLanguageParser.CoalesceExpressionContext => 9,
+                GameMakerLanguageParser.BitShiftExpressionContext => 10,
+                GameMakerLanguageParser.AdditiveExpressionContext => 11,
+                GameMakerLanguageParser.MultiplicativeExpressionContext => 12,
+                _ => -1,
+            };
+        }
+
+        bool IsBinaryExpression(ParserRuleContext node)
+        {
+            return node is GameMakerLanguageParser.ExpressionContext
+                && node is not GameMakerLanguageParser.RelationalExpressionContext
+                && node.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>().Length == 2;
         }
 
         Doc PrintSingleClauseStatement(
@@ -661,16 +865,13 @@ namespace PrettierGML
                 clause = clauseContext.expression();
             }
 
-            var parts = new Doc[]
-            {
+            return Doc.Concat(
                 keyword,
                 " (",
-                Doc.Group(Doc.Indent(new Doc[] { Doc.SoftLine, Visit(clause) })),
+                Doc.Group(Doc.Indent(Doc.SoftLine, Visit(clause))),
                 ") ",
                 PrintStatementInBlock(body)
-            };
-
-            return Doc.Concat(parts);
+            );
         }
 
         Doc PrintStatementInBlock(ParserRuleContext statementContext)
@@ -684,23 +885,20 @@ namespace PrettierGML
             }
 
             return Doc.Concat(
-                new Doc[]
-                {
-                    "{",
-                    Doc.Indent(Doc.Concat(new[] { Doc.HardLine, Visit(statementContext) })),
-                    Doc.HardLine,
-                    "}"
-                }
+                "{",
+                Doc.Indent(Doc.Concat(new[] { Doc.HardLine, Visit(statementContext) })),
+                Doc.HardLine,
+                "}"
             );
         }
 
         // only use to print comments in small, flat sequences of tokens
-        Doc PrintInnerComments(ParserRuleContext context, out bool containsSingleLineComment)
+        Doc PrintInnerComments(ParserRuleContext context, out bool shouldBreak)
         {
             var tokens = _tokens.Get(context.Start.TokenIndex, context.Stop.TokenIndex);
             var parts = new List<Doc>();
             var currentGroup = new List<IToken>();
-            containsSingleLineComment = false;
+            shouldBreak = false;
 
             for (var i = 0; i < tokens.Count; i++)
             {
@@ -713,7 +911,7 @@ namespace PrettierGML
                 {
                     if (tokens[i].Type == GameMakerLanguageLexer.SingleLineComment)
                     {
-                        containsSingleLineComment = true;
+                        shouldBreak = true;
                     }
                     currentGroup.Add(tokens[i]);
                 }
@@ -769,8 +967,8 @@ namespace PrettierGML
                 if (printed is not NullDoc)
                 {
                     return leadingSingleLineComment
-                        ? Doc.Concat(new[] { printed, Doc.HardLine })
-                        : Doc.Concat(new[] { printed, " " });
+                        ? Doc.Concat(printed, Doc.HardLine)
+                        : Doc.Concat(printed, " ");
                 }
             }
 
@@ -825,7 +1023,7 @@ namespace PrettierGML
                 }
 
                 var printed = PrintCommentsAndWhitespace(hiddenTokens, isTrailing: true);
-                return printed is NullDoc ? Doc.Null : Doc.Concat(new[] { " ", printed });
+                return printed is NullDoc ? Doc.Null : Doc.Concat(" ", printed);
             }
 
             return Doc.Null;
@@ -864,10 +1062,7 @@ namespace PrettierGML
                 }
                 else if (type == GameMakerLanguageLexer.LineTerminator)
                 {
-                    if (
-                        consecutiveLineBreaks < 2
-                        && tokens[i].Text.Replace("\r", @"\r").Contains(@"\r")
-                    )
+                    if (consecutiveLineBreaks < 2 && tokens[i].Text.Contains('\r'))
                     {
                         parts.Add(Doc.HardLine);
                         consecutiveLineBreaks++;
@@ -950,7 +1145,7 @@ namespace PrettierGML
 
                 if (
                     hiddenTokens[i].Type == GameMakerLanguageLexer.LineTerminator
-                    && !hiddenTokens[i].Text.Replace("\r", @"\r").Contains(@"\r")
+                    && !hiddenTokens[i].Text.Contains('\r')
                 )
                 {
                     lineCount++;
@@ -974,24 +1169,6 @@ namespace PrettierGML
                 context is GameMakerLanguageParser.ProgramContext
                 || context is GameMakerLanguageParser.StatementListContext
             );
-        }
-
-        static bool IsInContext<T>(RuleContext context, int maxSearchDepth = 100)
-        {
-            for (var i = 0; i < maxSearchDepth; i++)
-            {
-                if (context.Parent == null)
-                {
-                    return false;
-                }
-
-                if (context.Parent is not T)
-                {
-                    context = context.Parent;
-                }
-            }
-
-            return context.Parent is T;
         }
     }
 }
