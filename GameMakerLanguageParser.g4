@@ -140,13 +140,10 @@ globalVarStatement
     : GlobalVar identifier (',' identifier)* SemiColon
     ;
 
-newExpression
-    : New identifier arguments
-    ;
-
 lValueStartExpression
-    : identifier # IdentifierLValue
-    | newExpression # NewLValue
+    : identifier
+    | '(' expressionOrFunction ')'
+    | newExpression
     ;
 
 lValueExpression
@@ -162,6 +159,10 @@ lValueChainOperator
 lValueFinalOperator
     : accessor expressionSequence ']' # MemberIndexLValueFinal
     | '.' identifier # MemberDotLValueFinal
+    ;
+
+newExpression
+    : New identifier arguments
     ;
 
 expressionSequence

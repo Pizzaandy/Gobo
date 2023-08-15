@@ -11,7 +11,8 @@ namespace PrettierGML
         {
             if (context.statementList() != null)
             {
-                return Visit(context.statementList());
+                var statements = Visit(context.statementList());
+                return new Program(context, statements);
             }
             else
             {
@@ -36,7 +37,7 @@ namespace PrettierGML
                 parts.Add(statement);
             }
 
-            return GMLSyntaxNode.List(parts);
+            return GMLSyntaxNode.List(context, parts);
         }
 
         public override GMLSyntaxNode VisitStatement(
@@ -47,83 +48,83 @@ namespace PrettierGML
             {
                 return Visit(context.block());
             }
-            if (context.ifStatement() != null)
+            else if (context.ifStatement() != null)
             {
                 return Visit(context.ifStatement());
             }
-            if (context.variableDeclarationList() != null)
+            else if (context.variableDeclarationList() != null)
             {
                 return Visit(context.variableDeclarationList());
             }
-            if (context.assignmentExpression() != null)
+            else if (context.assignmentExpression() != null)
             {
                 return Visit(context.assignmentExpression());
             }
-            if (context.callStatement() != null)
+            else if (context.callStatement() != null)
             {
                 return Visit(context.callStatement());
             }
-            if (context.iterationStatement() != null)
+            else if (context.iterationStatement() != null)
             {
                 return Visit(context.iterationStatement());
             }
-            if (context.functionDeclaration() != null)
+            else if (context.functionDeclaration() != null)
             {
                 return Visit(context.functionDeclaration());
             }
-            if (context.switchStatement() != null)
+            else if (context.switchStatement() != null)
             {
                 return Visit(context.switchStatement());
             }
-            if (context.enumeratorDeclaration() != null)
+            else if (context.enumeratorDeclaration() != null)
             {
                 return Visit(context.enumeratorDeclaration());
             }
-            if (context.incDecStatement() != null)
+            else if (context.incDecStatement() != null)
             {
                 return Visit(context.incDecStatement());
             }
-            if (context.withStatement() != null)
+            else if (context.withStatement() != null)
             {
                 return Visit(context.withStatement());
             }
-            if (context.returnStatement() != null)
+            else if (context.returnStatement() != null)
             {
                 return Visit(context.returnStatement());
             }
-            if (context.exitStatement() != null)
+            else if (context.exitStatement() != null)
             {
                 return Visit(context.exitStatement());
             }
-            if (context.continueStatement() != null)
+            else if (context.continueStatement() != null)
             {
                 return Visit(context.continueStatement());
             }
-            if (context.breakStatement() != null)
+            else if (context.breakStatement() != null)
             {
                 return Visit(context.breakStatement());
             }
-            if (context.throwStatement() != null)
+            else if (context.throwStatement() != null)
             {
                 return Visit(context.throwStatement());
             }
-            if (context.tryStatement() != null)
+            else if (context.tryStatement() != null)
             {
                 return Visit(context.tryStatement());
             }
-            if (context.globalVarStatement() != null)
+            else if (context.globalVarStatement() != null)
             {
                 return Visit(context.globalVarStatement());
             }
-            if (context.macroStatement() != null)
+            else if (context.macroStatement() != null)
             {
                 return Visit(context.macroStatement());
             }
-            if (context.defineStatement() != null)
+            else if (context.defineStatement() != null)
             {
                 return Visit(context.defineStatement());
             }
-            if (context.regionStatement() != null)
+            else if (context.regionStatement() != null)
             {
                 return Visit(context.regionStatement());
             }
@@ -146,7 +147,7 @@ namespace PrettierGML
                 body = GMLSyntaxNode.Empty;
             }
 
-            return new Block(body);
+            return new Block(context, body);
         }
 
         public override GMLSyntaxNode VisitIfStatement(
@@ -162,7 +163,7 @@ namespace PrettierGML
                 alternate = Visit(context.statement()[1]);
             }
 
-            return new IfStatement(test, consequent, alternate);
+            return new IfStatement(context, test, consequent, alternate);
         }
 
         public override GMLSyntaxNode VisitDoStatement(
@@ -171,7 +172,7 @@ namespace PrettierGML
         {
             var body = Visit(context.statement());
             var test = Visit(context.expression());
-            return new DoStatement(body, test);
+            return new DoStatement(context, body, test);
         }
 
         public override GMLSyntaxNode VisitWhileStatement(
@@ -180,7 +181,7 @@ namespace PrettierGML
         {
             var test = Visit(context.expression());
             var body = Visit(context.statement());
-            return new WhileStatement(test, body);
+            return new WhileStatement(context, test, body);
         }
 
         public override GMLSyntaxNode VisitForStatement(
@@ -190,7 +191,7 @@ namespace PrettierGML
             GMLSyntaxNode init = GMLSyntaxNode.Empty;
             GMLSyntaxNode test = GMLSyntaxNode.Empty;
             GMLSyntaxNode update = GMLSyntaxNode.Empty;
-            GMLSyntaxNode body = GMLSyntaxNode.Empty;
+            GMLSyntaxNode body;
 
             if (context.variableDeclarationList() != null)
             {
@@ -216,7 +217,7 @@ namespace PrettierGML
                 body = Visit(context.statement()[0]);
             }
 
-            return new ForStatement(init, test, update, body);
+            return new ForStatement(context, init, test, update, body);
         }
 
         public override GMLSyntaxNode VisitWithStatement(
@@ -225,7 +226,7 @@ namespace PrettierGML
         {
             var @object = Visit(context.expression());
             var body = Visit(context.statement());
-            return new WithStatement(@object, body);
+            return new WithStatement(context, @object, body);
         }
 
         public override GMLSyntaxNode VisitSwitchStatement(
@@ -234,7 +235,7 @@ namespace PrettierGML
         {
             var discriminant = Visit(context.expression());
             var cases = Visit(context.caseBlock());
-            return new SwitchStatement(discriminant, cases);
+            return new SwitchStatement(context, discriminant, cases);
         }
 
         public override GMLSyntaxNode VisitCaseBlock(
@@ -258,7 +259,7 @@ namespace PrettierGML
             {
                 caseClauses.Add(Visit(context.defaultClause()));
             }
-            return GMLSyntaxNode.List(caseClauses);
+            return GMLSyntaxNode.List(context, caseClauses);
         }
 
         public override GMLSyntaxNode VisitCaseClauses(
@@ -271,7 +272,7 @@ namespace PrettierGML
             {
                 parts.Add(Visit(caseClause));
             }
-            return GMLSyntaxNode.List(parts);
+            return GMLSyntaxNode.List(context, parts);
         }
 
         public override GMLSyntaxNode VisitCaseClause(
@@ -284,7 +285,7 @@ namespace PrettierGML
             {
                 body = Visit(context.statementList());
             }
-            return new SwitchCase(test, body);
+            return new SwitchCase(context, test, body);
         }
 
         public override GMLSyntaxNode VisitDefaultClause(
@@ -296,28 +297,28 @@ namespace PrettierGML
             {
                 body = Visit(context.statementList());
             }
-            return new SwitchCase(GMLSyntaxNode.Empty, body);
+            return new SwitchCase(context, GMLSyntaxNode.Empty, body);
         }
 
         public override GMLSyntaxNode VisitContinueStatement(
             [NotNull] GameMakerLanguageParser.ContinueStatementContext context
         )
         {
-            return new ContinueStatement();
+            return new ContinueStatement(context);
         }
 
         public override GMLSyntaxNode VisitBreakStatement(
             [NotNull] GameMakerLanguageParser.BreakStatementContext context
         )
         {
-            return new BreakStatement();
+            return new BreakStatement(context);
         }
 
         public override GMLSyntaxNode VisitExitStatement(
             [NotNull] GameMakerLanguageParser.ExitStatementContext context
         )
         {
-            return new ExitStatement();
+            return new ExitStatement(context);
         }
 
         public override GMLSyntaxNode VisitAssignmentExpression(
@@ -331,7 +332,103 @@ namespace PrettierGML
             }
             var left = Visit(context.lValueExpression());
             var right = Visit(context.expressionOrFunction());
-            return new AssignmentExpression(@operator, left, right);
+            return new AssignmentExpression(context, @operator, left, right);
+        }
+
+        public override GMLSyntaxNode VisitVariableDeclarationList(
+            [NotNull] GameMakerLanguageParser.VariableDeclarationListContext context
+        )
+        {
+            var declarations = new List<GMLSyntaxNode>();
+            var declarationContexts = context.variableDeclaration();
+            foreach (var declaration in declarationContexts)
+            {
+                declarations.Add(Visit(declaration));
+            }
+            var kind = context.varModifier().GetText();
+            return new VariableDeclarationList(
+                context,
+                GMLSyntaxNode.List(context, declarations),
+                kind
+            );
+        }
+
+        public override GMLSyntaxNode VisitVariableDeclaration(
+            [NotNull] GameMakerLanguageParser.VariableDeclarationContext context
+        )
+        {
+            var id = Visit(context.identifier());
+            GMLSyntaxNode initializer = GMLSyntaxNode.Empty;
+            if (context.expressionOrFunction() != null)
+            {
+                initializer = Visit(context.expressionOrFunction());
+            }
+            return new VariableDeclarator(context, id, initializer);
+        }
+
+        public override GMLSyntaxNode VisitFunctionDeclaration(
+            [NotNull] GameMakerLanguageParser.FunctionDeclarationContext context
+        )
+        {
+            GMLSyntaxNode id = GMLSyntaxNode.Empty;
+            var parameters = Visit(context.parameterList());
+            var body = Visit(context.block());
+            GMLSyntaxNode constructorClause = GMLSyntaxNode.Empty;
+
+            if (context.Identifier() != null)
+            {
+                id = new Identifier(context.Identifier(), context.Identifier().GetText());
+            }
+
+            if (context.constructorClause() != null)
+            {
+                constructorClause = Visit(context.constructorClause());
+            }
+
+            return new FunctionDeclaration(context, id, parameters, body, constructorClause);
+        }
+
+        public override GMLSyntaxNode VisitConstructorClause(
+            [NotNull] GameMakerLanguageParser.ConstructorClauseContext context
+        )
+        {
+            GMLSyntaxNode id = GMLSyntaxNode.Empty;
+            GMLSyntaxNode parameters = GMLSyntaxNode.Empty;
+            if (context.parameterList() != null)
+            {
+                parameters = Visit(context.parameterList());
+            }
+            if (context.Identifier() != null)
+            {
+                id = new Identifier(context.Identifier(), context.Identifier().GetText());
+            }
+            return new ConstructorClause(context, id, parameters);
+        }
+
+        public override GMLSyntaxNode VisitParameterList(
+            [NotNull] GameMakerLanguageParser.ParameterListContext context
+        )
+        {
+            var parts = new List<GMLSyntaxNode>();
+            var args = context.parameterArgument();
+            foreach (var arg in args)
+            {
+                parts.Add(Visit(arg));
+            }
+            return GMLSyntaxNode.List(context, parts);
+        }
+
+        public override GMLSyntaxNode VisitParameterArgument(
+            [NotNull] GameMakerLanguageParser.ParameterArgumentContext context
+        )
+        {
+            var name = Visit(context.identifier());
+            GMLSyntaxNode initializer = GMLSyntaxNode.Empty;
+            if (context.expressionOrFunction() != null)
+            {
+                initializer = Visit(context.expressionOrFunction());
+            }
+            return new Parameter(context, name, initializer);
         }
 
         public override GMLSyntaxNode VisitLiteral(
@@ -342,15 +439,18 @@ namespace PrettierGML
             {
                 return Visit(context.arrayLiteral());
             }
-            if (context.structLiteral() != null)
+            else if (context.structLiteral() != null)
             {
                 return Visit(context.structLiteral());
             }
-            if (context.templateStringLiteral() != null)
+            else if (context.templateStringLiteral() != null)
             {
                 return Visit(context.templateStringLiteral());
             }
-            return new Literal(context.GetText());
+            else
+            {
+                return new Literal(context, context.GetText());
+            }
         }
 
         public override GMLSyntaxNode VisitLiteralExpression(
@@ -368,15 +468,36 @@ namespace PrettierGML
             {
                 return Visit(context.expression());
             }
-            if (context.functionDeclaration() != null)
+            else if (context.functionDeclaration() != null)
             {
                 return Visit(context.functionDeclaration());
             }
-            if (context.expressionOrFunction() != null)
+            else if (context.expressionOrFunction() != null)
             {
                 return Visit(context.expressionOrFunction());
             }
-            return GMLSyntaxNode.Empty;
+            else
+            {
+                return GMLSyntaxNode.Empty;
+            }
+        }
+
+        public override GMLSyntaxNode VisitLValueStartExpression(
+            [NotNull] GameMakerLanguageParser.LValueStartExpressionContext context
+        )
+        {
+            if (context.identifier() != null)
+            {
+                return Visit(context.identifier());
+            }
+            else if (context.expressionOrFunction() != null)
+            {
+                return Visit(context.expressionOrFunction());
+            }
+            else
+            {
+                return Visit(context.newExpression());
+            }
         }
 
         public override GMLSyntaxNode VisitLValueExpression(
@@ -396,14 +517,14 @@ namespace PrettierGML
                 }
             }
 
-            return @object;
-        }
+            if (context.lValueFinalOperator() != null)
+            {
+                var node = Visit(context.lValueFinalOperator());
+                (node as IHasObject)!.Object = @object;
+                @object = node;
+            }
 
-        public override GMLSyntaxNode VisitCallExpression(
-            [NotNull] GameMakerLanguageParser.CallExpressionContext context
-        )
-        {
-            return Visit(context.callStatement());
+            return @object;
         }
 
         public override GMLSyntaxNode VisitArguments(
@@ -416,7 +537,14 @@ namespace PrettierGML
             {
                 parts.Add(Visit(arg));
             }
-            return GMLSyntaxNode.List(parts);
+            return GMLSyntaxNode.List(context, parts);
+        }
+
+        public override GMLSyntaxNode VisitCallExpression(
+            [NotNull] GameMakerLanguageParser.CallExpressionContext context
+        )
+        {
+            return Visit(context.callStatement());
         }
 
         public override GMLSyntaxNode VisitCallStatement(
@@ -432,14 +560,42 @@ namespace PrettierGML
             {
                 @object = Visit(context.callStatement());
             }
-            return new CallExpression(@object, Visit(context.arguments()));
+            return new CallExpression(context, @object, Visit(context.arguments()));
         }
 
         public override GMLSyntaxNode VisitCallLValue(
             [NotNull] GameMakerLanguageParser.CallLValueContext context
         )
         {
-            return Visit(context.arguments());
+            return new CallExpression(context, GMLSyntaxNode.Empty, Visit(context.arguments()));
+        }
+
+        public override GMLSyntaxNode VisitCallableExpression(
+            [NotNull] GameMakerLanguageParser.CallableExpressionContext context
+        )
+        {
+            if (context.lValueExpression() != null)
+            {
+                return Visit(context.lValueExpression());
+            }
+            if (context.functionDeclaration() != null)
+            {
+                return Visit(context.functionDeclaration());
+            }
+            if (context.callableExpression() != null)
+            {
+                return Visit(context.callableExpression());
+            }
+            return GMLSyntaxNode.Empty;
+        }
+
+        public override GMLSyntaxNode VisitNewExpression(
+            [NotNull] GameMakerLanguageParser.NewExpressionContext context
+        )
+        {
+            var name = Visit(context.identifier());
+            var arguments = Visit(context.arguments());
+            return new NewExpression(context, name, arguments);
         }
 
         public override GMLSyntaxNode VisitMemberDotLValue(
@@ -447,7 +603,7 @@ namespace PrettierGML
         )
         {
             var property = Visit(context.identifier());
-            return new MemberDotExpression(GMLSyntaxNode.Empty, property);
+            return new MemberDotExpression(context, GMLSyntaxNode.Empty, property);
         }
 
         public override GMLSyntaxNode VisitMemberDotLValueFinal(
@@ -455,7 +611,7 @@ namespace PrettierGML
         )
         {
             var property = Visit(context.identifier());
-            return new MemberDotExpression(GMLSyntaxNode.Empty, property);
+            return new MemberDotExpression(context, GMLSyntaxNode.Empty, property);
         }
 
         public override GMLSyntaxNode VisitMemberIndexLValue(
@@ -464,7 +620,7 @@ namespace PrettierGML
         {
             var property = Visit(context.expressionSequence());
             var accessor = context.accessor().GetText();
-            return new MemberIndexExpression(GMLSyntaxNode.Empty, property, accessor);
+            return new MemberIndexExpression(context, GMLSyntaxNode.Empty, property, accessor);
         }
 
         public override GMLSyntaxNode VisitMemberIndexLValueFinal(
@@ -473,7 +629,7 @@ namespace PrettierGML
         {
             var property = Visit(context.expressionSequence());
             var accessor = context.accessor().GetText();
-            return new MemberIndexExpression(GMLSyntaxNode.Empty, property, accessor);
+            return new MemberIndexExpression(context, GMLSyntaxNode.Empty, property, accessor);
         }
 
         public override GMLSyntaxNode VisitExpressionSequence(
@@ -485,7 +641,7 @@ namespace PrettierGML
             {
                 parts.Add(Visit(expression));
             }
-            return new NodeList(parts);
+            return GMLSyntaxNode.List(context, parts);
         }
 
         public override GMLSyntaxNode VisitParenthesizedExpression(
@@ -493,27 +649,58 @@ namespace PrettierGML
         )
         {
             ParserRuleContext content = context.expression();
-
-            while (content is GameMakerLanguageParser.ParenthesizedExpressionContext clauseContext)
-            {
-                content = clauseContext.expression();
-            }
-
             return Visit(content);
         }
 
-        public override GMLSyntaxNode VisitIdentifierLValue(
-            [NotNull] GameMakerLanguageParser.IdentifierLValueContext context
+        public override GMLSyntaxNode VisitArrayLiteral(
+            [NotNull] GameMakerLanguageParser.ArrayLiteralContext context
         )
         {
-            return Visit(context.identifier());
+            if (context.elementList() == null)
+            {
+                return new ArrayExpression(context, GMLSyntaxNode.Empty);
+            }
+
+            var elements = context.elementList().expressionOrFunction();
+            var elementNodes = new List<GMLSyntaxNode>();
+            foreach (var element in elements)
+            {
+                elementNodes.Add(Visit(element));
+            }
+
+            return new ArrayExpression(context, GMLSyntaxNode.List(context, elementNodes));
+        }
+
+        public override GMLSyntaxNode VisitStructLiteral(
+            [NotNull] GameMakerLanguageParser.StructLiteralContext context
+        )
+        {
+            var properties = context.propertyAssignment();
+            var propertyNodes = new List<GMLSyntaxNode>();
+            foreach (var property in properties)
+            {
+                propertyNodes.Add(Visit(property));
+            }
+            return new StructExpression(context, GMLSyntaxNode.List(context, propertyNodes));
+        }
+
+        public override GMLSyntaxNode VisitPropertyAssignment(
+            [NotNull] GameMakerLanguageParser.PropertyAssignmentContext context
+        )
+        {
+            var name = new Identifier(
+                context.propertyIdentifier(),
+                context.propertyIdentifier().GetText()
+            );
+            var expression = Visit(context.expressionOrFunction());
+            return new StructProperty(context, name, expression);
         }
 
         public override GMLSyntaxNode VisitIdentifier(
             [NotNull] GameMakerLanguageParser.IdentifierContext context
         )
         {
-            return new Identifier(context.GetText());
+            return new Identifier(context, context.GetText());
         }
     }
 }

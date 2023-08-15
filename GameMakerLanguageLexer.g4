@@ -24,7 +24,7 @@ MapAccessor: '[?';
 GridAccessor: '[#';
 ArrayAccessor: '[@';
 StructAccessor: '[$'; 
-CloseBracket:                   ']';
+CloseBracket: ']';
 
 OpenParen:                      '(';
 CloseParen:                     ')';
@@ -93,10 +93,8 @@ HexIntegerLiteral:              HexLiteralPrefix [0-9a-fA-F] HexDigit*;
 
 /// Keywords
 
-Undefined:                      'undefined';
-NoOne:                          'noone';
-Self:                           'self';
-Other:                          'other';
+Undefined: 'undefined';
+NoOne: 'noone';
 
 Break:                          'break';
 Exit:                           'exit';

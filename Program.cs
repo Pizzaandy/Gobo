@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Tree;
 using Newtonsoft.Json;
 using PrettierGML;
@@ -25,8 +24,9 @@ static void Format(string input)
     ICharStream stream = CharStreams.fromString(input);
     var lexer = new GameMakerLanguageLexer(stream);
     var tokens = new CommonTokenStream(lexer);
-    var parser = new GameMakerLanguageParser(tokens) { };
-    parser.Interpreter.PredictionMode = PredictionMode.SLL;
+
+    var parser = new GameMakerLanguageParser(tokens);
+    parser.Interpreter.PredictionMode = Antlr4.Runtime.Atn.PredictionMode.SLL;
     IParseTree tree = parser.program();
 
     var builder = new GameMakerASTBuilder();
@@ -40,14 +40,12 @@ static void Format(string input)
 
 Format(
     """ 
-switch a {
-    case "e":
-        a()
-        break;
-    case a:
-    case b:
-        bruh()
-}
-
+	self.add_child(
+	new GuiSpaceBlock(8, 8),
+	new GuiButtonGreenUp("Ready", function() {}, 60),
+	new GuiSpaceInline(15),
+	new GuiButtonRedDown("Dismiss", function() {self.dismiss()}, 60),
+	new GuiSpaceBlock(8, 8)
+);
 """
 );

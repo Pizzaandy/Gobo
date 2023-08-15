@@ -581,13 +581,6 @@ namespace PrettierGML
             return Doc.Concat(".", Visit(context.identifier()));
         }
 
-        public override Doc VisitIdentifierLValue(
-            [NotNull] GameMakerLanguageParser.IdentifierLValueContext context
-        )
-        {
-            return Visit(context.identifier());
-        }
-
         public override Doc VisitIdentifier(
             [NotNull] GameMakerLanguageParser.IdentifierContext context
         )

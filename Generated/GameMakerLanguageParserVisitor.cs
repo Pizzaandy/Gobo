@@ -216,25 +216,11 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitGlobalVarStatement([NotNull] GameMakerLanguageParser.GlobalVarStatementContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.newExpression"/>.
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.lValueStartExpression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitNewExpression([NotNull] GameMakerLanguageParser.NewExpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>IdentifierLValue</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.lValueStartExpression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitIdentifierLValue([NotNull] GameMakerLanguageParser.IdentifierLValueContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>NewLValue</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.lValueStartExpression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitNewLValue([NotNull] GameMakerLanguageParser.NewLValueContext context);
+	Result VisitLValueStartExpression([NotNull] GameMakerLanguageParser.LValueStartExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.lValueExpression"/>.
 	/// </summary>
@@ -276,6 +262,12 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMemberDotLValueFinal([NotNull] GameMakerLanguageParser.MemberDotLValueFinalContext context);
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.newExpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitNewExpression([NotNull] GameMakerLanguageParser.NewExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.expressionSequence"/>.
 	/// </summary>

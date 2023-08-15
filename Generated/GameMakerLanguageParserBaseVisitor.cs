@@ -339,7 +339,7 @@ public partial class GameMakerLanguageParserBaseVisitor<Result> : AbstractParseT
 	/// <return>The visitor result.</return>
 	public virtual Result VisitGlobalVarStatement([NotNull] GameMakerLanguageParser.GlobalVarStatementContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.newExpression"/>.
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.lValueStartExpression"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -347,29 +347,7 @@ public partial class GameMakerLanguageParserBaseVisitor<Result> : AbstractParseT
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitNewExpression([NotNull] GameMakerLanguageParser.NewExpressionContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>IdentifierLValue</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.lValueStartExpression"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitIdentifierLValue([NotNull] GameMakerLanguageParser.IdentifierLValueContext context) { return VisitChildren(context); }
-	/// <summary>
-	/// Visit a parse tree produced by the <c>NewLValue</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.lValueStartExpression"/>.
-	/// <para>
-	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
-	/// on <paramref name="context"/>.
-	/// </para>
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	public virtual Result VisitNewLValue([NotNull] GameMakerLanguageParser.NewLValueContext context) { return VisitChildren(context); }
+	public virtual Result VisitLValueStartExpression([NotNull] GameMakerLanguageParser.LValueStartExpressionContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.lValueExpression"/>.
 	/// <para>
@@ -435,6 +413,16 @@ public partial class GameMakerLanguageParserBaseVisitor<Result> : AbstractParseT
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	public virtual Result VisitMemberDotLValueFinal([NotNull] GameMakerLanguageParser.MemberDotLValueFinalContext context) { return VisitChildren(context); }
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.newExpression"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitNewExpression([NotNull] GameMakerLanguageParser.NewExpressionContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.expressionSequence"/>.
 	/// <para>
