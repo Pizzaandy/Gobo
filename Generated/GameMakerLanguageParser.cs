@@ -2592,23 +2592,6 @@ public partial class GameMakerLanguageParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class AdditiveExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus() { return GetToken(GameMakerLanguageParser.Plus, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus() { return GetToken(GameMakerLanguageParser.Minus, 0); }
-		public AdditiveExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAdditiveExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
 	public partial class RelationalExpressionContext : ExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
 			return GetRuleContexts<ExpressionContext>();
@@ -2625,6 +2608,23 @@ public partial class GameMakerLanguageParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitRelationalExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class AdditiveExpressionContext : ExpressionContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus() { return GetToken(GameMakerLanguageParser.Plus, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus() { return GetToken(GameMakerLanguageParser.Minus, 0); }
+		public AdditiveExpressionContext(ExpressionContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAdditiveExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -2756,22 +2756,6 @@ public partial class GameMakerLanguageParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class LogicalXorExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Xor() { return GetToken(GameMakerLanguageParser.Xor, 0); }
-		public LogicalXorExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLogicalXorExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
 	public partial class BitOrExpressionContext : ExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
 			return GetRuleContexts<ExpressionContext>();
@@ -2788,6 +2772,22 @@ public partial class GameMakerLanguageParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
+	public partial class LogicalXorExpressionContext : ExpressionContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Xor() { return GetToken(GameMakerLanguageParser.Xor, 0); }
+		public LogicalXorExpressionContext(ExpressionContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitLogicalXorExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
 	public partial class IncDecExpressionContext : ExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public IncDecStatementContext incDecStatement() {
 			return GetRuleContext<IncDecStatementContext>(0);
@@ -2797,6 +2797,22 @@ public partial class GameMakerLanguageParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitIncDecExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class BitXOrExpressionContext : ExpressionContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitXOr() { return GetToken(GameMakerLanguageParser.BitXOr, 0); }
+		public BitXOrExpressionContext(ExpressionContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBitXOrExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -2818,22 +2834,6 @@ public partial class GameMakerLanguageParser : Parser {
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class BitXOrExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitXOr() { return GetToken(GameMakerLanguageParser.BitXOr, 0); }
-		public BitXOrExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitXOrExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
 	public partial class CallExpressionContext : ExpressionContext {
 		[System.Diagnostics.DebuggerNonUserCode] public CallStatementContext callStatement() {
 			return GetRuleContext<CallStatementContext>(0);
@@ -2843,6 +2843,22 @@ public partial class GameMakerLanguageParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitCallExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class CoalesceExpressionContext : ExpressionContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NullCoalesce() { return GetToken(GameMakerLanguageParser.NullCoalesce, 0); }
+		public CoalesceExpressionContext(ExpressionContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCoalesceExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -2862,22 +2878,6 @@ public partial class GameMakerLanguageParser : Parser {
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
 			if (typedVisitor != null) return typedVisitor.VisitMultiplicativeExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class CoalesceExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NullCoalesce() { return GetToken(GameMakerLanguageParser.NullCoalesce, 0); }
-		public CoalesceExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCoalesceExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
@@ -3018,63 +3018,49 @@ public partial class GameMakerLanguageParser : Parser {
 					switch ( Interpreter.AdaptivePredict(TokenStream,36,Context) ) {
 					case 1:
 						{
-						_localctx = new MultiplicativeExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new BitXOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 405;
 						if (!(Precpred(Context, 15))) throw new FailedPredicateException(this, "Precpred(Context, 15)");
 						State = 406;
-						_la = TokenStream.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
+						Match(BitXOr);
 						State = 407;
 						expression(16);
 						}
 						break;
 					case 2:
 						{
-						_localctx = new AdditiveExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new BitOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 408;
 						if (!(Precpred(Context, 14))) throw new FailedPredicateException(this, "Precpred(Context, 14)");
 						State = 409;
-						_la = TokenStream.LA(1);
-						if ( !(_la==Plus || _la==Minus) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
+						Match(BitOr);
 						State = 410;
 						expression(15);
 						}
 						break;
 					case 3:
 						{
-						_localctx = new CoalesceExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new BitAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 411;
 						if (!(Precpred(Context, 13))) throw new FailedPredicateException(this, "Precpred(Context, 13)");
 						State = 412;
-						Match(NullCoalesce);
+						Match(BitAnd);
 						State = 413;
 						expression(14);
 						}
 						break;
 					case 4:
 						{
-						_localctx = new BitShiftExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new RelationalExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 414;
 						if (!(Precpred(Context, 12))) throw new FailedPredicateException(this, "Precpred(Context, 12)");
 						State = 415;
 						_la = TokenStream.LA(1);
-						if ( !(_la==RightShiftArithmetic || _la==LeftShiftArithmetic) ) {
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4123168604160L) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
 						}
 						else {
@@ -3087,47 +3073,11 @@ public partial class GameMakerLanguageParser : Parser {
 						break;
 					case 5:
 						{
-						_localctx = new LogicalOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new EqualityExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 417;
 						if (!(Precpred(Context, 11))) throw new FailedPredicateException(this, "Precpred(Context, 11)");
 						State = 418;
-						Match(Or);
-						State = 419;
-						expression(12);
-						}
-						break;
-					case 6:
-						{
-						_localctx = new LogicalAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 420;
-						if (!(Precpred(Context, 10))) throw new FailedPredicateException(this, "Precpred(Context, 10)");
-						State = 421;
-						Match(And);
-						State = 422;
-						expression(11);
-						}
-						break;
-					case 7:
-						{
-						_localctx = new LogicalXorExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 423;
-						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
-						State = 424;
-						Match(Xor);
-						State = 425;
-						expression(10);
-						}
-						break;
-					case 8:
-						{
-						_localctx = new EqualityExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 426;
-						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
-						State = 427;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 13194140057600L) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -3136,19 +3086,55 @@ public partial class GameMakerLanguageParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
+						State = 419;
+						expression(12);
+						}
+						break;
+					case 6:
+						{
+						_localctx = new LogicalXorExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 420;
+						if (!(Precpred(Context, 10))) throw new FailedPredicateException(this, "Precpred(Context, 10)");
+						State = 421;
+						Match(Xor);
+						State = 422;
+						expression(11);
+						}
+						break;
+					case 7:
+						{
+						_localctx = new LogicalAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 423;
+						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
+						State = 424;
+						Match(And);
+						State = 425;
+						expression(10);
+						}
+						break;
+					case 8:
+						{
+						_localctx = new LogicalOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						PushNewRecursionContext(_localctx, _startState, RULE_expression);
+						State = 426;
+						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
+						State = 427;
+						Match(Or);
 						State = 428;
 						expression(9);
 						}
 						break;
 					case 9:
 						{
-						_localctx = new RelationalExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new BitShiftExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 429;
 						if (!(Precpred(Context, 7))) throw new FailedPredicateException(this, "Precpred(Context, 7)");
 						State = 430;
 						_la = TokenStream.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4123168604160L) != 0)) ) {
+						if ( !(_la==RightShiftArithmetic || _la==LeftShiftArithmetic) ) {
 						ErrorHandler.RecoverInline(this);
 						}
 						else {
@@ -3161,36 +3147,50 @@ public partial class GameMakerLanguageParser : Parser {
 						break;
 					case 10:
 						{
-						_localctx = new BitAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new CoalesceExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 432;
 						if (!(Precpred(Context, 6))) throw new FailedPredicateException(this, "Precpred(Context, 6)");
 						State = 433;
-						Match(BitAnd);
+						Match(NullCoalesce);
 						State = 434;
 						expression(7);
 						}
 						break;
 					case 11:
 						{
-						_localctx = new BitOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new AdditiveExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 435;
 						if (!(Precpred(Context, 5))) throw new FailedPredicateException(this, "Precpred(Context, 5)");
 						State = 436;
-						Match(BitOr);
+						_la = TokenStream.LA(1);
+						if ( !(_la==Plus || _la==Minus) ) {
+						ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
 						State = 437;
 						expression(6);
 						}
 						break;
 					case 12:
 						{
-						_localctx = new BitXOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
+						_localctx = new MultiplicativeExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
 						State = 438;
 						if (!(Precpred(Context, 4))) throw new FailedPredicateException(this, "Precpred(Context, 4)");
 						State = 439;
-						Match(BitXOr);
+						_la = TokenStream.LA(1);
+						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) ) {
+						ErrorHandler.RecoverInline(this);
+						}
+						else {
+							ErrorHandler.ReportMatch(this);
+						    Consume();
+						}
 						State = 440;
 						expression(5);
 						}
@@ -5526,45 +5526,45 @@ public partial class GameMakerLanguageParser : Parser {
 		1,65,1,66,1,66,1,66,0,2,68,70,67,0,2,4,6,8,10,12,14,16,18,20,22,24,26,
 		28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,
 		76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,
-		118,120,122,124,126,128,130,132,0,15,1,0,28,31,1,0,24,25,1,0,36,37,2,0,
-		19,19,42,43,1,0,38,41,1,0,22,23,1,0,3,8,3,0,19,19,35,35,50,59,2,0,64,64,
-		66,67,1,1,108,108,1,1,111,111,1,0,101,102,2,0,12,12,15,15,2,0,14,14,16,
-		16,4,0,3,97,99,99,103,106,112,114,738,0,135,1,0,0,0,2,140,1,0,0,0,4,166,
-		1,0,0,0,6,171,1,0,0,0,8,177,1,0,0,0,10,216,1,0,0,0,12,218,1,0,0,0,14,222,
-		1,0,0,0,16,226,1,0,0,0,18,228,1,0,0,0,20,230,1,0,0,0,22,232,1,0,0,0,24,
-		234,1,0,0,0,26,247,1,0,0,0,28,251,1,0,0,0,30,257,1,0,0,0,32,262,1,0,0,
-		0,34,265,1,0,0,0,36,274,1,0,0,0,38,284,1,0,0,0,40,287,1,0,0,0,42,291,1,
-		0,0,0,44,294,1,0,0,0,46,298,1,0,0,0,48,313,1,0,0,0,50,315,1,0,0,0,52,320,
-		1,0,0,0,54,337,1,0,0,0,56,339,1,0,0,0,58,356,1,0,0,0,60,364,1,0,0,0,62,
-		366,1,0,0,0,64,370,1,0,0,0,66,386,1,0,0,0,68,403,1,0,0,0,70,452,1,0,0,
-		0,72,471,1,0,0,0,74,478,1,0,0,0,76,480,1,0,0,0,78,482,1,0,0,0,80,498,1,
-		0,0,0,82,512,1,0,0,0,84,514,1,0,0,0,86,528,1,0,0,0,88,530,1,0,0,0,90,537,
-		1,0,0,0,92,557,1,0,0,0,94,573,1,0,0,0,96,580,1,0,0,0,98,582,1,0,0,0,100,
-		595,1,0,0,0,102,599,1,0,0,0,104,615,1,0,0,0,106,622,1,0,0,0,108,624,1,
-		0,0,0,110,632,1,0,0,0,112,643,1,0,0,0,114,648,1,0,0,0,116,657,1,0,0,0,
-		118,661,1,0,0,0,120,667,1,0,0,0,122,669,1,0,0,0,124,671,1,0,0,0,126,673,
-		1,0,0,0,128,675,1,0,0,0,130,677,1,0,0,0,132,679,1,0,0,0,134,136,3,2,1,
-		0,135,134,1,0,0,0,135,136,1,0,0,0,136,137,1,0,0,0,137,138,5,0,0,1,138,
-		1,1,0,0,0,139,141,3,4,2,0,140,139,1,0,0,0,141,142,1,0,0,0,142,140,1,0,
-		0,0,142,143,1,0,0,0,143,3,1,0,0,0,144,167,3,6,3,0,145,167,3,22,11,0,146,
-		167,3,8,4,0,147,167,3,46,23,0,148,167,3,10,5,0,149,167,3,16,8,0,150,167,
-		3,18,9,0,151,167,3,40,20,0,152,167,3,12,6,0,153,167,3,14,7,0,154,167,3,
-		34,17,0,155,167,3,32,16,0,156,167,3,20,10,0,157,167,3,114,57,0,158,167,
-		3,116,58,0,159,167,3,118,59,0,160,167,3,108,54,0,161,167,3,52,26,0,162,
-		167,3,44,22,0,163,167,3,74,37,0,164,167,3,70,35,0,165,167,3,98,49,0,166,
-		144,1,0,0,0,166,145,1,0,0,0,166,146,1,0,0,0,166,147,1,0,0,0,166,148,1,
-		0,0,0,166,149,1,0,0,0,166,150,1,0,0,0,166,151,1,0,0,0,166,152,1,0,0,0,
-		166,153,1,0,0,0,166,154,1,0,0,0,166,155,1,0,0,0,166,156,1,0,0,0,166,157,
-		1,0,0,0,166,158,1,0,0,0,166,159,1,0,0,0,166,160,1,0,0,0,166,161,1,0,0,
-		0,166,162,1,0,0,0,166,163,1,0,0,0,166,164,1,0,0,0,166,165,1,0,0,0,167,
-		169,1,0,0,0,168,170,3,130,65,0,169,168,1,0,0,0,169,170,1,0,0,0,170,5,1,
-		0,0,0,171,173,3,126,63,0,172,174,3,2,1,0,173,172,1,0,0,0,173,174,1,0,0,
-		0,174,175,1,0,0,0,175,176,3,128,64,0,176,7,1,0,0,0,177,178,5,90,0,0,178,
-		180,3,68,34,0,179,181,5,91,0,0,180,179,1,0,0,0,180,181,1,0,0,0,181,182,
-		1,0,0,0,182,185,3,4,2,0,183,184,5,74,0,0,184,186,3,4,2,0,185,183,1,0,0,
-		0,185,186,1,0,0,0,186,9,1,0,0,0,187,188,5,72,0,0,188,189,3,4,2,0,189,190,
-		5,85,0,0,190,191,3,68,34,0,191,217,1,0,0,0,192,193,5,84,0,0,193,194,3,
-		68,34,0,194,195,3,4,2,0,195,217,1,0,0,0,196,197,5,82,0,0,197,200,5,10,
+		118,120,122,124,126,128,130,132,0,15,1,0,38,41,2,0,19,19,42,43,1,0,36,
+		37,1,0,24,25,1,0,28,31,1,0,22,23,1,0,3,8,3,0,19,19,35,35,50,59,2,0,64,
+		64,66,67,1,1,108,108,1,1,111,111,1,0,101,102,2,0,12,12,15,15,2,0,14,14,
+		16,16,4,0,3,97,99,99,103,106,112,114,738,0,135,1,0,0,0,2,140,1,0,0,0,4,
+		166,1,0,0,0,6,171,1,0,0,0,8,177,1,0,0,0,10,216,1,0,0,0,12,218,1,0,0,0,
+		14,222,1,0,0,0,16,226,1,0,0,0,18,228,1,0,0,0,20,230,1,0,0,0,22,232,1,0,
+		0,0,24,234,1,0,0,0,26,247,1,0,0,0,28,251,1,0,0,0,30,257,1,0,0,0,32,262,
+		1,0,0,0,34,265,1,0,0,0,36,274,1,0,0,0,38,284,1,0,0,0,40,287,1,0,0,0,42,
+		291,1,0,0,0,44,294,1,0,0,0,46,298,1,0,0,0,48,313,1,0,0,0,50,315,1,0,0,
+		0,52,320,1,0,0,0,54,337,1,0,0,0,56,339,1,0,0,0,58,356,1,0,0,0,60,364,1,
+		0,0,0,62,366,1,0,0,0,64,370,1,0,0,0,66,386,1,0,0,0,68,403,1,0,0,0,70,452,
+		1,0,0,0,72,471,1,0,0,0,74,478,1,0,0,0,76,480,1,0,0,0,78,482,1,0,0,0,80,
+		498,1,0,0,0,82,512,1,0,0,0,84,514,1,0,0,0,86,528,1,0,0,0,88,530,1,0,0,
+		0,90,537,1,0,0,0,92,557,1,0,0,0,94,573,1,0,0,0,96,580,1,0,0,0,98,582,1,
+		0,0,0,100,595,1,0,0,0,102,599,1,0,0,0,104,615,1,0,0,0,106,622,1,0,0,0,
+		108,624,1,0,0,0,110,632,1,0,0,0,112,643,1,0,0,0,114,648,1,0,0,0,116,657,
+		1,0,0,0,118,661,1,0,0,0,120,667,1,0,0,0,122,669,1,0,0,0,124,671,1,0,0,
+		0,126,673,1,0,0,0,128,675,1,0,0,0,130,677,1,0,0,0,132,679,1,0,0,0,134,
+		136,3,2,1,0,135,134,1,0,0,0,135,136,1,0,0,0,136,137,1,0,0,0,137,138,5,
+		0,0,1,138,1,1,0,0,0,139,141,3,4,2,0,140,139,1,0,0,0,141,142,1,0,0,0,142,
+		140,1,0,0,0,142,143,1,0,0,0,143,3,1,0,0,0,144,167,3,6,3,0,145,167,3,22,
+		11,0,146,167,3,8,4,0,147,167,3,46,23,0,148,167,3,10,5,0,149,167,3,16,8,
+		0,150,167,3,18,9,0,151,167,3,40,20,0,152,167,3,12,6,0,153,167,3,14,7,0,
+		154,167,3,34,17,0,155,167,3,32,16,0,156,167,3,20,10,0,157,167,3,114,57,
+		0,158,167,3,116,58,0,159,167,3,118,59,0,160,167,3,108,54,0,161,167,3,52,
+		26,0,162,167,3,44,22,0,163,167,3,74,37,0,164,167,3,70,35,0,165,167,3,98,
+		49,0,166,144,1,0,0,0,166,145,1,0,0,0,166,146,1,0,0,0,166,147,1,0,0,0,166,
+		148,1,0,0,0,166,149,1,0,0,0,166,150,1,0,0,0,166,151,1,0,0,0,166,152,1,
+		0,0,0,166,153,1,0,0,0,166,154,1,0,0,0,166,155,1,0,0,0,166,156,1,0,0,0,
+		166,157,1,0,0,0,166,158,1,0,0,0,166,159,1,0,0,0,166,160,1,0,0,0,166,161,
+		1,0,0,0,166,162,1,0,0,0,166,163,1,0,0,0,166,164,1,0,0,0,166,165,1,0,0,
+		0,167,169,1,0,0,0,168,170,3,130,65,0,169,168,1,0,0,0,169,170,1,0,0,0,170,
+		5,1,0,0,0,171,173,3,126,63,0,172,174,3,2,1,0,173,172,1,0,0,0,173,174,1,
+		0,0,0,174,175,1,0,0,0,175,176,3,128,64,0,176,7,1,0,0,0,177,178,5,90,0,
+		0,178,180,3,68,34,0,179,181,5,91,0,0,180,179,1,0,0,0,180,181,1,0,0,0,181,
+		182,1,0,0,0,182,185,3,4,2,0,183,184,5,74,0,0,184,186,3,4,2,0,185,183,1,
+		0,0,0,185,186,1,0,0,0,186,9,1,0,0,0,187,188,5,72,0,0,188,189,3,4,2,0,189,
+		190,5,85,0,0,190,191,3,68,34,0,191,217,1,0,0,0,192,193,5,84,0,0,193,194,
+		3,68,34,0,194,195,3,4,2,0,195,217,1,0,0,0,196,197,5,82,0,0,197,200,5,10,
 		0,0,198,201,3,46,23,0,199,201,3,44,22,0,200,198,1,0,0,0,200,199,1,0,0,
 		0,200,201,1,0,0,0,201,202,1,0,0,0,202,204,5,17,0,0,203,205,3,68,34,0,204,
 		203,1,0,0,0,204,205,1,0,0,0,205,206,1,0,0,0,206,208,5,17,0,0,207,209,3,
@@ -5623,88 +5623,88 @@ public partial class GameMakerLanguageParser : Parser {
 		401,3,68,34,0,401,402,5,11,0,0,402,404,1,0,0,0,403,388,1,0,0,0,403,390,
 		1,0,0,0,403,391,1,0,0,0,403,392,1,0,0,0,403,394,1,0,0,0,403,396,1,0,0,
 		0,403,398,1,0,0,0,403,399,1,0,0,0,404,449,1,0,0,0,405,406,10,15,0,0,406,
-		407,7,0,0,0,407,448,3,68,34,16,408,409,10,14,0,0,409,410,7,1,0,0,410,448,
-		3,68,34,15,411,412,10,13,0,0,412,413,5,34,0,0,413,448,3,68,34,14,414,415,
-		10,12,0,0,415,416,7,2,0,0,416,448,3,68,34,13,417,418,10,11,0,0,418,419,
-		5,48,0,0,419,448,3,68,34,12,420,421,10,10,0,0,421,422,5,47,0,0,422,448,
-		3,68,34,11,423,424,10,9,0,0,424,425,5,49,0,0,425,448,3,68,34,10,426,427,
-		10,8,0,0,427,428,7,3,0,0,428,448,3,68,34,9,429,430,10,7,0,0,430,431,7,
-		4,0,0,431,448,3,68,34,8,432,433,10,6,0,0,433,434,5,44,0,0,434,448,3,68,
-		34,7,435,436,10,5,0,0,436,437,5,46,0,0,437,448,3,68,34,6,438,439,10,4,
-		0,0,439,440,5,45,0,0,440,448,3,68,34,5,441,442,10,3,0,0,442,443,5,33,0,
-		0,443,444,3,68,34,0,444,445,5,20,0,0,445,446,3,68,34,4,446,448,1,0,0,0,
-		447,405,1,0,0,0,447,408,1,0,0,0,447,411,1,0,0,0,447,414,1,0,0,0,447,417,
-		1,0,0,0,447,420,1,0,0,0,447,423,1,0,0,0,447,426,1,0,0,0,447,429,1,0,0,
-		0,447,432,1,0,0,0,447,435,1,0,0,0,447,438,1,0,0,0,447,441,1,0,0,0,448,
-		451,1,0,0,0,449,447,1,0,0,0,449,450,1,0,0,0,450,69,1,0,0,0,451,449,1,0,
-		0,0,452,453,6,35,-1,0,453,454,3,72,36,0,454,455,3,78,39,0,455,460,1,0,
-		0,0,456,457,10,1,0,0,457,459,3,78,39,0,458,456,1,0,0,0,459,462,1,0,0,0,
-		460,458,1,0,0,0,460,461,1,0,0,0,461,71,1,0,0,0,462,460,1,0,0,0,463,472,
-		3,56,28,0,464,467,5,10,0,0,465,468,3,98,49,0,466,468,3,72,36,0,467,465,
-		1,0,0,0,467,466,1,0,0,0,468,469,1,0,0,0,469,470,5,11,0,0,470,472,1,0,0,
-		0,471,463,1,0,0,0,471,464,1,0,0,0,472,73,1,0,0,0,473,474,7,5,0,0,474,479,
-		3,56,28,0,475,476,3,56,28,0,476,477,7,5,0,0,477,479,1,0,0,0,478,473,1,
-		0,0,0,478,475,1,0,0,0,479,75,1,0,0,0,480,481,7,6,0,0,481,77,1,0,0,0,482,
-		494,5,10,0,0,483,488,3,66,33,0,484,485,5,18,0,0,485,487,3,66,33,0,486,
-		484,1,0,0,0,487,490,1,0,0,0,488,486,1,0,0,0,488,489,1,0,0,0,489,492,1,
-		0,0,0,490,488,1,0,0,0,491,493,5,18,0,0,492,491,1,0,0,0,492,493,1,0,0,0,
-		493,495,1,0,0,0,494,483,1,0,0,0,494,495,1,0,0,0,495,496,1,0,0,0,496,497,
-		5,11,0,0,497,79,1,0,0,0,498,499,7,7,0,0,499,81,1,0,0,0,500,513,5,68,0,
-		0,501,513,5,69,0,0,502,513,5,63,0,0,503,513,5,104,0,0,504,513,5,106,0,
-		0,505,513,3,84,42,0,506,513,5,67,0,0,507,513,5,66,0,0,508,513,5,65,0,0,
-		509,513,5,64,0,0,510,513,3,88,44,0,511,513,3,92,46,0,512,500,1,0,0,0,512,
-		501,1,0,0,0,512,502,1,0,0,0,512,503,1,0,0,0,512,504,1,0,0,0,512,505,1,
-		0,0,0,512,506,1,0,0,0,512,507,1,0,0,0,512,508,1,0,0,0,512,509,1,0,0,0,
-		512,510,1,0,0,0,512,511,1,0,0,0,513,83,1,0,0,0,514,518,5,105,0,0,515,517,
-		3,86,43,0,516,515,1,0,0,0,517,520,1,0,0,0,518,516,1,0,0,0,518,519,1,0,
-		0,0,519,521,1,0,0,0,520,518,1,0,0,0,521,522,5,112,0,0,522,85,1,0,0,0,523,
-		529,5,114,0,0,524,525,5,113,0,0,525,526,3,68,34,0,526,527,5,13,0,0,527,
-		529,1,0,0,0,528,523,1,0,0,0,528,524,1,0,0,0,529,87,1,0,0,0,530,531,5,3,
-		0,0,531,532,3,90,45,0,532,533,5,9,0,0,533,89,1,0,0,0,534,536,5,18,0,0,
-		535,534,1,0,0,0,536,539,1,0,0,0,537,535,1,0,0,0,537,538,1,0,0,0,538,541,
-		1,0,0,0,539,537,1,0,0,0,540,542,3,66,33,0,541,540,1,0,0,0,541,542,1,0,
-		0,0,542,551,1,0,0,0,543,545,5,18,0,0,544,543,1,0,0,0,545,546,1,0,0,0,546,
-		544,1,0,0,0,546,547,1,0,0,0,547,548,1,0,0,0,548,550,3,66,33,0,549,544,
-		1,0,0,0,550,553,1,0,0,0,551,549,1,0,0,0,551,552,1,0,0,0,552,555,1,0,0,
-		0,553,551,1,0,0,0,554,556,5,18,0,0,555,554,1,0,0,0,555,556,1,0,0,0,556,
-		91,1,0,0,0,557,569,3,126,63,0,558,563,3,94,47,0,559,560,5,18,0,0,560,562,
-		3,94,47,0,561,559,1,0,0,0,562,565,1,0,0,0,563,561,1,0,0,0,563,564,1,0,
-		0,0,564,567,1,0,0,0,565,563,1,0,0,0,566,568,5,18,0,0,567,566,1,0,0,0,567,
-		568,1,0,0,0,568,570,1,0,0,0,569,558,1,0,0,0,569,570,1,0,0,0,570,571,1,
-		0,0,0,571,572,3,128,64,0,572,93,1,0,0,0,573,574,3,96,48,0,574,575,5,20,
-		0,0,575,576,3,66,33,0,576,95,1,0,0,0,577,581,5,103,0,0,578,581,3,122,61,
-		0,579,581,3,124,62,0,580,577,1,0,0,0,580,578,1,0,0,0,580,579,1,0,0,0,581,
-		97,1,0,0,0,582,584,5,87,0,0,583,585,5,103,0,0,584,583,1,0,0,0,584,585,
-		1,0,0,0,585,586,1,0,0,0,586,588,3,102,51,0,587,589,3,100,50,0,588,587,
-		1,0,0,0,588,589,1,0,0,0,589,590,1,0,0,0,590,591,3,6,3,0,591,99,1,0,0,0,
-		592,593,5,20,0,0,593,594,5,103,0,0,594,596,3,102,51,0,595,592,1,0,0,0,
-		595,596,1,0,0,0,596,597,1,0,0,0,597,598,5,96,0,0,598,101,1,0,0,0,599,611,
-		5,10,0,0,600,605,3,104,52,0,601,602,5,18,0,0,602,604,3,104,52,0,603,601,
-		1,0,0,0,604,607,1,0,0,0,605,603,1,0,0,0,605,606,1,0,0,0,606,609,1,0,0,
-		0,607,605,1,0,0,0,608,610,5,18,0,0,609,608,1,0,0,0,609,610,1,0,0,0,610,
-		612,1,0,0,0,611,600,1,0,0,0,611,612,1,0,0,0,612,613,1,0,0,0,613,614,5,
-		11,0,0,614,103,1,0,0,0,615,618,3,106,53,0,616,617,5,19,0,0,617,619,3,66,
-		33,0,618,616,1,0,0,0,618,619,1,0,0,0,619,105,1,0,0,0,620,623,5,103,0,0,
-		621,623,3,122,61,0,622,620,1,0,0,0,622,621,1,0,0,0,623,107,1,0,0,0,624,
-		625,5,95,0,0,625,626,3,106,53,0,626,628,3,126,63,0,627,629,3,110,55,0,
-		628,627,1,0,0,0,628,629,1,0,0,0,629,630,1,0,0,0,630,631,3,128,64,0,631,
-		109,1,0,0,0,632,637,3,112,56,0,633,634,5,18,0,0,634,636,3,112,56,0,635,
-		633,1,0,0,0,636,639,1,0,0,0,637,635,1,0,0,0,637,638,1,0,0,0,638,641,1,
-		0,0,0,639,637,1,0,0,0,640,642,5,18,0,0,641,640,1,0,0,0,641,642,1,0,0,0,
-		642,111,1,0,0,0,643,646,3,106,53,0,644,645,5,19,0,0,645,647,7,8,0,0,646,
-		644,1,0,0,0,646,647,1,0,0,0,647,113,1,0,0,0,648,649,5,98,0,0,649,651,3,
-		106,53,0,650,652,3,132,66,0,651,650,1,0,0,0,652,653,1,0,0,0,653,651,1,
-		0,0,0,653,654,1,0,0,0,654,655,1,0,0,0,655,656,7,9,0,0,656,115,1,0,0,0,
-		657,658,5,100,0,0,658,659,5,110,0,0,659,660,7,10,0,0,660,117,1,0,0,0,661,
-		663,7,11,0,0,662,664,5,110,0,0,663,662,1,0,0,0,663,664,1,0,0,0,664,665,
-		1,0,0,0,665,666,7,10,0,0,666,119,1,0,0,0,667,668,3,106,53,0,668,121,1,
-		0,0,0,669,670,5,96,0,0,670,123,1,0,0,0,671,672,5,69,0,0,672,125,1,0,0,
-		0,673,674,7,12,0,0,674,127,1,0,0,0,675,676,7,13,0,0,676,129,1,0,0,0,677,
-		678,5,17,0,0,678,131,1,0,0,0,679,680,7,14,0,0,680,133,1,0,0,0,71,135,142,
-		166,169,173,180,185,200,204,208,216,236,240,242,249,255,260,269,272,277,
-		280,289,304,310,313,318,326,337,343,347,356,364,375,380,386,403,447,449,
-		460,467,471,478,488,492,494,512,518,528,537,541,546,551,555,563,567,569,
-		580,584,588,595,605,609,611,618,622,628,637,641,646,653,663
+		407,5,45,0,0,407,448,3,68,34,16,408,409,10,14,0,0,409,410,5,46,0,0,410,
+		448,3,68,34,15,411,412,10,13,0,0,412,413,5,44,0,0,413,448,3,68,34,14,414,
+		415,10,12,0,0,415,416,7,0,0,0,416,448,3,68,34,13,417,418,10,11,0,0,418,
+		419,7,1,0,0,419,448,3,68,34,12,420,421,10,10,0,0,421,422,5,49,0,0,422,
+		448,3,68,34,11,423,424,10,9,0,0,424,425,5,47,0,0,425,448,3,68,34,10,426,
+		427,10,8,0,0,427,428,5,48,0,0,428,448,3,68,34,9,429,430,10,7,0,0,430,431,
+		7,2,0,0,431,448,3,68,34,8,432,433,10,6,0,0,433,434,5,34,0,0,434,448,3,
+		68,34,7,435,436,10,5,0,0,436,437,7,3,0,0,437,448,3,68,34,6,438,439,10,
+		4,0,0,439,440,7,4,0,0,440,448,3,68,34,5,441,442,10,3,0,0,442,443,5,33,
+		0,0,443,444,3,68,34,0,444,445,5,20,0,0,445,446,3,68,34,4,446,448,1,0,0,
+		0,447,405,1,0,0,0,447,408,1,0,0,0,447,411,1,0,0,0,447,414,1,0,0,0,447,
+		417,1,0,0,0,447,420,1,0,0,0,447,423,1,0,0,0,447,426,1,0,0,0,447,429,1,
+		0,0,0,447,432,1,0,0,0,447,435,1,0,0,0,447,438,1,0,0,0,447,441,1,0,0,0,
+		448,451,1,0,0,0,449,447,1,0,0,0,449,450,1,0,0,0,450,69,1,0,0,0,451,449,
+		1,0,0,0,452,453,6,35,-1,0,453,454,3,72,36,0,454,455,3,78,39,0,455,460,
+		1,0,0,0,456,457,10,1,0,0,457,459,3,78,39,0,458,456,1,0,0,0,459,462,1,0,
+		0,0,460,458,1,0,0,0,460,461,1,0,0,0,461,71,1,0,0,0,462,460,1,0,0,0,463,
+		472,3,56,28,0,464,467,5,10,0,0,465,468,3,98,49,0,466,468,3,72,36,0,467,
+		465,1,0,0,0,467,466,1,0,0,0,468,469,1,0,0,0,469,470,5,11,0,0,470,472,1,
+		0,0,0,471,463,1,0,0,0,471,464,1,0,0,0,472,73,1,0,0,0,473,474,7,5,0,0,474,
+		479,3,56,28,0,475,476,3,56,28,0,476,477,7,5,0,0,477,479,1,0,0,0,478,473,
+		1,0,0,0,478,475,1,0,0,0,479,75,1,0,0,0,480,481,7,6,0,0,481,77,1,0,0,0,
+		482,494,5,10,0,0,483,488,3,66,33,0,484,485,5,18,0,0,485,487,3,66,33,0,
+		486,484,1,0,0,0,487,490,1,0,0,0,488,486,1,0,0,0,488,489,1,0,0,0,489,492,
+		1,0,0,0,490,488,1,0,0,0,491,493,5,18,0,0,492,491,1,0,0,0,492,493,1,0,0,
+		0,493,495,1,0,0,0,494,483,1,0,0,0,494,495,1,0,0,0,495,496,1,0,0,0,496,
+		497,5,11,0,0,497,79,1,0,0,0,498,499,7,7,0,0,499,81,1,0,0,0,500,513,5,68,
+		0,0,501,513,5,69,0,0,502,513,5,63,0,0,503,513,5,104,0,0,504,513,5,106,
+		0,0,505,513,3,84,42,0,506,513,5,67,0,0,507,513,5,66,0,0,508,513,5,65,0,
+		0,509,513,5,64,0,0,510,513,3,88,44,0,511,513,3,92,46,0,512,500,1,0,0,0,
+		512,501,1,0,0,0,512,502,1,0,0,0,512,503,1,0,0,0,512,504,1,0,0,0,512,505,
+		1,0,0,0,512,506,1,0,0,0,512,507,1,0,0,0,512,508,1,0,0,0,512,509,1,0,0,
+		0,512,510,1,0,0,0,512,511,1,0,0,0,513,83,1,0,0,0,514,518,5,105,0,0,515,
+		517,3,86,43,0,516,515,1,0,0,0,517,520,1,0,0,0,518,516,1,0,0,0,518,519,
+		1,0,0,0,519,521,1,0,0,0,520,518,1,0,0,0,521,522,5,112,0,0,522,85,1,0,0,
+		0,523,529,5,114,0,0,524,525,5,113,0,0,525,526,3,68,34,0,526,527,5,13,0,
+		0,527,529,1,0,0,0,528,523,1,0,0,0,528,524,1,0,0,0,529,87,1,0,0,0,530,531,
+		5,3,0,0,531,532,3,90,45,0,532,533,5,9,0,0,533,89,1,0,0,0,534,536,5,18,
+		0,0,535,534,1,0,0,0,536,539,1,0,0,0,537,535,1,0,0,0,537,538,1,0,0,0,538,
+		541,1,0,0,0,539,537,1,0,0,0,540,542,3,66,33,0,541,540,1,0,0,0,541,542,
+		1,0,0,0,542,551,1,0,0,0,543,545,5,18,0,0,544,543,1,0,0,0,545,546,1,0,0,
+		0,546,544,1,0,0,0,546,547,1,0,0,0,547,548,1,0,0,0,548,550,3,66,33,0,549,
+		544,1,0,0,0,550,553,1,0,0,0,551,549,1,0,0,0,551,552,1,0,0,0,552,555,1,
+		0,0,0,553,551,1,0,0,0,554,556,5,18,0,0,555,554,1,0,0,0,555,556,1,0,0,0,
+		556,91,1,0,0,0,557,569,3,126,63,0,558,563,3,94,47,0,559,560,5,18,0,0,560,
+		562,3,94,47,0,561,559,1,0,0,0,562,565,1,0,0,0,563,561,1,0,0,0,563,564,
+		1,0,0,0,564,567,1,0,0,0,565,563,1,0,0,0,566,568,5,18,0,0,567,566,1,0,0,
+		0,567,568,1,0,0,0,568,570,1,0,0,0,569,558,1,0,0,0,569,570,1,0,0,0,570,
+		571,1,0,0,0,571,572,3,128,64,0,572,93,1,0,0,0,573,574,3,96,48,0,574,575,
+		5,20,0,0,575,576,3,66,33,0,576,95,1,0,0,0,577,581,5,103,0,0,578,581,3,
+		122,61,0,579,581,3,124,62,0,580,577,1,0,0,0,580,578,1,0,0,0,580,579,1,
+		0,0,0,581,97,1,0,0,0,582,584,5,87,0,0,583,585,5,103,0,0,584,583,1,0,0,
+		0,584,585,1,0,0,0,585,586,1,0,0,0,586,588,3,102,51,0,587,589,3,100,50,
+		0,588,587,1,0,0,0,588,589,1,0,0,0,589,590,1,0,0,0,590,591,3,6,3,0,591,
+		99,1,0,0,0,592,593,5,20,0,0,593,594,5,103,0,0,594,596,3,102,51,0,595,592,
+		1,0,0,0,595,596,1,0,0,0,596,597,1,0,0,0,597,598,5,96,0,0,598,101,1,0,0,
+		0,599,611,5,10,0,0,600,605,3,104,52,0,601,602,5,18,0,0,602,604,3,104,52,
+		0,603,601,1,0,0,0,604,607,1,0,0,0,605,603,1,0,0,0,605,606,1,0,0,0,606,
+		609,1,0,0,0,607,605,1,0,0,0,608,610,5,18,0,0,609,608,1,0,0,0,609,610,1,
+		0,0,0,610,612,1,0,0,0,611,600,1,0,0,0,611,612,1,0,0,0,612,613,1,0,0,0,
+		613,614,5,11,0,0,614,103,1,0,0,0,615,618,3,106,53,0,616,617,5,19,0,0,617,
+		619,3,66,33,0,618,616,1,0,0,0,618,619,1,0,0,0,619,105,1,0,0,0,620,623,
+		5,103,0,0,621,623,3,122,61,0,622,620,1,0,0,0,622,621,1,0,0,0,623,107,1,
+		0,0,0,624,625,5,95,0,0,625,626,3,106,53,0,626,628,3,126,63,0,627,629,3,
+		110,55,0,628,627,1,0,0,0,628,629,1,0,0,0,629,630,1,0,0,0,630,631,3,128,
+		64,0,631,109,1,0,0,0,632,637,3,112,56,0,633,634,5,18,0,0,634,636,3,112,
+		56,0,635,633,1,0,0,0,636,639,1,0,0,0,637,635,1,0,0,0,637,638,1,0,0,0,638,
+		641,1,0,0,0,639,637,1,0,0,0,640,642,5,18,0,0,641,640,1,0,0,0,641,642,1,
+		0,0,0,642,111,1,0,0,0,643,646,3,106,53,0,644,645,5,19,0,0,645,647,7,8,
+		0,0,646,644,1,0,0,0,646,647,1,0,0,0,647,113,1,0,0,0,648,649,5,98,0,0,649,
+		651,3,106,53,0,650,652,3,132,66,0,651,650,1,0,0,0,652,653,1,0,0,0,653,
+		651,1,0,0,0,653,654,1,0,0,0,654,655,1,0,0,0,655,656,7,9,0,0,656,115,1,
+		0,0,0,657,658,5,100,0,0,658,659,5,110,0,0,659,660,7,10,0,0,660,117,1,0,
+		0,0,661,663,7,11,0,0,662,664,5,110,0,0,663,662,1,0,0,0,663,664,1,0,0,0,
+		664,665,1,0,0,0,665,666,7,10,0,0,666,119,1,0,0,0,667,668,3,106,53,0,668,
+		121,1,0,0,0,669,670,5,96,0,0,670,123,1,0,0,0,671,672,5,69,0,0,672,125,
+		1,0,0,0,673,674,7,12,0,0,674,127,1,0,0,0,675,676,7,13,0,0,676,129,1,0,
+		0,0,677,678,5,17,0,0,678,131,1,0,0,0,679,680,7,14,0,0,680,133,1,0,0,0,
+		71,135,142,166,169,173,180,185,200,204,208,216,236,240,242,249,255,260,
+		269,272,277,280,289,304,310,313,318,326,337,343,347,356,364,375,380,386,
+		403,447,449,460,467,471,478,488,492,494,512,518,528,537,541,546,551,555,
+		563,567,569,580,584,588,595,605,609,611,618,622,628,637,641,646,653,663
 	};
 
 	public static readonly ATN _ATN =

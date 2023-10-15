@@ -1,35 +1,37 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
+using PrettierGML.Nodes;
+using PrettierGML.Nodes.SyntaxNodes;
 
 namespace PrettierGML
 {
-    public class GameMakerASTBuilder : GameMakerLanguageParserBaseVisitor<GMLSyntaxNode>
+    internal class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSyntaxNode>
     {
-        public override GMLSyntaxNode VisitProgram(
+        public override GmlSyntaxNode VisitProgram(
             [NotNull] GameMakerLanguageParser.ProgramContext context
         )
         {
             if (context.statementList() != null)
             {
                 var statements = Visit(context.statementList());
-                return new Program(context, statements);
+                return new Document(context, statements);
             }
             else
             {
-                return GMLSyntaxNode.Empty;
+                return GmlSyntaxNode.Empty;
             }
         }
 
-        public override GMLSyntaxNode VisitStatementList(
+        public override GmlSyntaxNode VisitStatementList(
             [NotNull] GameMakerLanguageParser.StatementListContext context
         )
         {
             var statements = context.statement();
-            var parts = new List<GMLSyntaxNode>(statements.Length);
+            var parts = new List<GmlSyntaxNode>(statements.Length);
 
             for (var i = 0; i < statements.Length; i++)
             {
-                GMLSyntaxNode statement = Visit(statements[i]);
+                GmlSyntaxNode statement = Visit(statements[i]);
                 if (statement is EmptyNode)
                 {
                     continue;
@@ -37,10 +39,10 @@ namespace PrettierGML
                 parts.Add(statement);
             }
 
-            return GMLSyntaxNode.List(context, parts);
+            return GmlSyntaxNode.List(context, parts);
         }
 
-        public override GMLSyntaxNode VisitStatement(
+        public override GmlSyntaxNode VisitStatement(
             [NotNull] GameMakerLanguageParser.StatementContext context
         )
         {
@@ -129,14 +131,14 @@ namespace PrettierGML
                 return Visit(context.regionStatement());
             }
 
-            return GMLSyntaxNode.Empty;
+            return GmlSyntaxNode.Empty;
         }
 
-        public override GMLSyntaxNode VisitBlock(
+        public override GmlSyntaxNode VisitBlock(
             [NotNull] GameMakerLanguageParser.BlockContext context
         )
         {
-            GMLSyntaxNode body;
+            GmlSyntaxNode body;
 
             if (context.statementList() != null)
             {
@@ -144,19 +146,19 @@ namespace PrettierGML
             }
             else
             {
-                body = GMLSyntaxNode.Empty;
+                body = GmlSyntaxNode.Empty;
             }
 
             return new Block(context, body);
         }
 
-        public override GMLSyntaxNode VisitIfStatement(
+        public override GmlSyntaxNode VisitIfStatement(
             [NotNull] GameMakerLanguageParser.IfStatementContext context
         )
         {
             var test = Visit(context.expression());
             var consequent = Visit(context.statement()[0]);
-            GMLSyntaxNode alternate = GMLSyntaxNode.Empty;
+            GmlSyntaxNode alternate = GmlSyntaxNode.Empty;
 
             if (context.statement().Length > 1)
             {
@@ -166,7 +168,7 @@ namespace PrettierGML
             return new IfStatement(context, test, consequent, alternate);
         }
 
-        public override GMLSyntaxNode VisitDoStatement(
+        public override GmlSyntaxNode VisitDoStatement(
             [NotNull] GameMakerLanguageParser.DoStatementContext context
         )
         {
@@ -175,7 +177,7 @@ namespace PrettierGML
             return new DoStatement(context, body, test);
         }
 
-        public override GMLSyntaxNode VisitWhileStatement(
+        public override GmlSyntaxNode VisitWhileStatement(
             [NotNull] GameMakerLanguageParser.WhileStatementContext context
         )
         {
@@ -184,14 +186,14 @@ namespace PrettierGML
             return new WhileStatement(context, test, body);
         }
 
-        public override GMLSyntaxNode VisitForStatement(
+        public override GmlSyntaxNode VisitForStatement(
             [NotNull] GameMakerLanguageParser.ForStatementContext context
         )
         {
-            GMLSyntaxNode init = GMLSyntaxNode.Empty;
-            GMLSyntaxNode test = GMLSyntaxNode.Empty;
-            GMLSyntaxNode update = GMLSyntaxNode.Empty;
-            GMLSyntaxNode body;
+            GmlSyntaxNode init = GmlSyntaxNode.Empty;
+            GmlSyntaxNode test = GmlSyntaxNode.Empty;
+            GmlSyntaxNode update = GmlSyntaxNode.Empty;
+            GmlSyntaxNode body;
 
             if (context.variableDeclarationList() != null)
             {
@@ -220,7 +222,7 @@ namespace PrettierGML
             return new ForStatement(context, init, test, update, body);
         }
 
-        public override GMLSyntaxNode VisitWithStatement(
+        public override GmlSyntaxNode VisitWithStatement(
             [NotNull] GameMakerLanguageParser.WithStatementContext context
         )
         {
@@ -229,7 +231,7 @@ namespace PrettierGML
             return new WithStatement(context, @object, body);
         }
 
-        public override GMLSyntaxNode VisitSwitchStatement(
+        public override GmlSyntaxNode VisitSwitchStatement(
             [NotNull] GameMakerLanguageParser.SwitchStatementContext context
         )
         {
@@ -238,15 +240,14 @@ namespace PrettierGML
             return new SwitchStatement(context, discriminant, cases);
         }
 
-        public override GMLSyntaxNode VisitCaseBlock(
+        public override GmlSyntaxNode VisitCaseBlock(
             [NotNull] GameMakerLanguageParser.CaseBlockContext context
         )
         {
-            var caseClauses = new List<GMLSyntaxNode>();
+            var caseClauses = new List<GmlSyntaxNode>();
             if (context.caseClauses() != null)
             {
-                var cases = context.caseClauses();
-                foreach (var caseList in cases)
+                foreach (var caseList in context.caseClauses())
                 {
                     var node = Visit(caseList);
                     if (node is NodeList nodeList)
@@ -259,28 +260,27 @@ namespace PrettierGML
             {
                 caseClauses.Add(Visit(context.defaultClause()));
             }
-            return GMLSyntaxNode.List(context, caseClauses);
+            return GmlSyntaxNode.List(context, caseClauses);
         }
 
-        public override GMLSyntaxNode VisitCaseClauses(
+        public override GmlSyntaxNode VisitCaseClauses(
             [NotNull] GameMakerLanguageParser.CaseClausesContext context
         )
         {
-            var parts = new List<GMLSyntaxNode>();
-            var caseClauses = context.caseClause();
-            foreach (var caseClause in caseClauses)
+            var parts = new List<GmlSyntaxNode>();
+            foreach (var caseClause in context.caseClause())
             {
                 parts.Add(Visit(caseClause));
             }
-            return GMLSyntaxNode.List(context, parts);
+            return GmlSyntaxNode.List(context, parts);
         }
 
-        public override GMLSyntaxNode VisitCaseClause(
+        public override GmlSyntaxNode VisitCaseClause(
             [NotNull] GameMakerLanguageParser.CaseClauseContext context
         )
         {
             var test = Visit(context.expression());
-            GMLSyntaxNode body = GMLSyntaxNode.Empty;
+            GmlSyntaxNode body = GmlSyntaxNode.Empty;
             if (context.statementList() != null)
             {
                 body = Visit(context.statementList());
@@ -288,40 +288,40 @@ namespace PrettierGML
             return new SwitchCase(context, test, body);
         }
 
-        public override GMLSyntaxNode VisitDefaultClause(
+        public override GmlSyntaxNode VisitDefaultClause(
             [NotNull] GameMakerLanguageParser.DefaultClauseContext context
         )
         {
-            GMLSyntaxNode body = GMLSyntaxNode.Empty;
+            GmlSyntaxNode body = GmlSyntaxNode.Empty;
             if (context.statementList() != null)
             {
                 body = Visit(context.statementList());
             }
-            return new SwitchCase(context, GMLSyntaxNode.Empty, body);
+            return new SwitchCase(context, GmlSyntaxNode.Empty, body);
         }
 
-        public override GMLSyntaxNode VisitContinueStatement(
+        public override GmlSyntaxNode VisitContinueStatement(
             [NotNull] GameMakerLanguageParser.ContinueStatementContext context
         )
         {
             return new ContinueStatement(context);
         }
 
-        public override GMLSyntaxNode VisitBreakStatement(
+        public override GmlSyntaxNode VisitBreakStatement(
             [NotNull] GameMakerLanguageParser.BreakStatementContext context
         )
         {
             return new BreakStatement(context);
         }
 
-        public override GMLSyntaxNode VisitExitStatement(
+        public override GmlSyntaxNode VisitExitStatement(
             [NotNull] GameMakerLanguageParser.ExitStatementContext context
         )
         {
             return new ExitStatement(context);
         }
 
-        public override GMLSyntaxNode VisitAssignmentExpression(
+        public override GmlSyntaxNode VisitAssignmentExpression(
             [NotNull] GameMakerLanguageParser.AssignmentExpressionContext context
         )
         {
@@ -335,30 +335,29 @@ namespace PrettierGML
             return new AssignmentExpression(context, @operator, left, right);
         }
 
-        public override GMLSyntaxNode VisitVariableDeclarationList(
+        public override GmlSyntaxNode VisitVariableDeclarationList(
             [NotNull] GameMakerLanguageParser.VariableDeclarationListContext context
         )
         {
-            var declarations = new List<GMLSyntaxNode>();
-            var declarationContexts = context.variableDeclaration();
-            foreach (var declaration in declarationContexts)
+            var declarations = new List<GmlSyntaxNode>();
+            foreach (var declaration in context.variableDeclaration())
             {
                 declarations.Add(Visit(declaration));
             }
             var kind = context.varModifier().GetText();
             return new VariableDeclarationList(
                 context,
-                GMLSyntaxNode.List(context, declarations),
+                GmlSyntaxNode.List(context, declarations),
                 kind
             );
         }
 
-        public override GMLSyntaxNode VisitVariableDeclaration(
+        public override GmlSyntaxNode VisitVariableDeclaration(
             [NotNull] GameMakerLanguageParser.VariableDeclarationContext context
         )
         {
             var id = Visit(context.identifier());
-            GMLSyntaxNode initializer = GMLSyntaxNode.Empty;
+            GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
             if (context.expressionOrFunction() != null)
             {
                 initializer = Visit(context.expressionOrFunction());
@@ -366,14 +365,14 @@ namespace PrettierGML
             return new VariableDeclarator(context, id, initializer);
         }
 
-        public override GMLSyntaxNode VisitFunctionDeclaration(
+        public override GmlSyntaxNode VisitFunctionDeclaration(
             [NotNull] GameMakerLanguageParser.FunctionDeclarationContext context
         )
         {
-            GMLSyntaxNode id = GMLSyntaxNode.Empty;
+            GmlSyntaxNode id = GmlSyntaxNode.Empty;
             var parameters = Visit(context.parameterList());
             var body = Visit(context.block());
-            GMLSyntaxNode constructorClause = GMLSyntaxNode.Empty;
+            GmlSyntaxNode constructorClause = GmlSyntaxNode.Empty;
 
             if (context.Identifier() != null)
             {
@@ -388,12 +387,12 @@ namespace PrettierGML
             return new FunctionDeclaration(context, id, parameters, body, constructorClause);
         }
 
-        public override GMLSyntaxNode VisitConstructorClause(
+        public override GmlSyntaxNode VisitConstructorClause(
             [NotNull] GameMakerLanguageParser.ConstructorClauseContext context
         )
         {
-            GMLSyntaxNode id = GMLSyntaxNode.Empty;
-            GMLSyntaxNode parameters = GMLSyntaxNode.Empty;
+            GmlSyntaxNode id = GmlSyntaxNode.Empty;
+            GmlSyntaxNode parameters = GmlSyntaxNode.Empty;
             if (context.parameterList() != null)
             {
                 parameters = Visit(context.parameterList());
@@ -405,25 +404,24 @@ namespace PrettierGML
             return new ConstructorClause(context, id, parameters);
         }
 
-        public override GMLSyntaxNode VisitParameterList(
+        public override GmlSyntaxNode VisitParameterList(
             [NotNull] GameMakerLanguageParser.ParameterListContext context
         )
         {
-            var parts = new List<GMLSyntaxNode>();
-            var args = context.parameterArgument();
-            foreach (var arg in args)
+            var parts = new List<GmlSyntaxNode>();
+            foreach (var arg in context.parameterArgument())
             {
                 parts.Add(Visit(arg));
             }
-            return GMLSyntaxNode.List(context, parts);
+            return GmlSyntaxNode.List(context, parts);
         }
 
-        public override GMLSyntaxNode VisitParameterArgument(
+        public override GmlSyntaxNode VisitParameterArgument(
             [NotNull] GameMakerLanguageParser.ParameterArgumentContext context
         )
         {
             var name = Visit(context.identifier());
-            GMLSyntaxNode initializer = GMLSyntaxNode.Empty;
+            GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
             if (context.expressionOrFunction() != null)
             {
                 initializer = Visit(context.expressionOrFunction());
@@ -431,7 +429,7 @@ namespace PrettierGML
             return new Parameter(context, name, initializer);
         }
 
-        public override GMLSyntaxNode VisitLiteral(
+        public override GmlSyntaxNode VisitLiteral(
             [NotNull] GameMakerLanguageParser.LiteralContext context
         )
         {
@@ -453,14 +451,14 @@ namespace PrettierGML
             }
         }
 
-        public override GMLSyntaxNode VisitLiteralExpression(
+        public override GmlSyntaxNode VisitLiteralExpression(
             [NotNull] GameMakerLanguageParser.LiteralExpressionContext context
         )
         {
             return Visit(context.literal());
         }
 
-        public override GMLSyntaxNode VisitExpressionOrFunction(
+        public override GmlSyntaxNode VisitExpressionOrFunction(
             [NotNull] GameMakerLanguageParser.ExpressionOrFunctionContext context
         )
         {
@@ -478,11 +476,11 @@ namespace PrettierGML
             }
             else
             {
-                return GMLSyntaxNode.Empty;
+                return GmlSyntaxNode.Empty;
             }
         }
 
-        public override GMLSyntaxNode VisitLValueStartExpression(
+        public override GmlSyntaxNode VisitLValueStartExpression(
             [NotNull] GameMakerLanguageParser.LValueStartExpressionContext context
         )
         {
@@ -500,11 +498,11 @@ namespace PrettierGML
             }
         }
 
-        public override GMLSyntaxNode VisitLValueExpression(
+        public override GmlSyntaxNode VisitLValueExpression(
             [NotNull] GameMakerLanguageParser.LValueExpressionContext context
         )
         {
-            GMLSyntaxNode @object = Visit(context.lValueStartExpression());
+            GmlSyntaxNode @object = Visit(context.lValueStartExpression());
 
             if (context.lValueChainOperator()?.Length > 0)
             {
@@ -527,31 +525,30 @@ namespace PrettierGML
             return @object;
         }
 
-        public override GMLSyntaxNode VisitArguments(
+        public override GmlSyntaxNode VisitArguments(
             [NotNull] GameMakerLanguageParser.ArgumentsContext context
         )
         {
-            var parts = new List<GMLSyntaxNode>();
-            var args = context.expressionOrFunction();
-            foreach (var arg in args)
+            var parts = new List<GmlSyntaxNode>();
+            foreach (var arg in context.expressionOrFunction())
             {
                 parts.Add(Visit(arg));
             }
-            return GMLSyntaxNode.List(context, parts);
+            return GmlSyntaxNode.List(context, parts);
         }
 
-        public override GMLSyntaxNode VisitCallExpression(
+        public override GmlSyntaxNode VisitCallExpression(
             [NotNull] GameMakerLanguageParser.CallExpressionContext context
         )
         {
             return Visit(context.callStatement());
         }
 
-        public override GMLSyntaxNode VisitCallStatement(
+        public override GmlSyntaxNode VisitCallStatement(
             [NotNull] GameMakerLanguageParser.CallStatementContext context
         )
         {
-            GMLSyntaxNode @object = GMLSyntaxNode.Empty;
+            GmlSyntaxNode @object = GmlSyntaxNode.Empty;
             if (context.callableExpression() != null)
             {
                 @object = Visit(context.callableExpression());
@@ -563,14 +560,14 @@ namespace PrettierGML
             return new CallExpression(context, @object, Visit(context.arguments()));
         }
 
-        public override GMLSyntaxNode VisitCallLValue(
+        public override GmlSyntaxNode VisitCallLValue(
             [NotNull] GameMakerLanguageParser.CallLValueContext context
         )
         {
-            return new CallExpression(context, GMLSyntaxNode.Empty, Visit(context.arguments()));
+            return new CallExpression(context, GmlSyntaxNode.Empty, Visit(context.arguments()));
         }
 
-        public override GMLSyntaxNode VisitCallableExpression(
+        public override GmlSyntaxNode VisitCallableExpression(
             [NotNull] GameMakerLanguageParser.CallableExpressionContext context
         )
         {
@@ -586,10 +583,10 @@ namespace PrettierGML
             {
                 return Visit(context.callableExpression());
             }
-            return GMLSyntaxNode.Empty;
+            return GmlSyntaxNode.Empty;
         }
 
-        public override GMLSyntaxNode VisitNewExpression(
+        public override GmlSyntaxNode VisitNewExpression(
             [NotNull] GameMakerLanguageParser.NewExpressionContext context
         )
         {
@@ -598,53 +595,53 @@ namespace PrettierGML
             return new NewExpression(context, name, arguments);
         }
 
-        public override GMLSyntaxNode VisitMemberDotLValue(
+        public override GmlSyntaxNode VisitMemberDotLValue(
             [NotNull] GameMakerLanguageParser.MemberDotLValueContext context
         )
         {
             var property = Visit(context.identifier());
-            return new MemberDotExpression(context, GMLSyntaxNode.Empty, property);
+            return new MemberDotExpression(context, GmlSyntaxNode.Empty, property);
         }
 
-        public override GMLSyntaxNode VisitMemberDotLValueFinal(
+        public override GmlSyntaxNode VisitMemberDotLValueFinal(
             [NotNull] GameMakerLanguageParser.MemberDotLValueFinalContext context
         )
         {
             var property = Visit(context.identifier());
-            return new MemberDotExpression(context, GMLSyntaxNode.Empty, property);
+            return new MemberDotExpression(context, GmlSyntaxNode.Empty, property);
         }
 
-        public override GMLSyntaxNode VisitMemberIndexLValue(
+        public override GmlSyntaxNode VisitMemberIndexLValue(
             [NotNull] GameMakerLanguageParser.MemberIndexLValueContext context
         )
         {
             var property = Visit(context.expressionSequence());
             var accessor = context.accessor().GetText();
-            return new MemberIndexExpression(context, GMLSyntaxNode.Empty, property, accessor);
+            return new MemberIndexExpression(context, GmlSyntaxNode.Empty, property, accessor);
         }
 
-        public override GMLSyntaxNode VisitMemberIndexLValueFinal(
+        public override GmlSyntaxNode VisitMemberIndexLValueFinal(
             [NotNull] GameMakerLanguageParser.MemberIndexLValueFinalContext context
         )
         {
             var property = Visit(context.expressionSequence());
             var accessor = context.accessor().GetText();
-            return new MemberIndexExpression(context, GMLSyntaxNode.Empty, property, accessor);
+            return new MemberIndexExpression(context, GmlSyntaxNode.Empty, property, accessor);
         }
 
-        public override GMLSyntaxNode VisitExpressionSequence(
+        public override GmlSyntaxNode VisitExpressionSequence(
             [NotNull] GameMakerLanguageParser.ExpressionSequenceContext context
         )
         {
-            var parts = new List<GMLSyntaxNode>();
+            var parts = new List<GmlSyntaxNode>();
             foreach (var expression in context.expression())
             {
                 parts.Add(Visit(expression));
             }
-            return GMLSyntaxNode.List(context, parts);
+            return GmlSyntaxNode.List(context, parts);
         }
 
-        public override GMLSyntaxNode VisitParenthesizedExpression(
+        public override GmlSyntaxNode VisitParenthesizedExpression(
             [NotNull] GameMakerLanguageParser.ParenthesizedExpressionContext context
         )
         {
@@ -652,39 +649,37 @@ namespace PrettierGML
             return Visit(content);
         }
 
-        public override GMLSyntaxNode VisitArrayLiteral(
+        public override GmlSyntaxNode VisitArrayLiteral(
             [NotNull] GameMakerLanguageParser.ArrayLiteralContext context
         )
         {
             if (context.elementList() == null)
             {
-                return new ArrayExpression(context, GMLSyntaxNode.Empty);
+                return new ArrayExpression(context, GmlSyntaxNode.Empty);
             }
 
-            var elements = context.elementList().expressionOrFunction();
-            var elementNodes = new List<GMLSyntaxNode>();
-            foreach (var element in elements)
+            var elementNodes = new List<GmlSyntaxNode>();
+            foreach (var element in context.elementList().expressionOrFunction())
             {
                 elementNodes.Add(Visit(element));
             }
 
-            return new ArrayExpression(context, GMLSyntaxNode.List(context, elementNodes));
+            return new ArrayExpression(context, GmlSyntaxNode.List(context, elementNodes));
         }
 
-        public override GMLSyntaxNode VisitStructLiteral(
+        public override GmlSyntaxNode VisitStructLiteral(
             [NotNull] GameMakerLanguageParser.StructLiteralContext context
         )
         {
-            var properties = context.propertyAssignment();
-            var propertyNodes = new List<GMLSyntaxNode>();
-            foreach (var property in properties)
+            var propertyNodes = new List<GmlSyntaxNode>();
+            foreach (var property in context.propertyAssignment())
             {
                 propertyNodes.Add(Visit(property));
             }
-            return new StructExpression(context, GMLSyntaxNode.List(context, propertyNodes));
+            return new StructExpression(context, GmlSyntaxNode.List(context, propertyNodes));
         }
 
-        public override GMLSyntaxNode VisitPropertyAssignment(
+        public override GmlSyntaxNode VisitPropertyAssignment(
             [NotNull] GameMakerLanguageParser.PropertyAssignmentContext context
         )
         {
@@ -696,11 +691,119 @@ namespace PrettierGML
             return new StructProperty(context, name, expression);
         }
 
-        public override GMLSyntaxNode VisitIdentifier(
+        public override GmlSyntaxNode VisitIdentifier(
             [NotNull] GameMakerLanguageParser.IdentifierContext context
         )
         {
             return new Identifier(context, context.GetText());
+        }
+
+        public override GmlSyntaxNode VisitMultiplicativeExpression(
+            [NotNull] GameMakerLanguageParser.MultiplicativeExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitAdditiveExpression(
+            [NotNull] GameMakerLanguageParser.AdditiveExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitCoalesceExpression(
+            [NotNull] GameMakerLanguageParser.CoalesceExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitBitShiftExpression(
+            [NotNull] GameMakerLanguageParser.BitShiftExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitLogicalOrExpression(
+            [NotNull] GameMakerLanguageParser.LogicalOrExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitLogicalAndExpression(
+            [NotNull] GameMakerLanguageParser.LogicalAndExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitLogicalXorExpression(
+            [NotNull] GameMakerLanguageParser.LogicalXorExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitEqualityExpression(
+            [NotNull] GameMakerLanguageParser.EqualityExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitRelationalExpression(
+            [NotNull] GameMakerLanguageParser.RelationalExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitBitAndExpression(
+            [NotNull] GameMakerLanguageParser.BitAndExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitBitOrExpression(
+            [NotNull] GameMakerLanguageParser.BitOrExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+        }
+
+        public override GmlSyntaxNode VisitBitXOrExpression(
+            [NotNull] GameMakerLanguageParser.BitXOrExpressionContext context
+        )
+        {
+            var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
+            var @operator = context.children[1].GetText();
+            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
         }
     }
 }
