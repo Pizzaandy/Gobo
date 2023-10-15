@@ -1,4 +1,4 @@
-﻿using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime;
 
 namespace PrettierGML.Nodes
 {
@@ -6,7 +6,7 @@ namespace PrettierGML.Nodes
     {
         public IList<GmlSyntaxNode> Contents { get; set; }
 
-        public NodeList(ISyntaxTree context, IList<GmlSyntaxNode> contents)
+        public NodeList(ParserRuleContext context, IList<GmlSyntaxNode> contents)
             : base(context)
         {
             Contents = contents;
@@ -16,6 +16,7 @@ namespace PrettierGML.Nodes
             }
         }
 
-        public override Doc Print() => throw new NotImplementedException("NodeList cannot be printed");
+        public override Doc Print() =>
+            throw new NotImplementedException("NodeList cannot be printed");
     }
 }

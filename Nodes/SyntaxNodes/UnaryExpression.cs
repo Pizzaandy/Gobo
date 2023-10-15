@@ -23,7 +23,14 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print()
         {
-            return Doc.Concat(Operator, Argument.Print());
+            if (IsPrefix)
+            {
+                return Doc.Concat(Operator, Argument.Print());
+            }
+            else
+            {
+                return Doc.Concat(Argument.Print(), Operator);
+            }
         }
     }
 }

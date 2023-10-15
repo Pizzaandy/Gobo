@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
@@ -6,7 +7,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public string Name { get; set; }
 
-        public Identifier(ISyntaxTree context, string name)
+        public Identifier(ITerminalNode context, string name)
+            : base(context)
+        {
+            Name = name;
+        }
+
+        public Identifier(ParserRuleContext context, string name)
             : base(context)
         {
             Name = name;

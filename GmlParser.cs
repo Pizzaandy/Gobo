@@ -11,8 +11,11 @@ namespace PrettierGML
             ICharStream stream = CharStreams.fromString(input);
             var lexer = new GameMakerLanguageLexer(stream);
             var tokens = new CommonTokenStream(lexer);
+
             var parser = new GameMakerLanguageParser(tokens);
             parser.Interpreter.PredictionMode = Antlr4.Runtime.Atn.PredictionMode.SLL;
+            parser.AddErrorListener(new GameMakerLanguageErrorListener());
+
             IParseTree tree = parser.program();
             var builder = new GmlAstBuilder();
             return builder.Visit(tree);

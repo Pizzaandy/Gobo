@@ -196,7 +196,7 @@ expression
     | expression ('+' | '-') expression # AdditiveExpression
     | expression ('*' | '/' | Modulo | IntegerDivide) expression # MultiplicativeExpression
 
-    | expression '?' expression ':' expression # TernaryExpression
+    | <assoc=right> expression '?' expression ':' expression # TernaryExpression
     | literal # LiteralExpression
     | '(' expression ')' # ParenthesizedExpression
     ;

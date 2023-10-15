@@ -22,7 +22,7 @@ namespace PrettierGML.Nodes
 
         public static Doc PrintStatementInBlock(GmlSyntaxNode statement)
         {
-            if (statement.Parent is Block)
+            if (statement is Block)
             {
                 return statement.Print();
             }
@@ -50,7 +50,7 @@ namespace PrettierGML.Nodes
 
         public static Doc PrintStatements(GmlSyntaxNode statements)
         {
-            Debug.Assert(statements is NodeList);
+            Debug.Assert(statements is NodeList or EmptyNode);
 
             var parts = new List<Doc>();
             foreach (var child in statements.Children)
@@ -58,7 +58,7 @@ namespace PrettierGML.Nodes
                 parts.Add(PrintStatement(child));
             }
 
-            return Doc.Concat(Doc.Join(Doc.HardLine, parts));
+            return parts.Count == 0 ? Doc.Null : Doc.Join(Doc.HardLine, parts);
         }
 
         public static bool NeedsSemicolon(GmlSyntaxNode node)
@@ -72,7 +72,7 @@ namespace PrettierGML.Nodes
                 or ContinueStatement _
                 or ExitStatement _
                     => true,
-                _ => false,
+                _ => false
             };
         }
 
@@ -129,7 +129,7 @@ namespace PrettierGML.Nodes
             int startingIndex = 0
         )
         {
-            Debug.Assert(list is EmptyNode || list is NodeList);
+            Debug.Assert(list is EmptyNode or NodeList);
             var parts = new List<Doc>();
 
             for (var i = startingIndex; i < list.Children.Count; i++)

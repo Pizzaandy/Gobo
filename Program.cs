@@ -20,8 +20,6 @@ static void Format(string input)
 
 Format(
     """
-shouldGroup =
-fooooooooo == barrrrrrrrrrrrrrrrrrrrrrrrrrr
-&& bazzzzzzzzzzzzzzz == thinggggggggggggggggggggggggggggggggggggggggggggg;
+if (foo) {}}
 """
 );

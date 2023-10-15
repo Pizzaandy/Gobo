@@ -2,6 +2,7 @@
 using Antlr4.Runtime.Misc;
 using PrettierGML.Nodes;
 using PrettierGML.Nodes.SyntaxNodes;
+using UnaryExpression = PrettierGML.Nodes.SyntaxNodes.UnaryExpression;
 
 namespace PrettierGML
 {
@@ -319,6 +320,14 @@ namespace PrettierGML
         )
         {
             return new ExitStatement(context);
+        }
+
+        public override GmlSyntaxNode VisitReturnStatement(
+            [NotNull] GameMakerLanguageParser.ReturnStatementContext context
+        )
+        {
+            var expression = Visit(context.expression());
+            return new ReturnStatement(context, expression);
         }
 
         public override GmlSyntaxNode VisitAssignmentExpression(
@@ -704,7 +713,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitAdditiveExpression(
@@ -713,7 +727,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitCoalesceExpression(
@@ -722,7 +741,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitBitShiftExpression(
@@ -731,7 +755,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitLogicalOrExpression(
@@ -740,7 +769,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitLogicalAndExpression(
@@ -749,7 +783,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitLogicalXorExpression(
@@ -758,7 +797,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitEqualityExpression(
@@ -767,7 +811,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitRelationalExpression(
@@ -776,7 +825,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitBitAndExpression(
@@ -785,7 +839,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitBitOrExpression(
@@ -794,7 +853,12 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
         }
 
         public override GmlSyntaxNode VisitBitXOrExpression(
@@ -803,7 +867,81 @@ namespace PrettierGML
         {
             var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
             var @operator = context.children[1].GetText();
-            return new BinaryExpression(context, @operator, Visit(expressions[0]), Visit(expressions[1]));
+            return new BinaryExpression(
+                context,
+                @operator,
+                Visit(expressions[0]),
+                Visit(expressions[1])
+            );
+        }
+
+        public override GmlSyntaxNode VisitUnaryMinusExpression(
+            [NotNull] GameMakerLanguageParser.UnaryMinusExpressionContext context
+        )
+        {
+            var expression = context.expression();
+            return new UnaryExpression(context, "-", Visit(expression), true);
+        }
+
+        public override GmlSyntaxNode VisitIncDecExpression(
+            [NotNull] GameMakerLanguageParser.IncDecExpressionContext context
+        )
+        {
+            return Visit(context.incDecStatement());
+        }
+
+        public override GmlSyntaxNode VisitPreIncDecExpression(
+            [NotNull] GameMakerLanguageParser.PreIncDecExpressionContext context
+        )
+        {
+            var expression = context.lValueExpression();
+            var @operator = context.children[0].GetText();
+            return new UnaryExpression(context, @operator, Visit(expression), true);
+        }
+
+        public override GmlSyntaxNode VisitPostIncDecExpression(
+            [NotNull] GameMakerLanguageParser.PostIncDecExpressionContext context
+        )
+        {
+            var expression = context.lValueExpression();
+            var @operator = context.children[1].GetText();
+            return new UnaryExpression(context, @operator, Visit(expression), false);
+        }
+
+        public override GmlSyntaxNode VisitTernaryExpression(
+            [NotNull] GameMakerLanguageParser.TernaryExpressionContext context
+        )
+        {
+            var test = context.expression()[0];
+            var whenTrue = context.expression()[1];
+            var whenFalse = context.expression()[2];
+            return new ConditionalExpression(
+                context,
+                Visit(test),
+                Visit(whenTrue),
+                Visit(whenFalse)
+            );
+        }
+
+        public override GmlSyntaxNode VisitMacroStatement(
+            [NotNull] GameMakerLanguageParser.MacroStatementContext context
+        )
+        {
+            var id = Visit(context.identifier());
+            var body = "";
+
+            if (context.macroToken().Length > 0)
+            {
+                var firstToken = context.macroToken().First().Start;
+                var lastToken = context.macroToken().Last().Stop;
+                var source = firstToken.TokenSource;
+
+                body = source.InputStream.GetText(
+                    new Interval(firstToken.StartIndex, lastToken.StopIndex)
+                );
+            }
+
+            return new MacroDeclaration(context, id, body);
         }
     }
 }

@@ -55,26 +55,6 @@ namespace PrettierGML.Nodes
         }
     }
 
-    internal class MemberIndexExpression : GmlSyntaxNode, IHasObject
-    {
-        public GmlSyntaxNode Object { get; set; }
-        public GmlSyntaxNode Property { get; set; }
-        public string Accessor { get; set; }
-
-        public MemberIndexExpression(
-            ParserRuleContext context,
-            GmlSyntaxNode @object,
-            GmlSyntaxNode property,
-            string accessor
-        )
-            : base(context)
-        {
-            Object = AsChild(@object);
-            Property = AsChild(property);
-            Accessor = accessor;
-        }
-    }
-
     internal class StructExpression : GmlSyntaxNode
     {
         public GmlSyntaxNode Properties { get; set; }
@@ -126,56 +106,6 @@ namespace PrettierGML.Nodes
         {
             Name = AsChild(name);
             Initializer = AsChild(initializer);
-        }
-    }
-
-    internal class MacroDeclaration : GmlSyntaxNode
-    {
-        public GmlSyntaxNode Name { get; set; }
-        public string Text { get; set; }
-
-        public MacroDeclaration(ParserRuleContext context, GmlSyntaxNode name, string text)
-            : base(context)
-        {
-            Name = AsChild(name);
-            Text = text;
-        }
-    }
-
-    internal class ConditionalExpression : GmlSyntaxNode
-    {
-        public GmlSyntaxNode Test { get; set; }
-        public GmlSyntaxNode WhenTrue { get; set; }
-        public GmlSyntaxNode WhenFalse { get; set; }
-
-        public ConditionalExpression(
-            ParserRuleContext context,
-            GmlSyntaxNode test,
-            GmlSyntaxNode whenTrue,
-            GmlSyntaxNode whenFalse
-        )
-            : base(context)
-        {
-            Test = AsChild(test);
-            WhenTrue = AsChild(whenTrue);
-            WhenFalse = AsChild(whenFalse);
-        }
-    }
-
-    internal class UnaryExpression : GmlSyntaxNode
-    {
-        public GmlSyntaxNode Operator { get; set; }
-        public GmlSyntaxNode Argument { get; set; }
-
-        public UnaryExpression(
-            ParserRuleContext context,
-            GmlSyntaxNode @operator,
-            GmlSyntaxNode argument
-        )
-            : base(context)
-        {
-            Operator = @operator;
-            Argument = argument;
         }
     }
 }

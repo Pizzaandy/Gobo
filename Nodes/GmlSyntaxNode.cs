@@ -1,4 +1,6 @@
-﻿using Antlr4.Runtime.Tree;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using Newtonsoft.Json;
 
 namespace PrettierGML.Nodes
@@ -6,12 +8,10 @@ namespace PrettierGML.Nodes
     internal abstract class GmlSyntaxNode
     {
         [JsonIgnore]
-        public int StartIndex { get; set; } = -1;
-        [JsonIgnore]
-        public int EndIndex { get; set; } = -1;
+        public Interval SourceInterval { get; set; }
 
         [JsonIgnore]
-        public string OriginalText => "Get source text here!";
+        public string SourceText => _inputStream.GetText(SourceInterval);
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; protected set; }
@@ -24,17 +24,25 @@ namespace PrettierGML.Nodes
 
         public string Kind => GetType().Name;
 
+        private readonly ICharStream _inputStream;
+
         public GmlSyntaxNode() { }
 
-        public GmlSyntaxNode(ISyntaxTree context)
+        public GmlSyntaxNode(ParserRuleContext context)
         {
-            StartIndex = context.SourceInterval.a;
-            EndIndex = context.SourceInterval.b;
+            SourceInterval = context.SourceInterval;
+            _inputStream = context.Start.InputStream;
+        }
+
+        public GmlSyntaxNode(ITerminalNode context)
+        {
+            SourceInterval = context.SourceInterval;
+            _inputStream = context.Symbol.InputStream;
         }
 
         public static EmptyNode Empty => EmptyNode.Instance;
 
-        public static NodeList List(ISyntaxTree context, IList<GmlSyntaxNode> contents) =>
+        public static NodeList List(ParserRuleContext context, IList<GmlSyntaxNode> contents) =>
             new(context, contents);
 
         protected GmlSyntaxNode AsChild(GmlSyntaxNode child)

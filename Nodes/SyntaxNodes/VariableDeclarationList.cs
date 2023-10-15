@@ -20,7 +20,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print()
         {
-            return Doc.Concat(Modifier, " ", Doc.Group(PrintHelper.PrintSeparatedList(Declarations, ",")));
+            return Doc.Concat(
+                Modifier,
+                " ",
+                Doc.Group(PrintHelper.PrintSeparatedList(Declarations, ","))
+            );
         }
     }
 }

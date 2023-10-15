@@ -34,7 +34,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public override Doc Print()
         {
             var docs = PrintBinaryExpression(this);
-            var shouldNotIndent = Parent is AssignmentExpression;
+            var shouldNotIndent = Parent is AssignmentExpression or VariableDeclarator;
+
+            if (Parent is IfStatement)
+            {
+                return Doc.Concat(docs);
+            }
 
             return shouldNotIndent
                 ? Doc.Group(docs)
