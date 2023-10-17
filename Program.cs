@@ -20,21 +20,19 @@ static void Format(string input)
 
 Format(
     """
-(
-  aaaaaaaaaaaaaaaaaaaaaaaaa &&
-  bbbbbbbbbbbbbbbbbbbbbbbbb &&
-  ccccccccccccccccccccccccc &&
-  ddddddddddddddddddddddddd &&
-  eeeeeeeeeeeeeeeeeeeeeeeee
-) {}
-
-(
-  aa &&
-  bb &&
-  cc &&
-  dd &&
-  ee
-)();
-
+a = foo[
+  a +
+  a +
+  a +
+    b +
+    b +
+    b + 
+    b +
+b +
+    b +
+    b + 
+    b +
+    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]
+;
 """
 );

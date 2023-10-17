@@ -48,6 +48,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
                         or WhileStatement
                         or ReturnStatement
                         or ParenthesizedExpression
+                || Parent?.Parent is MemberIndexExpression
                 || (
                     Parent is ConditionalExpression conditionalExpression
                     && conditionalExpression.WhenTrue != this
