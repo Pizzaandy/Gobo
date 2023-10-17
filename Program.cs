@@ -11,7 +11,7 @@ static void Format(string input)
     var astString = GmlParser.Parse(input).ToString();
     Console.WriteLine(astString);
 
-    var result = GmlFormatter.Format(input, options, checkAst: true);
+    var result = GmlFormatter.Format(input, options, checkAst: false);
     Console.WriteLine(result);
 
     sw.Stop();
@@ -20,19 +20,8 @@ static void Format(string input)
 
 Format(
     """
-a = foo[
-  a +
-  a +
-  a +
-    b +
-    b +
-    b + 
-    b +
-b +
-    b +
-    b + 
-    b +
-    bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb]
-;
+if (a + b == c) {
+    foo()
+}
 """
 );
