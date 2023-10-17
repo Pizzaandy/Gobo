@@ -6,15 +6,24 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Body { get; set; }
 
-        public Block(ParserRuleContext context, GmlSyntaxNode body)
-            : base(context)
+        public Block(ParserRuleContext context, CommonTokenStream tokenStream, GmlSyntaxNode body)
+            : base(context, tokenStream)
         {
             Body = AsChild(body);
         }
 
         public override Doc Print()
         {
-            return Doc.Concat("{", Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(Body)), Doc.HardLine, "}");
+            if (Body.IsEmpty)
+            {
+                return "{ }";
+            }
+            return Doc.Concat(
+                "{",
+                Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(Body)),
+                Doc.HardLine,
+                "}"
+            );
         }
     }
 }

@@ -6,8 +6,12 @@ namespace PrettierGML.Nodes
     {
         public IList<GmlSyntaxNode> Contents { get; set; }
 
-        public NodeList(ParserRuleContext context, IList<GmlSyntaxNode> contents)
-            : base(context)
+        public NodeList(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            IList<GmlSyntaxNode> contents
+        )
+            : base(context, tokenStream)
         {
             Contents = contents;
             foreach (var node in contents)

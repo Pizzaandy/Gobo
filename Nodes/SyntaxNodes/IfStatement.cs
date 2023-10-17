@@ -10,11 +10,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public IfStatement(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode test,
             GmlSyntaxNode consequent,
             GmlSyntaxNode alternate
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Test = AsChild(test);
             Consequent = AsChild(consequent);

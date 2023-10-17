@@ -11,12 +11,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public ForStatement(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode init,
             GmlSyntaxNode test,
             GmlSyntaxNode update,
             GmlSyntaxNode body
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Init = AsChild(init);
             Test = AsChild(test);

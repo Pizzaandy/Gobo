@@ -11,12 +11,13 @@ namespace PrettierGML.Nodes
 
         public FunctionDeclaration(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode id,
             GmlSyntaxNode parameters,
             GmlSyntaxNode body,
             GmlSyntaxNode parent
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Id = AsChild(id);
             Parameters = AsChild(parameters);
@@ -32,10 +33,11 @@ namespace PrettierGML.Nodes
 
         public ConstructorClause(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode id,
             GmlSyntaxNode parameters
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Id = AsChild(id);
             Parameters = AsChild(parameters);
@@ -47,8 +49,13 @@ namespace PrettierGML.Nodes
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Initializer { get; set; }
 
-        public Parameter(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode initializer)
-            : base(context)
+        public Parameter(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode name,
+            GmlSyntaxNode initializer
+        )
+            : base(context, tokenStream)
         {
             Name = AsChild(name);
             Initializer = AsChild(initializer);
@@ -59,8 +66,12 @@ namespace PrettierGML.Nodes
     {
         public GmlSyntaxNode Properties { get; set; }
 
-        public StructExpression(ParserRuleContext context, GmlSyntaxNode properties)
-            : base(context)
+        public StructExpression(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode properties
+        )
+            : base(context, tokenStream)
         {
             Properties = AsChild(properties);
         }
@@ -73,10 +84,11 @@ namespace PrettierGML.Nodes
 
         public StructProperty(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode name,
             GmlSyntaxNode initializer
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Name = AsChild(name);
             Initializer = AsChild(initializer);
@@ -88,8 +100,13 @@ namespace PrettierGML.Nodes
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Members { get; set; }
 
-        public EnumDeclaration(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode members)
-            : base(context)
+        public EnumDeclaration(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode name,
+            GmlSyntaxNode members
+        )
+            : base(context, tokenStream)
         {
             Name = AsChild(name);
             Members = AsChild(members);
@@ -101,11 +118,41 @@ namespace PrettierGML.Nodes
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Initializer { get; set; }
 
-        public EnumMember(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode initializer)
-            : base(context)
+        public EnumMember(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode name,
+            GmlSyntaxNode initializer
+        )
+            : base(context, tokenStream)
         {
             Name = AsChild(name);
             Initializer = AsChild(initializer);
+        }
+    }
+
+    internal class ParenthesizedExpression : GmlSyntaxNode
+    {
+        public GmlSyntaxNode Expression { get; set; }
+
+        public ParenthesizedExpression(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode expression
+        )
+            : base(context, tokenStream)
+        {
+            Expression = AsChild(expression);
+        }
+
+        public override Doc Print()
+        {
+            // remove redundant parens
+            while (Expression is ParenthesizedExpression other)
+            {
+                Expression = other.Expression;
+            }
+            return Doc.Group("(", Doc.Indent(Doc.SoftLine, Expression.Print()), Doc.SoftLine, ")");
         }
     }
 }

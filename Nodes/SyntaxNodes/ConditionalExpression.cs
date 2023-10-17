@@ -10,11 +10,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public ConditionalExpression(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode test,
             GmlSyntaxNode whenTrue,
             GmlSyntaxNode whenFalse
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Test = AsChild(test);
             WhenTrue = AsChild(whenTrue);

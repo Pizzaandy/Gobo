@@ -13,9 +13,9 @@ namespace PrettierGML.Nodes
         {
             return Doc.Concat(
                 keyword,
-                " (",
-                Doc.Group(Doc.Indent(Doc.SoftLine, clause.Print())),
-                ") ",
+                " ",
+                Doc.Group("(", Doc.Indent(Doc.SoftLine, clause.Print()), Doc.SoftLine, ")"),
+                " ",
                 PrintStatementInBlock(body)
             );
         }
@@ -39,7 +39,7 @@ namespace PrettierGML.Nodes
 
         public static Doc PrintExpressionInParentheses(GmlSyntaxNode expression)
         {
-            return Doc.Concat("(", expression.Print(), ")");
+            return Doc.Group("(", Doc.Indent(Doc.SoftLine, expression.Print()), Doc.SoftLine, ")");
         }
 
         public static Doc PrintStatement(GmlSyntaxNode statement)
@@ -86,17 +86,14 @@ namespace PrettierGML.Nodes
         {
             var parts = new List<Doc> { openToken };
 
-            if (arguments.Children.Count == 1)
+            if (arguments.Children.Any())
             {
-                parts.Add(arguments.Children[0].Print());
-            }
-            else if (arguments.Children.Any())
-            {
-                var printedArguments = PrintSeparatedSyntaxList(
+                Doc printedArguments = PrintSeparatedSyntaxList(
                     arguments,
                     separator,
                     allowTrailingSeparator
                 );
+
                 parts.Add(Doc.Indent(Doc.SoftLine, printedArguments));
                 parts.Add(Doc.SoftLine);
             }

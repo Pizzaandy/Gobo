@@ -288,19 +288,19 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitParenthesizedExpression([NotNull] GameMakerLanguageParser.ParenthesizedExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>RelationalExpression</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitRelationalExpression([NotNull] GameMakerLanguageParser.RelationalExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>AdditiveExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAdditiveExpression([NotNull] GameMakerLanguageParser.AdditiveExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>RelationalExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitRelationalExpression([NotNull] GameMakerLanguageParser.RelationalExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>TernaryExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
@@ -351,6 +351,13 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitNotExpression([NotNull] GameMakerLanguageParser.NotExpressionContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>InequalityExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitInequalityExpression([NotNull] GameMakerLanguageParser.InequalityExpressionContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>UnaryMinusExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// </summary>
@@ -365,19 +372,19 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitBitAndExpression([NotNull] GameMakerLanguageParser.BitAndExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>BitOrExpression</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitBitOrExpression([NotNull] GameMakerLanguageParser.BitOrExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>LogicalXorExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitLogicalXorExpression([NotNull] GameMakerLanguageParser.LogicalXorExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>BitOrExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBitOrExpression([NotNull] GameMakerLanguageParser.BitOrExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>IncDecExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
@@ -386,19 +393,19 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitIncDecExpression([NotNull] GameMakerLanguageParser.IncDecExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>BitXOrExpression</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitBitXOrExpression([NotNull] GameMakerLanguageParser.BitXOrExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>EqualityExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitEqualityExpression([NotNull] GameMakerLanguageParser.EqualityExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>BitXOrExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitBitXOrExpression([NotNull] GameMakerLanguageParser.BitXOrExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>CallExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
@@ -407,19 +414,19 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitCallExpression([NotNull] GameMakerLanguageParser.CallExpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>CoalesceExpression</c>
-	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitCoalesceExpression([NotNull] GameMakerLanguageParser.CoalesceExpressionContext context);
-	/// <summary>
 	/// Visit a parse tree produced by the <c>MultiplicativeExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMultiplicativeExpression([NotNull] GameMakerLanguageParser.MultiplicativeExpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>CoalesceExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCoalesceExpression([NotNull] GameMakerLanguageParser.CoalesceExpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>BitShiftExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.

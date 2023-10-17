@@ -17,7 +17,7 @@ namespace PrettierGML
             parser.AddErrorListener(new GameMakerLanguageErrorListener());
 
             IParseTree tree = parser.program();
-            var builder = new GmlAstBuilder();
+            var builder = new GmlAstBuilder(tokens);
             return builder.Visit(tree);
         }
     }

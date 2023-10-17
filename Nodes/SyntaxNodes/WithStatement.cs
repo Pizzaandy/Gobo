@@ -7,8 +7,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Object { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public WithStatement(ParserRuleContext context, GmlSyntaxNode @object, GmlSyntaxNode body)
-            : base(context)
+        public WithStatement(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode @object,
+            GmlSyntaxNode body
+        )
+            : base(context, tokenStream)
         {
             Object = AsChild(@object);
             Body = AsChild(body);

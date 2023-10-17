@@ -6,8 +6,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Argument { get; set; }
 
-        public ReturnStatement(ParserRuleContext context, GmlSyntaxNode argument)
-            : base(context)
+        public ReturnStatement(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode argument
+        )
+            : base(context, tokenStream)
         {
             Argument = argument;
         }

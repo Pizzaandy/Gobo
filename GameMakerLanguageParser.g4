@@ -182,19 +182,20 @@ expression
     | <assoc=right> '-' expression # UnaryMinusExpression
     | <assoc=right> '~' expression # BitNotExpression
     | <assoc=right> Not expression # NotExpression
-
-    | expression '^' expression # BitXOrExpression
-    | expression '|' expression # BitOrExpression
-    | expression '&' expression # BitAndExpression
-    | expression ('<' | '>' | '<=' | '>=') expression # RelationalExpression
-    | expression ('==' | Assign | NotEquals) expression # EqualityExpression
-    | expression Xor expression # LogicalXorExpression
-    | expression And expression # LogicalAndExpression
-    | expression Or expression # LogicalOrExpression
-    | expression ('<<' | '>>') expression # BitShiftExpression
-    | expression '??' expression # CoalesceExpression
-    | expression ('+' | '-') expression # AdditiveExpression
+    
     | expression ('*' | '/' | Modulo | IntegerDivide) expression # MultiplicativeExpression
+    | expression ('+' | '-') expression # AdditiveExpression
+    | expression '??' expression # CoalesceExpression
+    | expression ('<<' | '>>') expression # BitShiftExpression
+    | expression Or expression # LogicalOrExpression
+    | expression And expression # LogicalAndExpression
+    | expression Xor expression # LogicalXorExpression
+    | expression ('==' | Assign) expression # EqualityExpression
+    | expression NotEquals expression # InequalityExpression
+    | expression ('<' | '<=' | '>' | '>=') expression # RelationalExpression
+    | expression '&' expression # BitAndExpression
+    | expression '|' expression # BitOrExpression
+    | expression '^' expression # BitXOrExpression
 
     | <assoc=right> expression '?' expression ':' expression # TernaryExpression
     | literal # LiteralExpression

@@ -11,7 +11,13 @@ namespace PrettierGML.Nodes
         public Interval SourceInterval { get; set; }
 
         [JsonIgnore]
-        public string SourceText => _inputStream.GetText(SourceInterval);
+        public string SourceText => _tokenStream.GetText(SourceInterval);
+
+        [JsonIgnore]
+        public IList<IToken> LeadingTrivia => _tokenStream.GetHiddenTokensToLeft(_startTokenIndex);
+
+        [JsonIgnore]
+        public IList<IToken> TrailingTrivia => _tokenStream.GetHiddenTokensToRight(_stopTokenIndex);
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; protected set; }
@@ -24,26 +30,35 @@ namespace PrettierGML.Nodes
 
         public string Kind => GetType().Name;
 
-        private readonly ICharStream _inputStream;
+        private readonly CommonTokenStream _tokenStream;
+        private readonly int _startTokenIndex = -1;
+        private readonly int _stopTokenIndex = -1;
 
         public GmlSyntaxNode() { }
 
-        public GmlSyntaxNode(ParserRuleContext context)
+        public GmlSyntaxNode(ParserRuleContext context, CommonTokenStream tokenStream)
         {
             SourceInterval = context.SourceInterval;
-            _inputStream = context.Start.InputStream;
+            _tokenStream = tokenStream;
+            _startTokenIndex = context.Start.TokenIndex;
+            _stopTokenIndex = context.Stop.TokenIndex;
         }
 
-        public GmlSyntaxNode(ITerminalNode context)
+        public GmlSyntaxNode(ITerminalNode context, CommonTokenStream tokenStream)
         {
             SourceInterval = context.SourceInterval;
-            _inputStream = context.Symbol.InputStream;
+            _tokenStream = tokenStream;
+            _startTokenIndex = context.Symbol.TokenIndex;
+            _stopTokenIndex = context.Symbol.TokenIndex;
         }
 
         public static EmptyNode Empty => EmptyNode.Instance;
 
-        public static NodeList List(ParserRuleContext context, IList<GmlSyntaxNode> contents) =>
-            new(context, contents);
+        public static NodeList List(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            IList<GmlSyntaxNode> contents
+        ) => new(context, tokenStream, contents);
 
         protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
         {

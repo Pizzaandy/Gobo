@@ -10,11 +10,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public AssignmentExpression(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             string @operator,
             GmlSyntaxNode left,
             GmlSyntaxNode right
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Operator = @operator;
             Left = AsChild(left);

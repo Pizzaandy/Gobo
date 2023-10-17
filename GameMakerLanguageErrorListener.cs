@@ -36,8 +36,31 @@ namespace PrettierGML
 
         public void Throw()
         {
-            var syntaxErrorMessage = $"Syntax error at line {Line}, column {CharPositionInLine}:\n";
-            var message = syntaxErrorMessage + Message;
+            var parser = (Parser)Recognizer;
+            var stack = parser.GetRuleInvocationStack();
+            var stackText = parser.GetRuleInvocationStackAsString();
+            var lastRule = stack[0];
+
+            string offendingSymbolMessage;
+
+            if (lastRule == "closeBlock")
+            {
+                offendingSymbolMessage = $"missing '}}' at {stack[2]}";
+            }
+            else
+            {
+                offendingSymbolMessage = $"unexpected '{OffendingSymbol.Text}'";
+            }
+
+            var syntaxErrorMessage =
+                $"Syntax error at line {Line + 1}, column {CharPositionInLine}:\n";
+
+            var message =
+                syntaxErrorMessage
+                + offendingSymbolMessage
+                + "\n"
+                + Message
+                + $"\nStack: {stackText}";
 
             throw new GmlSyntaxErrorException(message);
         }

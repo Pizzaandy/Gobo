@@ -10,11 +10,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public MemberIndexExpression(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode @object,
             GmlSyntaxNode properties,
             string accessor
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Object = AsChild(@object);
             Properties = AsChild(properties);

@@ -9,10 +9,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public VariableDeclarator(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode id,
             GmlSyntaxNode initializer
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Id = AsChild(id);
             Initializer = AsChild(initializer);

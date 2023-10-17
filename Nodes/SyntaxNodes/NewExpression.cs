@@ -7,8 +7,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Arguments { get; set; }
 
-        public NewExpression(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode arguments)
-            : base(context)
+        public NewExpression(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode name,
+            GmlSyntaxNode arguments
+        )
+            : base(context, tokenStream)
         {
             Name = AsChild(name);
             Arguments = AsChild(arguments);
@@ -16,7 +21,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print()
         {
-            return Doc.Concat("new ", Name.Print(), PrintHelper.PrintArgumentListLikeSyntax("(", Arguments, ")", ","));
+            return Doc.Concat(
+                "new ",
+                Name.Print(),
+                PrintHelper.PrintArgumentListLikeSyntax("(", Arguments, ")", ",")
+            );
         }
     }
 }

@@ -9,10 +9,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public CallExpression(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode @object,
             GmlSyntaxNode arguments
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Object = AsChild(@object);
             Arguments = AsChild(arguments);
@@ -20,7 +21,10 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print()
         {
-            return Doc.Concat(Object.Print(), PrintHelper.PrintArgumentListLikeSyntax("(", Arguments, ")", ","));
+            return Doc.Concat(
+                Object.Print(),
+                PrintHelper.PrintArgumentListLikeSyntax("(", Arguments, ")", ",")
+            );
         }
     }
 }

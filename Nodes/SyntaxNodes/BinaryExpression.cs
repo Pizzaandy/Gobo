@@ -10,11 +10,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public BinaryExpression(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             string @operator,
             GmlSyntaxNode left,
             GmlSyntaxNode right
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Operator = @operator switch
             {
@@ -34,12 +35,24 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public override Doc Print()
         {
             var docs = PrintBinaryExpression(this);
-            var shouldNotIndent = Parent is AssignmentExpression or VariableDeclarator;
 
             if (Parent is IfStatement)
             {
                 return Doc.Concat(docs);
             }
+
+            var shouldNotIndent =
+                Parent
+                    is AssignmentExpression
+                        or VariableDeclarator
+                        or WhileStatement
+                        or ReturnStatement
+                        or ParenthesizedExpression
+                || (
+                    Parent is ConditionalExpression conditionalExpression
+                    && conditionalExpression.WhenTrue != this
+                    && conditionalExpression.WhenFalse != this
+                );
 
             return shouldNotIndent
                 ? Doc.Group(docs)
@@ -56,17 +69,17 @@ namespace PrettierGML.Nodes.SyntaxNodes
             var parts = new List<Doc>();
 
             var shouldGroup =
-                binaryExpression.Parent is BinaryExpression parentExpression
-                && GetPrecedence(binaryExpression) != GetPrecedence(parentExpression)
+                GetKindOrOperator(binaryExpression.Parent!) != GetKindOrOperator(binaryExpression)
+                && GetPrecedence(binaryExpression) != GetPrecedence(binaryExpression.Parent!)
                 && binaryExpression.Left is not BinaryExpression
                 && binaryExpression.Right is not BinaryExpression;
 
             if (
-                binaryExpression.Left is BinaryExpression childBinary
-                && ShouldFlatten(binaryExpression.Operator, childBinary.Operator)
+                binaryExpression.Left is BinaryExpression leftBinary
+                && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
             )
             {
-                parts.AddRange(PrintBinaryExpression(childBinary));
+                parts.AddRange(PrintBinaryExpression(leftBinary));
             }
             else
             {
@@ -89,6 +102,15 @@ namespace PrettierGML.Nodes.SyntaxNodes
             return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
         }
 
+        private static string GetKindOrOperator(GmlSyntaxNode node)
+        {
+            if (node is BinaryExpression binaryExpression)
+            {
+                return binaryExpression.Operator;
+            }
+            return node is null ? "null" : node.Kind;
+        }
+
         private static int GetPrecedence(GmlSyntaxNode node)
         {
             if (node is BinaryExpression binaryExpression)
@@ -104,23 +126,23 @@ namespace PrettierGML.Nodes.SyntaxNodes
             return @operator switch
             {
                 "*" => 21,
-                "/" => 20,
-                "%" => 19,
-                "div" => 18,
-                "+" => 17,
+                "/" => 21,
+                "%" => 21,
+                "div" => 21,
+                "+" => 16,
                 "-" => 16,
                 "??" => 15,
                 "<<" => 14,
-                ">>" => 13,
+                ">>" => 14,
                 "||" => 12,
                 "&&" => 11,
                 "^^" => 10,
                 "==" => 9,
                 "!=" => 8,
                 "<" => 7,
-                ">" => 6,
-                "<=" => 5,
-                ">=" => 4,
+                ">" => 7,
+                "<=" => 7,
+                ">=" => 7,
                 "&" => 3,
                 "|" => 2,
                 "^" => 1,

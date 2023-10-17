@@ -6,8 +6,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Body { get; set; }
 
-        public Document(ParserRuleContext context, GmlSyntaxNode body)
-            : base(context)
+        public Document(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode body
+        )
+            : base(context, tokenStream)
         {
             Body = AsChild(body);
         }

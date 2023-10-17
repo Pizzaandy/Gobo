@@ -10,11 +10,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public UnaryExpression(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             string @operator,
             GmlSyntaxNode argument,
             bool isPrefix
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Operator = @operator;
             Argument = AsChild(argument);

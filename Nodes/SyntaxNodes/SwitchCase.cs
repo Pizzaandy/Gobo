@@ -7,8 +7,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public SwitchCase(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
-            : base(context)
+        public SwitchCase(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode test,
+            GmlSyntaxNode body
+        )
+            : base(context, tokenStream)
         {
             Test = AsChild(test);
             Body = AsChild(body);

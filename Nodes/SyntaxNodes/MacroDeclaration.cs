@@ -7,8 +7,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Id { get; set; }
         public string Body { get; set; }
 
-        public MacroDeclaration(ParserRuleContext context, GmlSyntaxNode id, string body)
-            : base(context)
+        public MacroDeclaration(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode id,
+            string body
+        )
+            : base(context, tokenStream)
         {
             Id = id;
             Body = body;

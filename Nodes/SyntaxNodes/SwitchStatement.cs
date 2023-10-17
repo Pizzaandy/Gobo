@@ -9,10 +9,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public SwitchStatement(
             ParserRuleContext context,
+            CommonTokenStream tokenStream,
             GmlSyntaxNode discriminant,
             GmlSyntaxNode cases
         )
-            : base(context)
+            : base(context, tokenStream)
         {
             Discriminant = AsChild(discriminant);
             Cases = AsChild(cases);

@@ -6,8 +6,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Elements { get; set; }
 
-        public ArrayExpression(ParserRuleContext context, GmlSyntaxNode elements)
-            : base(context)
+        public ArrayExpression(
+            ParserRuleContext context,
+            CommonTokenStream tokenStream,
+            GmlSyntaxNode elements
+        )
+            : base(context, tokenStream)
         {
             Elements = AsChild(elements);
         }
