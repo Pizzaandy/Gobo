@@ -194,6 +194,15 @@ namespace PrettierGML
             return new WhileStatement(context, TokenStream, test, body);
         }
 
+        public override GmlSyntaxNode VisitRepeatStatement(
+            [NotNull] GameMakerLanguageParser.RepeatStatementContext context
+        )
+        {
+            var test = UnwrapParenthesizedExpression(Visit(context.expression()));
+            var body = Visit(context.statement());
+            return new RepeatStatement(context, TokenStream, test, body);
+        }
+
         public override GmlSyntaxNode VisitForStatement(
             [NotNull] GameMakerLanguageParser.ForStatementContext context
         )
@@ -966,6 +975,22 @@ namespace PrettierGML
             return new UnaryExpression(context, TokenStream, "-", Visit(expression), true);
         }
 
+        public override GmlSyntaxNode VisitNotExpression(
+            [NotNull] GameMakerLanguageParser.NotExpressionContext context
+        )
+        {
+            var expression = context.expression();
+            return new UnaryExpression(context, TokenStream, "!", Visit(expression), true);
+        }
+
+        public override GmlSyntaxNode VisitBitNotExpression(
+            [NotNull] GameMakerLanguageParser.BitNotExpressionContext context
+        )
+        {
+            var expression = context.expression();
+            return new UnaryExpression(context, TokenStream, "~", Visit(expression), true);
+        }
+
         public override GmlSyntaxNode VisitIncDecExpression(
             [NotNull] GameMakerLanguageParser.IncDecExpressionContext context
         )
@@ -979,7 +1004,7 @@ namespace PrettierGML
         {
             var expression = context.lValueExpression();
             var @operator = context.children[0].GetText();
-            return new UnaryExpression(context, TokenStream, @operator, Visit(expression), true);
+            return new IncDecStatement(context, TokenStream, @operator, Visit(expression), true);
         }
 
         public override GmlSyntaxNode VisitPostIncDecExpression(
@@ -988,7 +1013,7 @@ namespace PrettierGML
         {
             var expression = context.lValueExpression();
             var @operator = context.children[1].GetText();
-            return new UnaryExpression(context, TokenStream, @operator, Visit(expression), false);
+            return new IncDecStatement(context, TokenStream, @operator, Visit(expression), false);
         }
 
         public override GmlSyntaxNode VisitTernaryExpression(

@@ -63,17 +63,14 @@ namespace PrettierGML.Nodes
 
         public static bool NeedsSemicolon(GmlSyntaxNode node)
         {
-            return node switch
-            {
-                CallExpression _
-                or AssignmentExpression _
-                or VariableDeclarationList _
-                or BreakStatement _
-                or ContinueStatement _
-                or ExitStatement _
-                    => true,
-                _ => false
-            };
+            return node
+                is CallExpression
+                    or AssignmentExpression
+                    or VariableDeclarationList
+                    or BreakStatement
+                    or ContinueStatement
+                    or ExitStatement
+                    or IncDecStatement;
         }
 
         public static Doc PrintArgumentListLikeSyntax(

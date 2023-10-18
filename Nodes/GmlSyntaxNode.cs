@@ -14,10 +14,10 @@ namespace PrettierGML.Nodes
         public string SourceText => _tokenStream.GetText(SourceInterval);
 
         [JsonIgnore]
-        public IList<IToken> LeadingTrivia => _tokenStream.GetHiddenTokensToLeft(_startTokenIndex);
+        public IList<IToken>? LeadingTrivia;
 
         [JsonIgnore]
-        public IList<IToken> TrailingTrivia => _tokenStream.GetHiddenTokensToRight(_stopTokenIndex);
+        public IList<IToken>? TrailingTrivia;
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; protected set; }
@@ -85,7 +85,29 @@ namespace PrettierGML.Nodes
             return serialized.GetHashCode();
         }
 
-        //public static implicit operator Doc(GmlSyntaxNode node) => node.Print();
+        protected void GetTrivia()
+        {
+            LeadingTrivia = _tokenStream.GetHiddenTokensToLeft(_startTokenIndex);
+            TrailingTrivia = _tokenStream.GetHiddenTokensToRight(_stopTokenIndex);
+        }
+
+        protected bool HasLeadingComments()
+        {
+            return LeadingTrivia?.Any(
+                    t =>
+                        t.Type == GameMakerLanguageLexer.SingleLineComment
+                        || t.Type == GameMakerLanguageLexer.MultiLineComment
+                ) ?? false;
+        }
+
+        protected bool HasTrailingComments()
+        {
+            return TrailingTrivia?.Any(
+                    t =>
+                        t.Type == GameMakerLanguageLexer.SingleLineComment
+                        || t.Type == GameMakerLanguageLexer.MultiLineComment
+                ) ?? false;
+        }
     }
 
     internal interface IHasObject

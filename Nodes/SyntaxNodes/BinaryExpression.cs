@@ -60,6 +60,9 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
         }
 
+        // Because of cross-platform inconsistency with operator precedence in GML, we can't use
+        // the same printing strategy as Prettier. Binary expressions not explicitly grouped by
+        // parentheses will simply be flattened.
         public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node)
         {
             if (node is not BinaryExpression binaryExpression)
@@ -69,16 +72,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
             var parts = new List<Doc>();
 
-            var shouldGroup =
-                GetKindOrOperator(binaryExpression.Parent!) != GetKindOrOperator(binaryExpression)
-                && GetPrecedence(binaryExpression) != GetPrecedence(binaryExpression.Parent!)
-                && binaryExpression.Left is not BinaryExpression
-                && binaryExpression.Right is not BinaryExpression;
-
-            if (
-                binaryExpression.Left is BinaryExpression leftBinary
-                && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
-            )
+            if (binaryExpression.Left is BinaryExpression leftBinary)
             {
                 parts.AddRange(PrintBinaryExpression(leftBinary));
             }
@@ -87,68 +81,23 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 parts.Add(binaryExpression.Left.Print());
             }
 
-            var right = Doc.Concat(
-                Doc.Line,
-                binaryExpression.Operator,
-                " ",
-                binaryExpression.Right.Print()
+            bool isEqualityExpression =
+                binaryExpression.Operator == "==" || binaryExpression.Operator == "!=";
+
+            parts.Add(
+                Doc.Concat(" ", binaryExpression.Operator, isEqualityExpression ? " " : Doc.Line)
             );
 
-            parts.Add(shouldGroup ? Doc.Group(right) : right);
+            if (binaryExpression.Right is BinaryExpression rightBinary)
+            {
+                parts.AddRange(PrintBinaryExpression(rightBinary));
+            }
+            else
+            {
+                parts.Add(binaryExpression.Right.Print());
+            }
+
             return parts;
-        }
-
-        private static bool ShouldFlatten(string parentToken, string nodeToken)
-        {
-            return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
-        }
-
-        private static string GetKindOrOperator(GmlSyntaxNode node)
-        {
-            if (node is BinaryExpression binaryExpression)
-            {
-                return binaryExpression.Operator;
-            }
-            return node is null ? "null" : node.Kind;
-        }
-
-        private static int GetPrecedence(GmlSyntaxNode node)
-        {
-            if (node is BinaryExpression binaryExpression)
-            {
-                return GetPrecedence(binaryExpression.Operator);
-            }
-
-            return -1;
-        }
-
-        private static int GetPrecedence(string @operator)
-        {
-            return @operator switch
-            {
-                "*" => 21,
-                "/" => 20,
-                "%" => 19,
-                "div" => 18,
-                "+" => 16,
-                "-" => 16,
-                "??" => 15,
-                "<<" => 14,
-                ">>" => 13,
-                "||" => 12,
-                "&&" => 11,
-                "^^" => 10,
-                "==" => 9,
-                "!=" => 8,
-                "<" => 7,
-                ">" => 6,
-                "<=" => 5,
-                ">=" => 4,
-                "&" => 3,
-                "|" => 2,
-                "^" => 1,
-                _ => throw new Exception($"No precedence defined for {@operator}")
-            };
         }
     }
 }
