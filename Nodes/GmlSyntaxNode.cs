@@ -85,29 +85,23 @@ namespace PrettierGML.Nodes
             return serialized.GetHashCode();
         }
 
-        protected void GetTrivia()
-        {
-            LeadingTrivia = _tokenStream.GetHiddenTokensToLeft(_startTokenIndex);
-            TrailingTrivia = _tokenStream.GetHiddenTokensToRight(_stopTokenIndex);
-        }
-
-        protected bool HasLeadingComments()
-        {
-            return LeadingTrivia?.Any(
-                    t =>
-                        t.Type == GameMakerLanguageLexer.SingleLineComment
-                        || t.Type == GameMakerLanguageLexer.MultiLineComment
-                ) ?? false;
-        }
-
-        protected bool HasTrailingComments()
-        {
-            return TrailingTrivia?.Any(
-                    t =>
-                        t.Type == GameMakerLanguageLexer.SingleLineComment
-                        || t.Type == GameMakerLanguageLexer.MultiLineComment
-                ) ?? false;
-        }
+        //protected Doc PrintTrailingTrivia()
+        //{
+        //    var parts = new List<Doc>();
+        //    TrailingTrivia = _tokenStream.GetHiddenTokensToRight(_stopTokenIndex);
+        //    foreach (var token in TrailingTrivia)
+        //    {
+        //        if (token.Type == GameMakerLanguageLexer.SingleLineComment)
+        //        {
+        //            parts.Add(Doc.TrailingComment(token.Text, CommentType.SingleLine));
+        //        }
+        //        else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
+        //        {
+        //            parts.Add(Doc.TrailingComment(token.Text, CommentType.MultiLine));
+        //        }
+        //    }
+        //    return Doc.Concat(parts);
+        //}
     }
 
     internal interface IHasObject

@@ -48,14 +48,15 @@ namespace PrettierGML.Nodes
             return Doc.Concat(statement.Print(), lineSuffix);
         }
 
-        public static Doc PrintStatements(GmlSyntaxNode statements)
+        public static Doc PrintStatements(GmlSyntaxNode statements, bool isTopLevel = false)
         {
             Debug.Assert(statements is NodeList or EmptyNode);
 
             var parts = new List<Doc>();
             foreach (var child in statements.Children)
             {
-                parts.Add(PrintStatement(child));
+                Doc childDoc = PrintStatement(child);
+                parts.Add(childDoc);
             }
 
             return parts.Count == 0 ? Doc.Null : Doc.Join(Doc.HardLine, parts);

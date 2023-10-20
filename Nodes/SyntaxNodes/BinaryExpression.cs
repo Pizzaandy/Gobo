@@ -60,9 +60,9 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
         }
 
-        // Because of cross-platform inconsistency with operator precedence in GML, we can't use
-        // the same printing strategy as Prettier. Binary expressions not explicitly grouped by
-        // parentheses will simply be flattened.
+        // Because of cross-platform inconsistency with operator precedence in GML, we can't
+        // group binary expressions in a syntactically meaningful way like Prettier. My parser uses an
+        // inaccurate operator precedence to optimize for readability rather than correctness.
         public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node)
         {
             if (node is not BinaryExpression binaryExpression)
@@ -72,7 +72,16 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
             var parts = new List<Doc>();
 
-            if (binaryExpression.Left is BinaryExpression leftBinary)
+            var shouldGroup =
+                GetKindOrOperator(binaryExpression.Parent!) != GetKindOrOperator(binaryExpression)
+                && GetPrecedence(binaryExpression) != GetPrecedence(binaryExpression.Parent!)
+                && binaryExpression.Left is not BinaryExpression
+                && binaryExpression.Right is not BinaryExpression;
+
+            if (
+                binaryExpression.Left is BinaryExpression leftBinary
+                && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
+            )
             {
                 parts.AddRange(PrintBinaryExpression(leftBinary));
             }
@@ -81,23 +90,68 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 parts.Add(binaryExpression.Left.Print());
             }
 
-            bool isEqualityExpression =
-                binaryExpression.Operator == "==" || binaryExpression.Operator == "!=";
-
-            parts.Add(
-                Doc.Concat(" ", binaryExpression.Operator, isEqualityExpression ? " " : Doc.Line)
+            var right = Doc.Concat(
+                Doc.Line,
+                binaryExpression.Operator,
+                " ",
+                binaryExpression.Right.Print()
             );
 
-            if (binaryExpression.Right is BinaryExpression rightBinary)
+            parts.Add(shouldGroup ? Doc.Group(right) : right);
+            return parts;
+        }
+
+        private static bool ShouldFlatten(string parentToken, string nodeToken)
+        {
+            return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
+        }
+
+        private static string GetKindOrOperator(GmlSyntaxNode node)
+        {
+            if (node is BinaryExpression binaryExpression)
             {
-                parts.AddRange(PrintBinaryExpression(rightBinary));
+                return binaryExpression.Operator;
             }
-            else
+            return node is null ? "null" : node.Kind;
+        }
+
+        private static int GetPrecedence(GmlSyntaxNode node)
+        {
+            if (node is BinaryExpression binaryExpression)
             {
-                parts.Add(binaryExpression.Right.Print());
+                return GetPrecedence(binaryExpression.Operator);
             }
 
-            return parts;
+            return -1;
+        }
+
+        private static int GetPrecedence(string @operator)
+        {
+            return @operator switch
+            {
+                "*" => 21,
+                "/" => 21,
+                "%" => 21,
+                "div" => 21,
+                "+" => 16,
+                "-" => 16,
+                "??" => 15,
+                "<<" => 14,
+                ">>" => 14,
+                "||" => 12,
+                "&&" => 11,
+                "^^" => 10,
+                "==" => 9,
+                "!=" => 8,
+                "<" => 7,
+                ">" => 7,
+                "<=" => 7,
+                ">=" => 7,
+                "&" => 3,
+                "|" => 2,
+                "^" => 1,
+                _ => throw new Exception($"No precedence defined for {@operator}")
+            };
         }
     }
 }

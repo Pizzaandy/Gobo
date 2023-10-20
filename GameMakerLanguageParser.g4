@@ -183,16 +183,19 @@ expression
     | <assoc=right> '~' expression # BitNotExpression
     | <assoc=right> Not expression # NotExpression
     
+    // Binary operator precedence is purposely incorrect because it looks prettier that way :)
     | expression ('*' | '/' | Modulo | IntegerDivide) expression # MultiplicativeExpression
     | expression ('+' | '-') expression # AdditiveExpression
-    | expression '??' expression # CoalesceExpression
     | expression ('<<' | '>>') expression # BitShiftExpression
+    | expression ('<' | '<=' | '>' | '>=') expression # RelationalExpression
+    | expression ('==' | Assign) expression # EqualityExpression
+    | expression NotEquals expression # InequalityExpression
+
     | expression Or expression # LogicalOrExpression
     | expression And expression # LogicalAndExpression
     | expression Xor expression # LogicalXorExpression
-    | expression ('==' | Assign) expression # EqualityExpression
-    | expression NotEquals expression # InequalityExpression
-    | expression ('<' | '<=' | '>' | '>=') expression # RelationalExpression
+    | expression '??' expression # CoalesceExpression
+    
     | expression '&' expression # BitAndExpression
     | expression '|' expression # BitOrExpression
     | expression '^' expression # BitXOrExpression
