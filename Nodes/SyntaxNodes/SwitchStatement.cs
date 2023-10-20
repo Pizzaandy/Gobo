@@ -28,12 +28,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
             if (Cases.Children.Any())
             {
-                var cases = Cases.PrintChildren();
-                parts.Add(Doc.Concat("{", Doc.Indent(cases), Doc.HardLine, "}"));
+                var caseList = Cases.PrintChildren();
+                parts.Add(Block.PrintInBlock(Doc.Join(Doc.HardLine, caseList)));
             }
             else
             {
-                parts.Add("{}");
+                parts.Add(Block.EmptyBlock());
             }
 
             return Doc.Concat(parts);

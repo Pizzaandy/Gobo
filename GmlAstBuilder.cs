@@ -342,7 +342,11 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.ReturnStatementContext context
         )
         {
-            var expression = Visit(context.expression());
+            GmlSyntaxNode expression = GmlSyntaxNode.Empty;
+            if (context.expression() != null)
+            {
+                expression = Visit(context.expression());
+            }
             return new ReturnStatement(context, TokenStream, expression);
         }
 
@@ -467,7 +471,7 @@ namespace PrettierGML
             {
                 initializer = Visit(context.expressionOrFunction());
             }
-            return new Parameter(context, TokenStream, name, initializer);
+            return new Argument(context, TokenStream, name, initializer);
         }
 
         public override GmlSyntaxNode VisitLiteral(
@@ -514,7 +518,11 @@ namespace PrettierGML
             }
             else if (context.expressionOrFunction() != null)
             {
-                contents = Visit(context.expressionOrFunction());
+                contents = new ParenthesizedExpression(
+                    context,
+                    TokenStream,
+                    Visit(context.expressionOrFunction())
+                );
             }
             else
             {
@@ -770,6 +778,67 @@ namespace PrettierGML
         )
         {
             return new Identifier(context, TokenStream, context.GetText());
+        }
+
+        public override GmlSyntaxNode VisitEnumeratorDeclaration(
+            [NotNull] GameMakerLanguageParser.EnumeratorDeclarationContext context
+        )
+        {
+            var name = Visit(context.identifier());
+            GmlSyntaxNode members = GmlSyntaxNode.Empty;
+            if (context.enumeratorList() != null)
+            {
+                members = Visit(context.enumeratorList());
+            }
+            return new EnumDeclaration(context, TokenStream, name, members);
+        }
+
+        public override GmlSyntaxNode VisitEnumeratorList(
+            [NotNull] GameMakerLanguageParser.EnumeratorListContext context
+        )
+        {
+            var enums = new List<GmlSyntaxNode>();
+            foreach (var enumDecl in context.enumerator())
+            {
+                enums.Add(Visit(enumDecl));
+            }
+            return GmlSyntaxNode.List(context, TokenStream, enums);
+        }
+
+        public override GmlSyntaxNode VisitEnumerator(
+            [NotNull] GameMakerLanguageParser.EnumeratorContext context
+        )
+        {
+            var id = Visit(context.identifier());
+            GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
+            if (context.Assign() != null)
+            {
+                if (context.IntegerLiteral() != null)
+                {
+                    initializer = new Literal(
+                        context.IntegerLiteral(),
+                        TokenStream,
+                        context.IntegerLiteral().GetText()
+                    );
+                }
+                if (context.HexIntegerLiteral() != null)
+                {
+                    initializer = new Literal(
+                        context.HexIntegerLiteral(),
+                        TokenStream,
+                        context.HexIntegerLiteral().GetText()
+                    );
+                }
+                if (context.BinaryLiteral() != null)
+                {
+                    initializer = new Literal(
+                        context.BinaryLiteral(),
+                        TokenStream,
+                        context.BinaryLiteral().GetText()
+                    );
+                }
+            }
+            return new EnumMember(context, TokenStream, id, initializer);
         }
 
         public override GmlSyntaxNode VisitMultiplicativeExpression(
@@ -1051,6 +1120,22 @@ namespace PrettierGML
             }
 
             return new MacroDeclaration(context, TokenStream, id, body);
+        }
+
+        public override GmlSyntaxNode VisitRegionStatement(
+            [NotNull] GameMakerLanguageParser.RegionStatementContext context
+        )
+        {
+            var isEndRegion = context.EndRegion() != null;
+            if (isEndRegion)
+            {
+                return new RegionStatement(context, TokenStream, null, true);
+            }
+            else
+            {
+                var name = context.RegionCharacters().GetText();
+                return new RegionStatement(context, TokenStream, name, false);
+            }
         }
 
         private GmlSyntaxNode UnwrapParenthesizedExpression(GmlSyntaxNode node)

@@ -6,12 +6,10 @@ static void Format(string input)
 {
     Stopwatch sw = Stopwatch.StartNew();
 
-    var options = new PrinterOptions() { Width = 80 };
+    //var astString = GmlParser.Parse(input).ToString();
+    //Console.WriteLine(astString);
 
-    var astString = GmlParser.Parse(input).ToString();
-    Console.WriteLine(astString);
-
-    var result = GmlFormatter.Format(input, options, checkAst: false);
+    var result = GmlFormatter.Format(input, new PrinterOptions() { Width = 80 }, checkAst: true);
     Console.WriteLine(result);
 
     sw.Stop();
@@ -20,22 +18,13 @@ static void Format(string input)
 
 Format(
     """
-if (
-    one - two == three
-    || one + two == three
-    || one * two == three
-    || one / two == three
-    || one % two == three
-    || one != three
-    || one < two
-    || one > two
-    || one <= two
-    || one >= two
-    || one == null
-    || one == Something == null
-    || one - two > three
-    || someLongThing - someOtherLongThing__________________________________
-        > anotherLongThing
-) { }
+switch foo
+{
+    case x:
+        break;
+    case y:
+    foo.bar.baz()
+        break;
+}
 """
 );

@@ -14,16 +14,26 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print()
         {
-            if (Body.IsEmpty)
+            return PrintInBlock(PrintHelper.PrintStatements(Body));
+        }
+
+        public static Doc PrintInBlock(GmlSyntaxNode node)
+        {
+            return PrintInBlock(node.Print());
+        }
+
+        public static Doc PrintInBlock(Doc bodyDoc)
+        {
+            if (bodyDoc == Doc.Null)
             {
-                return "{ }";
+                return EmptyBlock();
             }
-            return Doc.Concat(
-                "{",
-                Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(Body)),
-                Doc.HardLine,
-                "}"
-            );
+            return Doc.Concat("{", Doc.Indent(Doc.HardLine, bodyDoc), Doc.HardLine, "}");
+        }
+
+        public static Doc EmptyBlock()
+        {
+            return "{ }";
         }
     }
 }

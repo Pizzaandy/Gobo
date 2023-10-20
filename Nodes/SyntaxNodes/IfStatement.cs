@@ -38,7 +38,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 }
                 else
                 {
-                    parts.Add(PrintHelper.PrintStatementInBlock(Alternate));
+                    parts.Add(PrintHelper.EnsureStatementInBlock(Alternate));
                 }
             }
 

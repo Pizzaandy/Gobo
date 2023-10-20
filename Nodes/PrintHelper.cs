@@ -16,11 +16,11 @@ namespace PrettierGML.Nodes
                 " ",
                 Doc.Group("(", Doc.Indent(Doc.SoftLine, clause.Print()), Doc.SoftLine, ")"),
                 " ",
-                PrintStatementInBlock(body)
+                EnsureStatementInBlock(body)
             );
         }
 
-        public static Doc PrintStatementInBlock(GmlSyntaxNode statement)
+        public static Doc EnsureStatementInBlock(GmlSyntaxNode statement)
         {
             if (statement is Block)
             {
@@ -28,12 +28,7 @@ namespace PrettierGML.Nodes
             }
             else
             {
-                return Doc.Concat(
-                    "{",
-                    Doc.Indent(Doc.Concat(Doc.HardLine, PrintStatement(statement))),
-                    Doc.HardLine,
-                    "}"
-                );
+                return Block.PrintInBlock(PrintStatement(statement));
             }
         }
 
@@ -70,6 +65,7 @@ namespace PrettierGML.Nodes
                     or VariableDeclarationList
                     or BreakStatement
                     or ContinueStatement
+                    or ReturnStatement
                     or ExitStatement
                     or IncDecStatement;
         }

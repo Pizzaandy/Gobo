@@ -22,7 +22,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public override Doc Print()
         {
             var caseText = Test.IsEmpty ? "default" : "case ";
-            var parts = new List<Doc>() { Doc.HardLine, caseText, Test.Print(), ":" };
+            var parts = new List<Doc>() { caseText, Test.Print(), ":" };
             if (!Body.IsEmpty)
             {
                 parts.Add(Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(Body)));

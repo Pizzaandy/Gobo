@@ -23,7 +23,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             return Doc.Concat(
                 "do ",
-                PrintHelper.PrintStatementInBlock(Body),
+                PrintHelper.EnsureStatementInBlock(Body),
                 " until ",
                 PrintHelper.PrintExpressionInParentheses(Test)
             );

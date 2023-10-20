@@ -4,13 +4,13 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class RegionStatement : GmlSyntaxNode
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public bool IsEndRegion { get; set; }
 
         public RegionStatement(
             ParserRuleContext context,
             CommonTokenStream tokenStream,
-            string name,
+            string? name,
             bool isEndRegion
         )
             : base(context, tokenStream)

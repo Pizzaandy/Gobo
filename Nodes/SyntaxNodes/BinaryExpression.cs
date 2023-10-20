@@ -60,8 +60,8 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
         }
 
-        // Because of cross-platform inconsistency with operator precedence in GML, we can't
-        // group binary expressions in a syntactically meaningful way like Prettier. My parser uses an
+        // Because GML operator precedence is inconsistent across platforms, we can't
+        // group binary expressions in a syntactically meaningful way like Prettier. Our parser uses an
         // inaccurate operator precedence to optimize for readability rather than correctness.
         public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node)
         {

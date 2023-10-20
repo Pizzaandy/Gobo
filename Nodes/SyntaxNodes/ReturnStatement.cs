@@ -18,7 +18,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print()
         {
-            return Doc.Concat("return ", Argument.Print());
+            return Doc.Concat("return", Argument.IsEmpty ? "" : " ", Argument.Print());
         }
     }
 }
