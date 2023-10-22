@@ -8,16 +8,7 @@ namespace PrettierGML.Nodes
     internal abstract class GmlSyntaxNode
     {
         [JsonIgnore]
-        public Interval SourceInterval { get; set; }
-
-        [JsonIgnore]
-        public string SourceText => _tokenStream.GetText(SourceInterval);
-
-        [JsonIgnore]
-        public IList<IToken>? LeadingTrivia;
-
-        [JsonIgnore]
-        public IList<IToken>? TrailingTrivia;
+        public Interval SourceInterval { get; init; }
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; protected set; }
@@ -30,35 +21,22 @@ namespace PrettierGML.Nodes
 
         public string Kind => GetType().Name;
 
-        private readonly CommonTokenStream _tokenStream;
-        private readonly int _startTokenIndex = -1;
-        private readonly int _stopTokenIndex = -1;
-
         public GmlSyntaxNode() { }
 
-        public GmlSyntaxNode(ParserRuleContext context, CommonTokenStream tokenStream)
+        public GmlSyntaxNode(ParserRuleContext node)
         {
-            SourceInterval = context.SourceInterval;
-            _tokenStream = tokenStream;
-            _startTokenIndex = context.Start.TokenIndex;
-            _stopTokenIndex = context.Stop.TokenIndex;
+            SourceInterval = node.SourceInterval;
         }
 
-        public GmlSyntaxNode(ITerminalNode context, CommonTokenStream tokenStream)
+        public GmlSyntaxNode(ITerminalNode node)
         {
-            SourceInterval = context.SourceInterval;
-            _tokenStream = tokenStream;
-            _startTokenIndex = context.Symbol.TokenIndex;
-            _stopTokenIndex = context.Symbol.TokenIndex;
+            SourceInterval = node.SourceInterval;
         }
 
         public static EmptyNode Empty => EmptyNode.Instance;
 
-        public static NodeList List(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            IList<GmlSyntaxNode> contents
-        ) => new(context, tokenStream, contents);
+        public static NodeList List(ParserRuleContext context, IList<GmlSyntaxNode> contents) =>
+            new(context, contents);
 
         protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
         {
@@ -67,11 +45,11 @@ namespace PrettierGML.Nodes
             return child;
         }
 
-        public virtual Doc Print() => throw new NotImplementedException();
+        public virtual Doc Print(PrintContext ctx) => throw new NotImplementedException();
 
-        public List<Doc> PrintChildren()
+        public List<Doc> PrintChildren(PrintContext ctx)
         {
-            return Children.Select(child => child.Print()).ToList();
+            return Children.Select(child => child.Print(ctx)).ToList();
         }
 
         public override string ToString()
@@ -81,26 +59,28 @@ namespace PrettierGML.Nodes
 
         public override int GetHashCode()
         {
-            var serialized = JsonConvert.SerializeObject(this);
-            return serialized.GetHashCode();
+            var hashCode = new HashCode();
+            hashCode.Add(Kind);
+            foreach (var child in Children)
+            {
+                hashCode.Add(child);
+            }
+            return hashCode.ToHashCode();
         }
 
-        //protected Doc PrintTrailingTrivia()
+        //public bool HasLeadingLine()
         //{
-        //    var parts = new List<Doc>();
-        //    TrailingTrivia = _tokenStream.GetHiddenTokensToRight(_stopTokenIndex);
-        //    foreach (var token in TrailingTrivia)
+        //    var leadingTokens = _tokenStream.GetHiddenTokensToLeft(_startTokenIndex);
+        //    if (leadingTokens is not null)
         //    {
-        //        if (token.Type == GameMakerLanguageLexer.SingleLineComment)
+        //        foreach (var token in leadingTokens)
         //        {
-        //            parts.Add(Doc.TrailingComment(token.Text, CommentType.SingleLine));
-        //        }
-        //        else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
-        //        {
-        //            parts.Add(Doc.TrailingComment(token.Text, CommentType.MultiLine));
+        //            Console.WriteLine(token);
         //        }
         //    }
-        //    return Doc.Concat(parts);
+
+        //    return leadingTokens is not null
+        //        && leadingTokens.Count(token => token.Text.Contains('\n')) >= 2;
         //}
     }
 

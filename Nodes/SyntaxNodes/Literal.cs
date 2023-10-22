@@ -7,19 +7,19 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public string Text { get; set; }
 
-        public Literal(ParserRuleContext context, CommonTokenStream tokenStream, string text)
-            : base(context, tokenStream)
+        public Literal(ParserRuleContext context, string text)
+            : base(context)
         {
             Text = text;
         }
 
-        public Literal(ITerminalNode context, CommonTokenStream tokenStream, string text)
-            : base(context, tokenStream)
+        public Literal(ITerminalNode context, string text)
+            : base(context)
         {
             Text = text;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return Text;
         }

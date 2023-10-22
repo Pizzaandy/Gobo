@@ -10,23 +10,23 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public MemberIndexExpression(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode @object,
             GmlSyntaxNode properties,
             string accessor
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Object = AsChild(@object);
             Properties = AsChild(properties);
             Accessor = accessor;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
+            var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
             return Doc.Concat(
-                Object.Print(),
-                PrintHelper.PrintArgumentListLikeSyntax(Accessor, Properties, "]", ",")
+                Object.Print(ctx),
+                PrintHelper.PrintArgumentListLikeSyntax(ctx, accessor, Properties, "]", ",")
             );
         }
     }

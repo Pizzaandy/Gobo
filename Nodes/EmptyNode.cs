@@ -6,7 +6,7 @@
 
         private EmptyNode() { }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return Doc.Null;
         }

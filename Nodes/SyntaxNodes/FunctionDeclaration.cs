@@ -12,13 +12,12 @@ namespace PrettierGML.Nodes
 
         public FunctionDeclaration(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode id,
             GmlSyntaxNode parameters,
             GmlSyntaxNode body,
             GmlSyntaxNode parent
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Id = AsChild(id);
             Parameters = AsChild(parameters);
@@ -27,21 +26,21 @@ namespace PrettierGML.Nodes
             ConstructorParent = AsChild(parent);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             var parts = new List<Doc>
             {
-                Doc.Concat("function", Id.IsEmpty ? "" : " ", Id.Print()),
-                PrintHelper.PrintArgumentListLikeSyntax("(", Parameters, ")", ",")
+                Doc.Concat("function", Id.IsEmpty ? "" : " ", Id.Print(ctx)),
+                PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Parameters, ")", ",")
             };
 
             if (!ConstructorParent.IsEmpty)
             {
-                parts.Add(ConstructorParent.Print());
+                parts.Add(ConstructorParent.Print(ctx));
             }
 
             parts.Add(" ");
-            parts.Add(PrintHelper.EnsureStatementInBlock(Body));
+            parts.Add(PrintHelper.EnsureStatementInBlock(ctx, Body));
 
             return Doc.Concat(parts);
         }

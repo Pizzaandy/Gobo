@@ -7,25 +7,20 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public SwitchCase(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode test,
-            GmlSyntaxNode body
-        )
-            : base(context, tokenStream)
+        public SwitchCase(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
+            : base(context)
         {
             Test = AsChild(test);
             Body = AsChild(body);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             var caseText = Test.IsEmpty ? "default" : "case ";
-            var parts = new List<Doc>() { caseText, Test.Print(), ":" };
+            var parts = new List<Doc>() { caseText, Test.Print(ctx), ":" };
             if (!Body.IsEmpty)
             {
-                parts.Add(Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(Body)));
+                parts.Add(Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(ctx, Body)));
             }
             return Doc.Concat(parts);
         }

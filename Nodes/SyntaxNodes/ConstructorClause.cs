@@ -9,24 +9,23 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public ConstructorClause(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode id,
             GmlSyntaxNode parameters
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Id = AsChild(id);
             Parameters = AsChild(parameters);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             if (!Id.IsEmpty)
             {
                 return Doc.Concat(
                     ": ",
-                    Id.Print(),
-                    PrintHelper.PrintArgumentListLikeSyntax("(", Parameters, ")", ","),
+                    Id.Print(ctx),
+                    PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Parameters, ")", ","),
                     " ",
                     "constructor"
                 );

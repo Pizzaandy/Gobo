@@ -8,20 +8,15 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Members { get; set; }
 
-        public EnumDeclaration(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode name,
-            GmlSyntaxNode members
-        )
-            : base(context, tokenStream)
+        public EnumDeclaration(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode members)
+            : base(context)
         {
             Name = AsChild(name);
             Members = AsChild(members);
             Debug.Assert(Members is NodeList or EmptyNode);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             Doc members = Doc.Null;
 
@@ -30,12 +25,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 var memberList = new List<Doc>();
                 foreach (var member in Members.Children)
                 {
-                    memberList.Add(Doc.Concat(member.Print(), ","));
+                    memberList.Add(Doc.Concat(member.Print(ctx), ","));
                 }
                 members = Doc.Join(Doc.HardLine, memberList);
             }
 
-            return Doc.Concat("enum", " ", Name.Print(), " ", Block.PrintInBlock(members));
+            return Doc.Concat("enum", " ", Name.Print(ctx), " ", Block.PrintInBlock(ctx, members));
         }
     }
 }

@@ -6,19 +6,15 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public string Name { get; set; }
 
-        public DefineStatement(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            string name
-        )
-            : base(context, tokenStream)
+        public DefineStatement(ParserRuleContext context, string name)
+            : base(context)
         {
             Name = name;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return Doc.Concat("#define", Name);
+            return Doc.Concat("#define", " ", Name);
         }
     }
 }

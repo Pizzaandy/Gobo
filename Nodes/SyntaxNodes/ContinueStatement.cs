@@ -4,10 +4,10 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class ContinueStatement : GmlSyntaxNode
     {
-        public ContinueStatement(ParserRuleContext context, CommonTokenStream tokenStream)
-            : base(context, tokenStream) { }
+        public ContinueStatement(ParserRuleContext context)
+            : base(context) { }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return "continue";
         }

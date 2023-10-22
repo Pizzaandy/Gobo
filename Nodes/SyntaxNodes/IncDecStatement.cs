@@ -10,27 +10,26 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public IncDecStatement(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             string @operator,
             GmlSyntaxNode argument,
             bool isPrefix
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Operator = @operator;
             Argument = AsChild(argument);
             IsPrefix = isPrefix;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             if (IsPrefix)
             {
-                return Doc.Concat(Operator, Argument.Print());
+                return Doc.Concat(Operator, Argument.Print(ctx));
             }
             else
             {
-                return Doc.Concat(Argument.Print(), Operator);
+                return Doc.Concat(Argument.Print(ctx), Operator);
             }
         }
     }

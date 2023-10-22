@@ -4,10 +4,10 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class ExitStatement : GmlSyntaxNode
     {
-        public ExitStatement(ParserRuleContext context, CommonTokenStream tokenStream)
-            : base(context, tokenStream) { }
+        public ExitStatement(ParserRuleContext context)
+            : base(context) { }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return "exit";
         }

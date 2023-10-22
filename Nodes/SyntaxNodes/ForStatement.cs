@@ -11,13 +11,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public ForStatement(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode init,
             GmlSyntaxNode test,
             GmlSyntaxNode update,
             GmlSyntaxNode body
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Init = AsChild(init);
             Test = AsChild(test);
@@ -25,18 +24,18 @@ namespace PrettierGML.Nodes.SyntaxNodes
             Body = AsChild(body);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             var separator = Doc.Concat(";", Doc.Line);
-            var items = new Doc[] { Init.Print(), Test.Print(), Update.Print() };
+            var items = new Doc[] { Init.Print(ctx), Test.Print(ctx), Update.Print(ctx) };
             return Doc.Concat(
                 "for (",
                 Doc.Group(
                     Doc.Indent(Doc.IfBreak(Doc.Line, Doc.Null), Doc.Join(separator, items)),
-                    Doc.Line
+                    Doc.IfBreak(Doc.Line, Doc.Null)
                 ),
                 ") ",
-                PrintHelper.EnsureStatementInBlock(Body)
+                PrintHelper.EnsureStatementInBlock(ctx, Body)
             );
         }
     }

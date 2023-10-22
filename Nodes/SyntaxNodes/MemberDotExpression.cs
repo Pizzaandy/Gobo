@@ -9,19 +9,18 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public MemberDotExpression(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode @object,
             GmlSyntaxNode property
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Object = AsChild(@object);
             Property = AsChild(property);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return Doc.Concat(Object.Print(), ".", Property.Print());
+            return Doc.Concat(Object.Print(ctx), ".", Property.Print(ctx));
         }
     }
 }

@@ -7,19 +7,19 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public string Name { get; set; }
 
-        public Identifier(ITerminalNode context, CommonTokenStream tokenStream, string name)
-            : base(context, tokenStream)
+        public Identifier(ITerminalNode context, string name)
+            : base(context)
         {
             Name = name;
         }
 
-        public Identifier(ParserRuleContext context, CommonTokenStream tokenStream, string name)
-            : base(context, tokenStream)
+        public Identifier(ParserRuleContext context, string name)
+            : base(context)
         {
             Name = name;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return Name;
         }

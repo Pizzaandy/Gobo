@@ -10,23 +10,22 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public IfStatement(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode test,
             GmlSyntaxNode consequent,
             GmlSyntaxNode alternate
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Test = AsChild(test);
             Consequent = AsChild(consequent);
             Alternate = AsChild(alternate);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             var parts = new List<Doc>
             {
-                PrintHelper.PrintSingleClauseStatement("if", Test, Consequent)
+                PrintHelper.PrintSingleClauseStatement(ctx, "if", Test, Consequent)
             };
 
             if (Alternate is not EmptyNode)
@@ -34,11 +33,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 parts.Add(" else ");
                 if (Alternate is IfStatement)
                 {
-                    parts.Add(Alternate.Print());
+                    parts.Add(Alternate.Print(ctx));
                 }
                 else
                 {
-                    parts.Add(PrintHelper.EnsureStatementInBlock(Alternate));
+                    parts.Add(PrintHelper.EnsureStatementInBlock(ctx, Alternate));
                 }
             }
 

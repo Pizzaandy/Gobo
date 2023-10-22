@@ -6,21 +6,24 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Properties { get; set; }
 
-        public StructExpression(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode properties
-        )
-            : base(context, tokenStream)
+        public StructExpression(ParserRuleContext context, GmlSyntaxNode properties)
+            : base(context)
         {
             Properties = AsChild(properties);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             if (Properties.Children.Any())
             {
-                return PrintHelper.PrintArgumentListLikeSyntax("{", Properties, "}", ",", true);
+                return PrintHelper.PrintArgumentListLikeSyntax(
+                    ctx,
+                    "{",
+                    Properties,
+                    "}",
+                    ",",
+                    true
+                );
             }
             else
             {

@@ -4,10 +4,10 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class BreakStatement : GmlSyntaxNode
     {
-        public BreakStatement(ParserRuleContext context, CommonTokenStream tokenStream)
-            : base(context, tokenStream) { }
+        public BreakStatement(ParserRuleContext context)
+            : base(context) { }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return "break";
         }

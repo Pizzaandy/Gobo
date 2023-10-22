@@ -7,21 +7,16 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public RepeatStatement(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode test,
-            GmlSyntaxNode body
-        )
-            : base(context, tokenStream)
+        public RepeatStatement(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
+            : base(context)
         {
             Test = AsChild(test);
             Body = AsChild(body);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return PrintHelper.PrintSingleClauseStatement("repeat", Test, Body);
+            return PrintHelper.PrintSingleClauseStatement(ctx, "repeat", Test, Body);
         }
     }
 }

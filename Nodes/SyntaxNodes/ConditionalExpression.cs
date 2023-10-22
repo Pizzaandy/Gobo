@@ -10,36 +10,35 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public ConditionalExpression(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode test,
             GmlSyntaxNode whenTrue,
             GmlSyntaxNode whenFalse
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Test = AsChild(test);
             WhenTrue = AsChild(whenTrue);
             WhenFalse = AsChild(whenFalse);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             Doc[] innerContents =
             {
                 Doc.Line,
                 "? ",
-                Doc.Concat(WhenTrue.Print()),
+                Doc.Concat(WhenTrue.Print(ctx)),
                 Doc.Line,
                 ": ",
-                Doc.Concat(WhenFalse.Print())
+                Doc.Concat(WhenFalse.Print(ctx))
             };
 
             Doc[] outerContents =
             {
                 Parent is ConditionalExpression ? Doc.BreakParent : Doc.Null,
                 Parent is ReturnStatement && Test is BinaryExpression
-                    ? Doc.Indent(Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Test.Print()))
-                    : Test.Print(),
+                    ? Doc.Indent(Doc.Group(Doc.IfBreak(Doc.SoftLine, Doc.Null), Test.Print(ctx)))
+                    : Test.Print(ctx),
                 Parent is ConditionalExpression or ReturnStatement
                     ? Doc.Indent(innerContents)
                     : Doc.Indent(innerContents)

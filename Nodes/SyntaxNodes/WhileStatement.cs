@@ -7,21 +7,16 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public WhileStatement(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode test,
-            GmlSyntaxNode body
-        )
-            : base(context, tokenStream)
+        public WhileStatement(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
+            : base(context)
         {
             Test = AsChild(test);
             Body = AsChild(body);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return PrintHelper.PrintSingleClauseStatement("while", Test, Body);
+            return PrintHelper.PrintSingleClauseStatement(ctx, "while", Test, Body);
         }
     }
 }

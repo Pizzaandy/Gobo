@@ -14,13 +14,18 @@ namespace PrettierGML.Nodes
             Fluid,
         }
 
-        public static Doc Print(GmlSyntaxNode leftNode, Doc operatorDoc, GmlSyntaxNode rightNode)
+        public static Doc Print(
+            PrintContext ctx,
+            GmlSyntaxNode leftNode,
+            Doc operatorDoc,
+            GmlSyntaxNode rightNode
+        )
         {
             var layout = DetermineLayout(leftNode, rightNode);
             var groupId = Guid.NewGuid().ToString();
 
-            var leftDoc = leftNode.Print();
-            var rightDoc = rightNode.Print();
+            var leftDoc = leftNode.Print(ctx);
+            var rightDoc = rightNode.Print(ctx);
 
             return layout switch
             {

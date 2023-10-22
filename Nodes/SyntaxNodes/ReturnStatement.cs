@@ -6,19 +6,15 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Argument { get; set; }
 
-        public ReturnStatement(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode argument
-        )
-            : base(context, tokenStream)
+        public ReturnStatement(ParserRuleContext context, GmlSyntaxNode argument)
+            : base(context)
         {
-            Argument = argument;
+            Argument = AsChild(argument);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return Doc.Concat("return", Argument.IsEmpty ? "" : " ", Argument.Print());
+            return Doc.Concat("return", Argument.IsEmpty ? "" : " ", Argument.Print(ctx));
         }
     }
 }

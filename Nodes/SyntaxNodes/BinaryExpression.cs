@@ -10,12 +10,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public BinaryExpression(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             string @operator,
             GmlSyntaxNode left,
             GmlSyntaxNode right
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Operator = @operator switch
             {
@@ -32,9 +31,9 @@ namespace PrettierGML.Nodes.SyntaxNodes
             Right = AsChild(right);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            var docs = PrintBinaryExpression(this);
+            var docs = PrintBinaryExpression(this, ctx);
 
             if (Parent is IfStatement)
             {
@@ -63,11 +62,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
         // Because GML operator precedence is inconsistent across platforms, we can't
         // group binary expressions in a syntactically meaningful way like Prettier. Our parser uses an
         // inaccurate operator precedence to optimize for readability rather than correctness.
-        public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node)
+        public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node, PrintContext ctx)
         {
             if (node is not BinaryExpression binaryExpression)
             {
-                return new List<Doc> { Doc.Group(node.Print()) };
+                return new List<Doc> { Doc.Group(node.Print(ctx)) };
             }
 
             var parts = new List<Doc>();
@@ -83,18 +82,18 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
             )
             {
-                parts.AddRange(PrintBinaryExpression(leftBinary));
+                parts.AddRange(PrintBinaryExpression(leftBinary, ctx));
             }
             else
             {
-                parts.Add(binaryExpression.Left.Print());
+                parts.Add(binaryExpression.Left.Print(ctx));
             }
 
             var right = Doc.Concat(
                 Doc.Line,
                 binaryExpression.Operator,
                 " ",
-                binaryExpression.Right.Print()
+                binaryExpression.Right.Print(ctx)
             );
 
             parts.Add(shouldGroup ? Doc.Group(right) : right);

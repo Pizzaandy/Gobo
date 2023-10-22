@@ -9,22 +9,21 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public VariableDeclarationList(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode declarations,
             string modifier
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Declarations = AsChild(declarations);
             Modifier = modifier;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return Doc.Concat(
                 Modifier,
                 " ",
-                Doc.Group(PrintHelper.PrintSeparatedList(Declarations, ","))
+                Doc.Group(PrintHelper.PrintSeparatedList(ctx, Declarations, ","))
             );
         }
     }

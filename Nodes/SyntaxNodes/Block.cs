@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using System.Diagnostics;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
@@ -6,23 +7,19 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Body { get; set; }
 
-        public Block(ParserRuleContext context, CommonTokenStream tokenStream, GmlSyntaxNode body)
-            : base(context, tokenStream)
+        public Block(ParserRuleContext context, GmlSyntaxNode body)
+            : base(context)
         {
             Body = AsChild(body);
+            Debug.Assert(Body is NodeList or EmptyNode);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return PrintInBlock(PrintHelper.PrintStatements(Body));
+            return PrintInBlock(ctx, PrintHelper.PrintStatements(ctx, Body));
         }
 
-        public static Doc PrintInBlock(GmlSyntaxNode node)
-        {
-            return PrintInBlock(node.Print());
-        }
-
-        public static Doc PrintInBlock(Doc bodyDoc)
+        public static Doc PrintInBlock(PrintContext ctx, Doc bodyDoc)
         {
             if (bodyDoc == Doc.Null)
             {
@@ -34,6 +31,18 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public static Doc EmptyBlock()
         {
             return "{ }";
+        }
+
+        public override int GetHashCode()
+        {
+            if (!Body.IsEmpty && Body.Children.Count == 1)
+            {
+                return Body.Children.First().GetHashCode();
+            }
+            else
+            {
+                return base.GetHashCode();
+            }
         }
     }
 }

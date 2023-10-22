@@ -9,27 +9,30 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public SwitchStatement(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode discriminant,
             GmlSyntaxNode cases
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Discriminant = AsChild(discriminant);
             Cases = AsChild(cases);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             var parts = new List<Doc>
             {
-                Doc.Concat("switch ", PrintHelper.PrintExpressionInParentheses(Discriminant), " ")
+                Doc.Concat(
+                    "switch ",
+                    PrintHelper.PrintExpressionInParentheses(ctx, Discriminant),
+                    " "
+                )
             };
 
             if (Cases.Children.Any())
             {
-                var caseList = Cases.PrintChildren();
-                parts.Add(Block.PrintInBlock(Doc.Join(Doc.HardLine, caseList)));
+                var caseList = Cases.PrintChildren(ctx);
+                parts.Add(Block.PrintInBlock(ctx, Doc.Join(Doc.HardLine, caseList)));
             }
             else
             {

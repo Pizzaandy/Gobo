@@ -2,11 +2,11 @@
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
-    internal class Document : GmlSyntaxNode
+    internal class FinallyProduction : GmlSyntaxNode
     {
         public GmlSyntaxNode Body { get; set; }
 
-        public Document(ParserRuleContext context, GmlSyntaxNode body)
+        public FinallyProduction(ParserRuleContext context, GmlSyntaxNode body)
             : base(context)
         {
             Body = AsChild(body);
@@ -14,7 +14,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            return Doc.Concat(PrintHelper.PrintStatements(ctx, Body), Doc.HardLineIfNoPreviousLine);
+            return Doc.Concat("finally", " ", PrintHelper.EnsureStatementInBlock(ctx, Body));
         }
     }
 }

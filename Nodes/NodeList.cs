@@ -6,12 +6,8 @@ namespace PrettierGML.Nodes
     {
         public IList<GmlSyntaxNode> Contents { get; set; }
 
-        public NodeList(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            IList<GmlSyntaxNode> contents
-        )
-            : base(context, tokenStream)
+        public NodeList(ParserRuleContext context, IList<GmlSyntaxNode> contents)
+            : base(context)
         {
             Contents = contents;
             foreach (var node in contents)
@@ -20,7 +16,7 @@ namespace PrettierGML.Nodes
             }
         }
 
-        public override Doc Print() =>
+        public override Doc Print(PrintContext ctx) =>
             throw new NotImplementedException("NodeList cannot be printed");
     }
 }

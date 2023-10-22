@@ -6,19 +6,15 @@ namespace PrettierGML.Nodes.SyntaxNodes
     {
         public GmlSyntaxNode Elements { get; set; }
 
-        public ArrayExpression(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode elements
-        )
-            : base(context, tokenStream)
+        public ArrayExpression(ParserRuleContext context, GmlSyntaxNode elements)
+            : base(context)
         {
             Elements = AsChild(elements);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
-            return PrintHelper.PrintArgumentListLikeSyntax("[", Elements, "]", ",");
+            return PrintHelper.PrintArgumentListLikeSyntax(ctx, "[", Elements, "]", ",");
         }
     }
 }

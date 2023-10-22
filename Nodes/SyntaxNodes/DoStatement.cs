@@ -7,25 +7,20 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public GmlSyntaxNode Body { get; set; }
         public GmlSyntaxNode Test { get; set; }
 
-        public DoStatement(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            GmlSyntaxNode body,
-            GmlSyntaxNode test
-        )
-            : base(context, tokenStream)
+        public DoStatement(ParserRuleContext context, GmlSyntaxNode body, GmlSyntaxNode test)
+            : base(context)
         {
             Body = AsChild(body);
             Test = AsChild(test);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return Doc.Concat(
                 "do ",
-                PrintHelper.EnsureStatementInBlock(Body),
+                PrintHelper.EnsureStatementInBlock(ctx, Body),
                 " until ",
-                PrintHelper.PrintExpressionInParentheses(Test)
+                PrintHelper.PrintExpressionInParentheses(ctx, Test)
             );
         }
     }

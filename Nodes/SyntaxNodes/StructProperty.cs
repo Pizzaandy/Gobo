@@ -9,25 +9,24 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public StructProperty(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             GmlSyntaxNode name,
             GmlSyntaxNode initializer
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Name = AsChild(name);
             Initializer = AsChild(initializer);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             if (Initializer.IsEmpty)
             {
-                return Name.Print();
+                return Name.Print(ctx);
             }
             else
             {
-                return Doc.Concat(Name.Print(), ": ", Initializer.Print());
+                return Doc.Concat(Name.Print(ctx), ": ", Initializer.Print(ctx));
             }
         }
     }

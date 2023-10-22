@@ -7,19 +7,14 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public string? Name { get; set; }
         public bool IsEndRegion { get; set; }
 
-        public RegionStatement(
-            ParserRuleContext context,
-            CommonTokenStream tokenStream,
-            string? name,
-            bool isEndRegion
-        )
-            : base(context, tokenStream)
+        public RegionStatement(ParserRuleContext context, string? name, bool isEndRegion)
+            : base(context)
         {
             Name = name;
             IsEndRegion = isEndRegion;
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             return IsEndRegion ? "#endregion" : Doc.Concat("#region", Name);
         }

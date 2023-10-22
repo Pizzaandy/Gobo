@@ -10,25 +10,24 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public AssignmentExpression(
             ParserRuleContext context,
-            CommonTokenStream tokenStream,
             string @operator,
             GmlSyntaxNode left,
             GmlSyntaxNode right
         )
-            : base(context, tokenStream)
+            : base(context)
         {
             Operator = @operator;
             Left = AsChild(left);
             Right = AsChild(right);
         }
 
-        public override Doc Print()
+        public override Doc Print(PrintContext ctx)
         {
             if (Operator == ":=")
             {
                 Operator = "=";
             }
-            return RightHandSide.Print(Left, Doc.Concat(" ", Operator), Right);
+            return RightHandSide.Print(ctx, Left, Doc.Concat(" ", Operator), Right);
         }
     }
 }
