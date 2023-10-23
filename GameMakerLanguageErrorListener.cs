@@ -41,19 +41,17 @@ namespace PrettierGML
             var stackText = parser.GetRuleInvocationStackAsString();
             var lastRule = stack[0];
 
-            string offendingSymbolMessage;
+            var symbolText =
+                OffendingSymbol.Text == "<EOF>" ? "end of file" : $"'{OffendingSymbol.Text}'";
 
-            if (lastRule == "closeBlock")
+            string offendingSymbolMessage = lastRule switch
             {
-                offendingSymbolMessage = $"missing '}}' at {stack[2]}";
-            }
-            else
-            {
-                offendingSymbolMessage = $"unexpected '{OffendingSymbol.Text}'";
-            }
+                "closeBlock" => $"expected '}}'",
+                "macroStatement" => $"macro is invalid",
+                _ => $"unexpected {symbolText}"
+            };
 
-            var syntaxErrorMessage =
-                $"Syntax error at line {Line + 1}, column {CharPositionInLine}:\n";
+            var syntaxErrorMessage = $"Syntax error at line {Line}, column {CharPositionInLine}:\n";
 
             var message =
                 syntaxErrorMessage

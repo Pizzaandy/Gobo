@@ -23,14 +23,21 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             Doc printedArguments;
 
-            if (IsFunctionOrStructWrapper(Arguments))
+            if (ShouldBreakOnLastArgument(Arguments))
             {
                 var printedChildren = Arguments.PrintChildren(ctx);
 
                 var last = printedChildren.Last();
                 var allExceptLast = printedChildren.GetRange(0, printedChildren.Count - 1);
 
-                var optionA = Doc.Concat("(", Doc.Join(", ", allExceptLast), ", ", last, ")");
+                var separator = Doc.Concat(",", " ");
+                var optionA = Doc.Concat(
+                    "(",
+                    Doc.Join(separator, allExceptLast),
+                    separator,
+                    last,
+                    ")"
+                );
                 var optionB = Doc.Concat(
                     DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
                 );
@@ -47,7 +54,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             return Doc.Concat(Object.Print(ctx), printedArguments);
         }
 
-        private static bool IsFunctionOrStructWrapper(GmlSyntaxNode arguments)
+        private static bool ShouldBreakOnLastArgument(GmlSyntaxNode arguments)
         {
             if (arguments is not NodeList || arguments.Children.Count == 0)
             {

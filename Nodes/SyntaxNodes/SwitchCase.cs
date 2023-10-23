@@ -17,7 +17,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            var caseText = Test.IsEmpty ? "default" : "case ";
+            var caseText = Test.IsEmpty ? "default" : "case" + " ";
             var parts = new List<Doc>() { caseText, Test.Print(ctx), ":" };
             if (!Body.IsEmpty)
             {

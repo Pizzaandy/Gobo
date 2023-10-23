@@ -26,10 +26,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
             Doc[] innerContents =
             {
                 Doc.Line,
-                "? ",
+                "?",
+                " ",
                 Doc.Concat(WhenTrue.Print(ctx)),
                 Doc.Line,
-                ": ",
+                ":",
+                " ",
                 Doc.Concat(WhenFalse.Print(ctx))
             };
 

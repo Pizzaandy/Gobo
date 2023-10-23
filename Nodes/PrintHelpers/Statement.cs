@@ -12,8 +12,6 @@ namespace PrettierGML.Nodes.PrintHelpers
             GmlSyntaxNode body
         )
         {
-            clause = UnwrapParenthesizedExpression(clause);
-
             return Doc.Concat(
                 keyword,
                 " ",

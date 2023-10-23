@@ -24,7 +24,8 @@ namespace PrettierGML.Nodes.SyntaxNodes
             var parts = new List<Doc>
             {
                 Doc.Concat(
-                    "switch ",
+                    "switch",
+                    " ",
                     Statement.EnsureExpressionInParentheses(ctx, Discriminant),
                     " "
                 )

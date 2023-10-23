@@ -26,7 +26,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             }
             else
             {
-                return Doc.Concat(Name.Print(ctx), ": ", Initializer.Print(ctx));
+                return Doc.Concat(Name.Print(ctx), ":", " ", Initializer.Print(ctx));
             }
         }
     }
