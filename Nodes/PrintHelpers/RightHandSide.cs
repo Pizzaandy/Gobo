@@ -1,6 +1,6 @@
 ﻿using PrettierGML.Nodes.SyntaxNodes;
 
-namespace PrettierGML.Nodes
+namespace PrettierGML.Nodes.PrintHelpers
 {
     internal class RightHandSide
     {

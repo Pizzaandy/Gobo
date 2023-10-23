@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using PrettierGML.Nodes.PrintHelpers;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
@@ -16,19 +17,14 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             if (Properties.Children.Any())
             {
-                return DelimitedList.PrintInBrackets(
-                    ctx,
-                    "{",
-                    Properties,
-                    "}",
-                    ",",
-                    true
-                );
+                return DelimitedList.PrintInBrackets(ctx, "{", Properties, "}", ",", true);
             }
             else
             {
-                return "{}";
+                return EmptyStruct;
             }
         }
+
+        public static string EmptyStruct => "{}";
     }
 }
