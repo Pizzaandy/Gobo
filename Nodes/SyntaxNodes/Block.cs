@@ -23,15 +23,22 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             if (bodyDoc == Doc.Null)
             {
-                return EmptyBlock();
+                return EmptyBlock;
             }
-            return Doc.Concat("{", Doc.Indent(Doc.HardLine, bodyDoc), Doc.HardLine, "}");
+
+            Doc leadingLine =
+                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : Doc.Null;
+
+            return Doc.Concat(
+                leadingLine,
+                "{",
+                Doc.Indent(Doc.HardLine, bodyDoc),
+                Doc.HardLine,
+                "}"
+            );
         }
 
-        public static Doc EmptyBlock()
-        {
-            return "{ }";
-        }
+        public static Doc EmptyBlock => "{}";
 
         public override int GetHashCode()
         {

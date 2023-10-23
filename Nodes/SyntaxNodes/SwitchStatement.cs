@@ -24,7 +24,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             {
                 Doc.Concat(
                     "switch ",
-                    PrintHelper.PrintExpressionInParentheses(ctx, Discriminant),
+                    PrintHelper.EnsureExpressionInParentheses(ctx, Discriminant),
                     " "
                 )
             };
@@ -36,7 +36,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             }
             else
             {
-                parts.Add(Block.EmptyBlock());
+                parts.Add(Block.EmptyBlock);
             }
 
             return Doc.Concat(parts);

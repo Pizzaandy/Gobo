@@ -28,14 +28,17 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 Doc.Concat("try", " ", PrintHelper.EnsureStatementInBlock(ctx, Body))
             };
 
+            Doc leadingWhitespace =
+                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : " ";
+
             if (!Catch.IsEmpty)
             {
-                parts.Add(Doc.Concat(" ", Catch.Print(ctx)));
+                parts.Add(Doc.Concat(leadingWhitespace, Catch.Print(ctx)));
             }
 
             if (!Finally.IsEmpty)
             {
-                parts.Add(Doc.Concat(" ", Finally.Print(ctx)));
+                parts.Add(Doc.Concat(leadingWhitespace, Finally.Print(ctx)));
             }
 
             return Doc.Concat(parts);

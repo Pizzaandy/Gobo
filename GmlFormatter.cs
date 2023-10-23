@@ -7,11 +7,11 @@ namespace PrettierGML
         public static string Format(string input, FormatOptions options, bool checkAst = true)
         {
             var ast = GmlParser.Parse(input, out var tokens);
-            Console.WriteLine(ast.ToString());
+            //Console.WriteLine(ast.ToString());
 
             var initialHash = checkAst ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
-            Console.WriteLine("--- DOCS ---\n" + docs.ToString());
+            //Console.WriteLine("--- DOCS ---\n" + docs.ToString());
 
             var printOptions = new CSharpier.PrinterOptions()
             {

@@ -10,36 +10,14 @@ static void FormatFile(string filePath)
 
 static string Format(string input)
 {
+    var formatOptions = new FormatOptions() { BraceStyle = BraceStyle.SameLine };
+
     Stopwatch sw = Stopwatch.StartNew();
-
-    var result = GmlFormatter.Format(input, new FormatOptions(), checkAst: true);
-    Console.WriteLine(result);
-
+    var result = GmlFormatter.Format(input, formatOptions, checkAst: false);
     sw.Stop();
+
+    Console.WriteLine(result);
     Console.WriteLine($"Total Time: {sw.ElapsedMilliseconds} ms");
 
     return result;
 }
-
-var input =
-    @"
-var a = 0, b = 0, c = 0;
-try
-{
-    c = a div b;
-}
-catch( _exception)
-{
-    show_debug_message(_exception.message);
-    show_debug_message(_exception.longMessage);
-
-    show_debug_message(_exception.script);
-
-    show_debug_message(_exception.stacktrace).b();
-} finally
-{
-    show_debug_message(""a = "" + string(a));
-}
-";
-
-Format(input);

@@ -12,6 +12,8 @@ namespace PrettierGML.Nodes
             GmlSyntaxNode body
         )
         {
+            clause = UnwrapParenthesizedExpression(clause);
+
             return Doc.Concat(
                 keyword,
                 " ",
@@ -19,6 +21,15 @@ namespace PrettierGML.Nodes
                 " ",
                 EnsureStatementInBlock(ctx, body)
             );
+        }
+
+        public static GmlSyntaxNode UnwrapParenthesizedExpression(GmlSyntaxNode expression)
+        {
+            while (expression is ParenthesizedExpression parenthesized)
+            {
+                expression = parenthesized.Expression;
+            }
+            return expression;
         }
 
         public static Doc EnsureStatementInBlock(PrintContext ctx, GmlSyntaxNode statement)
@@ -33,8 +44,10 @@ namespace PrettierGML.Nodes
             }
         }
 
-        public static Doc PrintExpressionInParentheses(PrintContext ctx, GmlSyntaxNode expression)
+        public static Doc EnsureExpressionInParentheses(PrintContext ctx, GmlSyntaxNode expression)
         {
+            expression = UnwrapParenthesizedExpression(expression);
+
             return Doc.Group(
                 "(",
                 Doc.Indent(Doc.SoftLine, expression.Print(ctx)),
@@ -54,11 +67,14 @@ namespace PrettierGML.Nodes
             Debug.Assert(statements is NodeList or EmptyNode);
 
             var parts = new List<Doc>();
+
             foreach (var child in statements.Children)
             {
-                Doc childDoc = HasLeadingLine(ctx, child)
-                    ? Doc.Concat(Doc.HardLine, PrintStatement(ctx, child))
-                    : PrintStatement(ctx, child);
+                Doc childDoc =
+                    child != statements.Children.First() && HasLeadingLine(ctx, child)
+                        ? Doc.Concat(Doc.HardLine, PrintStatement(ctx, child))
+                        : PrintStatement(ctx, child);
+
                 parts.Add(childDoc);
             }
 

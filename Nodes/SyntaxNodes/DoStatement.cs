@@ -20,7 +20,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 "do ",
                 PrintHelper.EnsureStatementInBlock(ctx, Body),
                 " until ",
-                PrintHelper.PrintExpressionInParentheses(ctx, Test)
+                PrintHelper.EnsureExpressionInParentheses(ctx, Test)
             );
         }
     }

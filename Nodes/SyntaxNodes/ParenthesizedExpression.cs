@@ -14,11 +14,12 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            // remove redundant parens
+            // remove redundant parentheses
             while (Expression is ParenthesizedExpression other)
             {
                 Expression = other.Expression;
             }
+
             return Doc.Group(
                 "(",
                 Doc.Indent(Doc.SoftLine, Expression.Print(ctx)),

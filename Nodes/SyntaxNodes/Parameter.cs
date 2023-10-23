@@ -2,12 +2,12 @@
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
-    internal class Argument : GmlSyntaxNode
+    internal class Parameter : GmlSyntaxNode
     {
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Initializer { get; set; }
 
-        public Argument(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode initializer)
+        public Parameter(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode initializer)
             : base(context)
         {
             Name = AsChild(name);

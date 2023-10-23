@@ -30,7 +30,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
             if (Alternate is not EmptyNode)
             {
-                parts.Add(" else ");
+                Doc leadingWhitespace =
+                    ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : " ";
+
+                parts.Add(Doc.Concat(leadingWhitespace, "else", " "));
+
                 if (Alternate is IfStatement)
                 {
                     parts.Add(Alternate.Print(ctx));

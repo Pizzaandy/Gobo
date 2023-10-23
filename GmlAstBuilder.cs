@@ -455,7 +455,7 @@ namespace PrettierGML
             {
                 initializer = Visit(context.expressionOrFunction());
             }
-            return new Argument(context, name, initializer);
+            return new Parameter(context, name, initializer);
         }
 
         public override GmlSyntaxNode VisitLiteral(
