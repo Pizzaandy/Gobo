@@ -19,7 +19,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             return Doc.Concat(
                 "new ",
                 Name.Print(ctx),
-                PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Arguments, ")", ",")
+                DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
             );
         }
     }

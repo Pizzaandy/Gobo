@@ -24,7 +24,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             {
                 Doc.Concat(
                     "switch ",
-                    PrintHelper.EnsureExpressionInParentheses(ctx, Discriminant),
+                    Statement.EnsureExpressionInParentheses(ctx, Discriminant),
                     " "
                 )
             };

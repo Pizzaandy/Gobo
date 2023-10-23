@@ -25,7 +25,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             var parts = new List<Doc>
             {
-                Doc.Concat("try", " ", PrintHelper.EnsureStatementInBlock(ctx, Body))
+                Doc.Concat("try", " ", Statement.EnsureStatementInBlock(ctx, Body))
             };
 
             Doc leadingWhitespace =

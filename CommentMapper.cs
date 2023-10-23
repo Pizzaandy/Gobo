@@ -35,7 +35,7 @@ namespace PrettierGML
             return result;
         }
 
-        public List<IToken> GetAllComments(CommonTokenStream tokenStream)
+        public static List<IToken> GetAllComments(CommonTokenStream tokenStream)
         {
             tokenStream.Fill();
             var tokens = tokenStream.GetTokens(0, tokenStream.Size - 1);
@@ -58,6 +58,21 @@ namespace PrettierGML
         private static bool CanAttachComment(GmlSyntaxNode node)
         {
             return node is not NodeList;
+        }
+    }
+
+    internal class GmlNodeComparer : Comparer<GmlSyntaxNode>
+    {
+        public override int Compare(GmlSyntaxNode? nodeA, GmlSyntaxNode? nodeB)
+        {
+            if (nodeA!.SourceInterval.a == nodeB!.SourceInterval.a)
+            {
+                return nodeA.SourceInterval.b - nodeB.SourceInterval.b;
+            }
+            else
+            {
+                return nodeA.SourceInterval.a - nodeB.SourceInterval.a;
+            }
         }
     }
 }

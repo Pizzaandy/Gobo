@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using PrettierGML.Nodes.PrintHelpers;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
@@ -20,7 +21,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             var parts = new List<Doc>() { caseText, Test.Print(ctx), ":" };
             if (!Body.IsEmpty)
             {
-                parts.Add(Doc.Indent(Doc.HardLine, PrintHelper.PrintStatements(ctx, Body)));
+                parts.Add(Doc.Indent(Doc.HardLine, Statement.PrintStatements(ctx, Body)));
             }
             return Doc.Concat(parts);
         }

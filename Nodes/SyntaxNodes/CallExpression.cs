@@ -31,7 +31,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
                 var optionA = Doc.Concat("(", Doc.Join(", ", allExceptLast), ", ", last, ")");
                 var optionB = Doc.Concat(
-                    PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Arguments, ")", ",")
+                    DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
                 );
 
                 printedArguments = Doc.ConditionalGroup(optionA, optionB);
@@ -39,7 +39,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             else
             {
                 printedArguments = Doc.Concat(
-                    PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Arguments, ")", ",")
+                    DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
                 );
             }
 

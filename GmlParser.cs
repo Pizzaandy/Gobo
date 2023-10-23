@@ -21,7 +21,7 @@ namespace PrettierGML
             parser.AddErrorListener(new GameMakerLanguageErrorListener());
 
             IParseTree tree = parser.program();
-            var builder = new GmlAstBuilder(sourceTokens);
+            var builder = new GmlAstBuilder();
 
             var ast = builder.Visit(tree);
 
@@ -35,17 +35,3 @@ namespace PrettierGML
     }
 }
 
-internal class GmlNodeComparer : Comparer<GmlSyntaxNode>
-{
-    public override int Compare(GmlSyntaxNode? nodeA, GmlSyntaxNode? nodeB)
-    {
-        if (nodeA!.SourceInterval.a == nodeB!.SourceInterval.a)
-        {
-            return nodeA.SourceInterval.b - nodeB.SourceInterval.b;
-        }
-        else
-        {
-            return nodeA.SourceInterval.a - nodeB.SourceInterval.a;
-        }
-    }
-}

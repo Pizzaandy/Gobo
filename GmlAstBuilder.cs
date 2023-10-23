@@ -1,5 +1,4 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime.Misc;
 using PrettierGML.Nodes;
 using PrettierGML.Nodes.SyntaxNodes;
 using UnaryExpression = PrettierGML.Nodes.SyntaxNodes.UnaryExpression;
@@ -8,13 +7,6 @@ namespace PrettierGML
 {
     internal class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSyntaxNode>
     {
-        public GmlAstBuilder(CommonTokenStream tokenStream)
-        {
-            TokenStream = tokenStream;
-        }
-
-        public CommonTokenStream TokenStream { get; private set; }
-
         public override GmlSyntaxNode VisitProgram(
             [NotNull] GameMakerLanguageParser.ProgramContext context
         )

@@ -16,7 +16,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            return PrintInBlock(ctx, PrintHelper.PrintStatements(ctx, Body));
+            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Body));
         }
 
         public static Doc PrintInBlock(PrintContext ctx, Doc bodyDoc)

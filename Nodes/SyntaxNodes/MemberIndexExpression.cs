@@ -26,7 +26,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
             return Doc.Concat(
                 Object.Print(ctx),
-                PrintHelper.PrintArgumentListLikeSyntax(ctx, accessor, Properties, "]", ",")
+                DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",")
             );
         }
     }

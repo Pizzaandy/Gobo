@@ -1,9 +1,9 @@
 ﻿using PrettierGML.Nodes.SyntaxNodes;
 using System.Diagnostics;
 
-namespace PrettierGML.Nodes
+namespace PrettierGML.Nodes.PrintHelpers
 {
-    internal static class PrintHelper
+    internal static class Statement
     {
         public static Doc PrintSingleClauseStatement(
             PrintContext ctx,
@@ -17,19 +17,10 @@ namespace PrettierGML.Nodes
             return Doc.Concat(
                 keyword,
                 " ",
-                Doc.Group("(", Doc.Indent(Doc.SoftLine, clause.Print(ctx)), Doc.SoftLine, ")"),
+                EnsureExpressionInParentheses(ctx, clause),
                 " ",
                 EnsureStatementInBlock(ctx, body)
             );
-        }
-
-        public static GmlSyntaxNode UnwrapParenthesizedExpression(GmlSyntaxNode expression)
-        {
-            while (expression is ParenthesizedExpression parenthesized)
-            {
-                expression = parenthesized.Expression;
-            }
-            return expression;
         }
 
         public static Doc EnsureStatementInBlock(PrintContext ctx, GmlSyntaxNode statement)
@@ -54,6 +45,15 @@ namespace PrettierGML.Nodes
                 Doc.SoftLine,
                 ")"
             );
+        }
+
+        public static GmlSyntaxNode UnwrapParenthesizedExpression(GmlSyntaxNode expression)
+        {
+            while (expression is ParenthesizedExpression parenthesized)
+            {
+                expression = parenthesized.Expression;
+            }
+            return expression;
         }
 
         public static Doc PrintStatement(PrintContext ctx, GmlSyntaxNode statement)
@@ -100,82 +100,6 @@ namespace PrettierGML.Nodes
                     or ExitStatement
                     or IncDecStatement
                     or ThrowStatement;
-        }
-
-        public static Doc PrintArgumentListLikeSyntax(
-            PrintContext ctx,
-            string openToken,
-            GmlSyntaxNode arguments,
-            string closeToken,
-            string separator,
-            bool allowTrailingSeparator = false
-        )
-        {
-            var parts = new List<Doc> { openToken };
-
-            if (arguments.Children.Any())
-            {
-                Doc printedArguments = PrintSeparatedSyntaxList(
-                    ctx,
-                    arguments,
-                    separator,
-                    allowTrailingSeparator
-                );
-
-                parts.Add(Doc.Indent(Doc.SoftLine, printedArguments));
-                parts.Add(Doc.SoftLine);
-            }
-
-            parts.Add(closeToken);
-
-            return Doc.Group(parts);
-        }
-
-        public static Doc PrintSeparatedList(
-            PrintContext ctx,
-            GmlSyntaxNode items,
-            string separator
-        )
-        {
-            var parts = new List<Doc>();
-            if (items.Children.Count == 1)
-            {
-                parts.Add(items.Children[0].Print(ctx));
-            }
-            else if (items.Children.Any())
-            {
-                var printedArguments = PrintSeparatedSyntaxList(ctx, items, separator);
-                parts.Add(Doc.Indent(printedArguments));
-            }
-
-            return Doc.Group(parts);
-        }
-
-        private static Doc PrintSeparatedSyntaxList(
-            PrintContext ctx,
-            GmlSyntaxNode list,
-            string separator,
-            bool allowTrailingSeparator = false,
-            int startingIndex = 0
-        )
-        {
-            var parts = new List<Doc>();
-
-            for (var i = startingIndex; i < list.Children.Count; i++)
-            {
-                parts.Add(list.Children[i].Print(ctx));
-
-                if (i != list.Children.Count - 1)
-                {
-                    parts.Add(Doc.Concat(separator, Doc.Line));
-                }
-                else if (allowTrailingSeparator)
-                {
-                    parts.Add(Doc.IfBreak(separator, Doc.Null));
-                }
-            }
-
-            return parts.Count == 0 ? Doc.Null : Doc.Concat(parts);
         }
     }
 }

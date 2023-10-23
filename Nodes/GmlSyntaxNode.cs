@@ -67,21 +67,6 @@ namespace PrettierGML.Nodes
             }
             return hashCode.ToHashCode();
         }
-
-        //public bool HasLeadingLine()
-        //{
-        //    var leadingTokens = _tokenStream.GetHiddenTokensToLeft(_startTokenIndex);
-        //    if (leadingTokens is not null)
-        //    {
-        //        foreach (var token in leadingTokens)
-        //        {
-        //            Console.WriteLine(token);
-        //        }
-        //    }
-
-        //    return leadingTokens is not null
-        //        && leadingTokens.Count(token => token.Text.Contains('\n')) >= 2;
-        //}
     }
 
     internal interface IHasObject

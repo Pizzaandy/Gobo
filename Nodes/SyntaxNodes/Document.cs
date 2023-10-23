@@ -14,7 +14,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            return Doc.Concat(PrintHelper.PrintStatements(ctx, Body), Doc.HardLineIfNoPreviousLine);
+            return Doc.Concat(Statement.PrintStatements(ctx, Body), Doc.HardLineIfNoPreviousLine);
         }
     }
 }

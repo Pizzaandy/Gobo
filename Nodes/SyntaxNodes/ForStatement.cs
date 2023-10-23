@@ -35,7 +35,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
                     Doc.IfBreak(Doc.Line, Doc.Null)
                 ),
                 ") ",
-                PrintHelper.EnsureStatementInBlock(ctx, Body)
+                Statement.EnsureStatementInBlock(ctx, Body)
             );
         }
     }

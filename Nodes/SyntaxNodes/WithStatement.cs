@@ -16,7 +16,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            return PrintHelper.PrintSingleClauseStatement(ctx, "with", Object, Body);
+            return Statement.PrintSingleClauseStatement(ctx, "with", Object, Body);
         }
     }
 }

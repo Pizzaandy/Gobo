@@ -14,7 +14,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            return PrintHelper.PrintArgumentListLikeSyntax(ctx, "[", Elements, "]", ",");
+            return DelimitedList.PrintInBrackets(ctx, "[", Elements, "]", ",");
         }
     }
 }

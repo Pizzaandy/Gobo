@@ -18,11 +18,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             if (Id.IsEmpty)
             {
-                return Doc.Concat("catch", " ", PrintHelper.EnsureStatementInBlock(ctx, Body));
+                return Doc.Concat("catch", " ", Statement.EnsureStatementInBlock(ctx, Body));
             }
             else
             {
-                return PrintHelper.PrintSingleClauseStatement(ctx, "catch", Id, Body);
+                return Statement.PrintSingleClauseStatement(ctx, "catch", Id, Body);
             }
         }
     }

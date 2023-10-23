@@ -16,7 +16,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             if (Properties.Children.Any())
             {
-                return PrintHelper.PrintArgumentListLikeSyntax(
+                return DelimitedList.PrintInBrackets(
                     ctx,
                     "{",
                     Properties,

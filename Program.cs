@@ -21,3 +21,26 @@ static string Format(string input)
 
     return result;
 }
+
+// example usage
+var input = """
+    var conditionalIndentation = someBoolean
+            ? someLongValue____________________________________
+                + someLongValue____________________________________
+            : someLongValue____________________________________
+                + someLongValue____________________________________;
+                
+    var a = someLongValue____________________________________, b = someLongValue____________________________________;
+
+    for (
+        i_____________________ = 1;
+        i_____________________ < 5;
+        i_____________________++
+    ) {
+        sum += i;
+    }
+
+    if ((foo)) {return} else if bar do_something()
+    """;
+
+Format(input);

@@ -25,7 +25,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 return Doc.Concat(
                     ": ",
                     Id.Print(ctx),
-                    PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Parameters, ")", ","),
+                    DelimitedList.PrintInBrackets(ctx, "(", Parameters, ")", ","),
                     " ",
                     "constructor"
                 );

@@ -25,7 +25,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             var parts = new List<Doc>
             {
-                PrintHelper.PrintSingleClauseStatement(ctx, "if", Test, Consequent)
+                Statement.PrintSingleClauseStatement(ctx, "if", Test, Consequent)
             };
 
             if (Alternate is not EmptyNode)
@@ -41,7 +41,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
                 }
                 else
                 {
-                    parts.Add(PrintHelper.EnsureStatementInBlock(ctx, Alternate));
+                    parts.Add(Statement.EnsureStatementInBlock(ctx, Alternate));
                 }
             }
 

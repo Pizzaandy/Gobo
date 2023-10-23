@@ -31,7 +31,7 @@ namespace PrettierGML.Nodes
             var parts = new List<Doc>
             {
                 Doc.Concat("function", Id.IsEmpty ? "" : " ", Id.Print(ctx)),
-                PrintHelper.PrintArgumentListLikeSyntax(ctx, "(", Parameters, ")", ",")
+                DelimitedList.PrintInBrackets(ctx, "(", Parameters, ")", ",")
             };
 
             if (!ConstructorParent.IsEmpty)
@@ -40,7 +40,7 @@ namespace PrettierGML.Nodes
             }
 
             parts.Add(" ");
-            parts.Add(PrintHelper.EnsureStatementInBlock(ctx, Body));
+            parts.Add(Statement.EnsureStatementInBlock(ctx, Body));
 
             return Doc.Concat(parts);
         }
