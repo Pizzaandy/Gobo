@@ -137,7 +137,7 @@ variableDeclaration
     ;
 
 typeAnnotation
-    : ':' identifier
+    : ':' identifier ('|' identifier)*
     ;
 
 globalVarStatement

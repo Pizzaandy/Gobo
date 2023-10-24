@@ -404,7 +404,14 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.TypeAnnotationContext context
         )
         {
-            return new TypeAnnotation(context, context.identifier().GetText());
+            var types = new List<string>();
+
+            foreach (var type in context.identifier())
+            {
+                types.Add(type.GetText());
+            }
+
+            return new TypeAnnotation(context, types);
         }
 
         public override GmlSyntaxNode VisitFunctionDeclaration(
