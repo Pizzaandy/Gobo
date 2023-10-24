@@ -346,14 +346,21 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.AssignmentExpressionContext context
         )
         {
+            var left = Visit(context.lValueExpression());
+            var right = Visit(context.expressionOrFunction());
+            GmlSyntaxNode type = GmlSyntaxNode.Empty;
+
             var @operator = context.assignmentOperator().GetText();
             if (@operator == ":=")
             {
                 @operator = "=";
             }
-            var left = Visit(context.lValueExpression());
-            var right = Visit(context.expressionOrFunction());
-            return new AssignmentExpression(context, @operator, left, right);
+
+            if (context.typeAnnotation() != null)
+            {
+                type = Visit(context.typeAnnotation());
+            }
+            return new AssignmentExpression(context, @operator, left, right, type);
         }
 
         public override GmlSyntaxNode VisitVariableDeclarationList(
@@ -379,11 +386,25 @@ namespace PrettierGML
         {
             var id = Visit(context.identifier());
             GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
+            GmlSyntaxNode type = GmlSyntaxNode.Empty;
+
             if (context.expressionOrFunction() != null)
             {
                 initializer = Visit(context.expressionOrFunction());
             }
-            return new VariableDeclarator(context, id, initializer);
+            if (context.typeAnnotation() != null)
+            {
+                type = Visit(context.typeAnnotation());
+            }
+
+            return new VariableDeclarator(context, id, type, initializer);
+        }
+
+        public override GmlSyntaxNode VisitTypeAnnotation(
+            [NotNull] GameMakerLanguageParser.TypeAnnotationContext context
+        )
+        {
+            return new TypeAnnotation(context, context.identifier().GetText());
         }
 
         public override GmlSyntaxNode VisitFunctionDeclaration(

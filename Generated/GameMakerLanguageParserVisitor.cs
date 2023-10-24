@@ -210,6 +210,12 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitVariableDeclaration([NotNull] GameMakerLanguageParser.VariableDeclarationContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.typeAnnotation"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTypeAnnotation([NotNull] GameMakerLanguageParser.TypeAnnotationContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.globalVarStatement"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

@@ -8,27 +8,27 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public string Operator { get; set; }
         public GmlSyntaxNode Left { get; set; }
         public GmlSyntaxNode Right { get; set; }
+        public GmlSyntaxNode Type { get; set; }
 
         public AssignmentExpression(
             ParserRuleContext context,
             string @operator,
             GmlSyntaxNode left,
-            GmlSyntaxNode right
+            GmlSyntaxNode right,
+            GmlSyntaxNode type
         )
             : base(context)
         {
             Operator = @operator;
             Left = AsChild(left);
             Right = AsChild(right);
+            Type = AsChild(type);
         }
 
         public override Doc Print(PrintContext ctx)
         {
-            if (Operator == ":=")
-            {
-                Operator = "=";
-            }
-            return RightHandSide.Print(ctx, Left, Doc.Concat(" ", Operator), Right);
+            var typeAnnotation = Type.Print(ctx);
+            return RightHandSide.Print(ctx, Left, Doc.Concat(typeAnnotation, " ", Operator), Right);
         }
     }
 }

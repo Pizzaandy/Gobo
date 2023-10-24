@@ -120,7 +120,7 @@ deleteStatement
     ;
 
 assignmentExpression
-    : lValueExpression assignmentOperator expressionOrFunction
+    : lValueExpression typeAnnotation? assignmentOperator expressionOrFunction
     ;
 
 variableDeclarationList
@@ -133,7 +133,11 @@ varModifier
     ;
 
 variableDeclaration
-    : identifier (Assign expressionOrFunction)?
+    : identifier typeAnnotation? (Assign expressionOrFunction)?
+    ;
+
+typeAnnotation
+    : ':' identifier
     ;
 
 globalVarStatement
