@@ -652,7 +652,9 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.NewExpressionContext context
         )
         {
-            var name = Visit(context.identifier());
+            var name = context.identifier() is null
+                ? GmlSyntaxNode.Empty
+                : Visit(context.identifier());
             var arguments = Visit(context.arguments());
             return new NewExpression(context, name, arguments);
         }

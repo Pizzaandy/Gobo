@@ -18,7 +18,8 @@ namespace PrettierGML.Nodes.SyntaxNodes
         public override Doc Print(PrintContext ctx)
         {
             return Doc.Concat(
-                "new ",
+                "new",
+                Name.IsEmpty ? Doc.Null : " ",
                 Name.Print(ctx),
                 DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
             );

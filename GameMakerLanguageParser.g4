@@ -166,7 +166,7 @@ lValueFinalOperator
     ;
 
 newExpression
-    : New identifier arguments
+    : New identifier? arguments
     ;
 
 expressionSequence

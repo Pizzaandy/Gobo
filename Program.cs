@@ -47,6 +47,7 @@ var input = """
         Y = y;
         Z = z;
     }
+    var x: Vector3 = new(a, b, c);
     """;
 
 Format(input);
