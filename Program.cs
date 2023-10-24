@@ -41,6 +41,12 @@ var input = """
     }
 
     if ((foo)) {return} else if bar do_something()
+
+    function Vector3(x: real, y: real, z: real = 0) constructor {
+        X = x;
+        Y = y;
+        Z = z;
+    }
     """;
 
 Format(input);

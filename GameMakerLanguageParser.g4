@@ -308,8 +308,9 @@ parameterList
     : '(' (parameterArgument (',' parameterArgument)* ','?)? ')'
     ;
 
+// TODO: fix this name? lol
 parameterArgument
-    : identifier (Assign expressionOrFunction)?
+    : identifier typeAnnotation? (Assign expressionOrFunction)?
     ;
 
 identifier

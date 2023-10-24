@@ -463,12 +463,19 @@ namespace PrettierGML
         )
         {
             var name = Visit(context.identifier());
+            GmlSyntaxNode type = GmlSyntaxNode.Empty;
             GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
+
             if (context.expressionOrFunction() != null)
             {
                 initializer = Visit(context.expressionOrFunction());
             }
-            return new Parameter(context, name, initializer);
+            if (context.typeAnnotation() != null)
+            {
+                type = Visit(context.typeAnnotation());
+            }
+
+            return new Parameter(context, name, type, initializer);
         }
 
         public override GmlSyntaxNode VisitLiteral(
