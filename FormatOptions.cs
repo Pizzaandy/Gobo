@@ -10,7 +10,7 @@
 
     internal enum BraceStyle
     {
-        SameLine = 0,
-        NewLine = 1,
+        SameLine,
+        NewLine,
     }
 }

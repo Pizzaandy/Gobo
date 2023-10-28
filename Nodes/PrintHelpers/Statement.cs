@@ -65,21 +65,54 @@ namespace PrettierGML.Nodes.PrintHelpers
             Debug.Assert(statements is NodeList or EmptyNode);
 
             var parts = new List<Doc>();
+            bool nextStatementNeedsLineBreak = false;
 
             foreach (var child in statements.Children)
             {
-                Doc childDoc =
-                    child != statements.Children.First() && HasLeadingLine(ctx, child)
-                        ? Doc.Concat(Doc.HardLine, PrintStatement(ctx, child))
-                        : PrintStatement(ctx, child);
+                var shouldAddLineBreakFromSource =
+                    HasLeadingLineBreak(ctx, child) && child != statements.Children.First();
 
-                parts.Add(childDoc);
+                var isTopLevelFunctionOrMethod = IsTopLevelFunctionOrMethod(child);
+
+                var shouldAddLineBreak =
+                    (
+                        shouldAddLineBreakFromSource
+                        || isTopLevelFunctionOrMethod
+                        || nextStatementNeedsLineBreak
+                    )
+                    && child != statements.Children.First();
+
+                parts.Add(
+                    shouldAddLineBreak
+                        ? Doc.Concat(Doc.HardLine, PrintStatement(ctx, child))
+                        : PrintStatement(ctx, child)
+                );
+
+                nextStatementNeedsLineBreak = isTopLevelFunctionOrMethod;
             }
 
             return parts.Count == 0 ? Doc.Null : Doc.Join(Doc.HardLine, parts);
         }
 
-        public static bool HasLeadingLine(PrintContext ctx, GmlSyntaxNode node)
+        public static bool IsTopLevelFunctionOrMethod(GmlSyntaxNode node)
+        {
+            var isTopLevelFunction = node is FunctionDeclaration && node.Parent?.Parent is Document;
+
+            // checks for a static method (i.e. static foo = function(){}) in a constructor
+            var isMethod =
+                node is VariableDeclarationList variableDeclarationList
+                && variableDeclarationList.Modifier == "static"
+                && variableDeclarationList.Declarations.Children.Any(
+                    c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration
+                )
+                && variableDeclarationList.Parent?.Parent is Block block
+                && block.Parent is FunctionDeclaration potentialConstructor
+                && potentialConstructor.IsConstructor;
+
+            return isTopLevelFunction || isMethod;
+        }
+
+        public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
         {
             var leadingTokens = ctx.Tokens.GetHiddenTokensToLeft(node.SourceInterval.a);
             return leadingTokens is not null

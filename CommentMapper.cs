@@ -1,27 +1,35 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Nodes;
+using PrettierGML.Nodes.SyntaxNodes;
+using System.Diagnostics;
 
 namespace PrettierGML
 {
     internal class CommentMapper
     {
-        public GmlSyntaxNode Ast { get; set; }
         public CommonTokenStream TokenStream { get; set; }
 
-        public CommentMapper(GmlSyntaxNode ast, CommonTokenStream tokenStream)
+        public CommentMapper(CommonTokenStream tokenStream)
         {
-            Ast = ast;
             TokenStream = tokenStream;
         }
 
-        public GmlSyntaxNode AttachComments()
+        public GmlSyntaxNode AttachComments(GmlSyntaxNode ast)
         {
-            return Ast;
+            Debug.Assert(ast is Document);
+
+            var comments = GetAllComments(TokenStream);
+            var nodes = GetSortedChildNodes(ast);
+
+            var decoratedComments = comments.Select(comment => DecorateComment(ast, comment));
+
+            return ast;
         }
 
         private List<GmlSyntaxNode> GetSortedChildNodes(GmlSyntaxNode node)
         {
             var result = new List<GmlSyntaxNode>();
+
             foreach (var child in node.Children)
             {
                 if (child is EmptyNode)
@@ -31,15 +39,16 @@ namespace PrettierGML
                 result.Add(child);
                 result.AddRange(GetSortedChildNodes(child));
             }
+
             result.Sort(new GmlNodeComparer());
             return result;
         }
 
-        public static List<IToken> GetAllComments(CommonTokenStream tokenStream)
+        private static List<Comment> GetAllComments(CommonTokenStream tokenStream)
         {
             tokenStream.Fill();
             var tokens = tokenStream.GetTokens(0, tokenStream.Size - 1);
-            var comments = new List<IToken>();
+            var comments = new List<Comment>();
 
             foreach (var token in tokens)
             {
@@ -48,16 +57,20 @@ namespace PrettierGML
                     || token.Type == GameMakerLanguageLexer.MultiLineComment
                 )
                 {
-                    comments.Add(token);
+                    comments.Add(new Comment(token.Text));
                 }
             }
 
             return comments;
         }
 
-        private static bool CanAttachComment(GmlSyntaxNode node)
+        private static Comment DecorateComment(
+            GmlSyntaxNode node,
+            Comment comment,
+            GmlSyntaxNode? enclosingNode = null
+        )
         {
-            return node is not NodeList;
+            return comment;
         }
     }
 

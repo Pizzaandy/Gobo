@@ -27,11 +27,10 @@ namespace PrettierGML
 
             if (handleComments)
             {
-                new CommentMapper(ast, sourceTokens).AttachComments();
+                ast = new CommentMapper(sourceTokens).AttachComments(ast);
             }
 
             return ast;
         }
     }
 }
-

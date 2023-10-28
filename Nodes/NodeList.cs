@@ -10,13 +10,13 @@ namespace PrettierGML.Nodes
             : base(context)
         {
             Contents = contents;
-            foreach (var node in contents)
+            foreach (var node in Contents)
             {
                 AsChild(node);
             }
         }
 
         public override Doc Print(PrintContext ctx) =>
-            throw new NotImplementedException("NodeList cannot be printed");
+            throw new NotImplementedException("NodeList cannot be printed directly");
     }
 }

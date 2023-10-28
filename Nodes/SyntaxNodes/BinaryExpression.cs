@@ -45,7 +45,6 @@ namespace PrettierGML.Nodes.SyntaxNodes
                     is AssignmentExpression
                         or VariableDeclarator
                         or WhileStatement
-                        or ReturnStatement
                         or ParenthesizedExpression
                 || Parent?.Parent is MemberIndexExpression
                 || (

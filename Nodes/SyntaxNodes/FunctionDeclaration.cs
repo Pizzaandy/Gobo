@@ -2,7 +2,7 @@
 using PrettierGML.Nodes.PrintHelpers;
 using System.Diagnostics;
 
-namespace PrettierGML.Nodes
+namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class FunctionDeclaration : GmlSyntaxNode
     {
@@ -20,9 +20,9 @@ namespace PrettierGML.Nodes
         )
             : base(context)
         {
+            Debug.Assert(parameters is NodeList or EmptyNode);
             Id = AsChild(id);
             Parameters = AsChild(parameters);
-            Debug.Assert(Parameters is NodeList);
             Body = AsChild(body);
             ConstructorParent = AsChild(parent);
         }
@@ -45,5 +45,7 @@ namespace PrettierGML.Nodes
 
             return Doc.Concat(parts);
         }
+
+        public bool IsConstructor => !ConstructorParent.IsEmpty;
     }
 }

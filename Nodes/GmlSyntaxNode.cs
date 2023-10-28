@@ -19,6 +19,9 @@ namespace PrettierGML.Nodes
         [JsonIgnore]
         public bool IsEmpty => this is EmptyNode;
 
+        [JsonIgnore]
+        public List<Comment>? Comments { get; set; }
+
         public string Kind => GetType().Name;
 
         public GmlSyntaxNode() { }
@@ -38,7 +41,7 @@ namespace PrettierGML.Nodes
         public static NodeList List(ParserRuleContext context, IList<GmlSyntaxNode> contents) =>
             new(context, contents);
 
-        protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
+        public GmlSyntaxNode AsChild(GmlSyntaxNode child)
         {
             Children.Add(child);
             child.Parent = this;

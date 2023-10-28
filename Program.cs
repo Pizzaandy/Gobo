@@ -13,7 +13,7 @@ static string Format(string input)
     var formatOptions = new FormatOptions() { BraceStyle = BraceStyle.SameLine };
 
     Stopwatch sw = Stopwatch.StartNew();
-    var result = GmlFormatter.Format(input, formatOptions, checkAst: false);
+    var result = GmlFormatter.Format(input, formatOptions, checkAst: true);
     sw.Stop();
 
     Console.WriteLine(result);
@@ -41,7 +41,6 @@ var input = """
     }
 
     if ((foo)) {return} else if bar do_something()
-
     function Vector3(x: real, y = 1, z: real | string = 0) constructor {
         X = x;
         Y = y;
