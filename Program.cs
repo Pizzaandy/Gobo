@@ -10,10 +10,10 @@ static void FormatFile(string filePath)
 
 static string Format(string input)
 {
-    var formatOptions = new FormatOptions() { BraceStyle = BraceStyle.SameLine };
+    var formatOptions = new FormatOptions() { BraceStyle = BraceStyle.SameLine, CheckAst = true };
 
     Stopwatch sw = Stopwatch.StartNew();
-    var result = GmlFormatter.Format(input, formatOptions, checkAst: false);
+    var result = GmlFormatter.Format(input, formatOptions);
     sw.Stop();
 
     Console.WriteLine(result);
@@ -27,9 +27,6 @@ var input = """
    
     call()
     call2()
-
-
-    // test!
 
     call3()
     """;

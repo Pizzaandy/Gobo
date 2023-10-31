@@ -4,19 +4,24 @@ using PrettierGML.Nodes;
 
 namespace PrettierGML
 {
+    internal struct GmlParseResult
+    {
+        public CommonTokenStream TokenStream;
+        public GmlSyntaxNode Ast;
+    }
+
     internal static class GmlParser
     {
-        public static GmlSyntaxNode Parse(
+        public static GmlParseResult Parse(
             string input,
-            out CommonTokenStream sourceTokens,
-            bool handleComments = true
+            bool attachComments = true
         )
         {
             ICharStream stream = CharStreams.fromString(input);
             var lexer = new GameMakerLanguageLexer(stream);
-            sourceTokens = new CommonTokenStream(lexer);
+            var tokenStream = new CommonTokenStream(lexer);
 
-            var parser = new GameMakerLanguageParser(sourceTokens);
+            var parser = new GameMakerLanguageParser(tokenStream);
             parser.Interpreter.PredictionMode = Antlr4.Runtime.Atn.PredictionMode.SLL;
             parser.AddErrorListener(new GameMakerLanguageErrorListener());
 
@@ -25,12 +30,16 @@ namespace PrettierGML
 
             var ast = builder.Visit(tree);
 
-            if (handleComments)
+            if (attachComments)
             {
-                ast = new CommentMapper(sourceTokens).AttachComments(ast);
+                ast = new CommentMapper(tokenStream).AttachComments(ast);
             }
 
-            return ast;
+            return new GmlParseResult()
+            {
+                Ast = ast,
+                TokenStream = tokenStream
+            };
         }
     }
 }
