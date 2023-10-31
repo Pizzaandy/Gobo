@@ -5,17 +5,17 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class ArrayExpression : GmlSyntaxNode
     {
-        public GmlSyntaxNode Elements { get; set; }
+        public List<GmlSyntaxNode> Elements => Children;
 
-        public ArrayExpression(ParserRuleContext context, GmlSyntaxNode elements)
+        public ArrayExpression(ParserRuleContext context, List<GmlSyntaxNode> elements)
             : base(context)
         {
-            Elements = AsChild(elements);
+            AsChildren(elements);
         }
 
         public override Doc Print(PrintContext ctx)
         {
-            return DelimitedList.PrintInBrackets(ctx, "[", Elements, "]", ",");
+            return DelimitedList.PrintInBrackets(ctx, "[", this, "]", ",");
         }
     }
 }

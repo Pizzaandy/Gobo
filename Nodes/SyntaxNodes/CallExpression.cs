@@ -21,50 +21,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            Doc printedArguments;
-
-            if (ShouldBreakOnLastArgument(Arguments))
-            {
-                var printedChildren = Arguments.PrintChildren(ctx);
-
-                var last = printedChildren.Last();
-                var allExceptLast = printedChildren.GetRange(0, printedChildren.Count - 1);
-
-                var separator = Doc.Concat(",", " ");
-                var optionA = Doc.Concat(
-                    "(",
-                    Doc.Join(separator, allExceptLast),
-                    separator,
-                    last,
-                    ")"
-                );
-                var optionB = Doc.Concat(
-                    DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
-                );
-
-                printedArguments = Doc.ConditionalGroup(optionA, optionB);
-            }
-            else
-            {
-                printedArguments = Doc.Concat(
-                    DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
-                );
-            }
-
-            return Doc.Concat(Object.Print(ctx), printedArguments);
-        }
-
-        private static bool ShouldBreakOnLastArgument(GmlSyntaxNode arguments)
-        {
-            if (arguments is not NodeList || arguments.Children.Count == 0)
-            {
-                return false;
-            }
-
-            return arguments.Children.Last() is FunctionDeclaration or StructExpression
-                && arguments.Children
-                    .Take(arguments.Children.Count - 1)
-                    .All(arg => arg is not FunctionDeclaration);
+            return Doc.Concat(Object.Print(ctx), Arguments.Print(ctx));
         }
     }
 }

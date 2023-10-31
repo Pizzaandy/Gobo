@@ -5,17 +5,17 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class Document : GmlSyntaxNode
     {
-        public GmlSyntaxNode Body { get; set; }
+        public List<GmlSyntaxNode> Body => Children;
 
-        public Document(ParserRuleContext context, GmlSyntaxNode body)
+        public Document(ParserRuleContext context, List<GmlSyntaxNode> body)
             : base(context)
         {
-            Body = AsChild(body);
+            AsChildren(body);
         }
 
         public override Doc Print(PrintContext ctx)
         {
-            return Doc.Concat(Statement.PrintStatements(ctx, Body), Doc.HardLineIfNoPreviousLine);
+            return Doc.Concat(Statement.PrintStatements(ctx, Children), Doc.HardLineIfNoPreviousLine);
         }
     }
 }

@@ -5,17 +5,17 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class VariableDeclarationList : GmlSyntaxNode
     {
-        public GmlSyntaxNode Declarations { get; set; }
+        public List<GmlSyntaxNode> Declarations { get; set; }
         public string Modifier { get; set; }
 
         public VariableDeclarationList(
             ParserRuleContext context,
-            GmlSyntaxNode declarations,
+            List<GmlSyntaxNode> declarations,
             string modifier
         )
             : base(context)
         {
-            Declarations = AsChild(declarations);
+            Declarations = AsChildren(declarations);
             Modifier = modifier;
         }
 
@@ -23,11 +23,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             var parts = new List<Doc>() { Modifier, " " };
 
-            if (Declarations.Children.Count == 1)
+            if (Children.Count == 1)
             {
-                parts.Add(Declarations.Children.First().Print(ctx));
+                parts.Add(Children.First().Print(ctx));
             }
-            else if (Declarations.Children.Any())
+            else if (Children.Any())
             {
                 var printedArguments = DelimitedList.Print(ctx, Declarations, ",");
                 parts.Add(Doc.Indent(printedArguments));

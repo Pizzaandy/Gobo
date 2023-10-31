@@ -5,19 +5,19 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class StructExpression : GmlSyntaxNode
     {
-        public GmlSyntaxNode Properties { get; set; }
+        public List<GmlSyntaxNode> Properties => Children;
 
-        public StructExpression(ParserRuleContext context, GmlSyntaxNode properties)
+        public StructExpression(ParserRuleContext context, List<GmlSyntaxNode> properties)
             : base(context)
         {
-            Properties = AsChild(properties);
+           AsChildren(properties);
         }
 
         public override Doc Print(PrintContext ctx)
         {
-            if (Properties.Children.Any())
+            if (Children.Any())
             {
-                return DelimitedList.PrintInBrackets(ctx, "{", Properties, "}", ",", true);
+                return DelimitedList.PrintInBrackets(ctx, "{", this, "}", ",", true);
             }
             else
             {

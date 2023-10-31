@@ -6,18 +6,17 @@ namespace PrettierGML.Nodes.SyntaxNodes
 {
     internal class Block : GmlSyntaxNode
     {
-        public GmlSyntaxNode Body { get; set; }
+        public List<GmlSyntaxNode> Statements => Children;
 
-        public Block(ParserRuleContext context, GmlSyntaxNode body)
+        public Block(ParserRuleContext context, List<GmlSyntaxNode> body)
             : base(context)
         {
-            Body = AsChild(body);
-            Debug.Assert(Body is NodeList or EmptyNode);
+            AsChildren(body);
         }
 
         public override Doc Print(PrintContext ctx)
         {
-            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Body));
+            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Children));
         }
 
         public static Doc PrintInBlock(PrintContext ctx, Doc bodyDoc)
@@ -43,9 +42,9 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override int GetHashCode()
         {
-            if (!Body.IsEmpty && Body.Children.Count == 1)
+            if (Children.Count == 1)
             {
-                return Body.Children.First().GetHashCode();
+                return Children.First().GetHashCode();
             }
             else
             {

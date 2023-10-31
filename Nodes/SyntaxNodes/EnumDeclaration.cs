@@ -6,6 +6,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
     internal class EnumDeclaration : GmlSyntaxNode
     {
         public GmlSyntaxNode Name { get; set; }
+        // TODO: change to list!
         public GmlSyntaxNode Members { get; set; }
 
         public EnumDeclaration(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode members)
@@ -13,7 +14,6 @@ namespace PrettierGML.Nodes.SyntaxNodes
         {
             Name = AsChild(name);
             Members = AsChild(members);
-            Debug.Assert(Members is NodeList or EmptyNode);
         }
 
         public override Doc Print(PrintContext ctx)

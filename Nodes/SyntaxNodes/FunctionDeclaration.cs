@@ -20,7 +20,6 @@ namespace PrettierGML.Nodes.SyntaxNodes
         )
             : base(context)
         {
-            Debug.Assert(parameters is NodeList or EmptyNode);
             Id = AsChild(id);
             Parameters = AsChild(parameters);
             Body = AsChild(body);
@@ -32,7 +31,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
             var parts = new List<Doc>
             {
                 Doc.Concat("function", Id.IsEmpty ? "" : " ", Id.Print(ctx)),
-                DelimitedList.PrintInBrackets(ctx, "(", Parameters, ")", ",")
+                Parameters.Print(ctx)
             };
 
             if (!ConstructorParent.IsEmpty)

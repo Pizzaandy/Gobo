@@ -67,17 +67,15 @@ namespace PrettierGML.Nodes.PrintHelpers
             );
         }
 
-        public static Doc PrintStatements(PrintContext ctx, GmlSyntaxNode statements)
+        public static Doc PrintStatements(PrintContext ctx, List<GmlSyntaxNode> statements)
         {
-            Debug.Assert(statements is NodeList or EmptyNode);
-
             var parts = new List<Doc>();
             bool nextStatementNeedsLineBreak = false;
 
-            foreach (var child in statements.Children)
+            foreach (var child in statements)
             {
                 var shouldAddLineBreakFromSource =
-                    HasLeadingLineBreak(ctx, child) && child != statements.Children.First();
+                    HasLeadingLineBreak(ctx, child) && child != statements.First();
 
                 var isTopLevelFunctionOrMethod = IsTopLevelFunctionOrMethod(child);
 
@@ -87,7 +85,7 @@ namespace PrettierGML.Nodes.PrintHelpers
                         || isTopLevelFunctionOrMethod
                         || nextStatementNeedsLineBreak
                     )
-                    && child != statements.Children.First();
+                    && child != statements.First();
 
                 parts.Add(
                     shouldAddLineBreak
@@ -109,7 +107,7 @@ namespace PrettierGML.Nodes.PrintHelpers
             var isMethod =
                 node is VariableDeclarationList variableDeclarationList
                 && variableDeclarationList.Modifier == "static"
-                && variableDeclarationList.Declarations.Children.Any(
+                && variableDeclarationList.Declarations.Any(
                     c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration
                 )
                 && variableDeclarationList.Parent?.Parent is Block block
@@ -122,7 +120,7 @@ namespace PrettierGML.Nodes.PrintHelpers
         public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
         {
             var leadingTokens = ctx.Tokens
-                .GetHiddenTokensToLeft(node.TokenRange.Start)
+                .GetHiddenTokensToLeft(node.TokenRange.Start)?
                 .Reverse()
                 .TakeWhile(IsWhiteSpace);
 

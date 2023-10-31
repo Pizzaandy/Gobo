@@ -6,6 +6,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
     internal class SwitchStatement : GmlSyntaxNode
     {
         public GmlSyntaxNode Discriminant { get; set; }
+        // TODO: change to list!
         public GmlSyntaxNode Cases { get; set; }
 
         public SwitchStatement(

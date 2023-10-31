@@ -1,19 +1,15 @@
 ﻿using Antlr4.Runtime;
 
 namespace PrettierGML.Nodes
-{
+{ 
+    /// <summary>
+    /// A utility node used for building the AST. This should not end up in the final AST!
+    /// </summary>
     internal class NodeList : GmlSyntaxNode
     {
-        public IList<GmlSyntaxNode> Contents { get; set; }
-
-        public NodeList(ParserRuleContext context, IList<GmlSyntaxNode> contents)
-            : base(context)
+        public NodeList(IList<GmlSyntaxNode> contents)
         {
-            Contents = contents;
-            foreach (var node in Contents)
-            {
-                AsChild(node);
-            }
+            AsChildren(contents);
         }
 
         public override Doc Print(PrintContext ctx) =>

@@ -14,7 +14,7 @@ namespace PrettierGML
             if (context.statementList() != null)
             {
                 var statements = Visit(context.statementList());
-                return new Document(context, statements);
+                return new Document(context, statements.Children);
             }
             else
             {
@@ -27,7 +27,7 @@ namespace PrettierGML
         )
         {
             var statements = context.statement();
-            var parts = new List<GmlSyntaxNode>(statements.Length);
+            var parts = new List<GmlSyntaxNode>();
 
             for (var i = 0; i < statements.Length; i++)
             {
@@ -39,7 +39,7 @@ namespace PrettierGML
                 parts.Add(statement);
             }
 
-            return GmlSyntaxNode.List(context, parts);
+            return parts;
         }
 
         public override GmlSyntaxNode VisitStatement(
@@ -149,7 +149,7 @@ namespace PrettierGML
                 body = GmlSyntaxNode.Empty;
             }
 
-            return new Block(context, body);
+            return new Block(context, body.Children);
         }
 
         public override GmlSyntaxNode VisitIfStatement(
@@ -259,17 +259,14 @@ namespace PrettierGML
                 foreach (var caseList in context.caseClauses())
                 {
                     var node = Visit(caseList);
-                    if (node is NodeList nodeList)
-                    {
-                        caseClauses.AddRange(nodeList.Contents);
-                    }
+                    caseClauses.AddRange(node.Children);
                 }
             }
             if (context.defaultClause() != null)
             {
                 caseClauses.Add(Visit(context.defaultClause()));
             }
-            return GmlSyntaxNode.List(context, caseClauses);
+            return caseClauses;
         }
 
         public override GmlSyntaxNode VisitCaseClauses(
@@ -281,7 +278,7 @@ namespace PrettierGML
             {
                 parts.Add(Visit(caseClause));
             }
-            return GmlSyntaxNode.List(context, parts);
+            return parts;
         }
 
         public override GmlSyntaxNode VisitCaseClause(
@@ -294,7 +291,7 @@ namespace PrettierGML
             {
                 body = Visit(context.statementList());
             }
-            return new SwitchCase(context, test, body);
+            return new SwitchCase(context, test, body.Children);
         }
 
         public override GmlSyntaxNode VisitDefaultClause(
@@ -306,7 +303,7 @@ namespace PrettierGML
             {
                 body = Visit(context.statementList());
             }
-            return new SwitchCase(context, GmlSyntaxNode.Empty, body);
+            return new SwitchCase(context, GmlSyntaxNode.Empty, body.Children);
         }
 
         public override GmlSyntaxNode VisitContinueStatement(
@@ -375,7 +372,7 @@ namespace PrettierGML
             var kind = context.varModifier().GetText();
             return new VariableDeclarationList(
                 context,
-                GmlSyntaxNode.List(context, declarations),
+                declarations,
                 kind
             );
         }
@@ -462,7 +459,7 @@ namespace PrettierGML
             {
                 parts.Add(Visit(arg));
             }
-            return GmlSyntaxNode.List(context, parts);
+            return new ParameterList(context, parts);
         }
 
         public override GmlSyntaxNode VisitParameterArgument(
@@ -596,7 +593,7 @@ namespace PrettierGML
             {
                 parts.Add(Visit(arg));
             }
-            return GmlSyntaxNode.List(context, parts);
+            return new ArgumentList(context, parts);
         }
 
         public override GmlSyntaxNode VisitCallExpression(
@@ -702,7 +699,7 @@ namespace PrettierGML
             {
                 parts.Add(Visit(expression));
             }
-            return GmlSyntaxNode.List(context, parts);
+            return parts;
         }
 
         public override GmlSyntaxNode VisitParenthesizedExpression(
@@ -719,7 +716,7 @@ namespace PrettierGML
         {
             if (context.elementList() == null)
             {
-                return new ArrayExpression(context, GmlSyntaxNode.Empty);
+                return new ArrayExpression(context, new());
             }
 
             var elementNodes = new List<GmlSyntaxNode>();
@@ -728,7 +725,7 @@ namespace PrettierGML
                 elementNodes.Add(Visit(element));
             }
 
-            return new ArrayExpression(context, GmlSyntaxNode.List(context, elementNodes));
+            return new ArrayExpression(context, elementNodes);
         }
 
         public override GmlSyntaxNode VisitStructLiteral(
@@ -740,7 +737,7 @@ namespace PrettierGML
             {
                 propertyNodes.Add(Visit(property));
             }
-            return new StructExpression(context, GmlSyntaxNode.List(context, propertyNodes));
+            return new StructExpression(context, propertyNodes);
         }
 
         public override GmlSyntaxNode VisitPropertyAssignment(
@@ -784,7 +781,7 @@ namespace PrettierGML
             {
                 enums.Add(Visit(enumDecl));
             }
-            return GmlSyntaxNode.List(context, enums);
+            return enums;
         }
 
         public override GmlSyntaxNode VisitEnumerator(

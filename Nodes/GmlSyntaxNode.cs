@@ -46,7 +46,7 @@ namespace PrettierGML.Nodes
         protected IEnumerable<CommentGroup> DanglingComments =>
             Comments.Where(c => c.Type == CommentType.Dangling);
 
-        public GmlSyntaxNode() { }
+        public GmlSyntaxNode() {}
 
         public GmlSyntaxNode(ParserRuleContext node)
         {
@@ -62,14 +62,20 @@ namespace PrettierGML.Nodes
 
         public static EmptyNode Empty => EmptyNode.Instance;
 
-        public static NodeList List(ParserRuleContext context, IList<GmlSyntaxNode> contents) =>
-            new(context, contents);
-
         public GmlSyntaxNode AsChild(GmlSyntaxNode child)
         {
             Children.Add(child);
             child.Parent = this;
             return child;
+        }
+
+        public List<GmlSyntaxNode> AsChildren(IEnumerable<GmlSyntaxNode> children)
+        {
+            foreach (var child in children)
+            {
+                AsChild(child);
+            }
+            return children.ToList();
         }
 
         public virtual Doc Print(PrintContext ctx) => throw new NotImplementedException();
@@ -86,6 +92,7 @@ namespace PrettierGML.Nodes
 
         public override int GetHashCode()
         {
+            // TODO: make more complete
             var hashCode = new HashCode();
             hashCode.Add(Kind);
             foreach (var child in Children)
@@ -119,6 +126,8 @@ namespace PrettierGML.Nodes
 
         public virtual Doc PrintDanglingComments(PrintContext ctx) =>
             throw new NotImplementedException();
+
+        public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) => new NodeList(contents);
     }
 
     internal interface IHasObject
