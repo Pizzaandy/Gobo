@@ -63,8 +63,8 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
             return arguments.Children.Last() is FunctionDeclaration or StructExpression
                 && arguments.Children
-                    .GetRange(0, arguments.Children.Count - 1)
-                    .All(arg => arg is not FunctionDeclaration and not StructExpression);
+                    .Take(arguments.Children.Count - 1)
+                    .All(arg => arg is not FunctionDeclaration);
         }
     }
 }

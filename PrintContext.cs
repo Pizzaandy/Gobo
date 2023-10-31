@@ -6,6 +6,7 @@ namespace PrettierGML
     {
         public FormatOptions Options { get; set; }
         public CommonTokenStream Tokens { get; set; }
+        public bool RemoveSyntaxExtensions { get; set; } = false;
 
         public PrintContext(FormatOptions options, CommonTokenStream tokenStream)
         {

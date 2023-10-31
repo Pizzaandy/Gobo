@@ -14,6 +14,11 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
+            if (ctx.RemoveSyntaxExtensions)
+            {
+                return Doc.Null;
+            }
+
             var parts = new List<Doc>();
             foreach (var typeName in Types)
             {

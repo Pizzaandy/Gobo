@@ -13,7 +13,7 @@ static string Format(string input)
     var formatOptions = new FormatOptions() { BraceStyle = BraceStyle.SameLine };
 
     Stopwatch sw = Stopwatch.StartNew();
-    var result = GmlFormatter.Format(input, formatOptions, checkAst: true);
+    var result = GmlFormatter.Format(input, formatOptions, checkAst: false);
     sw.Stop();
 
     Console.WriteLine(result);
@@ -24,29 +24,14 @@ static string Format(string input)
 
 // example usage
 var input = """
-    var conditionalIndentation = someBoolean
-            ? someLongValue____________________________________
-                + someLongValue____________________________________
-            : someLongValue____________________________________
-                + someLongValue____________________________________;
-                
-    var a = someLongValue____________________________________, b = someLongValue____________________________________;
+   
+    call()
+    call2()
 
-    for (
-        i_____________________: int = 1;
-        i_____________________ < 5;
-        i_____________________++
-    ) {
-        sum += i;
-    }
 
-    if ((foo)) {return} else if bar do_something()
-    function Vector3(x: real, y = 1, z: real | string = 0) constructor {
-        X = x;
-        Y = y;
-        Z = z;
-    }
-    var x: Vector3 = new(a, b, c);
+    // test!
+
+    call3()
     """;
 
 Format(input);

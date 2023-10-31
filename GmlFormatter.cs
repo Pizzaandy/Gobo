@@ -1,17 +1,20 @@
 ﻿using CSharpier.DocPrinter;
+using System.Text.RegularExpressions;
 
 namespace PrettierGML
 {
-    internal static class GmlFormatter
+    internal static partial class GmlFormatter
     {
         public static string Format(string input, FormatOptions options, bool checkAst = true)
         {
+            input = CarriageReturns().Replace(input, "\n");
+
             var ast = GmlParser.Parse(input, out var tokens);
             Console.WriteLine(ast.ToString());
 
             var initialHash = checkAst ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
-            Console.WriteLine("--- DOCS ---\n" + docs.ToString());
+            //Console.WriteLine("--- DOCS ---\n" + docs.ToString());
 
             var printOptions = new CSharpier.PrinterOptions()
             {
@@ -41,5 +44,8 @@ namespace PrettierGML
 
             return result;
         }
+
+        [GeneratedRegex("\\r\\n?|\\n")]
+        private static partial Regex CarriageReturns();
     }
 }

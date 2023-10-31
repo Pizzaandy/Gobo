@@ -214,7 +214,7 @@ internal class DocPrinter
         var stringReader = new StringReader(leadingComment.Comment);
         var line = stringReader.ReadLine();
         var numberOfSpacesToAddOrRemove = 0;
-        if (leadingComment.Type == CommentType.MultiLine && line != null)
+        if (leadingComment.Type == CommentFormat.MultiLine && line != null)
         {
             // in order to maintain the formatting inside of a multiline comment
             // we calculate how much the indentation of the first line is changing
@@ -226,7 +226,7 @@ internal class DocPrinter
 
         while (line != null)
         {
-            if (leadingComment.Type == CommentType.SingleLine)
+            if (leadingComment.Type == CommentFormat.SingleLine)
             {
                 this.Output.Append(indent.Value);
             }

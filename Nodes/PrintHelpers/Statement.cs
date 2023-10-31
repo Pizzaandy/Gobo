@@ -1,4 +1,5 @@
-﻿using PrettierGML.Nodes.SyntaxNodes;
+﻿using Antlr4.Runtime;
+using PrettierGML.Nodes.SyntaxNodes;
 using System.Diagnostics;
 
 namespace PrettierGML.Nodes.PrintHelpers
@@ -57,7 +58,13 @@ namespace PrettierGML.Nodes.PrintHelpers
         public static Doc PrintStatement(PrintContext ctx, GmlSyntaxNode statement)
         {
             var lineSuffix = NeedsSemicolon(statement) ? ";" : "";
-            return Doc.Concat(statement.Print(ctx), lineSuffix);
+
+            return Doc.Concat(
+                statement.PrintLeadingComments(ctx),
+                statement.Print(ctx),
+                lineSuffix,
+                statement.PrintTrailingComments(ctx)
+            );
         }
 
         public static Doc PrintStatements(PrintContext ctx, GmlSyntaxNode statements)
@@ -98,7 +105,7 @@ namespace PrettierGML.Nodes.PrintHelpers
         {
             var isTopLevelFunction = node is FunctionDeclaration && node.Parent?.Parent is Document;
 
-            // checks for a static method (i.e. static foo = function(){}) in a constructor
+            // check for a static method declaration (i.e. static foo = function(){}) in a constructor
             var isMethod =
                 node is VariableDeclarationList variableDeclarationList
                 && variableDeclarationList.Modifier == "static"
@@ -114,9 +121,19 @@ namespace PrettierGML.Nodes.PrintHelpers
 
         public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
         {
-            var leadingTokens = ctx.Tokens.GetHiddenTokensToLeft(node.SourceInterval.a);
+            var leadingTokens = ctx.Tokens
+                .GetHiddenTokensToLeft(node.TokenRange.Start)
+                .Reverse()
+                .TakeWhile(IsWhiteSpace);
+
             return leadingTokens is not null
                 && leadingTokens.Count(token => token.Text.Contains('\n')) >= 2;
+        }
+
+        private static bool IsWhiteSpace(IToken token)
+        {
+            return token.Type == GameMakerLanguageLexer.LineTerminator
+                || token.Type == GameMakerLanguageLexer.WhiteSpaces;
         }
 
         public static bool NeedsSemicolon(GmlSyntaxNode node)
