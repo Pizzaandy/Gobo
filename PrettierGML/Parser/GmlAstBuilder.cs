@@ -5,6 +5,9 @@ using UnaryExpression = PrettierGML.Nodes.SyntaxNodes.UnaryExpression;
 
 namespace PrettierGML
 {
+    /// <summary>
+    /// Visits the Antlr-generated parse tree and returns a GmlSyntaxNode tree
+    /// </summary>
     internal class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSyntaxNode>
     {
         public override GmlSyntaxNode VisitProgram(

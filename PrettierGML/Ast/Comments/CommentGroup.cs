@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using PrettierGML.Printer.Docs.DocTypes;
+using PrettierGML.Printer.Document.DocTypes;
 using PrettierGML.Nodes;
 using PrettierGML.Printer;
 using PrettierGML.Ast;

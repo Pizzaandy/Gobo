@@ -1,4 +1,4 @@
-﻿using PrettierGML.Printer.Docs.DocTypes;
+﻿using PrettierGML.Printer.Document.DocTypes;
 using PrettierGML.Nodes.SyntaxNodes;
 using PrettierGML.Printer;
 
