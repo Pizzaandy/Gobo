@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
 using Newtonsoft.Json;
 
 namespace PrettierGML.Nodes
@@ -23,9 +22,6 @@ namespace PrettierGML.Nodes
 
         [JsonIgnore]
         public List<CommentGroup> Comments { get; set; } = new();
-
-        [JsonIgnore]
-        public virtual bool PrintsOwnComments { get; } = false;
 
         public string Kind => GetType().Name;
 
@@ -53,12 +49,6 @@ namespace PrettierGML.Nodes
         {
             CharacterRange = new Range(node.Start.StartIndex, node.Stop.StopIndex);
             TokenRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
-        }
-
-        public GmlSyntaxNode(ITerminalNode token)
-        {
-            CharacterRange = new Range(token.SourceInterval.a, token.SourceInterval.b);
-            TokenRange = new Range(token.Symbol.StartIndex, token.Symbol.StartIndex);
         }
 
         public static EmptyNode Empty => EmptyNode.Instance;
@@ -93,9 +83,9 @@ namespace PrettierGML.Nodes
 
         public override int GetHashCode()
         {
-            // TODO: make more complete
             var hashCode = new HashCode();
             hashCode.Add(Kind);
+
             foreach (var child in Children)
             {
                 hashCode.Add(child);

@@ -39,7 +39,7 @@ var input = """
         case 1:
             draw_sprite(20, 20, spr_face_fatal);
         break;
-
+        // comment
         default:
             draw_sprite(20, 20, spr_face_fainted);
         break;

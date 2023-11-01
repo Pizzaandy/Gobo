@@ -3,7 +3,7 @@ using Antlr4.Runtime.Tree;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
-    internal class Literal : GmlSyntaxNode
+    internal class Literal : TerminalNode
     {
         public string Text { get; set; }
 
