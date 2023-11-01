@@ -1,6 +1,6 @@
 ﻿namespace PrettierGML
 {
-    internal class FormatOptions
+    public class FormatOptions
     {
         public BraceStyle BraceStyle { get; init; } = BraceStyle.SameLine;
         public bool UseTabs { get; init; } = false;
@@ -9,7 +9,7 @@
         public bool CheckAst { get; init; } = true;
     }
 
-    internal enum BraceStyle
+    public enum BraceStyle
     {
         SameLine,
         NewLine,

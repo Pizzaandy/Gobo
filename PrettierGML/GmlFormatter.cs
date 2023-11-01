@@ -1,12 +1,11 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Nodes;
 using PrettierGML.Parser;
-using PrettierGML.Printer;
 using PrettierGML.Printer.Docs.DocPrinter;
 
 namespace PrettierGML
 {
-    internal static partial class GmlFormatter
+    public static partial class GmlFormatter
     {
         public static string Format(string input, FormatOptions options)
         {
