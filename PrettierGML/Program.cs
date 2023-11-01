@@ -1,4 +1,5 @@
 ﻿using PrettierGML;
+using PrettierGML.Printer;
 using System.Diagnostics;
 
 static void FormatFile(string filePath)

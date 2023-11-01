@@ -1,6 +1,8 @@
 ﻿using Antlr4.Runtime;
-using CSharpier.DocPrinter;
 using PrettierGML.Nodes;
+using PrettierGML.Parser;
+using PrettierGML.Printer;
+using PrettierGML.Printer.Docs.DocPrinter;
 
 namespace PrettierGML
 {
@@ -19,7 +21,7 @@ namespace PrettierGML
             var docs = ast.Print(new PrintContext(options, tokens));
             //Console.WriteLine("--- DOCS ---\n" + docs.ToString());
 
-            var printOptions = new CSharpier.PrinterOptions()
+            var printOptions = new Printer.Docs.PrinterOptions()
             {
                 Width = options.Width,
                 TabWidth = options.TabWidth,
