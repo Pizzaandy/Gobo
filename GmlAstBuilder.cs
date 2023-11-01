@@ -258,15 +258,14 @@ namespace PrettierGML
             {
                 foreach (var caseList in context.caseClauses())
                 {
-                    var node = Visit(caseList);
-                    caseClauses.AddRange(node.Children);
+                    caseClauses.AddRange(Visit(caseList).Children);
                 }
             }
             if (context.defaultClause() != null)
             {
                 caseClauses.Add(Visit(context.defaultClause()));
             }
-            return caseClauses;
+            return new SwitchBlock(context, caseClauses);
         }
 
         public override GmlSyntaxNode VisitCaseClauses(
@@ -289,9 +288,11 @@ namespace PrettierGML
             GmlSyntaxNode body = GmlSyntaxNode.Empty;
             if (context.statementList() != null)
             {
-                body = Visit(context.statementList());
+                var sectionContext = context.statementList();
+                var statements = Visit(context.statementList());
+                body = new SwitchCaseBody(sectionContext, statements.Children);
             }
-            return new SwitchCase(context, test, body.Children);
+            return new SwitchCase(context, test, body);
         }
 
         public override GmlSyntaxNode VisitDefaultClause(
@@ -301,9 +302,11 @@ namespace PrettierGML
             GmlSyntaxNode body = GmlSyntaxNode.Empty;
             if (context.statementList() != null)
             {
-                body = Visit(context.statementList());
+                var sectionContext = context.statementList();
+                var statements = Visit(context.statementList());
+                body = new SwitchCaseBody(sectionContext, statements.Children);
             }
-            return new SwitchCase(context, GmlSyntaxNode.Empty, body.Children);
+            return new SwitchCase(context, GmlSyntaxNode.Empty, body);
         }
 
         public override GmlSyntaxNode VisitContinueStatement(
@@ -370,11 +373,7 @@ namespace PrettierGML
                 declarations.Add(Visit(declaration));
             }
             var kind = context.varModifier().GetText();
-            return new VariableDeclarationList(
-                context,
-                declarations,
-                kind
-            );
+            return new VariableDeclarationList(context, declarations, kind);
         }
 
         public override GmlSyntaxNode VisitVariableDeclaration(
@@ -776,12 +775,12 @@ namespace PrettierGML
             [NotNull] GameMakerLanguageParser.EnumeratorListContext context
         )
         {
-            var enums = new List<GmlSyntaxNode>();
+            var declarations = new List<GmlSyntaxNode>();
             foreach (var enumDecl in context.enumerator())
             {
-                enums.Add(Visit(enumDecl));
+                declarations.Add(Visit(enumDecl));
             }
-            return enums;
+            return new EnumBlock(context, declarations);
         }
 
         public override GmlSyntaxNode VisitEnumerator(

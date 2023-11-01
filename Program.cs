@@ -24,15 +24,6 @@ static string Format(string input)
 
 // example usage
 var input = """
-    call(a___________, a___________, a___________, function foo() {return});
-
-    var a = [a, b, c.d]
-    if foo {
-        bar()
-    }
-    {
-    something()
-    }
         switch (player_lives)
     {
         case 3:
@@ -43,6 +34,8 @@ var input = """
             draw_sprite(20, 20, spr_face_hurt);
         break;
 
+        case stacked:
+        case "bar":
         case 1:
             draw_sprite(20, 20, spr_face_fatal);
         break;
@@ -52,7 +45,9 @@ var input = """
         break;
     }
 
-    function foo(b________________________, b________________________, c=undefined) constructor {}
+    enum foo {
+     bar, baz 
+    }
     """;
 
 Format(input);

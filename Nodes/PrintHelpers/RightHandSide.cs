@@ -59,7 +59,7 @@ namespace PrettierGML.Nodes.PrintHelpers
             var shouldUseChainFormatting =
                 leftNode is AssignmentExpression
                 && leftNode.Parent is AssignmentExpression
-                && !isTail;
+                && (!isTail || leftNode.Parent.Parent is not VariableDeclarator);
 
             if (shouldUseChainFormatting)
             {

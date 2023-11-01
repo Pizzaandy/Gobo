@@ -16,8 +16,4 @@
     <Folder Include="Generated\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="CSharpier\CSharpier.csproj" />
-  </ItemGroup>
-
 </Project>

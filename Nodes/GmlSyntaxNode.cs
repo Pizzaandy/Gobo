@@ -21,6 +21,7 @@ namespace PrettierGML.Nodes
         [JsonIgnore]
         public bool IsEmpty => this is EmptyNode;
 
+        [JsonIgnore]
         public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
@@ -46,7 +47,7 @@ namespace PrettierGML.Nodes
         protected IEnumerable<CommentGroup> DanglingComments =>
             Comments.Where(c => c.Type == CommentType.Dangling);
 
-        public GmlSyntaxNode() {}
+        public GmlSyntaxNode() { }
 
         public GmlSyntaxNode(ParserRuleContext node)
         {
@@ -127,7 +128,8 @@ namespace PrettierGML.Nodes
         public virtual Doc PrintDanglingComments(PrintContext ctx) =>
             throw new NotImplementedException();
 
-        public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) => new NodeList(contents);
+        public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
+            new NodeList(contents);
     }
 
     internal interface IHasObject

@@ -6,7 +6,6 @@ namespace PrettierGML.Nodes.SyntaxNodes
     internal class SwitchStatement : GmlSyntaxNode
     {
         public GmlSyntaxNode Discriminant { get; set; }
-        // TODO: change to list!
         public GmlSyntaxNode Cases { get; set; }
 
         public SwitchStatement(
@@ -22,27 +21,15 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            var parts = new List<Doc>
-            {
+            return Doc.Concat(
                 Doc.Concat(
                     "switch",
                     " ",
                     Statement.EnsureExpressionInParentheses(ctx, Discriminant),
                     " "
-                )
-            };
-
-            if (Cases.Children.Any())
-            {
-                var caseList = Cases.PrintChildren(ctx);
-                parts.Add(Block.PrintInBlock(ctx, Doc.Join(Doc.HardLine, caseList)));
-            }
-            else
-            {
-                parts.Add(Block.EmptyBlock);
-            }
-
-            return Doc.Concat(parts);
+                ),
+                Cases.Print(ctx)
+            );
         }
     }
 }
