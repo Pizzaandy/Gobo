@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 
-namespace PrettierGML.Parser.Antlr
+namespace PrettierGML.Parser
 {
     public class GmlSyntaxErrorException : Exception
     {

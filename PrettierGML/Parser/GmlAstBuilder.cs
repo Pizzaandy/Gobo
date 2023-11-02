@@ -1,9 +1,10 @@
 ﻿using Antlr4.Runtime.Misc;
-using PrettierGML.Nodes;
-using PrettierGML.Nodes.SyntaxNodes;
-using UnaryExpression = PrettierGML.Nodes.SyntaxNodes.UnaryExpression;
+using PrettierGML.SyntaxNodes;
+using PrettierGML.SyntaxNodes.Gml;
+using PrettierGML.SyntaxNodes.GmlExtensions;
+using UnaryExpression = PrettierGML.SyntaxNodes.Gml.UnaryExpression;
 
-namespace PrettierGML
+namespace PrettierGML.Parser
 {
     /// <summary>
     /// Visits the Antlr-generated parse tree and returns a GmlSyntaxNode tree
