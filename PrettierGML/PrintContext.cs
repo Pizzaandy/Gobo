@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-using PrettierGML.Printer;
 
 namespace PrettierGML
 {
