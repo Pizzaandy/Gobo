@@ -1,13 +1,5 @@
 ﻿using PrettierGML;
-using PrettierGML.Printer;
 using System.Diagnostics;
-
-static void FormatFile(string filePath)
-{
-    string input = File.ReadAllText(filePath);
-    var formatted = Format(input);
-    File.WriteAllText(filePath, formatted);
-}
 
 static string Format(string input)
 {

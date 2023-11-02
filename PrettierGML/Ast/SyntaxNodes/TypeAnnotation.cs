@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Printer;
-using PrettierGML.Printer.Document.DocTypes;
+using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {
@@ -16,7 +16,7 @@ namespace PrettierGML.Nodes.SyntaxNodes
 
         public override Doc Print(PrintContext ctx)
         {
-            if (ctx.RemoveSyntaxExtensions)
+            if (ctx.Options.RemoveSyntaxExtensions)
             {
                 return Doc.Null;
             }

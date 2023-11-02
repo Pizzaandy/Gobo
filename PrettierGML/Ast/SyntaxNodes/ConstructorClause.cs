@@ -1,6 +1,6 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Nodes.PrintHelpers;
-using PrettierGML.Printer.Document.DocTypes;
+using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.Nodes.SyntaxNodes
 {

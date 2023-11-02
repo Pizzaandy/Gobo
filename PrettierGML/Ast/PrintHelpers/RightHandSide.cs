@@ -1,6 +1,6 @@
-﻿using PrettierGML.Printer.Document.DocTypes;
-using PrettierGML.Nodes.SyntaxNodes;
+﻿using PrettierGML.Nodes.SyntaxNodes;
 using PrettierGML.Printer;
+using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.Nodes.PrintHelpers
 {

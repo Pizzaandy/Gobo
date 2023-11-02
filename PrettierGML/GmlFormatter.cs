@@ -1,7 +1,7 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Nodes;
 using PrettierGML.Parser;
-using PrettierGML.Printer.Document.DocPrinter;
+using PrettierGML.Printer.DocPrinter;
 
 namespace PrettierGML
 {
@@ -18,9 +18,8 @@ namespace PrettierGML
 
             var initialHash = options.CheckAst ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
-            //Console.WriteLine("--- DOCS ---\n" + docs.ToString());
 
-            var printOptions = new Printer.Document.PrinterOptions()
+            var printOptions = new Printer.DocPrinterOptions()
             {
                 Width = options.Width,
                 TabWidth = options.TabWidth,
@@ -49,6 +48,13 @@ namespace PrettierGML
             }
 
             return output;
+        }
+
+        public static async Task FormatFileAsync(string filePath, FormatOptions options)
+        {
+            string input = await File.ReadAllTextAsync(filePath);
+            var formatted = Format(input, options);
+            await File.WriteAllTextAsync(filePath, formatted);
         }
     }
 }
