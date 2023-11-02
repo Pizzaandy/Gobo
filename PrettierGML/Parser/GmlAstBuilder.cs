@@ -485,6 +485,32 @@ namespace PrettierGML.Parser
             return new Parameter(context, name, type, initializer);
         }
 
+        public override GmlSyntaxNode VisitTemplateStringLiteral(
+            [NotNull] GameMakerLanguageParser.TemplateStringLiteralContext context
+        )
+        {
+            var parts = new List<GmlSyntaxNode>();
+            foreach (var atom in context.templateStringAtom())
+            {
+                parts.Add(Visit(atom));
+            }
+            return new TemplateStringLiteral(context, parts);
+        }
+
+        public override GmlSyntaxNode VisitTemplateStringAtom(
+            [NotNull] GameMakerLanguageParser.TemplateStringAtomContext context
+        )
+        {
+            if (context.expression() != null)
+            {
+                return new TemplateExpression(context, Visit(context.expression()));
+            }
+            else
+            {
+                return new TemplateText(context, context.GetText());
+            }
+        }
+
         public override GmlSyntaxNode VisitLiteral(
             [NotNull] GameMakerLanguageParser.LiteralContext context
         )

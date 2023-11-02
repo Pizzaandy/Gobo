@@ -17,30 +17,18 @@ static string Format(string input)
 
 // example usage
 var input = """
-        switch (player_lives)
-    {
-        case 3:
-            draw_sprite(20, 20, spr_face_healthy);
-        break;
-
-        case 2:
-            draw_sprite(20, 20, spr_face_hurt);
-        break;
-
-        case stacked:
-        case "bar":
-        case 1:
-            draw_sprite(20, 20, spr_face_fatal);
-        break;
-        // comment
-        default:
-            draw_sprite(20, 20, spr_face_fainted);
-        break;
+    function() {
+    return $"text {
+        expression_____________________________________________________________
+    } text text text{
+        expression_____________________________________________________________
+    }";
     }
-
-    enum foo {
-     bar, baz 
-    }
+    if condition
+    if condition2
+    foo = @"woah
+        woah a verbatimstring?
+    thats crazy"
     """;
 
 Format(input);
