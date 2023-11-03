@@ -7,7 +7,7 @@ using UnaryExpression = PrettierGML.SyntaxNodes.Gml.UnaryExpression;
 namespace PrettierGML.Parser
 {
     /// <summary>
-    /// Visits the Antlr-generated parse tree and returns a GmlSyntaxNode tree
+    /// Visits the Antlr-generated parse tree and returns a GmlSyntaxNode tree.
     /// </summary>
     internal class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSyntaxNode>
     {

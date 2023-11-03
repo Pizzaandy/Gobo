@@ -16,7 +16,7 @@ channels { ERROR }
 }
 
 MultiLineComment:               '/*' .*? '*/'             -> channel(HIDDEN);
-SingleLineComment:              '//' ~[\r\n\u2028\u2029]* -> channel(HIDDEN);
+SingleLineComment:              '//' ~[\r\n]* -> channel(HIDDEN);
 
 OpenBracket: '[';
 ListAccessor: '[|'; 
@@ -158,7 +158,7 @@ WhiteSpaces
     ;
 
 LineTerminator
-    : [\r\n\u2028\u2029] {
+    : ('\r' '\n'? | '\n') {
         if (ignoreNewline) {
             Channel = Lexer.Hidden;
         }

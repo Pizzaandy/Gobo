@@ -5,12 +5,12 @@
         public static readonly Range Invalid = new(-1, -2);
 
         /// <summary>
-        /// The start of the interval (inclusive)
+        /// The start of the interval (inclusive).
         /// </summary>
         public readonly int Start;
 
         /// <summary>
-        /// The end of the interval (inclusive)
+        /// The end of the interval (inclusive).
         /// </summary>
         public readonly int Stop;
 

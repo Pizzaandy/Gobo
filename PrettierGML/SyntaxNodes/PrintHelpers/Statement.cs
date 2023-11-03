@@ -57,7 +57,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
         public static Doc PrintStatement(PrintContext ctx, GmlSyntaxNode statement)
         {
-            var lineSuffix = NeedsSemicolon(statement) ? ";" : "";
+            Doc lineSuffix = NeedsSemicolon(statement) ? ";" : Doc.Null;
 
             return Doc.Concat(
                 statement.PrintLeadingComments(ctx),
@@ -121,11 +121,11 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         {
             var leadingTokens = ctx.Tokens
                 .GetHiddenTokensToLeft(node.TokenRange.Start)
-                ?.Reverse()
-                .TakeWhile(IsWhiteSpace);
+                ?.TakeWhile(IsWhiteSpace);
 
             return leadingTokens is not null
-                && leadingTokens.Count(token => token.Text.Contains('\n')) >= 2;
+                && leadingTokens.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator)
+                    >= 2;
         }
 
         private static bool IsWhiteSpace(IToken token)

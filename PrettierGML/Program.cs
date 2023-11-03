@@ -17,18 +17,30 @@ static string Format(string input)
 
 // example usage
 var input = """
-    function() {
-    return $"text {
-        expression_____________________________________________________________
-    } text text text{
-        expression_____________________________________________________________
-    }";
+    if (indent) {
+    // e
+        // e 2
+
+    // e 3
+        /*thing*/call(); // eee
     }
-    if condition
-    if condition2
-    foo = @"woah
-        woah a verbatimstring?
-    thats crazy"
+
+    if (indent) {
+        /* this
+            entire
+        comment*/
+    /* sequence */ /*should*/ //not
+    // break
+       /**
+    * This is the comments
+    * This is the comments
+    * @author Rookie
+    * @since 2019-07-07
+    * 
+    */
+        call();
+    }
+    
     """;
 
 Format(input);

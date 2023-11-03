@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
 using PrettierGML.SyntaxNodes;
 
 namespace PrettierGML.Parser
@@ -22,12 +21,11 @@ namespace PrettierGML.Parser
             parser.Interpreter.PredictionMode = Antlr4.Runtime.Atn.PredictionMode.SLL;
             parser.AddErrorListener(new GameMakerLanguageErrorListener());
 
-
             // 2) Build custom syntax tree with Antlr visitor
             var builder = new GmlAstBuilder();
             var ast = builder.Visit(parser.program());
 
-            // 3) Handle comments TODO: 
+            // 3) Handle comments
             if (attachComments)
             {
                 ast = new CommentMapper(tokenStream).AttachComments(ast);

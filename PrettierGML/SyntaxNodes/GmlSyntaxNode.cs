@@ -21,28 +21,21 @@ namespace PrettierGML.SyntaxNodes
         [JsonIgnore]
         public bool IsEmpty => this is EmptyNode;
 
-        [JsonIgnore]
-        public List<CommentGroup> Comments { get; set; } = new();
-
         public string Kind => GetType().Name;
 
-        [JsonIgnore]
-        public bool HasLeadingComments => LeadingComments.Any();
+        public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
-        public bool HasTrailingComments => TrailingComments.Any();
+        public List<CommentGroup> LeadingComments =>
+            Comments.Where(c => c.Type == CommentType.Leading).ToList();
 
         [JsonIgnore]
-        public bool HasDanglingComments => DanglingComments.Any();
+        public List<CommentGroup> TrailingComments =>
+            Comments.Where(c => c.Type == CommentType.Trailing).ToList();
 
-        protected IEnumerable<CommentGroup> LeadingComments =>
-            Comments.Where(c => c.Type == CommentType.Leading);
-
-        protected IEnumerable<CommentGroup> TrailingComments =>
-            Comments.Where(c => c.Type == CommentType.Trailing);
-
-        protected IEnumerable<CommentGroup> DanglingComments =>
-            Comments.Where(c => c.Type == CommentType.Dangling);
+        [JsonIgnore]
+        public List<CommentGroup> DanglingComments =>
+            Comments.Where(c => c.Type == CommentType.Dangling).ToList();
 
         public GmlSyntaxNode() { }
 
@@ -61,13 +54,13 @@ namespace PrettierGML.SyntaxNodes
             return child;
         }
 
-        public List<GmlSyntaxNode> AsChildren(IEnumerable<GmlSyntaxNode> children)
+        public List<GmlSyntaxNode> AsChildren(List<GmlSyntaxNode> children)
         {
             foreach (var child in children)
             {
                 AsChild(child);
             }
-            return children.ToList();
+            return children;
         }
 
         public virtual Doc Print(PrintContext ctx) => throw new NotImplementedException();
@@ -96,24 +89,73 @@ namespace PrettierGML.SyntaxNodes
 
         public virtual Doc PrintLeadingComments(PrintContext ctx)
         {
-            if (!HasLeadingComments)
+            if (LeadingComments.Count == 0)
             {
                 return Doc.Null;
             }
 
-            return Doc.Concat(
-                Doc.Concat(LeadingComments.Select(c => c.Print(ctx)).ToList()),
-                Doc.HardLine
+            var printedGroup = Doc.Join(
+                Doc.Concat(Doc.HardLine, Doc.HardLine),
+                LeadingComments.Select(c => c.Print()).ToList()
             );
+
+            var lineBreaksBetween =
+                ctx.Tokens
+                    .GetHiddenTokensToRight(LeadingComments.Last().TokenRange.Stop)
+                    ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+
+            if (lineBreaksBetween == 0)
+            {
+                return Doc.Concat(printedGroup, " ");
+            }
+
+            var parts = new List<Doc>() { printedGroup };
+
+            for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
+            {
+                parts.Add(Doc.HardLine);
+            }
+
+            return Doc.Concat(parts);
         }
 
         public virtual Doc PrintTrailingComments(PrintContext ctx)
         {
-            if (!HasTrailingComments)
+            if (TrailingComments.Count == 0)
             {
                 return Doc.Null;
             }
-            return Doc.Concat(TrailingComments.Select(c => c.Print(ctx)).ToList());
+
+            var printedGroup = Doc.Concat(TrailingComments.Select(c => c.Print()).ToList());
+
+            var lineBreaksBetween = ctx.Tokens
+                .GetHiddenTokensToLeft(TrailingComments.First().TokenRange.Start)
+                .Count(token => token.Type == GameMakerLanguageLexer.LineTerminator);
+
+            if (lineBreaksBetween == 0)
+            {
+                return Doc.Concat(" ", printedGroup);
+            }
+
+            var parts = new List<Doc>();
+
+            for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
+            {
+                parts.Add(Doc.HardLine);
+            }
+
+            parts.Add(printedGroup);
+
+            return Doc.Concat(parts);
+        }
+
+        public virtual Doc DecorateWithComments(PrintContext ctx, Doc printed)
+        {
+            if (TrailingComments is null && LeadingComments is null)
+            {
+                return printed;
+            }
+            return Doc.Concat(PrintLeadingComments(ctx), printed, PrintTrailingComments(ctx));
         }
 
         public virtual Doc PrintDanglingComments(PrintContext ctx) =>

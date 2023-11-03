@@ -36,7 +36,7 @@ namespace PrettierGML.Parser
 
         public void Throw()
         {
-            var parser = (ParserInterpreter)Recognizer;
+            var parser = (Antlr4.Runtime.Parser)Recognizer;
             var stack = parser.GetRuleInvocationStack();
             var stackText = parser.GetRuleInvocationStackAsString();
             var lastRule = stack[0];

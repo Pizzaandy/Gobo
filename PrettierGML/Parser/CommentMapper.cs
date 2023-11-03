@@ -1,7 +1,5 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.SyntaxNodes;
-using PrettierGML.SyntaxNodes.Gml;
-using System.Diagnostics;
 using Range = PrettierGML.SyntaxNodes.Range;
 
 namespace PrettierGML.Parser
@@ -19,8 +17,6 @@ namespace PrettierGML.Parser
 
         public GmlSyntaxNode AttachComments(GmlSyntaxNode ast)
         {
-            Debug.Assert(ast is Document or EmptyNode);
-
             var comments = GetAllCommentGroups(TokenStream);
             CommentGroups = comments.Select(comment => DecorateComment(ast, comment)).ToList();
 
@@ -35,19 +31,19 @@ namespace PrettierGML.Parser
                     comment.Placement = CommentPlacement.OwnLine;
                     if (followingNode is not null)
                     {
-                        AttachComment(followingNode, comment, CommentType.Leading);
+                        AttachCommentGroup(followingNode, comment, CommentType.Leading);
                     }
                     else if (precedingNode is not null)
                     {
-                        AttachComment(precedingNode, comment, CommentType.Trailing);
+                        AttachCommentGroup(precedingNode, comment, CommentType.Trailing);
                     }
                     else if (enclosingNode is not null)
                     {
-                        AttachComment(enclosingNode, comment, CommentType.Dangling);
+                        AttachCommentGroup(enclosingNode, comment, CommentType.Dangling);
                     }
                     else
                     {
-                        AttachComment(ast, comment, CommentType.Dangling);
+                        AttachCommentGroup(ast, comment, CommentType.Dangling);
                     }
                 }
                 else if (IsEndOfLineComment(comment))
@@ -56,19 +52,19 @@ namespace PrettierGML.Parser
 
                     if (precedingNode is not null)
                     {
-                        AttachComment(precedingNode, comment, CommentType.Trailing);
+                        AttachCommentGroup(precedingNode, comment, CommentType.Trailing);
                     }
                     else if (followingNode is not null)
                     {
-                        AttachComment(followingNode, comment, CommentType.Leading);
+                        AttachCommentGroup(followingNode, comment, CommentType.Leading);
                     }
                     else if (enclosingNode is not null)
                     {
-                        AttachComment(enclosingNode, comment, CommentType.Dangling);
+                        AttachCommentGroup(enclosingNode, comment, CommentType.Dangling);
                     }
                     else
                     {
-                        AttachComment(ast, comment, CommentType.Dangling);
+                        AttachCommentGroup(ast, comment, CommentType.Dangling);
                     }
                 }
                 else
@@ -78,33 +74,59 @@ namespace PrettierGML.Parser
                     {
                         if (RemainingCommentIsLeading(followingNode, comment))
                         {
-                            AttachComment(followingNode, comment, CommentType.Leading);
+                            AttachCommentGroup(followingNode, comment, CommentType.Leading);
                         }
                         else
                         {
-                            AttachComment(precedingNode, comment, CommentType.Trailing);
+                            AttachCommentGroup(precedingNode, comment, CommentType.Trailing);
                         }
                     }
                     else if (precedingNode is not null)
                     {
-                        AttachComment(precedingNode, comment, CommentType.Trailing);
+                        AttachCommentGroup(precedingNode, comment, CommentType.Trailing);
                     }
                     else if (followingNode is not null)
                     {
-                        AttachComment(followingNode, comment, CommentType.Leading);
+                        AttachCommentGroup(followingNode, comment, CommentType.Leading);
                     }
                     else if (enclosingNode is not null)
                     {
-                        AttachComment(enclosingNode, comment, CommentType.Dangling);
+                        AttachCommentGroup(enclosingNode, comment, CommentType.Dangling);
                     }
                     else
                     {
-                        AttachComment(ast, comment, CommentType.Dangling);
+                        AttachCommentGroup(ast, comment, CommentType.Dangling);
                     }
                 }
             }
 
             return ast;
+        }
+
+        /// <summary>
+        /// The tiebreaker for remaining comment groups.
+        /// </summary>
+        private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
+        {
+            // Ensure that all tokens between the comment and followingNode are whitespace or parentheses
+            var tokens = TokenStream
+                .GetTokens(comment.TokenRange.Stop, followingNode.TokenRange.Start)
+                .Skip(1)
+                .SkipLast(1);
+
+            foreach (var token in tokens)
+            {
+                if (IsWhiteSpace(token) || token.Type == GameMakerLanguageLexer.OpenParen)
+                {
+                    continue;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private static CommentGroup DecorateComment(
@@ -185,6 +207,9 @@ namespace PrettierGML.Parser
             return result;
         }
 
+        /// <summary>
+        /// Iterate all tokens and group together comments
+        /// </summary>
         private static List<CommentGroup> GetAllCommentGroups(CommonTokenStream tokenStream)
         {
             tokenStream.Fill();
@@ -211,8 +236,11 @@ namespace PrettierGML.Parser
                 }
 
                 if (
-                    currentGroup?.Count > 0
-                    && currentGroup.Last().Type == GameMakerLanguageLexer.SingleLineComment
+                    currentGroup
+                        ?.AsEnumerable()
+                        .Reverse()
+                        .TakeWhile(IsWhiteSpace)
+                        .Count(IsLineBreak) >= 2
                 )
                 {
                     breakGroup = true;
@@ -220,25 +248,26 @@ namespace PrettierGML.Parser
 
                 if (breakGroup && currentGroup?.Count > 0)
                 {
-                    // remove whitespace from end of group
-                    var trimmedGroup = currentGroup
-                        .AsEnumerable()
-                        .Reverse()
-                        .SkipWhile(IsWhiteSpace)
-                        .Reverse();
+                    // Remove whitespace from end of group
+                    var trimmedGroup = currentGroup.AsEnumerable();
+
+                    while (IsWhiteSpace(trimmedGroup.Last()))
+                    {
+                        trimmedGroup = trimmedGroup.SkipLast(1);
+                    }
 
                     var first = trimmedGroup.First();
                     var last = trimmedGroup.Last();
 
                     groups.Add(
                         new CommentGroup(
-                            string.Concat(trimmedGroup.Select(token => token.Text)),
+                            trimmedGroup.ToList(),
                             new Range(first.StartIndex, last.StopIndex),
                             new Range(first.TokenIndex, last.TokenIndex)
                         )
                     );
 
-                    currentGroup = null;
+                    currentGroup = IsComment(token) ? new() : null;
                 }
 
                 currentGroup?.Add(token);
@@ -266,34 +295,6 @@ namespace PrettierGML.Parser
                 && trailingTokens.TakeWhile(token => !IsComment(token)).Any(IsLineBreak);
         }
 
-        private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
-        {
-            // Ensure that all tokens between comment and followingNode are whitespaces or parentheses
-
-            var tokens = TokenStream
-                .GetTokens(comment.TokenRange.Stop, followingNode.TokenRange.Start)
-                .Skip(1)
-                .SkipLast(1);
-
-            foreach (var token in tokens)
-            {
-                if (
-                    token.Type == GameMakerLanguageLexer.WhiteSpaces
-                    || token.Type == GameMakerLanguageLexer.LineTerminator
-                    || token.Type == GameMakerLanguageLexer.OpenParen
-                )
-                {
-                    continue;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private static bool IsComment(IToken token)
         {
             return token.Type == GameMakerLanguageLexer.SingleLineComment
@@ -311,7 +312,7 @@ namespace PrettierGML.Parser
                 || token.Type == GameMakerLanguageLexer.WhiteSpaces;
         }
 
-        private static void AttachComment(
+        private static void AttachCommentGroup(
             GmlSyntaxNode node,
             CommentGroup comment,
             CommentType type
@@ -319,6 +320,7 @@ namespace PrettierGML.Parser
         {
             comment.Type = type;
             node.Comments.Add(comment);
+            Console.WriteLine(comment);
         }
     }
 
