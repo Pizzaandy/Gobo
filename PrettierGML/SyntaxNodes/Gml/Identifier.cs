@@ -22,7 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc Print(PrintContext ctx)
         {
-            return DecorateWithComments(ctx, Name);
+            return Name;
         }
     }
 }

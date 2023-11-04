@@ -39,15 +39,55 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
             for (var i = 0; i < list.Children.Count; i++)
             {
-                parts.Add(list.Children[i].Print(ctx));
+                var child = list.Children[i];
 
-                if (i != list.Children.Count - 1)
+                parts.Add(child.PrintLeadingComments(ctx));
+                parts.Add(child.Print(ctx));
+
+                var trailingComments = child.PrintTrailingComments(ctx);
+                var hasTrailingComments = child.TrailingComments.Any();
+
+                // Ensure end-of-line comments are printed after the separator
+                // if the list breaks.
+                var addCommentAfterSeparatorIfBreak =
+                    hasTrailingComments
+                    && child.TrailingComments.First().Placement == CommentPlacement.EndOfLine;
+
+                if (hasTrailingComments)
                 {
-                    parts.Add(Doc.Concat(separator, Doc.Line));
+                    parts.Add(
+                        addCommentAfterSeparatorIfBreak
+                            ? Doc.IfBreak(Doc.Null, trailingComments)
+                            : Doc.IfBreak(trailingComments, Doc.Null)
+                    );
                 }
-                else if (allowTrailingSeparator)
+
+                var isLastChild = i == list.Children.Count - 1;
+
+                if (isLastChild)
                 {
-                    parts.Add(Doc.IfBreak(separator, Doc.Null));
+                    if (allowTrailingSeparator)
+                    {
+                        parts.Add(Doc.IfBreak(separator, Doc.Null));
+                    }
+                }
+                else
+                {
+                    parts.Add(separator);
+                }
+
+                if (hasTrailingComments)
+                {
+                    parts.Add(
+                        addCommentAfterSeparatorIfBreak
+                            ? Doc.IfBreak(trailingComments, Doc.Null)
+                            : Doc.IfBreak(Doc.Null, trailingComments)
+                    );
+                }
+
+                if (!isLastChild)
+                {
+                    parts.Add(Doc.Line);
                 }
             }
 

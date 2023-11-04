@@ -15,32 +15,37 @@ static string Format(string input)
     return result;
 }
 
-// example usage
 var input = """
-    if (indent) {
-    // e
-        // e 2
+    /* this
+        entire
+         comment*/
+    /* sequence */ /*should*/ //be
+    // grouped
 
-    // e 3
-        /*thing*/call(); // eee
+    // but not this one!
+    call(
+    foo,
+    bar, // e
+    baz)    // eee
+
+    var foo = {
+        /*e*/a:b, // thing
+        c:d
     }
 
-    if (indent) {
-        /* this
-            entire
-        comment*/
-    /* sequence */ /*should*/ //not
     // break
-       /**
-    * This is the comments
-    * This is the comments
-    * @author Rookie
-    * @since 2019-07-07
-    * 
-    */
-        call();
-    }
+    var arr = [
+        a123___________________,
+        456, /* eee*/
+        abc_____________________________________
+    ]
     
+    // flat
+    var arr2 = [
+        a123,
+        456, /* eee*/
+        abc
+    ]
     """;
 
 Format(input);

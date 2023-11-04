@@ -16,16 +16,17 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc Print(PrintContext ctx)
         {
-            Doc printedArguments;
+            Doc result;
 
             if (ShouldBreakOnLastArgument())
             {
-                var printedChildren = PrintChildren(ctx);
+                var printedArguments = PrintChildren(ctx);
 
-                var last = printedChildren.Last();
-                var allExceptLast = printedChildren.GetRange(0, printedChildren.Count - 1);
+                var last = printedArguments.Last();
+                var allExceptLast = printedArguments.GetRange(0, printedArguments.Count - 1);
 
                 var separator = Doc.Concat(",", " ");
+
                 var optionA = Doc.Concat(
                     "(",
                     Doc.Join(separator, allExceptLast),
@@ -35,16 +36,14 @@ namespace PrettierGML.SyntaxNodes.Gml
                 );
                 var optionB = Doc.Concat(DelimitedList.PrintInBrackets(ctx, "(", this, ")", ","));
 
-                printedArguments = Doc.ConditionalGroup(optionA, optionB);
+                result = Doc.ConditionalGroup(optionA, optionB);
             }
             else
             {
-                printedArguments = Doc.Concat(
-                    DelimitedList.PrintInBrackets(ctx, "(", this, ")", ",")
-                );
+                result = Doc.Concat(DelimitedList.PrintInBrackets(ctx, "(", this, ")", ","));
             }
 
-            return printedArguments;
+            return result;
         }
 
         private bool ShouldBreakOnLastArgument()

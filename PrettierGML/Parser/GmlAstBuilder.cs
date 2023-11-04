@@ -618,9 +618,10 @@ namespace PrettierGML.Parser
         )
         {
             var parts = new List<GmlSyntaxNode>();
-            foreach (var arg in context.expressionOrFunction())
+            foreach (var expressionContext in context.expressionOrFunction())
             {
-                parts.Add(Visit(arg));
+                var arg = Visit(expressionContext);
+                parts.Add(arg);
             }
             return new ArgumentList(context, parts);
         }

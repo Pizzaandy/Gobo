@@ -128,9 +128,10 @@ namespace PrettierGML.SyntaxNodes
 
             var printedGroup = Doc.Concat(TrailingComments.Select(c => c.Print()).ToList());
 
-            var lineBreaksBetween = ctx.Tokens
-                .GetHiddenTokensToLeft(TrailingComments.First().TokenRange.Start)
-                .Count(token => token.Type == GameMakerLanguageLexer.LineTerminator);
+            var lineBreaksBetween =
+                ctx.Tokens
+                    .GetHiddenTokensToLeft(TrailingComments.First().TokenRange.Start)
+                    ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
 
             if (lineBreaksBetween == 0)
             {
@@ -147,15 +148,6 @@ namespace PrettierGML.SyntaxNodes
             parts.Add(printedGroup);
 
             return Doc.Concat(parts);
-        }
-
-        public virtual Doc DecorateWithComments(PrintContext ctx, Doc printed)
-        {
-            if (TrailingComments is null && LeadingComments is null)
-            {
-                return printed;
-            }
-            return Doc.Concat(PrintLeadingComments(ctx), printed, PrintTrailingComments(ctx));
         }
 
         public virtual Doc PrintDanglingComments(PrintContext ctx) =>

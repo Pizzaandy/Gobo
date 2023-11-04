@@ -66,37 +66,36 @@ namespace PrettierGML.SyntaxNodes
             {
                 if (Printed)
                 {
-                    throw new InvalidOperationException($"Comment printed twice:\n{this}");
+                    throw new InvalidOperationException("Comment printed twice: " + this);
                 }
                 Printed = true;
             }
 
             var parts = new List<Doc>();
-            int consecutiveLines = 0;
+
+            bool shouldBreak = false;
 
             foreach (var token in Tokens)
             {
                 if (token.Type == GameMakerLanguageLexer.SingleLineComment)
                 {
                     parts.Add(PrintSingleLineComment(token.Text));
+                    shouldBreak = true;
                 }
                 else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
                 {
                     parts.Add(PrintMultiLineComment(token.Text));
                 }
+                else if (token.Type == GameMakerLanguageLexer.LineTerminator)
+                {
+                    parts.Add(Doc.HardLine);
+                    shouldBreak = true;
+                }
+            }
 
-                if (token.Type == GameMakerLanguageLexer.LineTerminator)
-                {
-                    if (consecutiveLines < 2)
-                    {
-                        parts.Add(Doc.HardLine);
-                    }
-                    consecutiveLines += 1;
-                }
-                else
-                {
-                    consecutiveLines = 0;
-                }
+            if (shouldBreak)
+            {
+                parts.Add(Doc.BreakParent);
             }
 
             return Doc.Concat(parts);
@@ -118,8 +117,15 @@ namespace PrettierGML.SyntaxNodes
 
         public override string ToString()
         {
-            return $"{Tokens}\nType: {Type}, Range: {CharacterRange}\n"
-                + $"Enclosing: {EnclosingNode?.Kind}\nPreceding: {PrecedingNode?.Kind}\nFollowing: {FollowingNode?.Kind}\n";
+            return string.Join(
+                '\n',
+                $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
+                $"Type: {Type}",
+                $"Range: {CharacterRange}",
+                $"Enclosing: {EnclosingNode?.Kind}",
+                $"Preceding: {PrecedingNode?.Kind}",
+                $"Following: {FollowingNode?.Kind}\n"
+            );
         }
     }
 }
