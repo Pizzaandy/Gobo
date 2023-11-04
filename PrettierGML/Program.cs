@@ -16,15 +16,16 @@ static string Format(string input)
 }
 
 var input = $$"""
-    switch(_charArray[_i])
+    if // test
+    ((e)
+    // eee
+    
+    ) // bruh
     {
-        //Set up alternating single quote marks
-        case ord("'").foo().bar: 
-            _inSingleQuote = !_inSingleQuote;
-            _charArray[@ _i] = _inSingleQuote? ord("^") : ord("*");
-            break;
-        default: break
+        var foo = ((bar)) // thing
     }
+    function a() {return}
+    function b(){}
     """;
 
 Format(input);

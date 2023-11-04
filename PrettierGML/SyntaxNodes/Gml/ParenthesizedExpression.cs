@@ -15,10 +15,10 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            // remove redundant parentheses
-            while (Expression is ParenthesizedExpression other)
+            // Remove redundant parentheses
+            if (Parent is ParenthesizedExpression)
             {
-                Expression = other.Expression;
+                return Expression.Print(ctx);
             }
 
             return Doc.Group(

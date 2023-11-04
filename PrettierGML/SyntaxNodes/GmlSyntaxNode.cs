@@ -120,17 +120,45 @@ namespace PrettierGML.SyntaxNodes
             );
         }
 
-        public bool EnsureCommentsPrinted()
+        public bool EndsWithSingleLineComment()
+        {
+            if (!Comments.Any())
+            {
+                return false;
+            }
+            return TrailingComments.LastOrDefault()?.EndsWithSingleLineComment ?? false;
+        }
+
+        public bool EnsureCommentsPrinted(bool isRoot = true)
         {
             var allCommentsPrinted =
-                Comments.All(c => c.Printed) && Children.All(c => c.EnsureCommentsPrinted());
+                Comments.All(c => c.Printed)
+                && Children.All(c => c.EnsureCommentsPrinted(isRoot: false));
 
-            if (!allCommentsPrinted)
+            if (!allCommentsPrinted && isRoot)
             {
-                throw new Exception("Not all comments were printed! This is a bug.");
+                var unprintedGroups = GetUnprintedCommentGroups();
+                var text = "";
+                foreach (var group in unprintedGroups)
+                {
+                    text += group;
+                }
+                throw new Exception(
+                    $"{unprintedGroups.Count} comment groups were not printed.\nComment Groups:\n{text}"
+                );
             }
 
             return allCommentsPrinted;
+        }
+
+        public List<CommentGroup> GetUnprintedCommentGroups()
+        {
+            var unprinted = Comments.Where(c => !c.Printed).ToList();
+            foreach (var child in Children)
+            {
+                unprinted.AddRange(child.GetUnprintedCommentGroups());
+            }
+            return unprinted;
         }
 
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>

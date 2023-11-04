@@ -53,6 +53,21 @@ namespace PrettierGML.SyntaxNodes
         [JsonIgnore]
         public bool Printed { get; set; } = false;
 
+        [JsonIgnore]
+        // TODO: Please rewrite this oh my god
+        public bool EndsWithSingleLineComment =>
+            Tokens
+                .AsEnumerable()
+                .Reverse()
+                .SkipWhile(
+                    token =>
+                        token.Type != GameMakerLanguageLexer.SingleLineComment
+                        && token.Type != GameMakerLanguageLexer.MultiLineComment
+                )
+                .Take(1)
+                .FirstOrDefault()
+                ?.Type == GameMakerLanguageLexer.SingleLineComment;
+
         public CommentGroup(List<IToken> text, Range characterRange, Range tokenRange)
         {
             Tokens = text;

@@ -13,11 +13,18 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             GmlSyntaxNode body
         )
         {
+            Doc spaceBetweenClauseAndBody = " ";
+
+            if (clause.EndsWithSingleLineComment())
+            {
+                spaceBetweenClauseAndBody = Doc.HardLine;
+            }
+
             return Doc.Concat(
                 keyword,
                 " ",
                 EnsureExpressionInParentheses(ctx, clause),
-                " ",
+                spaceBetweenClauseAndBody,
                 EnsureStatementInBlock(ctx, body)
             );
         }
@@ -36,23 +43,19 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
         public static Doc EnsureExpressionInParentheses(PrintContext ctx, GmlSyntaxNode expression)
         {
-            expression = UnwrapParenthesizedExpression(expression);
-
-            return Doc.Group(
-                "(",
-                Doc.Indent(Doc.SoftLine, expression.Print(ctx)),
-                Doc.SoftLine,
-                ")"
-            );
-        }
-
-        public static GmlSyntaxNode UnwrapParenthesizedExpression(GmlSyntaxNode expression)
-        {
-            while (expression is ParenthesizedExpression parenthesized)
+            if (expression is ParenthesizedExpression)
             {
-                expression = parenthesized.Expression;
+                return expression.Print(ctx);
             }
-            return expression;
+            else
+            {
+                return Doc.Group(
+                    "(",
+                    Doc.Indent(Doc.SoftLine, expression.Print(ctx)),
+                    Doc.SoftLine,
+                    ")"
+                );
+            }
         }
 
         public static Doc PrintStatement(PrintContext ctx, GmlSyntaxNode statement)
@@ -102,7 +105,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
         public static bool IsTopLevelFunctionOrMethod(GmlSyntaxNode node)
         {
-            var isTopLevelFunction = node is FunctionDeclaration && node.Parent?.Parent is Document;
+            var isTopLevelFunction = node is FunctionDeclaration && node.Parent is Document;
 
             // Check for a static method declaration (i.e. static foo = function(){}) in a constructor
             var isMethod =
