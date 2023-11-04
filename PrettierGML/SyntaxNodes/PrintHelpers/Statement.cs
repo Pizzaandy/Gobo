@@ -103,7 +103,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         {
             var isTopLevelFunction = node is FunctionDeclaration && node.Parent?.Parent is Document;
 
-            // check for a static method declaration (i.e. static foo = function(){}) in a constructor
+            // Check for a static method declaration (i.e. static foo = function(){}) in a constructor
             var isMethod =
                 node is VariableDeclarationList variableDeclarationList
                 && variableDeclarationList.Modifier == "static"

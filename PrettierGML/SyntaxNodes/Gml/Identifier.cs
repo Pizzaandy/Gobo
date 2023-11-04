@@ -22,7 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc Print(PrintContext ctx)
         {
-            return Name;
+            return WithComments(ctx, Name);
         }
 
         public override int GetHashCode()

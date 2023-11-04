@@ -40,6 +40,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             for (var i = 0; i < list.Children.Count; i++)
             {
                 var child = list.Children[i];
+                child.PrintOwnComments = false;
 
                 parts.Add(child.PrintLeadingComments(ctx));
                 parts.Add(child.Print(ctx));

@@ -106,6 +106,67 @@ namespace PrettierGML.SyntaxNodes
             return Doc.Concat(parts);
         }
 
+        public static Doc PrintGroups(PrintContext ctx, List<CommentGroup> groups, CommentType type)
+        {
+            if (groups.Count == 0)
+            {
+                return Doc.Null;
+            }
+
+            var printedGroups = Doc.Join(
+                Doc.Concat(Doc.HardLine, Doc.HardLine),
+                groups.Select(c => c.Print()).ToList()
+            );
+
+            if (type == CommentType.Dangling)
+            {
+                return printedGroups;
+            }
+
+            var parts = new List<Doc>();
+
+            if (type == CommentType.Leading)
+            {
+                int lineBreaksBetween =
+                    ctx.Tokens
+                        .GetHiddenTokensToRight(groups.Last().TokenRange.Stop)
+                        ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+
+                if (lineBreaksBetween == 0)
+                {
+                    return Doc.Concat(printedGroups, " ");
+                }
+
+                parts.Add(printedGroups);
+
+                for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
+                {
+                    parts.Add(Doc.HardLine);
+                }
+            }
+            else
+            {
+                int lineBreaksBetween =
+                    ctx.Tokens
+                        .GetHiddenTokensToLeft(groups.First().TokenRange.Start)
+                        ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+
+                if (lineBreaksBetween == 0)
+                {
+                    return Doc.Concat(" ", printedGroups);
+                }
+
+                for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
+                {
+                    parts.Add(Doc.HardLine);
+                }
+
+                parts.Add(printedGroups);
+            }
+
+            return Doc.Concat(parts);
+        }
+
         public static Doc PrintSingleLineComment(string text)
         {
             // TODO: decide whether to format comments

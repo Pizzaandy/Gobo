@@ -5,12 +5,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes
 {
-    internal interface ISyntaxTree
-    {
-        public Range CharacterRange { get; init; }
-    }
-
-    internal abstract class GmlSyntaxNode : ISyntaxTree
+    internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     {
         [JsonIgnore]
         public Range CharacterRange { get; init; }
@@ -19,12 +14,10 @@ namespace PrettierGML.SyntaxNodes
         public Range TokenRange { get; init; }
 
         [JsonIgnore]
-        public GmlSyntaxNode? Parent { get; protected set; }
+        public GmlSyntaxNode? Parent { get; set; }
 
         [JsonIgnore]
-        public List<GmlSyntaxNode> Children { get; protected set; } = new();
-
-        public List<GmlToken> Tokens { get; protected set; } = new();
+        public List<GmlSyntaxNode> Children { get; set; } = new();
 
         [JsonIgnore]
         public bool IsEmpty => this is EmptyNode;
@@ -32,6 +25,9 @@ namespace PrettierGML.SyntaxNodes
         public string Kind => GetType().Name;
 
         public List<CommentGroup> Comments { get; set; } = new();
+
+        [JsonIgnore]
+        public bool PrintOwnComments { get; set; } = true;
 
         [JsonIgnore]
         public List<CommentGroup> LeadingComments =>
@@ -61,20 +57,14 @@ namespace PrettierGML.SyntaxNodes
 
         public static EmptyNode Empty => EmptyNode.Instance;
 
-        public GmlSyntaxNode AsChild(GmlSyntaxNode child)
+        protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
         {
             Children.Add(child);
             child.Parent = this;
             return child;
         }
 
-        public GmlToken AsChild(GmlToken child)
-        {
-            Tokens.Add(child);
-            return child;
-        }
-
-        public List<GmlSyntaxNode> AsChildren(List<GmlSyntaxNode> children)
+        protected List<GmlSyntaxNode> AsChildren(List<GmlSyntaxNode> children)
         {
             foreach (var child in children)
             {
@@ -84,6 +74,8 @@ namespace PrettierGML.SyntaxNodes
         }
 
         public virtual Doc Print(PrintContext ctx) => throw new NotImplementedException();
+
+        // public virtual Doc PrintNode(PrintContext ctx);
 
         public List<Doc> PrintChildren(PrintContext ctx)
         {
@@ -105,79 +97,40 @@ namespace PrettierGML.SyntaxNodes
                 hashCode.Add(child);
             }
 
-            foreach (var token in Tokens)
-            {
-                hashCode.Add(token);
-            }
-
             return hashCode.ToHashCode();
         }
 
         public virtual Doc PrintLeadingComments(PrintContext ctx)
         {
-            if (LeadingComments.Count == 0)
-            {
-                return Doc.Null;
-            }
-
-            var printedGroup = Doc.Join(
-                Doc.Concat(Doc.HardLine, Doc.HardLine),
-                LeadingComments.Select(c => c.Print()).ToList()
-            );
-
-            var lineBreaksBetween =
-                ctx.Tokens
-                    .GetHiddenTokensToRight(LeadingComments.Last().TokenRange.Stop)
-                    ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
-
-            if (lineBreaksBetween == 0)
-            {
-                return Doc.Concat(printedGroup, " ");
-            }
-
-            var parts = new List<Doc>() { printedGroup };
-
-            for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
-            {
-                parts.Add(Doc.HardLine);
-            }
-
-            return Doc.Concat(parts);
+            return CommentGroup.PrintGroups(ctx, LeadingComments, CommentType.Leading);
         }
 
         public virtual Doc PrintTrailingComments(PrintContext ctx)
         {
-            if (TrailingComments.Count == 0)
-            {
-                return Doc.Null;
-            }
-
-            var printedGroup = Doc.Concat(TrailingComments.Select(c => c.Print()).ToList());
-
-            var lineBreaksBetween =
-                ctx.Tokens
-                    .GetHiddenTokensToLeft(TrailingComments.First().TokenRange.Start)
-                    ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
-
-            if (lineBreaksBetween == 0)
-            {
-                return Doc.Concat(" ", printedGroup);
-            }
-
-            var parts = new List<Doc>();
-
-            for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
-            {
-                parts.Add(Doc.HardLine);
-            }
-
-            parts.Add(printedGroup);
-
-            return Doc.Concat(parts);
+            return CommentGroup.PrintGroups(ctx, TrailingComments, CommentType.Trailing);
         }
 
-        public virtual Doc PrintDanglingComments(PrintContext ctx) =>
-            throw new NotImplementedException();
+        public virtual Doc PrintDanglingComments(PrintContext ctx)
+        {
+            // Print dangling comments as leading by default
+            return CommentGroup.PrintGroups(ctx, DanglingComments, CommentType.Leading);
+        }
+
+        protected Doc WithComments(PrintContext ctx, Doc printed)
+        {
+            if (!PrintOwnComments || Comments.Count == 0)
+            {
+                return printed;
+            }
+
+            // Print dangling comments as leading by default
+            return Doc.Concat(
+                PrintLeadingComments(ctx),
+                PrintDanglingComments(ctx),
+                printed,
+                PrintTrailingComments(ctx)
+            );
+        }
 
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
             new NodeList(contents);
