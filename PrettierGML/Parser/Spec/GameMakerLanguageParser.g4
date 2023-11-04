@@ -289,7 +289,7 @@ structLiteral
     ;
 
 propertyAssignment
-    : propertyIdentifier ':' expressionOrFunction
+    : (propertyIdentifier | StringLiteral) ':' expressionOrFunction
     ;
 
 propertyIdentifier

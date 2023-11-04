@@ -15,7 +15,7 @@ static string Format(string input)
     return result;
 }
 
-var input = """
+var input = $$"""
     /* this
         entire
          comment*/
@@ -48,7 +48,7 @@ var input = """
     ]
 
     enum /*comment*/ foo {
-    bar, baz, qux
+    bar, baz=567, qux
     }
 
     switch (foo) {
@@ -61,6 +61,8 @@ var input = """
     default:
     break;
     }
+
+    foo = {"a":"b"}
     """;
 
 Format(input);

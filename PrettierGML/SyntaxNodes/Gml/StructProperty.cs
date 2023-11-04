@@ -21,13 +21,15 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
+            var name = Name is Literal literal ? literal.Text.Trim('"') : Name.Print(ctx);
+
             if (Initializer.IsEmpty)
             {
-                return Name.Print(ctx);
+                return name;
             }
             else
             {
-                return Doc.Concat(Name.Print(ctx), ":", " ", Initializer.Print(ctx));
+                return Doc.Concat(name, ":", " ", Initializer.Print(ctx));
             }
         }
     }

@@ -776,10 +776,20 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.PropertyAssignmentContext context
         )
         {
-            var name = new Identifier(
-                context.propertyIdentifier(),
-                context.propertyIdentifier().GetText()
-            );
+            GmlSyntaxNode name;
+
+            if (context.propertyIdentifier() != null)
+            {
+                name = new Identifier(
+                    context.propertyIdentifier(),
+                    context.propertyIdentifier().GetText()
+                );
+            }
+            else
+            {
+                name = new Literal(context.StringLiteral(), context.StringLiteral().GetText());
+            }
+
             var expression = Visit(context.expressionOrFunction());
             return new StructProperty(context, name, expression);
         }

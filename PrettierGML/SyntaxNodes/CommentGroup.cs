@@ -60,16 +60,13 @@ namespace PrettierGML.SyntaxNodes
             TokenRange = tokenRange;
         }
 
-        public Doc Print(bool checkPrinted = true)
+        public Doc Print()
         {
-            if (checkPrinted)
+            if (Printed)
             {
-                if (Printed)
-                {
-                    throw new InvalidOperationException("Comment printed twice: " + Text);
-                }
-                Printed = true;
+                throw new InvalidOperationException("Comment printed twice: " + Text);
             }
+            Printed = true;
 
             var parts = new List<Doc>();
 
