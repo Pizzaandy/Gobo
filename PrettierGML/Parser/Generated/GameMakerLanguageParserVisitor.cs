@@ -551,11 +551,11 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitParameterList([NotNull] GameMakerLanguageParser.ParameterListContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.parameterArgument"/>.
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.parameter"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitParameterArgument([NotNull] GameMakerLanguageParser.ParameterArgumentContext context);
+	Result VisitParameter([NotNull] GameMakerLanguageParser.ParameterContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.identifier"/>.
 	/// </summary>

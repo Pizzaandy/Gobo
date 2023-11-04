@@ -286,7 +286,7 @@ propertyIdentifier
 functionDeclaration
 constructorClause
 parameterList
-parameterArgument
+parameter
 identifier
 enumeratorDeclaration
 enumeratorList

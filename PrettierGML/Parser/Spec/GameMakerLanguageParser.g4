@@ -305,11 +305,11 @@ constructorClause
     ;
 
 parameterList
-    : '(' (parameterArgument (',' parameterArgument)* ','?)? ')'
+    : '(' (parameter (',' parameter)* ','?)? ')'
     ;
 
 // TODO: fix this name? lol
-parameterArgument
+parameter
     : identifier typeAnnotation? (Assign expressionOrFunction)?
     ;
 

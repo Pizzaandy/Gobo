@@ -18,6 +18,7 @@ namespace PrettierGML
 
             var initialHash = options.CheckAst ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
+            ast.EnsureCommentsPrinted();
 
             //Console.WriteLine(docs);
 

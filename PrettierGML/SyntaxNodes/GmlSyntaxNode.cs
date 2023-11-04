@@ -120,6 +120,19 @@ namespace PrettierGML.SyntaxNodes
             );
         }
 
+        public bool EnsureCommentsPrinted()
+        {
+            var allCommentsPrinted =
+                Comments.All(c => c.Printed) && Children.All(c => c.EnsureCommentsPrinted());
+
+            if (!allCommentsPrinted)
+            {
+                throw new Exception("Not all comments were printed! This is a bug.");
+            }
+
+            return allCommentsPrinted;
+        }
+
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
             new NodeList(contents);
 

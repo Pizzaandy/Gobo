@@ -460,15 +460,15 @@ namespace PrettierGML.Parser
         )
         {
             var parts = new List<GmlSyntaxNode>();
-            foreach (var arg in context.parameterArgument())
+            foreach (var arg in context.parameter())
             {
                 parts.Add(Visit(arg));
             }
             return new ParameterList(context, parts);
         }
 
-        public override GmlSyntaxNode VisitParameterArgument(
-            [NotNull] GameMakerLanguageParser.ParameterArgumentContext context
+        public override GmlSyntaxNode VisitParameter(
+            [NotNull] GameMakerLanguageParser.ParameterContext context
         )
         {
             var name = Visit(context.identifier());

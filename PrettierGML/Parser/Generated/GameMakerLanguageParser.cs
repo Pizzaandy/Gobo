@@ -76,11 +76,11 @@ public partial class GameMakerLanguageParser : Parser {
 		RULE_templateStringLiteral = 43, RULE_templateStringAtom = 44, RULE_arrayLiteral = 45, 
 		RULE_elementList = 46, RULE_structLiteral = 47, RULE_propertyAssignment = 48, 
 		RULE_propertyIdentifier = 49, RULE_functionDeclaration = 50, RULE_constructorClause = 51, 
-		RULE_parameterList = 52, RULE_parameterArgument = 53, RULE_identifier = 54, 
-		RULE_enumeratorDeclaration = 55, RULE_enumeratorList = 56, RULE_enumerator = 57, 
-		RULE_macroStatement = 58, RULE_defineStatement = 59, RULE_regionStatement = 60, 
-		RULE_identifierStatement = 61, RULE_softKeyword = 62, RULE_propertySoftKeyword = 63, 
-		RULE_openBlock = 64, RULE_closeBlock = 65, RULE_eos = 66, RULE_macroToken = 67;
+		RULE_parameterList = 52, RULE_parameter = 53, RULE_identifier = 54, RULE_enumeratorDeclaration = 55, 
+		RULE_enumeratorList = 56, RULE_enumerator = 57, RULE_macroStatement = 58, 
+		RULE_defineStatement = 59, RULE_regionStatement = 60, RULE_identifierStatement = 61, 
+		RULE_softKeyword = 62, RULE_propertySoftKeyword = 63, RULE_openBlock = 64, 
+		RULE_closeBlock = 65, RULE_eos = 66, RULE_macroToken = 67;
 	public static readonly string[] ruleNames = {
 		"program", "statementList", "statement", "block", "ifStatement", "iterationStatement", 
 		"withStatement", "switchStatement", "continueStatement", "breakStatement", 
@@ -94,8 +94,8 @@ public partial class GameMakerLanguageParser : Parser {
 		"accessor", "arguments", "assignmentOperator", "literal", "templateStringLiteral", 
 		"templateStringAtom", "arrayLiteral", "elementList", "structLiteral", 
 		"propertyAssignment", "propertyIdentifier", "functionDeclaration", "constructorClause", 
-		"parameterList", "parameterArgument", "identifier", "enumeratorDeclaration", 
-		"enumeratorList", "enumerator", "macroStatement", "defineStatement", "regionStatement", 
+		"parameterList", "parameter", "identifier", "enumeratorDeclaration", "enumeratorList", 
+		"enumerator", "macroStatement", "defineStatement", "regionStatement", 
 		"identifierStatement", "softKeyword", "propertySoftKeyword", "openBlock", 
 		"closeBlock", "eos", "macroToken"
 	};
@@ -4600,11 +4600,11 @@ public partial class GameMakerLanguageParser : Parser {
 	public partial class ParameterListContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(GameMakerLanguageParser.OpenParen, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(GameMakerLanguageParser.CloseParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ParameterArgumentContext[] parameterArgument() {
-			return GetRuleContexts<ParameterArgumentContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public ParameterContext[] parameter() {
+			return GetRuleContexts<ParameterContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ParameterArgumentContext parameterArgument(int i) {
-			return GetRuleContext<ParameterArgumentContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public ParameterContext parameter(int i) {
+			return GetRuleContext<ParameterContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Comma() { return GetTokens(GameMakerLanguageParser.Comma); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Comma(int i) {
@@ -4640,7 +4640,7 @@ public partial class GameMakerLanguageParser : Parser {
 			if (_la==Constructor || _la==Identifier) {
 				{
 				State = 625;
-				parameterArgument();
+				parameter();
 				State = 630;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,65,Context);
@@ -4651,7 +4651,7 @@ public partial class GameMakerLanguageParser : Parser {
 						State = 626;
 						Match(Comma);
 						State = 627;
-						parameterArgument();
+						parameter();
 						}
 						} 
 					}
@@ -4687,7 +4687,7 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class ParameterArgumentContext : ParserRuleContext {
+	public partial class ParameterContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
 			return GetRuleContext<IdentifierContext>(0);
 		}
@@ -4698,23 +4698,23 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
 			return GetRuleContext<ExpressionOrFunctionContext>(0);
 		}
-		public ParameterArgumentContext(ParserRuleContext parent, int invokingState)
+		public ParameterContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_parameterArgument; } }
+		public override int RuleIndex { get { return RULE_parameter; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitParameterArgument(this);
+			if (typedVisitor != null) return typedVisitor.VisitParameter(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public ParameterArgumentContext parameterArgument() {
-		ParameterArgumentContext _localctx = new ParameterArgumentContext(Context, State);
-		EnterRule(_localctx, 106, RULE_parameterArgument);
+	public ParameterContext parameter() {
+		ParameterContext _localctx = new ParameterContext(Context, State);
+		EnterRule(_localctx, 106, RULE_parameter);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);

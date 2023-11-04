@@ -8,6 +8,8 @@
         public int Width { get; init; } = 80;
         public bool CheckAst { get; init; } = true;
         public bool RemoveSyntaxExtensions { get; set; } = false;
+
+        public static FormatOptions TestOptions { get; } = new() { Width = 100 };
     }
 
     public enum BraceStyle

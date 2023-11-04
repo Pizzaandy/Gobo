@@ -64,7 +64,7 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                throw new InvalidOperationException("Comment printed twice: " + Text);
+                throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -91,7 +91,10 @@ namespace PrettierGML.SyntaxNodes
                 else if (token.Type == GameMakerLanguageLexer.WhiteSpaces)
                 {
                     // Collapse whitespace to a single space
-                    parts.Add(" ");
+                    if (parts.Count > 0 && parts.Last() is not HardLine)
+                    {
+                        parts.Add(" ");
+                    }
                 }
             }
 

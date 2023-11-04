@@ -176,7 +176,7 @@ namespace PrettierGML.Parser
                     continue;
                 }
 
-                throw new InvalidOperationException("Comment location overlaps with node location");
+                throw new Exception("Comment location overlaps with node location");
             }
 
             comment.EnclosingNode = enclosingNode;
