@@ -180,8 +180,8 @@ expressionOrFunction
 
 expression
     : incDecStatement # IncDecExpression
-    | lValueExpression # VariableExpression
     | callStatement # CallExpression
+    | lValueExpression # VariableExpression
 
     | <assoc=right> '-' expression # UnaryMinusExpression
     | <assoc=right> '~' expression # BitNotExpression

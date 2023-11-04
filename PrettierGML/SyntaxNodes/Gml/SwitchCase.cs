@@ -23,13 +23,34 @@ namespace PrettierGML.SyntaxNodes.Gml
         public override Doc PrintNode(PrintContext ctx)
         {
             var caseText = Test.IsEmpty ? "default" : $"{"case"} ";
+
+            Doc printedStatements = Doc.Null;
+
+            if (Statements.Any())
+            {
+                var onlyBlock = Statements.Count == 1 && Statements.First() is Block;
+
+                if (onlyBlock)
+                {
+                    printedStatements = Doc.Concat(
+                        " ",
+                        Statement.PrintStatement(ctx, Statements.First())
+                    );
+                }
+                else
+                {
+                    printedStatements = Doc.Indent(
+                        Doc.HardLine,
+                        Statement.PrintStatements(ctx, Statements)
+                    );
+                }
+            }
+
             return Doc.Concat(
                 caseText,
                 Test.Print(ctx),
                 ":",
-                Statements.Count > 0
-                    ? Doc.Indent(Doc.HardLine, Statement.PrintStatements(ctx, Statements))
-                    : Doc.Null
+                Statements.Count > 0 ? printedStatements : Doc.Null
             );
         }
     }

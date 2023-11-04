@@ -3048,20 +3048,20 @@ public partial class GameMakerLanguageParser : Parser {
 				break;
 			case 2:
 				{
-				_localctx = new VariableExpressionContext(_localctx);
+				_localctx = new CallExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
 				State = 409;
-				lValueExpression();
+				callStatement(0);
 				}
 				break;
 			case 3:
 				{
-				_localctx = new CallExpressionContext(_localctx);
+				_localctx = new VariableExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
 				State = 410;
-				callStatement(0);
+				lValueExpression();
 				}
 				break;
 			case 4:
@@ -5787,7 +5787,7 @@ public partial class GameMakerLanguageParser : Parser {
 		0,398,400,3,100,50,0,399,397,1,0,0,0,399,398,1,0,0,0,400,406,1,0,0,0,401,
 		402,5,10,0,0,402,403,3,68,34,0,403,404,5,11,0,0,404,406,1,0,0,0,405,399,
 		1,0,0,0,405,401,1,0,0,0,406,69,1,0,0,0,407,408,6,35,-1,0,408,423,3,76,
-		38,0,409,423,3,58,29,0,410,423,3,72,36,0,411,412,5,25,0,0,412,423,3,70,
+		38,0,409,423,3,72,36,0,410,423,3,58,29,0,411,412,5,25,0,0,412,423,3,70,
 		35,19,413,414,5,26,0,0,414,423,3,70,35,18,415,416,5,27,0,0,416,423,3,70,
 		35,17,417,423,3,84,42,0,418,419,5,10,0,0,419,420,3,70,35,0,420,421,5,11,
 		0,0,421,423,1,0,0,0,422,407,1,0,0,0,422,409,1,0,0,0,422,410,1,0,0,0,422,

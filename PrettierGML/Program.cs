@@ -16,53 +16,15 @@ static string Format(string input)
 }
 
 var input = $$"""
-    /* this
-        entire
-         comment*/
-    /* sequence */   /*should*/ //be
-    // grouped
-
-    // but not this one!
-    call(
-    foo,
-    bar, // e
-    baz)    // eee
-
-    var foo = {
-        /*e*/a:b, // thing
-        c:d
+    switch(_charArray[_i])
+    {
+        //Set up alternating single quote marks
+        case ord("'").foo().bar: 
+            _inSingleQuote = !_inSingleQuote;
+            _charArray[@ _i] = _inSingleQuote? ord("^") : ord("*");
+            break;
+        default: break
     }
-
-    // break
-    var arr = [
-        a123___________________,
-        456, /* eee*/
-        abc_____________________________________
-    ]
-    
-    // flat
-    var arr2 = [
-        a123,
-        456, /* eee*/
-        abc
-    ]
-
-    enum /*comment*/ foo {
-    bar, baz=567, qux
-    }
-
-    switch (foo) {
-      case thing:
-
-      // comment
-      thing()
-
-    break;   
-    default:
-    break;
-    }
-
-    foo = {"a":"b"}
     """;
 
 Format(input);
