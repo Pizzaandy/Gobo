@@ -13,7 +13,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Expression = AsChild(expression);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat("throw", " ", Expression.Print(ctx));
         }

@@ -16,7 +16,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Body = AsChild(body);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Statement.PrintSingleClauseStatement(ctx, "repeat", Test, Body);
         }

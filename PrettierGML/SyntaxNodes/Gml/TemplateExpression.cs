@@ -19,7 +19,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Expression = AsChild(expression);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Group("{", Doc.SoftLine, Expression.Print(ctx), Doc.LiteralLine, "}");
         }

@@ -73,31 +73,19 @@ namespace PrettierGML.SyntaxNodes
             return children;
         }
 
-        public virtual Doc Print(PrintContext ctx) => throw new NotImplementedException();
+        public Doc Print(PrintContext ctx)
+        {
+            ctx.Stack.Push(this);
+            var printed = WithComments(ctx, PrintNode(ctx));
+            ctx.Stack.Pop();
+            return printed;
+        }
 
-        // public virtual Doc PrintNode(PrintContext ctx);
+        public abstract Doc PrintNode(PrintContext ctx);
 
         public List<Doc> PrintChildren(PrintContext ctx)
         {
             return Children.Select(child => child.Print(ctx)).ToList();
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-
-        public override int GetHashCode()
-        {
-            var hashCode = new HashCode();
-            hashCode.Add(Kind);
-
-            foreach (var child in Children)
-            {
-                hashCode.Add(child);
-            }
-
-            return hashCode.ToHashCode();
         }
 
         public virtual Doc PrintLeadingComments(PrintContext ctx)
@@ -134,6 +122,24 @@ namespace PrettierGML.SyntaxNodes
 
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
             new NodeList(contents);
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = new HashCode();
+            hashCode.Add(Kind);
+
+            foreach (var child in Children)
+            {
+                hashCode.Add(child);
+            }
+
+            return hashCode.ToHashCode();
+        }
     }
 
     internal interface IHasObject

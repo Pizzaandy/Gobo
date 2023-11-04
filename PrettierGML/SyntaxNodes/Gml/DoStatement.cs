@@ -16,7 +16,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Test = AsChild(test);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat(
                 "do ",

@@ -22,7 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             WhenFalse = AsChild(whenFalse);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             Doc[] innerContents =
             {

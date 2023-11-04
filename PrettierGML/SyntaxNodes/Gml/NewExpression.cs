@@ -16,7 +16,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Arguments = AsChild(arguments);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat(
                 "new",

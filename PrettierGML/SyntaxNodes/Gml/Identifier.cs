@@ -20,9 +20,9 @@ namespace PrettierGML.SyntaxNodes.Gml
             Name = name;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
-            return WithComments(ctx, Name);
+            return Name;
         }
 
         public override int GetHashCode()

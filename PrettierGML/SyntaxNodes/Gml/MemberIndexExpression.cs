@@ -23,7 +23,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Accessor = accessor;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
             return Doc.Concat(

@@ -19,7 +19,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Property = AsChild(property);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat(Object.Print(ctx), ".", Property.Print(ctx));
         }

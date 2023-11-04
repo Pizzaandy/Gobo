@@ -14,7 +14,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Body = AsChild(body);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat("finally", " ", Statement.EnsureStatementInBlock(ctx, Body));
         }

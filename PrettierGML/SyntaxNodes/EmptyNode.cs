@@ -8,7 +8,7 @@ namespace PrettierGML.SyntaxNodes
 
         private EmptyNode() { }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Null;
         }

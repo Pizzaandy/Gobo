@@ -8,7 +8,7 @@ namespace PrettierGML.SyntaxNodes.Gml
         public ContinueStatement(ParserRuleContext context)
             : base(context) { }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return "continue";
         }

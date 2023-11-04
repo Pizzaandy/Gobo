@@ -13,7 +13,7 @@ namespace PrettierGML.SyntaxNodes.GmlExtensions
             Types = types;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             if (ctx.Options.RemoveSyntaxExtensions)
             {

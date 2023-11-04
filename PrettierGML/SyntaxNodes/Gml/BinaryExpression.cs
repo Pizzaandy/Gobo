@@ -32,7 +32,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Right = AsChild(right);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             var docs = PrintBinaryExpression(this, ctx);
 
@@ -48,11 +48,9 @@ namespace PrettierGML.SyntaxNodes.Gml
                         or WhileStatement
                         or ParenthesizedExpression
                 || Parent?.Parent is MemberIndexExpression
-                ||
-                    Parent is ConditionalExpression conditionalExpression
+                || Parent is ConditionalExpression conditionalExpression
                     && conditionalExpression.WhenTrue != this
-                    && conditionalExpression.WhenFalse != this
-                ;
+                    && conditionalExpression.WhenFalse != this;
 
             return shouldNotIndent
                 ? Doc.Group(docs)

@@ -22,7 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             IsPrefix = isPrefix;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             if (IsPrefix)
             {

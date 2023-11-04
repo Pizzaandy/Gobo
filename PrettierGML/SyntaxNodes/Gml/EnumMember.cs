@@ -15,7 +15,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Initializer = AsChild(initializer);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             if (Initializer.IsEmpty)
             {

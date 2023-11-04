@@ -19,7 +19,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Text = text;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             // Template strings don't contain line breaks
             return Text;

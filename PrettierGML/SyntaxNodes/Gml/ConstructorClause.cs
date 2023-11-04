@@ -20,7 +20,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Parameters = AsChild(parameters);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             if (!Id.IsEmpty)
             {

@@ -320,7 +320,6 @@ namespace PrettierGML.Parser
         {
             comment.Type = type;
             node.Comments.Add(comment);
-            Console.WriteLine(comment);
         }
     }
 

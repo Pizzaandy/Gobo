@@ -26,7 +26,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Type = AsChild(type);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             var typeAnnotation = Type.Print(ctx);
             return RightHandSide.Print(ctx, Left, Doc.Concat(typeAnnotation, " ", Operator), Right);

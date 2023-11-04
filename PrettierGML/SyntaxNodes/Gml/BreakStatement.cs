@@ -8,7 +8,7 @@ namespace PrettierGML.SyntaxNodes.Gml
         public BreakStatement(ParserRuleContext context)
             : base(context) { }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return "break";
         }

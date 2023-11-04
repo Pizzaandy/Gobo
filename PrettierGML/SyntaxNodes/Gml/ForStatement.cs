@@ -26,7 +26,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Body = AsChild(body);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             var separator = Doc.Concat(";", Doc.Line);
             var items = new Doc[] { Init.Print(ctx), Test.Print(ctx), Update.Print(ctx) };

@@ -58,6 +58,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         public static Doc PrintStatement(PrintContext ctx, GmlSyntaxNode statement)
         {
             Doc lineSuffix = NeedsSemicolon(statement) ? ";" : Doc.Null;
+            statement.PrintOwnComments = false;
 
             return Doc.Concat(
                 statement.PrintLeadingComments(ctx),

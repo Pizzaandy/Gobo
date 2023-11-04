@@ -13,7 +13,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             AsChildren(cases);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Block.PrintInBlock(ctx, Doc.Join(Doc.HardLine, PrintChildren(ctx)));
         }

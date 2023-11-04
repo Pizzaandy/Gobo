@@ -20,7 +20,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Cases = AsChild(cases);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat(
                 Doc.Concat(

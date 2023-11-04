@@ -20,7 +20,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Statements = AsChildren(statements);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             var caseText = Test.IsEmpty ? "default" : $"{"case"} ";
             return Doc.Concat(

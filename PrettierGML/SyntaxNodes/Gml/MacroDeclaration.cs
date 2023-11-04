@@ -15,7 +15,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Body = body;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat("#macro", " ", Id.Print(ctx), " ", Body);
         }

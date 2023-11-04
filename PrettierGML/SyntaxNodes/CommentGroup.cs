@@ -66,7 +66,7 @@ namespace PrettierGML.SyntaxNodes
             {
                 if (Printed)
                 {
-                    throw new InvalidOperationException("Comment printed twice: " + this);
+                    throw new InvalidOperationException("Comment printed twice: " + Text);
                 }
                 Printed = true;
             }

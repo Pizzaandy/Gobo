@@ -14,7 +14,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             AsChildren(body);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return PrintInBlock(ctx, Statement.PrintStatements(ctx, Children));
         }

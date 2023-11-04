@@ -13,7 +13,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Children = AsChildren(atoms);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat("$\"", Doc.Concat(PrintChildren(ctx)), "\"");
         }

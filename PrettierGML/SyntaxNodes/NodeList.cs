@@ -3,7 +3,7 @@
 namespace PrettierGML.SyntaxNodes
 {
     /// <summary>
-    /// A utility node used for building the AST. This should not end up in the final AST!
+    /// A utility node used to build the AST. This should not end up in the final AST!
     /// </summary>
     internal class NodeList : GmlSyntaxNode
     {
@@ -12,7 +12,7 @@ namespace PrettierGML.SyntaxNodes
             AsChildren(contents);
         }
 
-        public override Doc Print(PrintContext ctx) =>
+        public override Doc PrintNode(PrintContext ctx) =>
             throw new NotImplementedException("NodeList cannot be printed directly");
     }
 }

@@ -20,7 +20,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Modifier = modifier;
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             var parts = new List<Doc>() { Modifier, " " };
 

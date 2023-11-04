@@ -13,7 +13,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             Argument = AsChild(argument);
         }
 
-        public override Doc Print(PrintContext ctx)
+        public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat("return", Argument.IsEmpty ? "" : " ", Argument.Print(ctx));
         }
