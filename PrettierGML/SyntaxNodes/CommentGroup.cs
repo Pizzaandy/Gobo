@@ -91,6 +91,11 @@ namespace PrettierGML.SyntaxNodes
                     parts.Add(Doc.HardLine);
                     shouldBreak = true;
                 }
+                else if (token.Type == GameMakerLanguageLexer.WhiteSpaces)
+                {
+                    // Collapse whitespace to a single space
+                    parts.Add(" ");
+                }
             }
 
             if (shouldBreak)

@@ -6,7 +6,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 {
     internal class Document : GmlSyntaxNode
     {
-        public List<GmlSyntaxNode> Body => Children;
+        public List<GmlSyntaxNode> Statements => Children;
 
         public Document(ParserRuleContext context, List<GmlSyntaxNode> body)
             : base(context)

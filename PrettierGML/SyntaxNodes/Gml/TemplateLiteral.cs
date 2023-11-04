@@ -3,11 +3,11 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class TemplateStringLiteral : GmlSyntaxNode
+    internal class TemplateLiteral : GmlSyntaxNode
     {
         public List<GmlSyntaxNode> Parts => Children;
 
-        public TemplateStringLiteral(ParserRuleContext context, List<GmlSyntaxNode> atoms)
+        public TemplateLiteral(ParserRuleContext context, List<GmlSyntaxNode> atoms)
             : base(context)
         {
             Children = AsChildren(atoms);

@@ -19,7 +19,7 @@ var input = """
     /* this
         entire
          comment*/
-    /* sequence */ /*should*/ //be
+    /* sequence */   /*should*/ //be
     // grouped
 
     // but not this one!
@@ -46,6 +46,21 @@ var input = """
         456, /* eee*/
         abc
     ]
+
+    enum /*comment*/ foo {
+    bar, baz, qux
+    }
+
+    switch (foo) {
+      case thing:
+
+      // comment
+      thing()
+
+    break;   
+    default:
+    break;
+    }
     """;
 
 Format(input);

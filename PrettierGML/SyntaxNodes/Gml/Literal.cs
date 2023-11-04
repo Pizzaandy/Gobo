@@ -5,7 +5,7 @@ using PrettierGML.Printer.DocTypes;
 namespace PrettierGML.SyntaxNodes.Gml
 {
     // TODO: disambiguate literal types?
-    internal class Literal : TerminalNode
+    internal class Literal : GmlSyntaxNode
     {
         public string Text { get; set; }
 

@@ -1,10 +1,16 @@
 ﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using Newtonsoft.Json;
 using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes
 {
-    internal abstract class GmlSyntaxNode
+    internal interface ISyntaxTree
+    {
+        public Range CharacterRange { get; init; }
+    }
+
+    internal abstract class GmlSyntaxNode : ISyntaxTree
     {
         [JsonIgnore]
         public Range CharacterRange { get; init; }
@@ -17,6 +23,8 @@ namespace PrettierGML.SyntaxNodes
 
         [JsonIgnore]
         public List<GmlSyntaxNode> Children { get; protected set; } = new();
+
+        public List<GmlToken> Tokens { get; protected set; } = new();
 
         [JsonIgnore]
         public bool IsEmpty => this is EmptyNode;
@@ -45,12 +53,24 @@ namespace PrettierGML.SyntaxNodes
             TokenRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
         }
 
+        public GmlSyntaxNode(ITerminalNode node)
+        {
+            CharacterRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
+            TokenRange = new Range(node.Symbol.StartIndex, node.Symbol.StartIndex);
+        }
+
         public static EmptyNode Empty => EmptyNode.Instance;
 
         public GmlSyntaxNode AsChild(GmlSyntaxNode child)
         {
             Children.Add(child);
             child.Parent = this;
+            return child;
+        }
+
+        public GmlToken AsChild(GmlToken child)
+        {
+            Tokens.Add(child);
             return child;
         }
 
@@ -84,6 +104,12 @@ namespace PrettierGML.SyntaxNodes
             {
                 hashCode.Add(child);
             }
+
+            foreach (var token in Tokens)
+            {
+                hashCode.Add(token);
+            }
+
             return hashCode.ToHashCode();
         }
 

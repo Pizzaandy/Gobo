@@ -1,18 +1,23 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Printer.DocTypes;
+using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
     internal class SwitchCase : GmlSyntaxNode
     {
         public GmlSyntaxNode Test { get; set; }
-        public GmlSyntaxNode Body { get; set; }
+        public List<GmlSyntaxNode> Statements { get; set; }
 
-        public SwitchCase(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
+        public SwitchCase(
+            ParserRuleContext context,
+            GmlSyntaxNode test,
+            List<GmlSyntaxNode> statements
+        )
             : base(context)
         {
             Test = AsChild(test);
-            Body = AsChild(body);
+            Statements = AsChildren(statements);
         }
 
         public override Doc Print(PrintContext ctx)
@@ -22,7 +27,9 @@ namespace PrettierGML.SyntaxNodes.Gml
                 caseText,
                 Test.Print(ctx),
                 ":",
-                Body.IsEmpty ? Doc.Null : Doc.Indent(Doc.HardLine, Body.Print(ctx))
+                Statements.Count > 0
+                    ? Doc.Indent(Doc.HardLine, Statement.PrintStatements(ctx, Statements))
+                    : Doc.Null
             );
         }
     }

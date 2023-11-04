@@ -4,7 +4,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class Identifier : TerminalNode
+    internal class Identifier : GmlSyntaxNode
     {
         public string Name { get; set; }
 
@@ -23,6 +23,11 @@ namespace PrettierGML.SyntaxNodes.Gml
         public override Doc Print(PrintContext ctx)
         {
             return Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
     }
 }

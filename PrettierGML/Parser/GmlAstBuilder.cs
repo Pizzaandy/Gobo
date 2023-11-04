@@ -290,13 +290,14 @@ namespace PrettierGML.Parser
         {
             var test = Visit(context.expression());
             GmlSyntaxNode body = GmlSyntaxNode.Empty;
+            GmlSyntaxNode statements = GmlSyntaxNode.Empty;
+
             if (context.statementList() != null)
             {
-                var sectionContext = context.statementList();
-                var statements = Visit(context.statementList());
-                body = new SwitchCaseBody(sectionContext, statements.Children);
+                statements = Visit(context.statementList());
             }
-            return new SwitchCase(context, test, body);
+
+            return new SwitchCase(context, test, statements.Children);
         }
 
         public override GmlSyntaxNode VisitDefaultClause(
@@ -304,13 +305,14 @@ namespace PrettierGML.Parser
         )
         {
             GmlSyntaxNode body = GmlSyntaxNode.Empty;
+            GmlSyntaxNode statements = GmlSyntaxNode.Empty;
+
             if (context.statementList() != null)
             {
-                var sectionContext = context.statementList();
-                var statements = Visit(context.statementList());
-                body = new SwitchCaseBody(sectionContext, statements.Children);
+                statements = Visit(context.statementList());
             }
-            return new SwitchCase(context, GmlSyntaxNode.Empty, body);
+
+            return new SwitchCase(context, GmlSyntaxNode.Empty, statements.Children);
         }
 
         public override GmlSyntaxNode VisitContinueStatement(
@@ -494,7 +496,7 @@ namespace PrettierGML.Parser
             {
                 parts.Add(Visit(atom));
             }
-            return new TemplateStringLiteral(context, parts);
+            return new TemplateLiteral(context, parts);
         }
 
         public override GmlSyntaxNode VisitTemplateStringAtom(
@@ -799,7 +801,7 @@ namespace PrettierGML.Parser
             {
                 members = Visit(context.enumeratorList());
             }
-            return new EnumDeclaration(context, name, members);
+            return new EnumDeclaration(context, name, members.Children);
         }
 
         public override GmlSyntaxNode VisitEnumeratorList(
@@ -811,7 +813,7 @@ namespace PrettierGML.Parser
             {
                 declarations.Add(Visit(enumDecl));
             }
-            return new EnumBlock(context, declarations);
+            return declarations;
         }
 
         public override GmlSyntaxNode VisitEnumerator(
