@@ -22,12 +22,22 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
+            var printedBlock = DelimitedList.PrintInBrackets(
+                ctx,
+                "{",
+                Members,
+                "}",
+                ",",
+                allowTrailingSeparator: true,
+                forceBreak: true
+            );
+
             return Doc.Concat(
                 "enum",
                 " ",
                 Name.Print(ctx),
-                " ",
-                DelimitedList.PrintInBrackets(ctx, "{", Members, "}", ",", true)
+                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : " ",
+                printedBlock
             );
         }
     }

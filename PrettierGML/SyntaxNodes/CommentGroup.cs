@@ -79,7 +79,7 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                throw new Exception("Comment printed twice: " + Text);
+                //throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -97,11 +97,7 @@ namespace PrettierGML.SyntaxNodes
                 else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
                 {
                     parts.Add(PrintMultiLineComment(token.Text));
-                }
-                else if (token.Type == GameMakerLanguageLexer.WhiteSpaces)
-                {
-                    // Collapse whitespace to a single space
-                    if (parts.Count > 0 && parts.Last() is not HardLine)
+                    if (token != Tokens.Last())
                     {
                         parts.Add(" ");
                     }
@@ -226,6 +222,11 @@ namespace PrettierGML.SyntaxNodes
                 $"Preceding: {PrecedingNode?.Kind}",
                 $"Following: {FollowingNode?.Kind}\n"
             );
+        }
+
+        public override int GetHashCode()
+        {
+            return Text.GetHashCode();
         }
     }
 }

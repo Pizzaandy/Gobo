@@ -10,17 +10,30 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             GmlSyntaxNode arguments,
             string closeToken,
             string separator,
-            bool allowTrailingSeparator = false
+            bool allowTrailingSeparator = false,
+            bool forceBreak = false
         )
         {
             var parts = new List<Doc> { openToken };
 
             if (arguments.Children.Any())
             {
-                Doc printedArguments = Print(ctx, arguments, separator, allowTrailingSeparator);
-
+                Doc printedArguments = Print(
+                    ctx,
+                    arguments,
+                    separator,
+                    allowTrailingSeparator,
+                    forceBreak
+                );
                 parts.Add(Doc.Indent(Doc.SoftLine, printedArguments));
                 parts.Add(Doc.SoftLine);
+            }
+            else if (arguments.DanglingComments.Any())
+            {
+                arguments.PrintOwnComments = false;
+                parts.Add(
+                    CommentGroup.PrintGroups(ctx, arguments.DanglingComments, CommentType.Dangling)
+                );
             }
 
             parts.Add(closeToken);
@@ -32,7 +45,8 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             PrintContext ctx,
             GmlSyntaxNode list,
             string separator,
-            bool allowTrailingSeparator = false
+            bool allowTrailingSeparator = false,
+            bool forceBreak = false
         )
         {
             var parts = new List<Doc>();
@@ -88,7 +102,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
                 if (!isLastChild)
                 {
-                    parts.Add(Doc.Line);
+                    parts.Add(forceBreak ? Doc.HardLine : Doc.Line);
                 }
             }
 

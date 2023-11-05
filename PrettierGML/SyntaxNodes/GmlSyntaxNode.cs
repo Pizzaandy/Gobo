@@ -112,7 +112,7 @@ namespace PrettierGML.SyntaxNodes
             return CommentGroup.PrintGroups(ctx, DanglingComments, CommentType.Leading);
         }
 
-        protected Doc WithComments(PrintContext ctx, GmlSyntaxNode node, Doc nodeDoc)
+        public static Doc WithComments(PrintContext ctx, GmlSyntaxNode node, Doc nodeDoc)
         {
             // Print dangling comments as leading by default
             return Doc.Concat(

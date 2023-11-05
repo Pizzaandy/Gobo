@@ -20,35 +20,54 @@ namespace PrettierGML.Tests
         }
 
         [Theory]
-        [ClassData(typeof(SampleFiles))]
-        public async Task FormatSamples(string filePath)
+        [ClassData(typeof(SampleFileProvider))]
+        public async Task FormatSamples(SampleFileTest test)
         {
+            var filePath = test.FilePath;
+
             var input = await File.ReadAllTextAsync(filePath);
 
-            var formatted = GmlFormatter.Format(input, options);
+            var result = GmlFormatter.Format(input, options);
 
             await File.WriteAllTextAsync(
                 filePath.Replace(TestFileExtension, ActualFileExtension),
-                formatted
+                result.Output
             );
         }
     }
 
-    public class SampleFiles : IEnumerable<object[]>
+    public class SampleFileProvider : IEnumerable<object[]>
     {
         private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent(
             "PrettierGML.Tests"
         );
 
-        public SampleFiles() { }
+        public SampleFileProvider() { }
 
         public IEnumerator<object[]> GetEnumerator()
         {
             var filePath = Path.Combine(rootDirectory.FullName, "Samples");
             var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
-            return files.Select(fp => new object[] { fp }).GetEnumerator();
+            return files.Select(fp => new object[] { new SampleFileTest(fp) }).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
+    public class SampleFileTest
+    {
+        public string FilePath { get; set; }
+        public string FileName { get; set; }
+
+        public SampleFileTest(string filePath)
+        {
+            FilePath = filePath;
+            FileName = Path.GetFileName(filePath);
+        }
+
+        public override string ToString()
+        {
+            return FileName;
+        }
     }
 }

@@ -22,15 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return Doc.Concat(
-                Doc.Concat(
-                    "switch",
-                    " ",
-                    Statement.EnsureExpressionInParentheses(ctx, Discriminant),
-                    " "
-                ),
-                Cases.Print(ctx)
-            );
+            return Statement.PrintSingleClauseStatement(ctx, "switch", Discriminant, Cases);
         }
     }
 }

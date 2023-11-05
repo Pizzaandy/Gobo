@@ -2,21 +2,78 @@
 using PrettierGML.Parser;
 using PrettierGML.Printer.DocPrinter;
 using PrettierGML.SyntaxNodes;
+using System.Diagnostics;
 
 namespace PrettierGML
 {
+    public struct FormatResult
+    {
+        public string Output;
+
+        public string Ast = string.Empty;
+        public string DocTree = string.Empty;
+
+        public double? ParseTimeMs = null;
+        public double? FormatTimeMs = null;
+        public double? TotalTimeMs = null;
+
+        public FormatResult(string output)
+        {
+            Output = output;
+        }
+
+        public override readonly string ToString()
+        {
+            var result = "";
+
+            if (Ast != string.Empty)
+                result += $"--- ABSTRACT SYNTAX TREE ---\n\n{Ast}\n\n";
+
+            if (DocTree != string.Empty)
+                result += $"--- DOC TREE ---\n\n{DocTree}\n\n";
+
+            result += $"--- PRINTED OUTPUT ---\n\n{Output}\n\n";
+
+            if (ParseTimeMs != null)
+                result += $"Parse: {ParseTimeMs} ms\n";
+
+            if (FormatTimeMs != null)
+                result += $"Format: {FormatTimeMs} ms\n";
+
+            if (TotalTimeMs != null)
+                result += $"Total: {TotalTimeMs} ms\n";
+
+            return result;
+        }
+    }
+
     public static partial class GmlFormatter
     {
-        public static string Format(string input, FormatOptions options)
+        public static FormatResult Format(string code, FormatOptions options)
         {
-            input = input.ReplaceLineEndings();
+            code = code.ReplaceLineEndings();
 
-            var parseResult = GmlParser.Parse(input);
+            long parseStart = 0;
+            long parseStop = 0;
+            long formatStart = 0;
+
+            var isDebug = options.Debug;
+
+            if (isDebug)
+            {
+                parseStart = Stopwatch.GetTimestamp();
+            }
+
+            var parseResult = GmlParser.Parse(code);
+
+            if (isDebug)
+            {
+                parseStop = Stopwatch.GetTimestamp();
+                formatStart = Stopwatch.GetTimestamp();
+            }
 
             GmlSyntaxNode ast = parseResult.Ast;
             CommonTokenStream tokens = parseResult.TokenStream;
-
-            Console.WriteLine(ast);
 
             var initialHash = options.CheckAst ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
@@ -36,28 +93,48 @@ namespace PrettierGML
                 var updatedParseResult = GmlParser.Parse(output);
 
                 var resultHash = updatedParseResult.Ast.GetHashCode();
-                Console.WriteLine(updatedParseResult.Ast);
 
                 if (initialHash != resultHash)
                 {
-                    Console.Clear();
-
-                    Console.WriteLine("--- ORIGINAL AST ---");
-                    Console.WriteLine(ast);
-
-                    Console.WriteLine("--- FORMATTED AST ---");
-                    Console.WriteLine(updatedParseResult.Ast);
                     throw new Exception("Formatting transformed the AST!");
                 }
             }
 
-            return output;
+            if (isDebug)
+            {
+                long formatStop = Stopwatch.GetTimestamp();
+                return new FormatResult(output)
+                {
+                    Ast = ast.ToString(),
+                    DocTree = docs.ToString(),
+                    ParseTimeMs = Stopwatch.GetElapsedTime(parseStart, parseStop).TotalMilliseconds,
+                    FormatTimeMs = Stopwatch
+                        .GetElapsedTime(formatStart, formatStop)
+                        .TotalMilliseconds,
+                    TotalTimeMs = Stopwatch.GetElapsedTime(parseStart, formatStop).TotalMilliseconds
+                };
+            }
+            else
+            {
+                return new FormatResult(output);
+            }
         }
 
         public static async Task FormatFileAsync(string filePath, FormatOptions options)
         {
             string input = await File.ReadAllTextAsync(filePath);
-            var formatted = Format(input, options);
+            string formatted;
+
+            try
+            {
+                var result = Format(input, options);
+                formatted = result.Output;
+            }
+            catch (Exception)
+            {
+                return;
+            }
+
             await File.WriteAllTextAsync(filePath, formatted);
         }
     }

@@ -16,23 +16,40 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Children));
+            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Children), this);
         }
 
-        public static Doc PrintInBlock(PrintContext ctx, Doc bodyDoc)
+        /// <summary>
+        /// Wraps a doc in brackets and line breaks.
+        /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
+        /// </summary>
+        public static Doc PrintInBlock(
+            PrintContext ctx,
+            Doc bodyDoc,
+            GmlSyntaxNode? danglingCommentSource = null
+        )
         {
-            if (bodyDoc == Doc.Null)
+            if (bodyDoc == Doc.Null && danglingCommentSource is null)
             {
                 return EmptyBlock;
             }
 
-            Doc leadingLine =
-                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : Doc.Null;
+            Doc printedComments = Doc.Null;
+
+            if (danglingCommentSource is not null && danglingCommentSource.DanglingComments.Any())
+            {
+                danglingCommentSource.PrintOwnComments = false;
+
+                printedComments = CommentGroup.PrintGroups(
+                    ctx,
+                    danglingCommentSource.DanglingComments,
+                    CommentType.Dangling
+                );
+            }
 
             return Doc.Concat(
-                leadingLine,
                 "{",
-                Doc.Indent(Doc.HardLine, bodyDoc),
+                Doc.Indent(Doc.HardLine, printedComments, bodyDoc),
                 Doc.HardLine,
                 "}"
             );

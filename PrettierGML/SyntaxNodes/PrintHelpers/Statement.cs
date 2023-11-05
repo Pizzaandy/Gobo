@@ -13,25 +13,24 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             GmlSyntaxNode body
         )
         {
-            Doc spaceBetweenClauseAndBody = " ";
+            bool lineBreakBeforeBlock =
+                ctx.Options.BraceStyle == BraceStyle.NewLine || clause.EndsWithSingleLineComment();
 
-            if (clause.EndsWithSingleLineComment())
-            {
-                spaceBetweenClauseAndBody = Doc.HardLine;
-            }
+            Doc clauseDoc = EnsureExpressionInParentheses(ctx, clause);
+            Doc bodyDoc = EnsureStatementInBlock(ctx, body);
 
             return Doc.Concat(
                 keyword,
                 " ",
-                EnsureExpressionInParentheses(ctx, clause),
-                spaceBetweenClauseAndBody,
-                EnsureStatementInBlock(ctx, body)
+                clauseDoc,
+                lineBreakBeforeBlock ? Doc.HardLine : " ",
+                bodyDoc
             );
         }
 
         public static Doc EnsureStatementInBlock(PrintContext ctx, GmlSyntaxNode statement)
         {
-            if (statement is Block)
+            if (statement is Block or SwitchBlock)
             {
                 return statement.Print(ctx);
             }
@@ -49,12 +48,16 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             }
             else
             {
-                return Doc.Group(
+                expression.PrintOwnComments = false;
+
+                var printedGroup = Doc.Group(
                     "(",
                     Doc.Indent(Doc.SoftLine, expression.Print(ctx)),
                     Doc.SoftLine,
                     ")"
                 );
+
+                return GmlSyntaxNode.WithComments(ctx, expression, printedGroup);
             }
         }
 

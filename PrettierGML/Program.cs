@@ -1,29 +1,34 @@
 ﻿using PrettierGML;
-using System.Diagnostics;
 
-static string Format(string input)
+static string TestFormat(string input)
 {
-    var formatOptions = new FormatOptions() { BraceStyle = BraceStyle.SameLine, CheckAst = true };
+    var formatOptions = new FormatOptions()
+    {
+        BraceStyle = BraceStyle.NewLine,
+        CheckAst = false,
+        Debug = true
+    };
 
-    Stopwatch sw = Stopwatch.StartNew();
-    var result = GmlFormatter.Format(input, formatOptions);
-    sw.Stop();
+    FormatResult result = GmlFormatter.Format(input, formatOptions);
 
     Console.WriteLine(result);
-    Console.WriteLine($"Total Time: {sw.ElapsedMilliseconds} ms");
 
-    return result;
+    return result.Output;
 }
 
 var input = $$"""
-    globalvar a, // fpp 
-    constructor;
-    // comment x
+    if cond // yep
+    {
+    // eee
+    }
+    call(/* comment!
 
-    // comment a
-    // comment b
+    */) // yay!
 
-    /*ee*/
+    switch (foo) // e
+    {
+        //bar
+    }
     """;
 
-Format(input);
+TestFormat(input);
