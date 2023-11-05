@@ -108,7 +108,7 @@ namespace PrettierGML.Parser
         /// </summary>
         private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
         {
-            // Ensure that all tokens between the comment and followingNode are whitespace or parentheses
+            // Check if all tokens between the comment and followingNode are whitespace or parentheses
             var tokens = TokenStream
                 .GetTokens(comment.TokenRange.Stop, followingNode.TokenRange.Start)
                 .Skip(1)

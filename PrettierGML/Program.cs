@@ -16,8 +16,14 @@ static string Format(string input)
 }
 
 var input = $$"""
-    globalvar a, // you 
+    globalvar a, // fpp 
     constructor;
+    // comment x
+
+    // comment a
+    // comment b
+
+    /*ee*/
     """;
 
 Format(input);

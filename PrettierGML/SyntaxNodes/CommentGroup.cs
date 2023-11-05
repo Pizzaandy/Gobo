@@ -123,10 +123,27 @@ namespace PrettierGML.SyntaxNodes
                 return Doc.Null;
             }
 
-            var printedGroups = Doc.Join(
-                Doc.Concat(Doc.HardLine, Doc.HardLine),
-                groups.Select(c => c.Print()).ToList()
-            );
+            var groupDocs = new List<Doc>() { groups.First().Print() };
+
+            // Add line breaks between comment groups
+            foreach (var group in groups.Skip(1))
+            {
+                int leadingLineBreaks =
+                    ctx.Tokens
+                        .GetHiddenTokensToLeft(group.TokenRange.Start)
+                        .Reverse()
+                        .TakeWhile(token => !IsComment(token))
+                        ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+
+                for (var i = 0; i < Math.Min(leadingLineBreaks, 2); i++)
+                {
+                    groupDocs.Add(Doc.HardLine);
+                }
+
+                groupDocs.Add(group.Print());
+            }
+
+            var printedGroups = Doc.Concat(groupDocs);
 
             if (type == CommentType.Dangling)
             {
@@ -135,6 +152,7 @@ namespace PrettierGML.SyntaxNodes
 
             var parts = new List<Doc>();
 
+            // Add leading or trailing line breaks
             if (type == CommentType.Leading)
             {
                 int lineBreaksBetween =
@@ -175,6 +193,12 @@ namespace PrettierGML.SyntaxNodes
             }
 
             return Doc.Concat(parts);
+        }
+
+        private static bool IsComment(IToken token)
+        {
+            return token.Type == GameMakerLanguageLexer.SingleLineComment
+                || token.Type == GameMakerLanguageLexer.MultiLineComment;
         }
 
         public static Doc PrintSingleLineComment(string text)
