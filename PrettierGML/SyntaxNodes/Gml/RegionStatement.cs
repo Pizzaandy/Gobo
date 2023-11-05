@@ -17,7 +17,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return IsEndRegion ? "#endregion" : Doc.Concat("#region", Name);
+            return IsEndRegion ? "#endregion" : Doc.Concat("#region", Name!);
         }
     }
 }

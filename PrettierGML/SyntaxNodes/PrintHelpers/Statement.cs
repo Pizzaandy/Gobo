@@ -149,7 +149,8 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                     or ReturnStatement
                     or ExitStatement
                     or IncDecStatement
-                    or ThrowStatement;
+                    or ThrowStatement
+                    or GlobalVariableStatement;
         }
     }
 }

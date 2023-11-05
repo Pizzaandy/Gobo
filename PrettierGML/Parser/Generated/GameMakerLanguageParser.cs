@@ -63,35 +63,35 @@ public partial class GameMakerLanguageParser : Parser {
 		RULE_ifStatement = 4, RULE_iterationStatement = 5, RULE_withStatement = 6, 
 		RULE_switchStatement = 7, RULE_continueStatement = 8, RULE_breakStatement = 9, 
 		RULE_exitStatement = 10, RULE_emptyStatement = 11, RULE_caseBlock = 12, 
-		RULE_caseClauses = 13, RULE_caseClause = 14, RULE_defaultClause = 15, 
-		RULE_throwStatement = 16, RULE_tryStatement = 17, RULE_catchProduction = 18, 
-		RULE_finallyProduction = 19, RULE_returnStatement = 20, RULE_deleteStatement = 21, 
-		RULE_assignmentExpression = 22, RULE_variableDeclarationList = 23, RULE_varModifier = 24, 
-		RULE_variableDeclaration = 25, RULE_typeAnnotation = 26, RULE_globalVarStatement = 27, 
-		RULE_lValueStartExpression = 28, RULE_lValueExpression = 29, RULE_lValueChainOperator = 30, 
-		RULE_lValueFinalOperator = 31, RULE_newExpression = 32, RULE_expressionSequence = 33, 
-		RULE_expressionOrFunction = 34, RULE_expression = 35, RULE_callStatement = 36, 
-		RULE_callableExpression = 37, RULE_incDecStatement = 38, RULE_accessor = 39, 
-		RULE_arguments = 40, RULE_assignmentOperator = 41, RULE_literal = 42, 
-		RULE_templateStringLiteral = 43, RULE_templateStringAtom = 44, RULE_arrayLiteral = 45, 
-		RULE_elementList = 46, RULE_structLiteral = 47, RULE_propertyAssignment = 48, 
-		RULE_propertyIdentifier = 49, RULE_functionDeclaration = 50, RULE_constructorClause = 51, 
-		RULE_parameterList = 52, RULE_parameter = 53, RULE_identifier = 54, RULE_enumeratorDeclaration = 55, 
-		RULE_enumeratorList = 56, RULE_enumerator = 57, RULE_macroStatement = 58, 
-		RULE_defineStatement = 59, RULE_regionStatement = 60, RULE_identifierStatement = 61, 
-		RULE_softKeyword = 62, RULE_propertySoftKeyword = 63, RULE_openBlock = 64, 
-		RULE_closeBlock = 65, RULE_eos = 66, RULE_macroToken = 67;
+		RULE_caseClause = 13, RULE_throwStatement = 14, RULE_tryStatement = 15, 
+		RULE_catchProduction = 16, RULE_finallyProduction = 17, RULE_returnStatement = 18, 
+		RULE_deleteStatement = 19, RULE_assignmentExpression = 20, RULE_variableDeclarationList = 21, 
+		RULE_varModifier = 22, RULE_variableDeclaration = 23, RULE_typeAnnotation = 24, 
+		RULE_globalVarStatement = 25, RULE_lValueStartExpression = 26, RULE_lValueExpression = 27, 
+		RULE_lValueChainOperator = 28, RULE_lValueFinalOperator = 29, RULE_newExpression = 30, 
+		RULE_expressionSequence = 31, RULE_expressionOrFunction = 32, RULE_expression = 33, 
+		RULE_callStatement = 34, RULE_callableExpression = 35, RULE_incDecStatement = 36, 
+		RULE_accessor = 37, RULE_arguments = 38, RULE_assignmentOperator = 39, 
+		RULE_literal = 40, RULE_templateStringLiteral = 41, RULE_templateStringAtom = 42, 
+		RULE_arrayLiteral = 43, RULE_elementList = 44, RULE_structLiteral = 45, 
+		RULE_propertyAssignment = 46, RULE_propertyIdentifier = 47, RULE_functionDeclaration = 48, 
+		RULE_constructorClause = 49, RULE_parameterList = 50, RULE_parameter = 51, 
+		RULE_identifier = 52, RULE_enumeratorDeclaration = 53, RULE_enumeratorList = 54, 
+		RULE_enumerator = 55, RULE_macroStatement = 56, RULE_defineStatement = 57, 
+		RULE_regionStatement = 58, RULE_identifierStatement = 59, RULE_softKeyword = 60, 
+		RULE_propertySoftKeyword = 61, RULE_openBlock = 62, RULE_closeBlock = 63, 
+		RULE_eos = 64, RULE_macroToken = 65;
 	public static readonly string[] ruleNames = {
 		"program", "statementList", "statement", "block", "ifStatement", "iterationStatement", 
 		"withStatement", "switchStatement", "continueStatement", "breakStatement", 
-		"exitStatement", "emptyStatement", "caseBlock", "caseClauses", "caseClause", 
-		"defaultClause", "throwStatement", "tryStatement", "catchProduction", 
-		"finallyProduction", "returnStatement", "deleteStatement", "assignmentExpression", 
-		"variableDeclarationList", "varModifier", "variableDeclaration", "typeAnnotation", 
-		"globalVarStatement", "lValueStartExpression", "lValueExpression", "lValueChainOperator", 
-		"lValueFinalOperator", "newExpression", "expressionSequence", "expressionOrFunction", 
-		"expression", "callStatement", "callableExpression", "incDecStatement", 
-		"accessor", "arguments", "assignmentOperator", "literal", "templateStringLiteral", 
+		"exitStatement", "emptyStatement", "caseBlock", "caseClause", "throwStatement", 
+		"tryStatement", "catchProduction", "finallyProduction", "returnStatement", 
+		"deleteStatement", "assignmentExpression", "variableDeclarationList", 
+		"varModifier", "variableDeclaration", "typeAnnotation", "globalVarStatement", 
+		"lValueStartExpression", "lValueExpression", "lValueChainOperator", "lValueFinalOperator", 
+		"newExpression", "expressionSequence", "expressionOrFunction", "expression", 
+		"callStatement", "callableExpression", "incDecStatement", "accessor", 
+		"arguments", "assignmentOperator", "literal", "templateStringLiteral", 
 		"templateStringAtom", "arrayLiteral", "elementList", "structLiteral", 
 		"propertyAssignment", "propertyIdentifier", "functionDeclaration", "constructorClause", 
 		"parameterList", "parameter", "identifier", "enumeratorDeclaration", "enumeratorList", 
@@ -196,17 +196,17 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 137;
+			State = 133;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
 				{
-				State = 136;
+				State = 132;
 				statementList();
 				}
 			}
 
-			State = 139;
+			State = 135;
 			Match(Eof);
 			}
 		}
@@ -249,17 +249,17 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 142;
+			State = 138;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 141;
+				State = 137;
 				statement();
 				}
 				}
-				State = 144;
+				State = 140;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0) );
@@ -366,148 +366,148 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 168;
+			State = 164;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
 			case 1:
 				{
-				State = 146;
+				State = 142;
 				block();
 				}
 				break;
 			case 2:
 				{
-				State = 147;
+				State = 143;
 				emptyStatement();
 				}
 				break;
 			case 3:
 				{
-				State = 148;
+				State = 144;
 				ifStatement();
 				}
 				break;
 			case 4:
 				{
-				State = 149;
+				State = 145;
 				variableDeclarationList();
 				}
 				break;
 			case 5:
 				{
-				State = 150;
+				State = 146;
 				iterationStatement();
 				}
 				break;
 			case 6:
 				{
-				State = 151;
+				State = 147;
 				continueStatement();
 				}
 				break;
 			case 7:
 				{
-				State = 152;
+				State = 148;
 				breakStatement();
 				}
 				break;
 			case 8:
 				{
-				State = 153;
+				State = 149;
 				returnStatement();
 				}
 				break;
 			case 9:
 				{
-				State = 154;
+				State = 150;
 				withStatement();
 				}
 				break;
 			case 10:
 				{
-				State = 155;
+				State = 151;
 				switchStatement();
 				}
 				break;
 			case 11:
 				{
-				State = 156;
+				State = 152;
 				tryStatement();
 				}
 				break;
 			case 12:
 				{
-				State = 157;
+				State = 153;
 				throwStatement();
 				}
 				break;
 			case 13:
 				{
-				State = 158;
+				State = 154;
 				exitStatement();
 				}
 				break;
 			case 14:
 				{
-				State = 159;
+				State = 155;
 				macroStatement();
 				}
 				break;
 			case 15:
 				{
-				State = 160;
+				State = 156;
 				defineStatement();
 				}
 				break;
 			case 16:
 				{
-				State = 161;
+				State = 157;
 				regionStatement();
 				}
 				break;
 			case 17:
 				{
-				State = 162;
+				State = 158;
 				enumeratorDeclaration();
 				}
 				break;
 			case 18:
 				{
-				State = 163;
+				State = 159;
 				globalVarStatement();
 				}
 				break;
 			case 19:
 				{
-				State = 164;
+				State = 160;
 				assignmentExpression();
 				}
 				break;
 			case 20:
 				{
-				State = 165;
+				State = 161;
 				incDecStatement();
 				}
 				break;
 			case 21:
 				{
-				State = 166;
+				State = 162;
 				callStatement(0);
 				}
 				break;
 			case 22:
 				{
-				State = 167;
+				State = 163;
 				functionDeclaration();
 				}
 				break;
 			}
-			State = 171;
+			State = 167;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,3,Context) ) {
 			case 1:
 				{
-				State = 170;
+				State = 166;
 				eos();
 				}
 				break;
@@ -556,19 +556,19 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 173;
+			State = 169;
 			openBlock();
-			State = 175;
+			State = 171;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
 				{
-				State = 174;
+				State = 170;
 				statementList();
 				}
 			}
 
-			State = 177;
+			State = 173;
 			closeBlock();
 			}
 		}
@@ -617,30 +617,30 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 179;
+			State = 175;
 			Match(If);
-			State = 180;
+			State = 176;
 			expression(0);
-			State = 182;
+			State = 178;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Then) {
 				{
-				State = 181;
+				State = 177;
 				Match(Then);
 				}
 			}
 
-			State = 184;
+			State = 180;
 			statement();
-			State = 187;
+			State = 183;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,6,Context) ) {
 			case 1:
 				{
-				State = 185;
+				State = 181;
 				Match(Else);
-				State = 186;
+				State = 182;
 				statement();
 				}
 				break;
@@ -757,20 +757,20 @@ public partial class GameMakerLanguageParser : Parser {
 		EnterRule(_localctx, 10, RULE_iterationStatement);
 		int _la;
 		try {
-			State = 218;
+			State = 214;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Do:
 				_localctx = new DoStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 189;
+				State = 185;
 				Match(Do);
-				State = 190;
+				State = 186;
 				statement();
-				State = 191;
+				State = 187;
 				Match(Until);
-				State = 192;
+				State = 188;
 				expression(0);
 				}
 				break;
@@ -778,11 +778,11 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new WhileStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 194;
+				State = 190;
 				Match(While);
-				State = 195;
+				State = 191;
 				expression(0);
-				State = 196;
+				State = 192;
 				statement();
 				}
 				break;
@@ -790,17 +790,17 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new ForStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 198;
+				State = 194;
 				Match(For);
-				State = 199;
+				State = 195;
 				Match(OpenParen);
-				State = 202;
+				State = 198;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case Var:
 				case Static:
 					{
-					State = 200;
+					State = 196;
 					variableDeclarationList();
 					}
 					break;
@@ -809,7 +809,7 @@ public partial class GameMakerLanguageParser : Parser {
 				case Constructor:
 				case Identifier:
 					{
-					State = 201;
+					State = 197;
 					assignmentExpression();
 					}
 					break;
@@ -818,33 +818,33 @@ public partial class GameMakerLanguageParser : Parser {
 				default:
 					break;
 				}
+				State = 200;
+				Match(SemiColon);
+				State = 202;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036607273976L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250632177727L) != 0)) {
+					{
+					State = 201;
+					expression(0);
+					}
+				}
+
 				State = 204;
 				Match(SemiColon);
 				State = 206;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036607273976L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250632177727L) != 0)) {
-					{
-					State = 205;
-					expression(0);
-					}
-				}
-
-				State = 208;
-				Match(SemiColon);
-				State = 210;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
 				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
 					{
-					State = 209;
+					State = 205;
 					statement();
 					}
 				}
 
-				State = 212;
+				State = 208;
 				Match(CloseParen);
-				State = 213;
+				State = 209;
 				statement();
 				}
 				break;
@@ -852,11 +852,11 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new RepeatStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 214;
+				State = 210;
 				Match(Repeat);
-				State = 215;
+				State = 211;
 				expression(0);
-				State = 216;
+				State = 212;
 				statement();
 				}
 				break;
@@ -903,11 +903,11 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 220;
+			State = 216;
 			Match(With);
-			State = 221;
+			State = 217;
 			expression(0);
-			State = 222;
+			State = 218;
 			statement();
 			}
 		}
@@ -950,11 +950,11 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 224;
+			State = 220;
 			Match(Switch);
-			State = 225;
+			State = 221;
 			expression(0);
-			State = 226;
+			State = 222;
 			caseBlock();
 			}
 		}
@@ -991,7 +991,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 228;
+			State = 224;
 			Match(Continue);
 			}
 		}
@@ -1028,7 +1028,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 230;
+			State = 226;
 			Match(Break);
 			}
 		}
@@ -1065,7 +1065,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 232;
+			State = 228;
 			Match(Exit);
 			}
 		}
@@ -1102,7 +1102,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 234;
+			State = 230;
 			Match(SemiColon);
 			}
 		}
@@ -1124,14 +1124,11 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public CloseBlockContext closeBlock() {
 			return GetRuleContext<CloseBlockContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public CaseClausesContext[] caseClauses() {
-			return GetRuleContexts<CaseClausesContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public CaseClauseContext[] caseClause() {
+			return GetRuleContexts<CaseClauseContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public CaseClausesContext caseClauses(int i) {
-			return GetRuleContext<CaseClausesContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public DefaultClauseContext defaultClause() {
-			return GetRuleContext<DefaultClauseContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public CaseClauseContext caseClause(int i) {
+			return GetRuleContext<CaseClauseContext>(i);
 		}
 		public CaseBlockContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -1154,39 +1151,23 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 236;
+			State = 232;
 			openBlock();
-			State = 238;
+			State = 236;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if (_la==Case) {
+			while (_la==Case || _la==Default) {
 				{
-				State = 237;
-				caseClauses();
+				{
+				State = 233;
+				caseClause();
 				}
-			}
-
-			State = 244;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==Default) {
-				{
-				State = 240;
-				defaultClause();
-				State = 242;
+				}
+				State = 238;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if (_la==Case) {
-					{
-					State = 241;
-					caseClauses();
-					}
-				}
-
-				}
 			}
-
-			State = 246;
+			State = 239;
 			closeBlock();
 			}
 		}
@@ -1201,69 +1182,15 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class CaseClausesContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public CaseClauseContext[] caseClause() {
-			return GetRuleContexts<CaseClauseContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public CaseClauseContext caseClause(int i) {
-			return GetRuleContext<CaseClauseContext>(i);
-		}
-		public CaseClausesContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_caseClauses; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCaseClauses(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public CaseClausesContext caseClauses() {
-		CaseClausesContext _localctx = new CaseClausesContext(Context, State);
-		EnterRule(_localctx, 26, RULE_caseClauses);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 249;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			do {
-				{
-				{
-				State = 248;
-				caseClause();
-				}
-				}
-				State = 251;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-			} while ( _la==Case );
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
 	public partial class CaseClauseContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Case() { return GetToken(GameMakerLanguageParser.Case, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
-		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Default() { return GetToken(GameMakerLanguageParser.Default, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public StatementListContext statementList() {
 			return GetRuleContext<StatementListContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Case() { return GetToken(GameMakerLanguageParser.Case, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
 		public CaseClauseContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -1281,81 +1208,54 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public CaseClauseContext caseClause() {
 		CaseClauseContext _localctx = new CaseClauseContext(Context, State);
-		EnterRule(_localctx, 28, RULE_caseClause);
+		EnterRule(_localctx, 26, RULE_caseClause);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 253;
-			Match(Case);
-			State = 254;
-			expression(0);
-			State = 255;
-			Match(Colon);
-			State = 257;
+			State = 252;
 			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
+			switch (TokenStream.LA(1)) {
+			case Default:
+				EnterOuterAlt(_localctx, 1);
 				{
-				State = 256;
-				statementList();
+				State = 241;
+				Match(Default);
+				State = 242;
+				Match(Colon);
+				State = 244;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
+					{
+					State = 243;
+					statementList();
+					}
 				}
-			}
 
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class DefaultClauseContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Default() { return GetToken(GameMakerLanguageParser.Default, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public StatementListContext statementList() {
-			return GetRuleContext<StatementListContext>(0);
-		}
-		public DefaultClauseContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_defaultClause; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitDefaultClause(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public DefaultClauseContext defaultClause() {
-		DefaultClauseContext _localctx = new DefaultClauseContext(Context, State);
-		EnterRule(_localctx, 30, RULE_defaultClause);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 259;
-			Match(Default);
-			State = 260;
-			Match(Colon);
-			State = 262;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
+				}
+				break;
+			case Case:
+				EnterOuterAlt(_localctx, 2);
 				{
-				State = 261;
-				statementList();
+				State = 246;
+				Match(Case);
+				State = 247;
+				expression(0);
+				State = 248;
+				Match(Colon);
+				State = 250;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
+					{
+					State = 249;
+					statementList();
+					}
 				}
-			}
 
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1390,13 +1290,13 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ThrowStatementContext throwStatement() {
 		ThrowStatementContext _localctx = new ThrowStatementContext(Context, State);
-		EnterRule(_localctx, 32, RULE_throwStatement);
+		EnterRule(_localctx, 28, RULE_throwStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 264;
+			State = 254;
 			Match(Throw);
-			State = 265;
+			State = 255;
 			expression(0);
 			}
 		}
@@ -1438,27 +1338,27 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public TryStatementContext tryStatement() {
 		TryStatementContext _localctx = new TryStatementContext(Context, State);
-		EnterRule(_localctx, 34, RULE_tryStatement);
+		EnterRule(_localctx, 30, RULE_tryStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 267;
+			State = 257;
 			Match(Try);
-			State = 268;
+			State = 258;
 			statement();
-			State = 274;
+			State = 264;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Catch:
 				{
-				State = 269;
+				State = 259;
 				catchProduction();
-				State = 271;
+				State = 261;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,17,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,15,Context) ) {
 				case 1:
 					{
-					State = 270;
+					State = 260;
 					finallyProduction();
 					}
 					break;
@@ -1467,7 +1367,7 @@ public partial class GameMakerLanguageParser : Parser {
 				break;
 			case Finally:
 				{
-				State = 273;
+				State = 263;
 				finallyProduction();
 				}
 				break;
@@ -1513,36 +1413,36 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public CatchProductionContext catchProduction() {
 		CatchProductionContext _localctx = new CatchProductionContext(Context, State);
-		EnterRule(_localctx, 36, RULE_catchProduction);
+		EnterRule(_localctx, 32, RULE_catchProduction);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 276;
+			State = 266;
 			Match(Catch);
-			State = 282;
+			State = 272;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,20,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,18,Context) ) {
 			case 1:
 				{
-				State = 277;
+				State = 267;
 				Match(OpenParen);
-				State = 279;
+				State = 269;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Constructor || _la==Identifier) {
 					{
-					State = 278;
+					State = 268;
 					identifier();
 					}
 				}
 
-				State = 281;
+				State = 271;
 				Match(CloseParen);
 				}
 				break;
 			}
-			State = 284;
+			State = 274;
 			statement();
 			}
 		}
@@ -1578,13 +1478,13 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public FinallyProductionContext finallyProduction() {
 		FinallyProductionContext _localctx = new FinallyProductionContext(Context, State);
-		EnterRule(_localctx, 38, RULE_finallyProduction);
+		EnterRule(_localctx, 34, RULE_finallyProduction);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 286;
+			State = 276;
 			Match(Finally);
-			State = 287;
+			State = 277;
 			statement();
 			}
 		}
@@ -1620,18 +1520,18 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ReturnStatementContext returnStatement() {
 		ReturnStatementContext _localctx = new ReturnStatementContext(Context, State);
-		EnterRule(_localctx, 40, RULE_returnStatement);
+		EnterRule(_localctx, 36, RULE_returnStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 289;
+			State = 279;
 			Match(Return);
-			State = 291;
+			State = 281;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,21,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,19,Context) ) {
 			case 1:
 				{
-				State = 290;
+				State = 280;
 				expression(0);
 				}
 				break;
@@ -1670,13 +1570,13 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public DeleteStatementContext deleteStatement() {
 		DeleteStatementContext _localctx = new DeleteStatementContext(Context, State);
-		EnterRule(_localctx, 42, RULE_deleteStatement);
+		EnterRule(_localctx, 38, RULE_deleteStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 293;
+			State = 283;
 			Match(Delete);
-			State = 294;
+			State = 284;
 			expression(0);
 			}
 		}
@@ -1720,26 +1620,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public AssignmentExpressionContext assignmentExpression() {
 		AssignmentExpressionContext _localctx = new AssignmentExpressionContext(Context, State);
-		EnterRule(_localctx, 44, RULE_assignmentExpression);
+		EnterRule(_localctx, 40, RULE_assignmentExpression);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 296;
+			State = 286;
 			lValueExpression();
-			State = 298;
+			State = 288;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon) {
 				{
-				State = 297;
+				State = 287;
 				typeAnnotation();
 				}
 			}
 
-			State = 300;
+			State = 290;
 			assignmentOperator();
-			State = 301;
+			State = 291;
 			expressionOrFunction();
 			}
 		}
@@ -1784,28 +1684,28 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public VariableDeclarationListContext variableDeclarationList() {
 		VariableDeclarationListContext _localctx = new VariableDeclarationListContext(Context, State);
-		EnterRule(_localctx, 46, RULE_variableDeclarationList);
+		EnterRule(_localctx, 42, RULE_variableDeclarationList);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 303;
+			State = 293;
 			varModifier();
-			State = 304;
+			State = 294;
 			variableDeclaration();
-			State = 309;
+			State = 299;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==Comma) {
 				{
 				{
-				State = 305;
+				State = 295;
 				Match(Comma);
-				State = 306;
+				State = 296;
 				variableDeclaration();
 				}
 				}
-				State = 311;
+				State = 301;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -1844,26 +1744,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public VarModifierContext varModifier() {
 		VarModifierContext _localctx = new VarModifierContext(Context, State);
-		EnterRule(_localctx, 48, RULE_varModifier);
+		EnterRule(_localctx, 44, RULE_varModifier);
 		int _la;
 		try {
-			State = 318;
+			State = 308;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Var:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 313;
+				State = 303;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				do {
 					{
 					{
-					State = 312;
+					State = 302;
 					Match(Var);
 					}
 					}
-					State = 315;
+					State = 305;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				} while ( _la==Var );
@@ -1872,7 +1772,7 @@ public partial class GameMakerLanguageParser : Parser {
 			case Static:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 317;
+				State = 307;
 				Match(Static);
 				}
 				break;
@@ -1918,31 +1818,31 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public VariableDeclarationContext variableDeclaration() {
 		VariableDeclarationContext _localctx = new VariableDeclarationContext(Context, State);
-		EnterRule(_localctx, 50, RULE_variableDeclaration);
+		EnterRule(_localctx, 46, RULE_variableDeclaration);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 320;
+			State = 310;
 			identifier();
-			State = 322;
+			State = 312;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon) {
 				{
-				State = 321;
+				State = 311;
 				typeAnnotation();
 				}
 			}
 
-			State = 326;
+			State = 316;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Assign) {
 				{
-				State = 324;
+				State = 314;
 				Match(Assign);
-				State = 325;
+				State = 315;
 				expressionOrFunction();
 				}
 			}
@@ -1988,28 +1888,28 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public TypeAnnotationContext typeAnnotation() {
 		TypeAnnotationContext _localctx = new TypeAnnotationContext(Context, State);
-		EnterRule(_localctx, 52, RULE_typeAnnotation);
+		EnterRule(_localctx, 48, RULE_typeAnnotation);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 328;
+			State = 318;
 			Match(Colon);
-			State = 329;
+			State = 319;
 			identifier();
-			State = 334;
+			State = 324;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==BitOr) {
 				{
 				{
-				State = 330;
+				State = 320;
 				Match(BitOr);
-				State = 331;
+				State = 321;
 				identifier();
 				}
 				}
-				State = 336;
+				State = 326;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -2055,32 +1955,32 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public GlobalVarStatementContext globalVarStatement() {
 		GlobalVarStatementContext _localctx = new GlobalVarStatementContext(Context, State);
-		EnterRule(_localctx, 54, RULE_globalVarStatement);
+		EnterRule(_localctx, 50, RULE_globalVarStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 337;
+			State = 327;
 			Match(GlobalVar);
-			State = 338;
+			State = 328;
 			identifier();
-			State = 343;
+			State = 333;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==Comma) {
 				{
 				{
-				State = 339;
+				State = 329;
 				Match(Comma);
-				State = 340;
+				State = 330;
 				identifier();
 				}
 				}
-				State = 345;
+				State = 335;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 346;
+			State = 336;
 			Match(SemiColon);
 			}
 		}
@@ -2123,34 +2023,34 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public LValueStartExpressionContext lValueStartExpression() {
 		LValueStartExpressionContext _localctx = new LValueStartExpressionContext(Context, State);
-		EnterRule(_localctx, 56, RULE_lValueStartExpression);
+		EnterRule(_localctx, 52, RULE_lValueStartExpression);
 		try {
-			State = 354;
+			State = 344;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Constructor:
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 348;
+				State = 338;
 				identifier();
 				}
 				break;
 			case OpenParen:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 349;
+				State = 339;
 				Match(OpenParen);
-				State = 350;
+				State = 340;
 				expressionOrFunction();
-				State = 351;
+				State = 341;
 				Match(CloseParen);
 				}
 				break;
 			case New:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 353;
+				State = 343;
 				newExpression();
 				}
 				break;
@@ -2198,35 +2098,35 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public LValueExpressionContext lValueExpression() {
 		LValueExpressionContext _localctx = new LValueExpressionContext(Context, State);
-		EnterRule(_localctx, 58, RULE_lValueExpression);
+		EnterRule(_localctx, 54, RULE_lValueExpression);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 356;
+			State = 346;
 			lValueStartExpression();
-			State = 364;
+			State = 354;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,32,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,30,Context) ) {
 			case 1:
 				{
-				State = 360;
+				State = 350;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,31,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,29,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 357;
+						State = 347;
 						lValueChainOperator();
 						}
 						} 
 					}
-					State = 362;
+					State = 352;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,31,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,29,Context);
 				}
-				State = 363;
+				State = 353;
 				lValueFinalOperator();
 				}
 				break;
@@ -2301,9 +2201,9 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public LValueChainOperatorContext lValueChainOperator() {
 		LValueChainOperatorContext _localctx = new LValueChainOperatorContext(Context, State);
-		EnterRule(_localctx, 60, RULE_lValueChainOperator);
+		EnterRule(_localctx, 56, RULE_lValueChainOperator);
 		try {
-			State = 373;
+			State = 363;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case OpenBracket:
@@ -2315,11 +2215,11 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new MemberIndexLValueContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 366;
+				State = 356;
 				accessor();
-				State = 367;
+				State = 357;
 				expressionSequence();
-				State = 368;
+				State = 358;
 				Match(CloseBracket);
 				}
 				break;
@@ -2327,9 +2227,9 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new MemberDotLValueContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 370;
+				State = 360;
 				Match(Dot);
-				State = 371;
+				State = 361;
 				identifier();
 				}
 				break;
@@ -2337,7 +2237,7 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new CallLValueContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 372;
+				State = 362;
 				arguments();
 				}
 				break;
@@ -2401,9 +2301,9 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public LValueFinalOperatorContext lValueFinalOperator() {
 		LValueFinalOperatorContext _localctx = new LValueFinalOperatorContext(Context, State);
-		EnterRule(_localctx, 62, RULE_lValueFinalOperator);
+		EnterRule(_localctx, 58, RULE_lValueFinalOperator);
 		try {
-			State = 381;
+			State = 371;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case OpenBracket:
@@ -2415,11 +2315,11 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new MemberIndexLValueFinalContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 375;
+				State = 365;
 				accessor();
-				State = 376;
+				State = 366;
 				expressionSequence();
-				State = 377;
+				State = 367;
 				Match(CloseBracket);
 				}
 				break;
@@ -2427,9 +2327,9 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new MemberDotLValueFinalContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 379;
+				State = 369;
 				Match(Dot);
-				State = 380;
+				State = 370;
 				identifier();
 				}
 				break;
@@ -2472,24 +2372,24 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public NewExpressionContext newExpression() {
 		NewExpressionContext _localctx = new NewExpressionContext(Context, State);
-		EnterRule(_localctx, 64, RULE_newExpression);
+		EnterRule(_localctx, 60, RULE_newExpression);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 383;
+			State = 373;
 			Match(New);
-			State = 385;
+			State = 375;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Constructor || _la==Identifier) {
 				{
-				State = 384;
+				State = 374;
 				identifier();
 				}
 			}
 
-			State = 387;
+			State = 377;
 			arguments();
 			}
 		}
@@ -2531,26 +2431,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ExpressionSequenceContext expressionSequence() {
 		ExpressionSequenceContext _localctx = new ExpressionSequenceContext(Context, State);
-		EnterRule(_localctx, 66, RULE_expressionSequence);
+		EnterRule(_localctx, 62, RULE_expressionSequence);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 389;
+			State = 379;
 			expression(0);
-			State = 394;
+			State = 384;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==Comma) {
 				{
 				{
-				State = 390;
+				State = 380;
 				Match(Comma);
-				State = 391;
+				State = 381;
 				expression(0);
 				}
 				}
-				State = 396;
+				State = 386;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -2595,15 +2495,15 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ExpressionOrFunctionContext expressionOrFunction() {
 		ExpressionOrFunctionContext _localctx = new ExpressionOrFunctionContext(Context, State);
-		EnterRule(_localctx, 68, RULE_expressionOrFunction);
+		EnterRule(_localctx, 64, RULE_expressionOrFunction);
 		try {
-			State = 405;
+			State = 395;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,38,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,36,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 399;
+				State = 389;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case OpenBracket:
@@ -2629,13 +2529,13 @@ public partial class GameMakerLanguageParser : Parser {
 				case TemplateStringStart:
 				case VerbatimStringLiteral:
 					{
-					State = 397;
+					State = 387;
 					expression(0);
 					}
 					break;
 				case Function:
 					{
-					State = 398;
+					State = 388;
 					functionDeclaration();
 					}
 					break;
@@ -2647,11 +2547,11 @@ public partial class GameMakerLanguageParser : Parser {
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 401;
+				State = 391;
 				Match(OpenParen);
-				State = 402;
+				State = 392;
 				expressionOrFunction();
-				State = 403;
+				State = 393;
 				Match(CloseParen);
 				}
 				break;
@@ -3026,23 +2926,23 @@ public partial class GameMakerLanguageParser : Parser {
 		int _parentState = State;
 		ExpressionContext _localctx = new ExpressionContext(Context, _parentState);
 		ExpressionContext _prevctx = _localctx;
-		int _startState = 70;
-		EnterRecursionRule(_localctx, 70, RULE_expression, _p);
+		int _startState = 66;
+		EnterRecursionRule(_localctx, 66, RULE_expression, _p);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 422;
+			State = 412;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,39,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,37,Context) ) {
 			case 1:
 				{
 				_localctx = new IncDecExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
 
-				State = 408;
+				State = 398;
 				incDecStatement();
 				}
 				break;
@@ -3051,7 +2951,7 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new CallExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 409;
+				State = 399;
 				callStatement(0);
 				}
 				break;
@@ -3060,7 +2960,7 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new VariableExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 410;
+				State = 400;
 				lValueExpression();
 				}
 				break;
@@ -3069,9 +2969,9 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new UnaryMinusExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 411;
+				State = 401;
 				Match(Minus);
-				State = 412;
+				State = 402;
 				expression(19);
 				}
 				break;
@@ -3080,9 +2980,9 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new BitNotExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 413;
+				State = 403;
 				Match(BitNot);
-				State = 414;
+				State = 404;
 				expression(18);
 				}
 				break;
@@ -3091,9 +2991,9 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new NotExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 415;
+				State = 405;
 				Match(Not);
-				State = 416;
+				State = 406;
 				expression(17);
 				}
 				break;
@@ -3102,7 +3002,7 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new LiteralExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 417;
+				State = 407;
 				literal();
 				}
 				break;
@@ -3111,35 +3011,35 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new ParenthesizedExpressionContext(_localctx);
 				Context = _localctx;
 				_prevctx = _localctx;
-				State = 418;
+				State = 408;
 				Match(OpenParen);
-				State = 419;
+				State = 409;
 				expression(0);
-				State = 420;
+				State = 410;
 				Match(CloseParen);
 				}
 				break;
 			}
 			Context.Stop = TokenStream.LT(-1);
-			State = 471;
+			State = 461;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,41,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,39,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
 						TriggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					State = 469;
+					State = 459;
 					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,40,Context) ) {
+					switch ( Interpreter.AdaptivePredict(TokenStream,38,Context) ) {
 					case 1:
 						{
 						_localctx = new MultiplicativeExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 424;
+						State = 414;
 						if (!(Precpred(Context, 16))) throw new FailedPredicateException(this, "Precpred(Context, 16)");
-						State = 425;
+						State = 415;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -3148,7 +3048,7 @@ public partial class GameMakerLanguageParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 426;
+						State = 416;
 						expression(17);
 						}
 						break;
@@ -3156,9 +3056,9 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new AdditiveExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 427;
+						State = 417;
 						if (!(Precpred(Context, 15))) throw new FailedPredicateException(this, "Precpred(Context, 15)");
-						State = 428;
+						State = 418;
 						_la = TokenStream.LA(1);
 						if ( !(_la==Plus || _la==Minus) ) {
 						ErrorHandler.RecoverInline(this);
@@ -3167,7 +3067,7 @@ public partial class GameMakerLanguageParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 429;
+						State = 419;
 						expression(16);
 						}
 						break;
@@ -3175,9 +3075,9 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new BitShiftExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 430;
+						State = 420;
 						if (!(Precpred(Context, 14))) throw new FailedPredicateException(this, "Precpred(Context, 14)");
-						State = 431;
+						State = 421;
 						_la = TokenStream.LA(1);
 						if ( !(_la==RightShiftArithmetic || _la==LeftShiftArithmetic) ) {
 						ErrorHandler.RecoverInline(this);
@@ -3186,7 +3086,7 @@ public partial class GameMakerLanguageParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 432;
+						State = 422;
 						expression(15);
 						}
 						break;
@@ -3194,9 +3094,9 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new RelationalExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 433;
+						State = 423;
 						if (!(Precpred(Context, 13))) throw new FailedPredicateException(this, "Precpred(Context, 13)");
-						State = 434;
+						State = 424;
 						_la = TokenStream.LA(1);
 						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4123168604160L) != 0)) ) {
 						ErrorHandler.RecoverInline(this);
@@ -3205,7 +3105,7 @@ public partial class GameMakerLanguageParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 435;
+						State = 425;
 						expression(14);
 						}
 						break;
@@ -3213,9 +3113,9 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new EqualityExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 436;
+						State = 426;
 						if (!(Precpred(Context, 12))) throw new FailedPredicateException(this, "Precpred(Context, 12)");
-						State = 437;
+						State = 427;
 						_la = TokenStream.LA(1);
 						if ( !(_la==Assign || _la==Equals_) ) {
 						ErrorHandler.RecoverInline(this);
@@ -3224,7 +3124,7 @@ public partial class GameMakerLanguageParser : Parser {
 							ErrorHandler.ReportMatch(this);
 						    Consume();
 						}
-						State = 438;
+						State = 428;
 						expression(13);
 						}
 						break;
@@ -3232,11 +3132,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new InequalityExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 439;
+						State = 429;
 						if (!(Precpred(Context, 11))) throw new FailedPredicateException(this, "Precpred(Context, 11)");
-						State = 440;
+						State = 430;
 						Match(NotEquals);
-						State = 441;
+						State = 431;
 						expression(12);
 						}
 						break;
@@ -3244,11 +3144,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new LogicalOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 442;
+						State = 432;
 						if (!(Precpred(Context, 10))) throw new FailedPredicateException(this, "Precpred(Context, 10)");
-						State = 443;
+						State = 433;
 						Match(Or);
-						State = 444;
+						State = 434;
 						expression(11);
 						}
 						break;
@@ -3256,11 +3156,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new LogicalAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 445;
+						State = 435;
 						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
-						State = 446;
+						State = 436;
 						Match(And);
-						State = 447;
+						State = 437;
 						expression(10);
 						}
 						break;
@@ -3268,11 +3168,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new LogicalXorExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 448;
+						State = 438;
 						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
-						State = 449;
+						State = 439;
 						Match(Xor);
-						State = 450;
+						State = 440;
 						expression(9);
 						}
 						break;
@@ -3280,11 +3180,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new CoalesceExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 451;
+						State = 441;
 						if (!(Precpred(Context, 7))) throw new FailedPredicateException(this, "Precpred(Context, 7)");
-						State = 452;
+						State = 442;
 						Match(NullCoalesce);
-						State = 453;
+						State = 443;
 						expression(8);
 						}
 						break;
@@ -3292,11 +3192,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new BitAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 454;
+						State = 444;
 						if (!(Precpred(Context, 6))) throw new FailedPredicateException(this, "Precpred(Context, 6)");
-						State = 455;
+						State = 445;
 						Match(BitAnd);
-						State = 456;
+						State = 446;
 						expression(7);
 						}
 						break;
@@ -3304,11 +3204,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new BitOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 457;
+						State = 447;
 						if (!(Precpred(Context, 5))) throw new FailedPredicateException(this, "Precpred(Context, 5)");
-						State = 458;
+						State = 448;
 						Match(BitOr);
-						State = 459;
+						State = 449;
 						expression(6);
 						}
 						break;
@@ -3316,11 +3216,11 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new BitXOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 460;
+						State = 450;
 						if (!(Precpred(Context, 4))) throw new FailedPredicateException(this, "Precpred(Context, 4)");
-						State = 461;
+						State = 451;
 						Match(BitXOr);
-						State = 462;
+						State = 452;
 						expression(5);
 						}
 						break;
@@ -3328,24 +3228,24 @@ public partial class GameMakerLanguageParser : Parser {
 						{
 						_localctx = new TernaryExpressionContext(new ExpressionContext(_parentctx, _parentState));
 						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 463;
+						State = 453;
 						if (!(Precpred(Context, 3))) throw new FailedPredicateException(this, "Precpred(Context, 3)");
-						State = 464;
+						State = 454;
 						Match(QuestionMark);
-						State = 465;
+						State = 455;
 						expression(0);
-						State = 466;
+						State = 456;
 						Match(Colon);
-						State = 467;
+						State = 457;
 						expression(3);
 						}
 						break;
 					}
 					} 
 				}
-				State = 473;
+				State = 463;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,41,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,39,Context);
 			}
 			}
 		}
@@ -3393,22 +3293,22 @@ public partial class GameMakerLanguageParser : Parser {
 		int _parentState = State;
 		CallStatementContext _localctx = new CallStatementContext(Context, _parentState);
 		CallStatementContext _prevctx = _localctx;
-		int _startState = 72;
-		EnterRecursionRule(_localctx, 72, RULE_callStatement, _p);
+		int _startState = 68;
+		EnterRecursionRule(_localctx, 68, RULE_callStatement, _p);
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
 			{
-			State = 475;
+			State = 465;
 			callableExpression();
-			State = 476;
+			State = 466;
 			arguments();
 			}
 			Context.Stop = TokenStream.LT(-1);
-			State = 482;
+			State = 472;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,42,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
@@ -3418,16 +3318,16 @@ public partial class GameMakerLanguageParser : Parser {
 					{
 					_localctx = new CallStatementContext(_parentctx, _parentState);
 					PushNewRecursionContext(_localctx, _startState, RULE_callStatement);
-					State = 478;
+					State = 468;
 					if (!(Precpred(Context, 1))) throw new FailedPredicateException(this, "Precpred(Context, 1)");
-					State = 479;
+					State = 469;
 					arguments();
 					}
 					} 
 				}
-				State = 484;
+				State = 474;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,42,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
 			}
 			}
 		}
@@ -3470,29 +3370,29 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public CallableExpressionContext callableExpression() {
 		CallableExpressionContext _localctx = new CallableExpressionContext(Context, State);
-		EnterRule(_localctx, 74, RULE_callableExpression);
+		EnterRule(_localctx, 70, RULE_callableExpression);
 		try {
-			State = 493;
+			State = 483;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,44,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,42,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 485;
+				State = 475;
 				lValueExpression();
 				}
 				break;
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 486;
+				State = 476;
 				Match(OpenParen);
-				State = 489;
+				State = 479;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
 				case Function:
 					{
-					State = 487;
+					State = 477;
 					functionDeclaration();
 					}
 					break;
@@ -3501,14 +3401,14 @@ public partial class GameMakerLanguageParser : Parser {
 				case Constructor:
 				case Identifier:
 					{
-					State = 488;
+					State = 478;
 					callableExpression();
 					}
 					break;
 				default:
 					throw new NoViableAltException(this);
 				}
-				State = 491;
+				State = 481;
 				Match(CloseParen);
 				}
 				break;
@@ -3569,10 +3469,10 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public IncDecStatementContext incDecStatement() {
 		IncDecStatementContext _localctx = new IncDecStatementContext(Context, State);
-		EnterRule(_localctx, 76, RULE_incDecStatement);
+		EnterRule(_localctx, 72, RULE_incDecStatement);
 		int _la;
 		try {
-			State = 500;
+			State = 490;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case PlusPlus:
@@ -3580,7 +3480,7 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new PreIncDecExpressionContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 495;
+				State = 485;
 				_la = TokenStream.LA(1);
 				if ( !(_la==PlusPlus || _la==MinusMinus) ) {
 				ErrorHandler.RecoverInline(this);
@@ -3589,7 +3489,7 @@ public partial class GameMakerLanguageParser : Parser {
 					ErrorHandler.ReportMatch(this);
 				    Consume();
 				}
-				State = 496;
+				State = 486;
 				lValueExpression();
 				}
 				break;
@@ -3600,9 +3500,9 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new PostIncDecExpressionContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 497;
+				State = 487;
 				lValueExpression();
-				State = 498;
+				State = 488;
 				_la = TokenStream.LA(1);
 				if ( !(_la==PlusPlus || _la==MinusMinus) ) {
 				ErrorHandler.RecoverInline(this);
@@ -3651,12 +3551,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public AccessorContext accessor() {
 		AccessorContext _localctx = new AccessorContext(Context, State);
-		EnterRule(_localctx, 78, RULE_accessor);
+		EnterRule(_localctx, 74, RULE_accessor);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 502;
+			State = 492;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 504L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -3707,45 +3607,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ArgumentsContext arguments() {
 		ArgumentsContext _localctx = new ArgumentsContext(Context, State);
-		EnterRule(_localctx, 80, RULE_arguments);
+		EnterRule(_localctx, 76, RULE_arguments);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 504;
+			State = 494;
 			Match(OpenParen);
-			State = 516;
+			State = 506;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036607273976L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250640566335L) != 0)) {
 				{
-				State = 505;
+				State = 495;
 				expressionOrFunction();
-				State = 510;
+				State = 500;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,46,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,44,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 506;
+						State = 496;
 						Match(Comma);
-						State = 507;
+						State = 497;
 						expressionOrFunction();
 						}
 						} 
 					}
-					State = 512;
+					State = 502;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,46,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,44,Context);
 				}
-				State = 514;
+				State = 504;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 513;
+					State = 503;
 					Match(Comma);
 					}
 				}
@@ -3753,7 +3653,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 518;
+			State = 508;
 			Match(CloseParen);
 			}
 		}
@@ -3797,12 +3697,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public AssignmentOperatorContext assignmentOperator() {
 		AssignmentOperatorContext _localctx = new AssignmentOperatorContext(Context, State);
-		EnterRule(_localctx, 82, RULE_assignmentOperator);
+		EnterRule(_localctx, 78, RULE_assignmentOperator);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 520;
+			State = 510;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1151795639060267008L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -3859,85 +3759,85 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public LiteralContext literal() {
 		LiteralContext _localctx = new LiteralContext(Context, State);
-		EnterRule(_localctx, 84, RULE_literal);
+		EnterRule(_localctx, 80, RULE_literal);
 		try {
-			State = 534;
+			State = 524;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Undefined:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 522;
+				State = 512;
 				Match(Undefined);
 				}
 				break;
 			case NoOne:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 523;
+				State = 513;
 				Match(NoOne);
 				}
 				break;
 			case BooleanLiteral:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 524;
+				State = 514;
 				Match(BooleanLiteral);
 				}
 				break;
 			case StringLiteral:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 525;
+				State = 515;
 				Match(StringLiteral);
 				}
 				break;
 			case VerbatimStringLiteral:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 526;
+				State = 516;
 				Match(VerbatimStringLiteral);
 				}
 				break;
 			case TemplateStringStart:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 527;
+				State = 517;
 				templateStringLiteral();
 				}
 				break;
 			case HexIntegerLiteral:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 528;
+				State = 518;
 				Match(HexIntegerLiteral);
 				}
 				break;
 			case BinaryLiteral:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 529;
+				State = 519;
 				Match(BinaryLiteral);
 				}
 				break;
 			case DecimalLiteral:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 530;
+				State = 520;
 				Match(DecimalLiteral);
 				}
 				break;
 			case IntegerLiteral:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 531;
+				State = 521;
 				Match(IntegerLiteral);
 				}
 				break;
 			case OpenBracket:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 532;
+				State = 522;
 				arrayLiteral();
 				}
 				break;
@@ -3945,7 +3845,7 @@ public partial class GameMakerLanguageParser : Parser {
 			case Begin:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 533;
+				State = 523;
 				structLiteral();
 				}
 				break;
@@ -3989,28 +3889,28 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public TemplateStringLiteralContext templateStringLiteral() {
 		TemplateStringLiteralContext _localctx = new TemplateStringLiteralContext(Context, State);
-		EnterRule(_localctx, 86, RULE_templateStringLiteral);
+		EnterRule(_localctx, 82, RULE_templateStringLiteral);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 536;
+			State = 526;
 			Match(TemplateStringStart);
-			State = 540;
+			State = 530;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==TemplateStringStartExpression || _la==TemplateStringText) {
 				{
 				{
-				State = 537;
+				State = 527;
 				templateStringAtom();
 				}
 				}
-				State = 542;
+				State = 532;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 543;
+			State = 533;
 			Match(TemplateStringEnd);
 			}
 		}
@@ -4048,26 +3948,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public TemplateStringAtomContext templateStringAtom() {
 		TemplateStringAtomContext _localctx = new TemplateStringAtomContext(Context, State);
-		EnterRule(_localctx, 88, RULE_templateStringAtom);
+		EnterRule(_localctx, 84, RULE_templateStringAtom);
 		try {
-			State = 550;
+			State = 540;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case TemplateStringText:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 545;
+				State = 535;
 				Match(TemplateStringText);
 				}
 				break;
 			case TemplateStringStartExpression:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 546;
+				State = 536;
 				Match(TemplateStringStartExpression);
-				State = 547;
+				State = 537;
 				expression(0);
-				State = 548;
+				State = 538;
 				Match(TemplateStringEndExpression);
 				}
 				break;
@@ -4108,15 +4008,15 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ArrayLiteralContext arrayLiteral() {
 		ArrayLiteralContext _localctx = new ArrayLiteralContext(Context, State);
-		EnterRule(_localctx, 90, RULE_arrayLiteral);
+		EnterRule(_localctx, 86, RULE_arrayLiteral);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 552;
+			State = 542;
 			Match(OpenBracket);
-			State = 553;
+			State = 543;
 			elementList();
-			State = 554;
+			State = 544;
 			Match(CloseBracket);
 			}
 		}
@@ -4158,74 +4058,74 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ElementListContext elementList() {
 		ElementListContext _localctx = new ElementListContext(Context, State);
-		EnterRule(_localctx, 92, RULE_elementList);
+		EnterRule(_localctx, 88, RULE_elementList);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 559;
+			State = 549;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,52,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
+			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					State = 546;
+					Match(Comma);
+					}
+					} 
+				}
+				State = 551;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
+			}
+			State = 553;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036607273976L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250640566335L) != 0)) {
+				{
+				State = 552;
+				expressionOrFunction();
+				}
+			}
+
+			State = 563;
+			ErrorHandler.Sync(this);
+			_alt = Interpreter.AdaptivePredict(TokenStream,53,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
 					State = 556;
-					Match(Comma);
-					}
-					} 
-				}
-				State = 561;
-				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,52,Context);
-			}
-			State = 563;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036607273976L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250640566335L) != 0)) {
-				{
-				State = 562;
-				expressionOrFunction();
-				}
-			}
-
-			State = 573;
-			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
-			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					{
-					{
-					State = 566;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 					do {
 						{
 						{
-						State = 565;
+						State = 555;
 						Match(Comma);
 						}
 						}
-						State = 568;
+						State = 558;
 						ErrorHandler.Sync(this);
 						_la = TokenStream.LA(1);
 					} while ( _la==Comma );
-					State = 570;
+					State = 560;
 					expressionOrFunction();
 					}
 					} 
 				}
-				State = 575;
+				State = 565;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,53,Context);
 			}
-			State = 577;
+			State = 567;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Comma) {
 				{
-				State = 576;
+				State = 566;
 				Match(Comma);
 				}
 			}
@@ -4276,45 +4176,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public StructLiteralContext structLiteral() {
 		StructLiteralContext _localctx = new StructLiteralContext(Context, State);
-		EnterRule(_localctx, 94, RULE_structLiteral);
+		EnterRule(_localctx, 90, RULE_structLiteral);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 579;
+			State = 569;
 			openBlock();
-			State = 591;
+			State = 581;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (((((_la - 69)) & ~0x3f) == 0 && ((1L << (_la - 69)) & 51673825281L) != 0)) {
 				{
-				State = 580;
+				State = 570;
 				propertyAssignment();
-				State = 585;
+				State = 575;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,57,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 581;
+						State = 571;
 						Match(Comma);
-						State = 582;
+						State = 572;
 						propertyAssignment();
 						}
 						} 
 					}
-					State = 587;
+					State = 577;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,57,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
 				}
-				State = 589;
+				State = 579;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 588;
+					State = 578;
 					Match(Comma);
 					}
 				}
@@ -4322,7 +4222,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 593;
+			State = 583;
 			closeBlock();
 			}
 		}
@@ -4362,33 +4262,33 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public PropertyAssignmentContext propertyAssignment() {
 		PropertyAssignmentContext _localctx = new PropertyAssignmentContext(Context, State);
-		EnterRule(_localctx, 96, RULE_propertyAssignment);
+		EnterRule(_localctx, 92, RULE_propertyAssignment);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 597;
+			State = 587;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NoOne:
 			case Constructor:
 			case Identifier:
 				{
-				State = 595;
+				State = 585;
 				propertyIdentifier();
 				}
 				break;
 			case StringLiteral:
 				{
-				State = 596;
+				State = 586;
 				Match(StringLiteral);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			State = 599;
+			State = 589;
 			Match(Colon);
-			State = 600;
+			State = 590;
 			expressionOrFunction();
 			}
 		}
@@ -4427,29 +4327,29 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public PropertyIdentifierContext propertyIdentifier() {
 		PropertyIdentifierContext _localctx = new PropertyIdentifierContext(Context, State);
-		EnterRule(_localctx, 98, RULE_propertyIdentifier);
+		EnterRule(_localctx, 94, RULE_propertyIdentifier);
 		try {
-			State = 605;
+			State = 595;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 602;
+				State = 592;
 				Match(Identifier);
 				}
 				break;
 			case Constructor:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 603;
+				State = 593;
 				softKeyword();
 				}
 				break;
 			case NoOne:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 604;
+				State = 594;
 				propertySoftKeyword();
 				}
 				break;
@@ -4496,36 +4396,36 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public FunctionDeclarationContext functionDeclaration() {
 		FunctionDeclarationContext _localctx = new FunctionDeclarationContext(Context, State);
-		EnterRule(_localctx, 100, RULE_functionDeclaration);
+		EnterRule(_localctx, 96, RULE_functionDeclaration);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 607;
+			State = 597;
 			Match(Function);
-			State = 609;
+			State = 599;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Identifier) {
 				{
-				State = 608;
+				State = 598;
 				Match(Identifier);
 				}
 			}
 
-			State = 611;
+			State = 601;
 			parameterList();
-			State = 613;
+			State = 603;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon || _la==Constructor) {
 				{
-				State = 612;
+				State = 602;
 				constructorClause();
 				}
 			}
 
-			State = 615;
+			State = 605;
 			block();
 			}
 		}
@@ -4563,26 +4463,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ConstructorClauseContext constructorClause() {
 		ConstructorClauseContext _localctx = new ConstructorClauseContext(Context, State);
-		EnterRule(_localctx, 102, RULE_constructorClause);
+		EnterRule(_localctx, 98, RULE_constructorClause);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 620;
+			State = 610;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon) {
 				{
-				State = 617;
+				State = 607;
 				Match(Colon);
-				State = 618;
+				State = 608;
 				Match(Identifier);
-				State = 619;
+				State = 609;
 				parameterList();
 				}
 			}
 
-			State = 622;
+			State = 612;
 			Match(Constructor);
 			}
 		}
@@ -4626,45 +4526,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ParameterListContext parameterList() {
 		ParameterListContext _localctx = new ParameterListContext(Context, State);
-		EnterRule(_localctx, 104, RULE_parameterList);
+		EnterRule(_localctx, 100, RULE_parameterList);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 624;
+			State = 614;
 			Match(OpenParen);
-			State = 636;
+			State = 626;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Constructor || _la==Identifier) {
 				{
-				State = 625;
+				State = 615;
 				parameter();
-				State = 630;
+				State = 620;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,65,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,63,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 626;
+						State = 616;
 						Match(Comma);
-						State = 627;
+						State = 617;
 						parameter();
 						}
 						} 
 					}
-					State = 632;
+					State = 622;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,65,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,63,Context);
 				}
-				State = 634;
+				State = 624;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 633;
+					State = 623;
 					Match(Comma);
 					}
 				}
@@ -4672,7 +4572,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 638;
+			State = 628;
 			Match(CloseParen);
 			}
 		}
@@ -4714,31 +4614,31 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ParameterContext parameter() {
 		ParameterContext _localctx = new ParameterContext(Context, State);
-		EnterRule(_localctx, 106, RULE_parameter);
+		EnterRule(_localctx, 102, RULE_parameter);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 640;
+			State = 630;
 			identifier();
-			State = 642;
+			State = 632;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon) {
 				{
-				State = 641;
+				State = 631;
 				typeAnnotation();
 				}
 			}
 
-			State = 646;
+			State = 636;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Assign) {
 				{
-				State = 644;
+				State = 634;
 				Match(Assign);
-				State = 645;
+				State = 635;
 				expressionOrFunction();
 				}
 			}
@@ -4777,22 +4677,22 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public IdentifierContext identifier() {
 		IdentifierContext _localctx = new IdentifierContext(Context, State);
-		EnterRule(_localctx, 108, RULE_identifier);
+		EnterRule(_localctx, 104, RULE_identifier);
 		try {
-			State = 650;
+			State = 640;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 648;
+				State = 638;
 				Match(Identifier);
 				}
 				break;
 			case Constructor:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 649;
+				State = 639;
 				softKeyword();
 				}
 				break;
@@ -4841,28 +4741,28 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EnumeratorDeclarationContext enumeratorDeclaration() {
 		EnumeratorDeclarationContext _localctx = new EnumeratorDeclarationContext(Context, State);
-		EnterRule(_localctx, 110, RULE_enumeratorDeclaration);
+		EnterRule(_localctx, 106, RULE_enumeratorDeclaration);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 652;
+			State = 642;
 			Match(Enum);
-			State = 653;
+			State = 643;
 			identifier();
-			State = 654;
+			State = 644;
 			openBlock();
-			State = 656;
+			State = 646;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Constructor || _la==Identifier) {
 				{
-				State = 655;
+				State = 645;
 				enumeratorList();
 				}
 			}
 
-			State = 658;
+			State = 648;
 			closeBlock();
 			}
 		}
@@ -4904,38 +4804,38 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EnumeratorListContext enumeratorList() {
 		EnumeratorListContext _localctx = new EnumeratorListContext(Context, State);
-		EnterRule(_localctx, 112, RULE_enumeratorList);
+		EnterRule(_localctx, 108, RULE_enumeratorList);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 660;
+			State = 650;
 			enumerator();
-			State = 665;
+			State = 655;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,72,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,70,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 661;
+					State = 651;
 					Match(Comma);
-					State = 662;
+					State = 652;
 					enumerator();
 					}
 					} 
 				}
-				State = 667;
+				State = 657;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,72,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,70,Context);
 			}
-			State = 669;
+			State = 659;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Comma) {
 				{
-				State = 668;
+				State = 658;
 				Match(Comma);
 				}
 			}
@@ -4977,21 +4877,21 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EnumeratorContext enumerator() {
 		EnumeratorContext _localctx = new EnumeratorContext(Context, State);
-		EnterRule(_localctx, 114, RULE_enumerator);
+		EnterRule(_localctx, 110, RULE_enumerator);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 671;
+			State = 661;
 			identifier();
-			State = 674;
+			State = 664;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Assign) {
 				{
-				State = 672;
+				State = 662;
 				Match(Assign);
-				State = 673;
+				State = 663;
 				_la = TokenStream.LA(1);
 				if ( !(((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 13L) != 0)) ) {
 				ErrorHandler.RecoverInline(this);
@@ -5045,30 +4945,30 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public MacroStatementContext macroStatement() {
 		MacroStatementContext _localctx = new MacroStatementContext(Context, State);
-		EnterRule(_localctx, 116, RULE_macroStatement);
+		EnterRule(_localctx, 112, RULE_macroStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 676;
+			State = 666;
 			Match(Macro);
-			State = 677;
+			State = 667;
 			identifier();
-			State = 679;
+			State = 669;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 678;
+				State = 668;
 				macroToken();
 				}
 				}
-				State = 681;
+				State = 671;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & -8L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 1978622713790463L) != 0) );
-			State = 683;
+			State = 673;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Eof || _la==LineTerminator) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5111,16 +5011,16 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public DefineStatementContext defineStatement() {
 		DefineStatementContext _localctx = new DefineStatementContext(Context, State);
-		EnterRule(_localctx, 118, RULE_defineStatement);
+		EnterRule(_localctx, 114, RULE_defineStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 685;
+			State = 675;
 			Match(Define);
-			State = 686;
+			State = 676;
 			Match(RegionCharacters);
-			State = 687;
+			State = 677;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Eof || _la==RegionEOL) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5164,12 +5064,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public RegionStatementContext regionStatement() {
 		RegionStatementContext _localctx = new RegionStatementContext(Context, State);
-		EnterRule(_localctx, 120, RULE_regionStatement);
+		EnterRule(_localctx, 116, RULE_regionStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 689;
+			State = 679;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Region || _la==EndRegion) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5178,17 +5078,17 @@ public partial class GameMakerLanguageParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 691;
+			State = 681;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==RegionCharacters) {
 				{
-				State = 690;
+				State = 680;
 				Match(RegionCharacters);
 				}
 			}
 
-			State = 693;
+			State = 683;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Eof || _la==RegionEOL) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5230,11 +5130,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public IdentifierStatementContext identifierStatement() {
 		IdentifierStatementContext _localctx = new IdentifierStatementContext(Context, State);
-		EnterRule(_localctx, 122, RULE_identifierStatement);
+		EnterRule(_localctx, 118, RULE_identifierStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 695;
+			State = 685;
 			identifier();
 			}
 		}
@@ -5267,11 +5167,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public SoftKeywordContext softKeyword() {
 		SoftKeywordContext _localctx = new SoftKeywordContext(Context, State);
-		EnterRule(_localctx, 124, RULE_softKeyword);
+		EnterRule(_localctx, 120, RULE_softKeyword);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 697;
+			State = 687;
 			Match(Constructor);
 			}
 		}
@@ -5304,11 +5204,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public PropertySoftKeywordContext propertySoftKeyword() {
 		PropertySoftKeywordContext _localctx = new PropertySoftKeywordContext(Context, State);
-		EnterRule(_localctx, 126, RULE_propertySoftKeyword);
+		EnterRule(_localctx, 122, RULE_propertySoftKeyword);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 699;
+			State = 689;
 			Match(NoOne);
 			}
 		}
@@ -5342,12 +5242,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public OpenBlockContext openBlock() {
 		OpenBlockContext _localctx = new OpenBlockContext(Context, State);
-		EnterRule(_localctx, 128, RULE_openBlock);
+		EnterRule(_localctx, 124, RULE_openBlock);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 701;
+			State = 691;
 			_la = TokenStream.LA(1);
 			if ( !(_la==OpenBrace || _la==Begin) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5388,12 +5288,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public CloseBlockContext closeBlock() {
 		CloseBlockContext _localctx = new CloseBlockContext(Context, State);
-		EnterRule(_localctx, 130, RULE_closeBlock);
+		EnterRule(_localctx, 126, RULE_closeBlock);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 703;
+			State = 693;
 			_la = TokenStream.LA(1);
 			if ( !(_la==CloseBrace || _la==End) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5433,11 +5333,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EosContext eos() {
 		EosContext _localctx = new EosContext(Context, State);
-		EnterRule(_localctx, 132, RULE_eos);
+		EnterRule(_localctx, 128, RULE_eos);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 705;
+			State = 695;
 			Match(SemiColon);
 			}
 		}
@@ -5572,12 +5472,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public MacroTokenContext macroToken() {
 		MacroTokenContext _localctx = new MacroTokenContext(Context, State);
-		EnterRule(_localctx, 134, RULE_macroToken);
+		EnterRule(_localctx, 130, RULE_macroToken);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 707;
+			State = 697;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & -8L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 1978622713790463L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5601,8 +5501,8 @@ public partial class GameMakerLanguageParser : Parser {
 
 	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
-		case 35: return expression_sempred((ExpressionContext)_localctx, predIndex);
-		case 36: return callStatement_sempred((CallStatementContext)_localctx, predIndex);
+		case 33: return expression_sempred((ExpressionContext)_localctx, predIndex);
+		case 34: return callStatement_sempred((CallStatementContext)_localctx, predIndex);
 		}
 		return true;
 	}
@@ -5633,7 +5533,7 @@ public partial class GameMakerLanguageParser : Parser {
 	}
 
 	private static int[] _serializedATN = {
-		4,1,114,710,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+		4,1,114,700,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
 		7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
 		2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,28,
@@ -5642,242 +5542,239 @@ public partial class GameMakerLanguageParser : Parser {
 		2,43,7,43,2,44,7,44,2,45,7,45,2,46,7,46,2,47,7,47,2,48,7,48,2,49,7,49,
 		2,50,7,50,2,51,7,51,2,52,7,52,2,53,7,53,2,54,7,54,2,55,7,55,2,56,7,56,
 		2,57,7,57,2,58,7,58,2,59,7,59,2,60,7,60,2,61,7,61,2,62,7,62,2,63,7,63,
-		2,64,7,64,2,65,7,65,2,66,7,66,2,67,7,67,1,0,3,0,138,8,0,1,0,1,0,1,1,4,
-		1,143,8,1,11,1,12,1,144,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,
-		2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,169,8,2,1,2,3,2,172,8,2,
-		1,3,1,3,3,3,176,8,3,1,3,1,3,1,4,1,4,1,4,3,4,183,8,4,1,4,1,4,1,4,3,4,188,
-		8,4,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,203,8,5,1,
-		5,1,5,3,5,207,8,5,1,5,1,5,3,5,211,8,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,219,
-		8,5,1,6,1,6,1,6,1,6,1,7,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,
-		1,12,1,12,3,12,239,8,12,1,12,1,12,3,12,243,8,12,3,12,245,8,12,1,12,1,12,
-		1,13,4,13,250,8,13,11,13,12,13,251,1,14,1,14,1,14,1,14,3,14,258,8,14,1,
-		15,1,15,1,15,3,15,263,8,15,1,16,1,16,1,16,1,17,1,17,1,17,1,17,3,17,272,
-		8,17,1,17,3,17,275,8,17,1,18,1,18,1,18,3,18,280,8,18,1,18,3,18,283,8,18,
-		1,18,1,18,1,19,1,19,1,19,1,20,1,20,3,20,292,8,20,1,21,1,21,1,21,1,22,1,
-		22,3,22,299,8,22,1,22,1,22,1,22,1,23,1,23,1,23,1,23,5,23,308,8,23,10,23,
-		12,23,311,9,23,1,24,4,24,314,8,24,11,24,12,24,315,1,24,3,24,319,8,24,1,
-		25,1,25,3,25,323,8,25,1,25,1,25,3,25,327,8,25,1,26,1,26,1,26,1,26,5,26,
-		333,8,26,10,26,12,26,336,9,26,1,27,1,27,1,27,1,27,5,27,342,8,27,10,27,
-		12,27,345,9,27,1,27,1,27,1,28,1,28,1,28,1,28,1,28,1,28,3,28,355,8,28,1,
-		29,1,29,5,29,359,8,29,10,29,12,29,362,9,29,1,29,3,29,365,8,29,1,30,1,30,
-		1,30,1,30,1,30,1,30,1,30,3,30,374,8,30,1,31,1,31,1,31,1,31,1,31,1,31,3,
-		31,382,8,31,1,32,1,32,3,32,386,8,32,1,32,1,32,1,33,1,33,1,33,5,33,393,
-		8,33,10,33,12,33,396,9,33,1,34,1,34,3,34,400,8,34,1,34,1,34,1,34,1,34,
-		3,34,406,8,34,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,
-		35,1,35,1,35,1,35,3,35,423,8,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,
-		1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,
-		1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,
-		1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,5,35,470,8,35,10,35,12,35,
-		473,9,35,1,36,1,36,1,36,1,36,1,36,1,36,5,36,481,8,36,10,36,12,36,484,9,
-		36,1,37,1,37,1,37,1,37,3,37,490,8,37,1,37,1,37,3,37,494,8,37,1,38,1,38,
-		1,38,1,38,1,38,3,38,501,8,38,1,39,1,39,1,40,1,40,1,40,1,40,5,40,509,8,
-		40,10,40,12,40,512,9,40,1,40,3,40,515,8,40,3,40,517,8,40,1,40,1,40,1,41,
-		1,41,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,3,42,
-		535,8,42,1,43,1,43,5,43,539,8,43,10,43,12,43,542,9,43,1,43,1,43,1,44,1,
-		44,1,44,1,44,1,44,3,44,551,8,44,1,45,1,45,1,45,1,45,1,46,5,46,558,8,46,
-		10,46,12,46,561,9,46,1,46,3,46,564,8,46,1,46,4,46,567,8,46,11,46,12,46,
-		568,1,46,5,46,572,8,46,10,46,12,46,575,9,46,1,46,3,46,578,8,46,1,47,1,
-		47,1,47,1,47,5,47,584,8,47,10,47,12,47,587,9,47,1,47,3,47,590,8,47,3,47,
-		592,8,47,1,47,1,47,1,48,1,48,3,48,598,8,48,1,48,1,48,1,48,1,49,1,49,1,
-		49,3,49,606,8,49,1,50,1,50,3,50,610,8,50,1,50,1,50,3,50,614,8,50,1,50,
-		1,50,1,51,1,51,1,51,3,51,621,8,51,1,51,1,51,1,52,1,52,1,52,1,52,5,52,629,
-		8,52,10,52,12,52,632,9,52,1,52,3,52,635,8,52,3,52,637,8,52,1,52,1,52,1,
-		53,1,53,3,53,643,8,53,1,53,1,53,3,53,647,8,53,1,54,1,54,3,54,651,8,54,
-		1,55,1,55,1,55,1,55,3,55,657,8,55,1,55,1,55,1,56,1,56,1,56,5,56,664,8,
-		56,10,56,12,56,667,9,56,1,56,3,56,670,8,56,1,57,1,57,1,57,3,57,675,8,57,
-		1,58,1,58,1,58,4,58,680,8,58,11,58,12,58,681,1,58,1,58,1,59,1,59,1,59,
-		1,59,1,60,1,60,3,60,692,8,60,1,60,1,60,1,61,1,61,1,62,1,62,1,63,1,63,1,
-		64,1,64,1,65,1,65,1,66,1,66,1,67,1,67,1,67,0,2,70,72,68,0,2,4,6,8,10,12,
-		14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,
-		62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,
-		108,110,112,114,116,118,120,122,124,126,128,130,132,134,0,15,1,0,28,31,
-		1,0,24,25,1,0,36,37,1,0,38,41,2,0,19,19,42,42,1,0,22,23,1,0,3,8,3,0,19,
-		19,35,35,50,59,2,0,64,64,66,67,1,1,108,108,1,1,111,111,1,0,101,102,2,0,
-		12,12,15,15,2,0,14,14,16,16,4,0,3,97,99,99,103,106,112,114,772,0,137,1,
-		0,0,0,2,142,1,0,0,0,4,168,1,0,0,0,6,173,1,0,0,0,8,179,1,0,0,0,10,218,1,
-		0,0,0,12,220,1,0,0,0,14,224,1,0,0,0,16,228,1,0,0,0,18,230,1,0,0,0,20,232,
-		1,0,0,0,22,234,1,0,0,0,24,236,1,0,0,0,26,249,1,0,0,0,28,253,1,0,0,0,30,
-		259,1,0,0,0,32,264,1,0,0,0,34,267,1,0,0,0,36,276,1,0,0,0,38,286,1,0,0,
-		0,40,289,1,0,0,0,42,293,1,0,0,0,44,296,1,0,0,0,46,303,1,0,0,0,48,318,1,
-		0,0,0,50,320,1,0,0,0,52,328,1,0,0,0,54,337,1,0,0,0,56,354,1,0,0,0,58,356,
-		1,0,0,0,60,373,1,0,0,0,62,381,1,0,0,0,64,383,1,0,0,0,66,389,1,0,0,0,68,
-		405,1,0,0,0,70,422,1,0,0,0,72,474,1,0,0,0,74,493,1,0,0,0,76,500,1,0,0,
-		0,78,502,1,0,0,0,80,504,1,0,0,0,82,520,1,0,0,0,84,534,1,0,0,0,86,536,1,
-		0,0,0,88,550,1,0,0,0,90,552,1,0,0,0,92,559,1,0,0,0,94,579,1,0,0,0,96,597,
-		1,0,0,0,98,605,1,0,0,0,100,607,1,0,0,0,102,620,1,0,0,0,104,624,1,0,0,0,
-		106,640,1,0,0,0,108,650,1,0,0,0,110,652,1,0,0,0,112,660,1,0,0,0,114,671,
-		1,0,0,0,116,676,1,0,0,0,118,685,1,0,0,0,120,689,1,0,0,0,122,695,1,0,0,
-		0,124,697,1,0,0,0,126,699,1,0,0,0,128,701,1,0,0,0,130,703,1,0,0,0,132,
-		705,1,0,0,0,134,707,1,0,0,0,136,138,3,2,1,0,137,136,1,0,0,0,137,138,1,
-		0,0,0,138,139,1,0,0,0,139,140,5,0,0,1,140,1,1,0,0,0,141,143,3,4,2,0,142,
-		141,1,0,0,0,143,144,1,0,0,0,144,142,1,0,0,0,144,145,1,0,0,0,145,3,1,0,
-		0,0,146,169,3,6,3,0,147,169,3,22,11,0,148,169,3,8,4,0,149,169,3,46,23,
-		0,150,169,3,10,5,0,151,169,3,16,8,0,152,169,3,18,9,0,153,169,3,40,20,0,
-		154,169,3,12,6,0,155,169,3,14,7,0,156,169,3,34,17,0,157,169,3,32,16,0,
-		158,169,3,20,10,0,159,169,3,116,58,0,160,169,3,118,59,0,161,169,3,120,
-		60,0,162,169,3,110,55,0,163,169,3,54,27,0,164,169,3,44,22,0,165,169,3,
-		76,38,0,166,169,3,72,36,0,167,169,3,100,50,0,168,146,1,0,0,0,168,147,1,
-		0,0,0,168,148,1,0,0,0,168,149,1,0,0,0,168,150,1,0,0,0,168,151,1,0,0,0,
-		168,152,1,0,0,0,168,153,1,0,0,0,168,154,1,0,0,0,168,155,1,0,0,0,168,156,
-		1,0,0,0,168,157,1,0,0,0,168,158,1,0,0,0,168,159,1,0,0,0,168,160,1,0,0,
-		0,168,161,1,0,0,0,168,162,1,0,0,0,168,163,1,0,0,0,168,164,1,0,0,0,168,
-		165,1,0,0,0,168,166,1,0,0,0,168,167,1,0,0,0,169,171,1,0,0,0,170,172,3,
-		132,66,0,171,170,1,0,0,0,171,172,1,0,0,0,172,5,1,0,0,0,173,175,3,128,64,
-		0,174,176,3,2,1,0,175,174,1,0,0,0,175,176,1,0,0,0,176,177,1,0,0,0,177,
-		178,3,130,65,0,178,7,1,0,0,0,179,180,5,90,0,0,180,182,3,70,35,0,181,183,
-		5,91,0,0,182,181,1,0,0,0,182,183,1,0,0,0,183,184,1,0,0,0,184,187,3,4,2,
-		0,185,186,5,74,0,0,186,188,3,4,2,0,187,185,1,0,0,0,187,188,1,0,0,0,188,
-		9,1,0,0,0,189,190,5,72,0,0,190,191,3,4,2,0,191,192,5,85,0,0,192,193,3,
-		70,35,0,193,219,1,0,0,0,194,195,5,84,0,0,195,196,3,70,35,0,196,197,3,4,
-		2,0,197,219,1,0,0,0,198,199,5,82,0,0,199,202,5,10,0,0,200,203,3,46,23,
-		0,201,203,3,44,22,0,202,200,1,0,0,0,202,201,1,0,0,0,202,203,1,0,0,0,203,
-		204,1,0,0,0,204,206,5,17,0,0,205,207,3,70,35,0,206,205,1,0,0,0,206,207,
-		1,0,0,0,207,208,1,0,0,0,208,210,5,17,0,0,209,211,3,4,2,0,210,209,1,0,0,
-		0,210,211,1,0,0,0,211,212,1,0,0,0,212,213,5,11,0,0,213,219,3,4,2,0,214,
-		215,5,86,0,0,215,216,3,70,35,0,216,217,3,4,2,0,217,219,1,0,0,0,218,189,
-		1,0,0,0,218,194,1,0,0,0,218,198,1,0,0,0,218,214,1,0,0,0,219,11,1,0,0,0,
-		220,221,5,88,0,0,221,222,3,70,35,0,222,223,3,4,2,0,223,13,1,0,0,0,224,
-		225,5,83,0,0,225,226,3,70,35,0,226,227,3,24,12,0,227,15,1,0,0,0,228,229,
-		5,81,0,0,229,17,1,0,0,0,230,231,5,70,0,0,231,19,1,0,0,0,232,233,5,71,0,
-		0,233,21,1,0,0,0,234,235,5,17,0,0,235,23,1,0,0,0,236,238,3,128,64,0,237,
-		239,3,26,13,0,238,237,1,0,0,0,238,239,1,0,0,0,239,244,1,0,0,0,240,242,
-		3,30,15,0,241,243,3,26,13,0,242,241,1,0,0,0,242,243,1,0,0,0,243,245,1,
-		0,0,0,244,240,1,0,0,0,244,245,1,0,0,0,245,246,1,0,0,0,246,247,3,130,65,
-		0,247,25,1,0,0,0,248,250,3,28,14,0,249,248,1,0,0,0,250,251,1,0,0,0,251,
-		249,1,0,0,0,251,252,1,0,0,0,252,27,1,0,0,0,253,254,5,73,0,0,254,255,3,
-		70,35,0,255,257,5,20,0,0,256,258,3,2,1,0,257,256,1,0,0,0,257,258,1,0,0,
-		0,258,29,1,0,0,0,259,260,5,89,0,0,260,262,5,20,0,0,261,263,3,2,1,0,262,
-		261,1,0,0,0,262,263,1,0,0,0,263,31,1,0,0,0,264,265,5,92,0,0,265,266,3,
-		70,35,0,266,33,1,0,0,0,267,268,5,94,0,0,268,274,3,4,2,0,269,271,3,36,18,
-		0,270,272,3,38,19,0,271,270,1,0,0,0,271,272,1,0,0,0,272,275,1,0,0,0,273,
-		275,3,38,19,0,274,269,1,0,0,0,274,273,1,0,0,0,275,35,1,0,0,0,276,282,5,
-		78,0,0,277,279,5,10,0,0,278,280,3,108,54,0,279,278,1,0,0,0,279,280,1,0,
-		0,0,280,281,1,0,0,0,281,283,5,11,0,0,282,277,1,0,0,0,282,283,1,0,0,0,283,
-		284,1,0,0,0,284,285,3,4,2,0,285,37,1,0,0,0,286,287,5,79,0,0,287,288,3,
-		4,2,0,288,39,1,0,0,0,289,291,5,80,0,0,290,292,3,70,35,0,291,290,1,0,0,
-		0,291,292,1,0,0,0,292,41,1,0,0,0,293,294,5,93,0,0,294,295,3,70,35,0,295,
-		43,1,0,0,0,296,298,3,58,29,0,297,299,3,52,26,0,298,297,1,0,0,0,298,299,
-		1,0,0,0,299,300,1,0,0,0,300,301,3,82,41,0,301,302,3,68,34,0,302,45,1,0,
-		0,0,303,304,3,48,24,0,304,309,3,50,25,0,305,306,5,18,0,0,306,308,3,50,
-		25,0,307,305,1,0,0,0,308,311,1,0,0,0,309,307,1,0,0,0,309,310,1,0,0,0,310,
-		47,1,0,0,0,311,309,1,0,0,0,312,314,5,76,0,0,313,312,1,0,0,0,314,315,1,
-		0,0,0,315,313,1,0,0,0,315,316,1,0,0,0,316,319,1,0,0,0,317,319,5,97,0,0,
-		318,313,1,0,0,0,318,317,1,0,0,0,319,49,1,0,0,0,320,322,3,108,54,0,321,
-		323,3,52,26,0,322,321,1,0,0,0,322,323,1,0,0,0,323,326,1,0,0,0,324,325,
-		5,19,0,0,325,327,3,68,34,0,326,324,1,0,0,0,326,327,1,0,0,0,327,51,1,0,
-		0,0,328,329,5,20,0,0,329,334,3,108,54,0,330,331,5,46,0,0,331,333,3,108,
-		54,0,332,330,1,0,0,0,333,336,1,0,0,0,334,332,1,0,0,0,334,335,1,0,0,0,335,
-		53,1,0,0,0,336,334,1,0,0,0,337,338,5,77,0,0,338,343,3,108,54,0,339,340,
-		5,18,0,0,340,342,3,108,54,0,341,339,1,0,0,0,342,345,1,0,0,0,343,341,1,
-		0,0,0,343,344,1,0,0,0,344,346,1,0,0,0,345,343,1,0,0,0,346,347,5,17,0,0,
-		347,55,1,0,0,0,348,355,3,108,54,0,349,350,5,10,0,0,350,351,3,68,34,0,351,
-		352,5,11,0,0,352,355,1,0,0,0,353,355,3,64,32,0,354,348,1,0,0,0,354,349,
-		1,0,0,0,354,353,1,0,0,0,355,57,1,0,0,0,356,364,3,56,28,0,357,359,3,60,
-		30,0,358,357,1,0,0,0,359,362,1,0,0,0,360,358,1,0,0,0,360,361,1,0,0,0,361,
-		363,1,0,0,0,362,360,1,0,0,0,363,365,3,62,31,0,364,360,1,0,0,0,364,365,
-		1,0,0,0,365,59,1,0,0,0,366,367,3,78,39,0,367,368,3,66,33,0,368,369,5,9,
-		0,0,369,374,1,0,0,0,370,371,5,21,0,0,371,374,3,108,54,0,372,374,3,80,40,
-		0,373,366,1,0,0,0,373,370,1,0,0,0,373,372,1,0,0,0,374,61,1,0,0,0,375,376,
-		3,78,39,0,376,377,3,66,33,0,377,378,5,9,0,0,378,382,1,0,0,0,379,380,5,
-		21,0,0,380,382,3,108,54,0,381,375,1,0,0,0,381,379,1,0,0,0,382,63,1,0,0,
-		0,383,385,5,75,0,0,384,386,3,108,54,0,385,384,1,0,0,0,385,386,1,0,0,0,
-		386,387,1,0,0,0,387,388,3,80,40,0,388,65,1,0,0,0,389,394,3,70,35,0,390,
-		391,5,18,0,0,391,393,3,70,35,0,392,390,1,0,0,0,393,396,1,0,0,0,394,392,
-		1,0,0,0,394,395,1,0,0,0,395,67,1,0,0,0,396,394,1,0,0,0,397,400,3,70,35,
-		0,398,400,3,100,50,0,399,397,1,0,0,0,399,398,1,0,0,0,400,406,1,0,0,0,401,
-		402,5,10,0,0,402,403,3,68,34,0,403,404,5,11,0,0,404,406,1,0,0,0,405,399,
-		1,0,0,0,405,401,1,0,0,0,406,69,1,0,0,0,407,408,6,35,-1,0,408,423,3,76,
-		38,0,409,423,3,72,36,0,410,423,3,58,29,0,411,412,5,25,0,0,412,423,3,70,
-		35,19,413,414,5,26,0,0,414,423,3,70,35,18,415,416,5,27,0,0,416,423,3,70,
-		35,17,417,423,3,84,42,0,418,419,5,10,0,0,419,420,3,70,35,0,420,421,5,11,
-		0,0,421,423,1,0,0,0,422,407,1,0,0,0,422,409,1,0,0,0,422,410,1,0,0,0,422,
-		411,1,0,0,0,422,413,1,0,0,0,422,415,1,0,0,0,422,417,1,0,0,0,422,418,1,
-		0,0,0,423,471,1,0,0,0,424,425,10,16,0,0,425,426,7,0,0,0,426,470,3,70,35,
-		17,427,428,10,15,0,0,428,429,7,1,0,0,429,470,3,70,35,16,430,431,10,14,
-		0,0,431,432,7,2,0,0,432,470,3,70,35,15,433,434,10,13,0,0,434,435,7,3,0,
-		0,435,470,3,70,35,14,436,437,10,12,0,0,437,438,7,4,0,0,438,470,3,70,35,
-		13,439,440,10,11,0,0,440,441,5,43,0,0,441,470,3,70,35,12,442,443,10,10,
-		0,0,443,444,5,48,0,0,444,470,3,70,35,11,445,446,10,9,0,0,446,447,5,47,
-		0,0,447,470,3,70,35,10,448,449,10,8,0,0,449,450,5,49,0,0,450,470,3,70,
-		35,9,451,452,10,7,0,0,452,453,5,34,0,0,453,470,3,70,35,8,454,455,10,6,
-		0,0,455,456,5,44,0,0,456,470,3,70,35,7,457,458,10,5,0,0,458,459,5,46,0,
-		0,459,470,3,70,35,6,460,461,10,4,0,0,461,462,5,45,0,0,462,470,3,70,35,
-		5,463,464,10,3,0,0,464,465,5,33,0,0,465,466,3,70,35,0,466,467,5,20,0,0,
-		467,468,3,70,35,3,468,470,1,0,0,0,469,424,1,0,0,0,469,427,1,0,0,0,469,
-		430,1,0,0,0,469,433,1,0,0,0,469,436,1,0,0,0,469,439,1,0,0,0,469,442,1,
-		0,0,0,469,445,1,0,0,0,469,448,1,0,0,0,469,451,1,0,0,0,469,454,1,0,0,0,
-		469,457,1,0,0,0,469,460,1,0,0,0,469,463,1,0,0,0,470,473,1,0,0,0,471,469,
-		1,0,0,0,471,472,1,0,0,0,472,71,1,0,0,0,473,471,1,0,0,0,474,475,6,36,-1,
-		0,475,476,3,74,37,0,476,477,3,80,40,0,477,482,1,0,0,0,478,479,10,1,0,0,
-		479,481,3,80,40,0,480,478,1,0,0,0,481,484,1,0,0,0,482,480,1,0,0,0,482,
-		483,1,0,0,0,483,73,1,0,0,0,484,482,1,0,0,0,485,494,3,58,29,0,486,489,5,
-		10,0,0,487,490,3,100,50,0,488,490,3,74,37,0,489,487,1,0,0,0,489,488,1,
-		0,0,0,490,491,1,0,0,0,491,492,5,11,0,0,492,494,1,0,0,0,493,485,1,0,0,0,
-		493,486,1,0,0,0,494,75,1,0,0,0,495,496,7,5,0,0,496,501,3,58,29,0,497,498,
-		3,58,29,0,498,499,7,5,0,0,499,501,1,0,0,0,500,495,1,0,0,0,500,497,1,0,
-		0,0,501,77,1,0,0,0,502,503,7,6,0,0,503,79,1,0,0,0,504,516,5,10,0,0,505,
-		510,3,68,34,0,506,507,5,18,0,0,507,509,3,68,34,0,508,506,1,0,0,0,509,512,
-		1,0,0,0,510,508,1,0,0,0,510,511,1,0,0,0,511,514,1,0,0,0,512,510,1,0,0,
-		0,513,515,5,18,0,0,514,513,1,0,0,0,514,515,1,0,0,0,515,517,1,0,0,0,516,
-		505,1,0,0,0,516,517,1,0,0,0,517,518,1,0,0,0,518,519,5,11,0,0,519,81,1,
-		0,0,0,520,521,7,7,0,0,521,83,1,0,0,0,522,535,5,68,0,0,523,535,5,69,0,0,
-		524,535,5,63,0,0,525,535,5,104,0,0,526,535,5,106,0,0,527,535,3,86,43,0,
-		528,535,5,67,0,0,529,535,5,66,0,0,530,535,5,65,0,0,531,535,5,64,0,0,532,
-		535,3,90,45,0,533,535,3,94,47,0,534,522,1,0,0,0,534,523,1,0,0,0,534,524,
-		1,0,0,0,534,525,1,0,0,0,534,526,1,0,0,0,534,527,1,0,0,0,534,528,1,0,0,
-		0,534,529,1,0,0,0,534,530,1,0,0,0,534,531,1,0,0,0,534,532,1,0,0,0,534,
-		533,1,0,0,0,535,85,1,0,0,0,536,540,5,105,0,0,537,539,3,88,44,0,538,537,
-		1,0,0,0,539,542,1,0,0,0,540,538,1,0,0,0,540,541,1,0,0,0,541,543,1,0,0,
-		0,542,540,1,0,0,0,543,544,5,112,0,0,544,87,1,0,0,0,545,551,5,114,0,0,546,
-		547,5,113,0,0,547,548,3,70,35,0,548,549,5,13,0,0,549,551,1,0,0,0,550,545,
-		1,0,0,0,550,546,1,0,0,0,551,89,1,0,0,0,552,553,5,3,0,0,553,554,3,92,46,
-		0,554,555,5,9,0,0,555,91,1,0,0,0,556,558,5,18,0,0,557,556,1,0,0,0,558,
-		561,1,0,0,0,559,557,1,0,0,0,559,560,1,0,0,0,560,563,1,0,0,0,561,559,1,
-		0,0,0,562,564,3,68,34,0,563,562,1,0,0,0,563,564,1,0,0,0,564,573,1,0,0,
-		0,565,567,5,18,0,0,566,565,1,0,0,0,567,568,1,0,0,0,568,566,1,0,0,0,568,
-		569,1,0,0,0,569,570,1,0,0,0,570,572,3,68,34,0,571,566,1,0,0,0,572,575,
-		1,0,0,0,573,571,1,0,0,0,573,574,1,0,0,0,574,577,1,0,0,0,575,573,1,0,0,
-		0,576,578,5,18,0,0,577,576,1,0,0,0,577,578,1,0,0,0,578,93,1,0,0,0,579,
-		591,3,128,64,0,580,585,3,96,48,0,581,582,5,18,0,0,582,584,3,96,48,0,583,
-		581,1,0,0,0,584,587,1,0,0,0,585,583,1,0,0,0,585,586,1,0,0,0,586,589,1,
-		0,0,0,587,585,1,0,0,0,588,590,5,18,0,0,589,588,1,0,0,0,589,590,1,0,0,0,
-		590,592,1,0,0,0,591,580,1,0,0,0,591,592,1,0,0,0,592,593,1,0,0,0,593,594,
-		3,130,65,0,594,95,1,0,0,0,595,598,3,98,49,0,596,598,5,104,0,0,597,595,
-		1,0,0,0,597,596,1,0,0,0,598,599,1,0,0,0,599,600,5,20,0,0,600,601,3,68,
-		34,0,601,97,1,0,0,0,602,606,5,103,0,0,603,606,3,124,62,0,604,606,3,126,
-		63,0,605,602,1,0,0,0,605,603,1,0,0,0,605,604,1,0,0,0,606,99,1,0,0,0,607,
-		609,5,87,0,0,608,610,5,103,0,0,609,608,1,0,0,0,609,610,1,0,0,0,610,611,
-		1,0,0,0,611,613,3,104,52,0,612,614,3,102,51,0,613,612,1,0,0,0,613,614,
-		1,0,0,0,614,615,1,0,0,0,615,616,3,6,3,0,616,101,1,0,0,0,617,618,5,20,0,
-		0,618,619,5,103,0,0,619,621,3,104,52,0,620,617,1,0,0,0,620,621,1,0,0,0,
-		621,622,1,0,0,0,622,623,5,96,0,0,623,103,1,0,0,0,624,636,5,10,0,0,625,
-		630,3,106,53,0,626,627,5,18,0,0,627,629,3,106,53,0,628,626,1,0,0,0,629,
-		632,1,0,0,0,630,628,1,0,0,0,630,631,1,0,0,0,631,634,1,0,0,0,632,630,1,
-		0,0,0,633,635,5,18,0,0,634,633,1,0,0,0,634,635,1,0,0,0,635,637,1,0,0,0,
-		636,625,1,0,0,0,636,637,1,0,0,0,637,638,1,0,0,0,638,639,5,11,0,0,639,105,
-		1,0,0,0,640,642,3,108,54,0,641,643,3,52,26,0,642,641,1,0,0,0,642,643,1,
-		0,0,0,643,646,1,0,0,0,644,645,5,19,0,0,645,647,3,68,34,0,646,644,1,0,0,
-		0,646,647,1,0,0,0,647,107,1,0,0,0,648,651,5,103,0,0,649,651,3,124,62,0,
-		650,648,1,0,0,0,650,649,1,0,0,0,651,109,1,0,0,0,652,653,5,95,0,0,653,654,
-		3,108,54,0,654,656,3,128,64,0,655,657,3,112,56,0,656,655,1,0,0,0,656,657,
-		1,0,0,0,657,658,1,0,0,0,658,659,3,130,65,0,659,111,1,0,0,0,660,665,3,114,
-		57,0,661,662,5,18,0,0,662,664,3,114,57,0,663,661,1,0,0,0,664,667,1,0,0,
-		0,665,663,1,0,0,0,665,666,1,0,0,0,666,669,1,0,0,0,667,665,1,0,0,0,668,
-		670,5,18,0,0,669,668,1,0,0,0,669,670,1,0,0,0,670,113,1,0,0,0,671,674,3,
-		108,54,0,672,673,5,19,0,0,673,675,7,8,0,0,674,672,1,0,0,0,674,675,1,0,
-		0,0,675,115,1,0,0,0,676,677,5,98,0,0,677,679,3,108,54,0,678,680,3,134,
-		67,0,679,678,1,0,0,0,680,681,1,0,0,0,681,679,1,0,0,0,681,682,1,0,0,0,682,
-		683,1,0,0,0,683,684,7,9,0,0,684,117,1,0,0,0,685,686,5,100,0,0,686,687,
-		5,110,0,0,687,688,7,10,0,0,688,119,1,0,0,0,689,691,7,11,0,0,690,692,5,
-		110,0,0,691,690,1,0,0,0,691,692,1,0,0,0,692,693,1,0,0,0,693,694,7,10,0,
-		0,694,121,1,0,0,0,695,696,3,108,54,0,696,123,1,0,0,0,697,698,5,96,0,0,
-		698,125,1,0,0,0,699,700,5,69,0,0,700,127,1,0,0,0,701,702,7,12,0,0,702,
-		129,1,0,0,0,703,704,7,13,0,0,704,131,1,0,0,0,705,706,5,17,0,0,706,133,
-		1,0,0,0,707,708,7,14,0,0,708,135,1,0,0,0,77,137,144,168,171,175,182,187,
-		202,206,210,218,238,242,244,251,257,262,271,274,279,282,291,298,309,315,
-		318,322,326,334,343,354,360,364,373,381,385,394,399,405,422,469,471,482,
-		489,493,500,510,514,516,534,540,550,559,563,568,573,577,585,589,591,597,
-		605,609,613,620,630,634,636,642,646,650,656,665,669,674,681,691
+		2,64,7,64,2,65,7,65,1,0,3,0,134,8,0,1,0,1,0,1,1,4,1,139,8,1,11,1,12,1,
+		140,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,
+		2,1,2,1,2,1,2,1,2,1,2,3,2,165,8,2,1,2,3,2,168,8,2,1,3,1,3,3,3,172,8,3,
+		1,3,1,3,1,4,1,4,1,4,3,4,179,8,4,1,4,1,4,1,4,3,4,184,8,4,1,5,1,5,1,5,1,
+		5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,199,8,5,1,5,1,5,3,5,203,8,5,
+		1,5,1,5,3,5,207,8,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,215,8,5,1,6,1,6,1,6,1,
+		6,1,7,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,1,12,1,12,5,12,235,
+		8,12,10,12,12,12,238,9,12,1,12,1,12,1,13,1,13,1,13,3,13,245,8,13,1,13,
+		1,13,1,13,1,13,3,13,251,8,13,3,13,253,8,13,1,14,1,14,1,14,1,15,1,15,1,
+		15,1,15,3,15,262,8,15,1,15,3,15,265,8,15,1,16,1,16,1,16,3,16,270,8,16,
+		1,16,3,16,273,8,16,1,16,1,16,1,17,1,17,1,17,1,18,1,18,3,18,282,8,18,1,
+		19,1,19,1,19,1,20,1,20,3,20,289,8,20,1,20,1,20,1,20,1,21,1,21,1,21,1,21,
+		5,21,298,8,21,10,21,12,21,301,9,21,1,22,4,22,304,8,22,11,22,12,22,305,
+		1,22,3,22,309,8,22,1,23,1,23,3,23,313,8,23,1,23,1,23,3,23,317,8,23,1,24,
+		1,24,1,24,1,24,5,24,323,8,24,10,24,12,24,326,9,24,1,25,1,25,1,25,1,25,
+		5,25,332,8,25,10,25,12,25,335,9,25,1,25,1,25,1,26,1,26,1,26,1,26,1,26,
+		1,26,3,26,345,8,26,1,27,1,27,5,27,349,8,27,10,27,12,27,352,9,27,1,27,3,
+		27,355,8,27,1,28,1,28,1,28,1,28,1,28,1,28,1,28,3,28,364,8,28,1,29,1,29,
+		1,29,1,29,1,29,1,29,3,29,372,8,29,1,30,1,30,3,30,376,8,30,1,30,1,30,1,
+		31,1,31,1,31,5,31,383,8,31,10,31,12,31,386,9,31,1,32,1,32,3,32,390,8,32,
+		1,32,1,32,1,32,1,32,3,32,396,8,32,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,
+		33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,3,33,413,8,33,1,33,1,33,1,33,1,33,
+		1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,
+		1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,
+		1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,1,33,5,33,
+		460,8,33,10,33,12,33,463,9,33,1,34,1,34,1,34,1,34,1,34,1,34,5,34,471,8,
+		34,10,34,12,34,474,9,34,1,35,1,35,1,35,1,35,3,35,480,8,35,1,35,1,35,3,
+		35,484,8,35,1,36,1,36,1,36,1,36,1,36,3,36,491,8,36,1,37,1,37,1,38,1,38,
+		1,38,1,38,5,38,499,8,38,10,38,12,38,502,9,38,1,38,3,38,505,8,38,3,38,507,
+		8,38,1,38,1,38,1,39,1,39,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,
+		1,40,1,40,1,40,3,40,525,8,40,1,41,1,41,5,41,529,8,41,10,41,12,41,532,9,
+		41,1,41,1,41,1,42,1,42,1,42,1,42,1,42,3,42,541,8,42,1,43,1,43,1,43,1,43,
+		1,44,5,44,548,8,44,10,44,12,44,551,9,44,1,44,3,44,554,8,44,1,44,4,44,557,
+		8,44,11,44,12,44,558,1,44,5,44,562,8,44,10,44,12,44,565,9,44,1,44,3,44,
+		568,8,44,1,45,1,45,1,45,1,45,5,45,574,8,45,10,45,12,45,577,9,45,1,45,3,
+		45,580,8,45,3,45,582,8,45,1,45,1,45,1,46,1,46,3,46,588,8,46,1,46,1,46,
+		1,46,1,47,1,47,1,47,3,47,596,8,47,1,48,1,48,3,48,600,8,48,1,48,1,48,3,
+		48,604,8,48,1,48,1,48,1,49,1,49,1,49,3,49,611,8,49,1,49,1,49,1,50,1,50,
+		1,50,1,50,5,50,619,8,50,10,50,12,50,622,9,50,1,50,3,50,625,8,50,3,50,627,
+		8,50,1,50,1,50,1,51,1,51,3,51,633,8,51,1,51,1,51,3,51,637,8,51,1,52,1,
+		52,3,52,641,8,52,1,53,1,53,1,53,1,53,3,53,647,8,53,1,53,1,53,1,54,1,54,
+		1,54,5,54,654,8,54,10,54,12,54,657,9,54,1,54,3,54,660,8,54,1,55,1,55,1,
+		55,3,55,665,8,55,1,56,1,56,1,56,4,56,670,8,56,11,56,12,56,671,1,56,1,56,
+		1,57,1,57,1,57,1,57,1,58,1,58,3,58,682,8,58,1,58,1,58,1,59,1,59,1,60,1,
+		60,1,61,1,61,1,62,1,62,1,63,1,63,1,64,1,64,1,65,1,65,1,65,0,2,66,68,66,
+		0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,
+		50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,
+		98,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,0,15,
+		1,0,28,31,1,0,24,25,1,0,36,37,1,0,38,41,2,0,19,19,42,42,1,0,22,23,1,0,
+		3,8,3,0,19,19,35,35,50,59,2,0,64,64,66,67,1,1,108,108,1,1,111,111,1,0,
+		101,102,2,0,12,12,15,15,2,0,14,14,16,16,4,0,3,97,99,99,103,106,112,114,
+		762,0,133,1,0,0,0,2,138,1,0,0,0,4,164,1,0,0,0,6,169,1,0,0,0,8,175,1,0,
+		0,0,10,214,1,0,0,0,12,216,1,0,0,0,14,220,1,0,0,0,16,224,1,0,0,0,18,226,
+		1,0,0,0,20,228,1,0,0,0,22,230,1,0,0,0,24,232,1,0,0,0,26,252,1,0,0,0,28,
+		254,1,0,0,0,30,257,1,0,0,0,32,266,1,0,0,0,34,276,1,0,0,0,36,279,1,0,0,
+		0,38,283,1,0,0,0,40,286,1,0,0,0,42,293,1,0,0,0,44,308,1,0,0,0,46,310,1,
+		0,0,0,48,318,1,0,0,0,50,327,1,0,0,0,52,344,1,0,0,0,54,346,1,0,0,0,56,363,
+		1,0,0,0,58,371,1,0,0,0,60,373,1,0,0,0,62,379,1,0,0,0,64,395,1,0,0,0,66,
+		412,1,0,0,0,68,464,1,0,0,0,70,483,1,0,0,0,72,490,1,0,0,0,74,492,1,0,0,
+		0,76,494,1,0,0,0,78,510,1,0,0,0,80,524,1,0,0,0,82,526,1,0,0,0,84,540,1,
+		0,0,0,86,542,1,0,0,0,88,549,1,0,0,0,90,569,1,0,0,0,92,587,1,0,0,0,94,595,
+		1,0,0,0,96,597,1,0,0,0,98,610,1,0,0,0,100,614,1,0,0,0,102,630,1,0,0,0,
+		104,640,1,0,0,0,106,642,1,0,0,0,108,650,1,0,0,0,110,661,1,0,0,0,112,666,
+		1,0,0,0,114,675,1,0,0,0,116,679,1,0,0,0,118,685,1,0,0,0,120,687,1,0,0,
+		0,122,689,1,0,0,0,124,691,1,0,0,0,126,693,1,0,0,0,128,695,1,0,0,0,130,
+		697,1,0,0,0,132,134,3,2,1,0,133,132,1,0,0,0,133,134,1,0,0,0,134,135,1,
+		0,0,0,135,136,5,0,0,1,136,1,1,0,0,0,137,139,3,4,2,0,138,137,1,0,0,0,139,
+		140,1,0,0,0,140,138,1,0,0,0,140,141,1,0,0,0,141,3,1,0,0,0,142,165,3,6,
+		3,0,143,165,3,22,11,0,144,165,3,8,4,0,145,165,3,42,21,0,146,165,3,10,5,
+		0,147,165,3,16,8,0,148,165,3,18,9,0,149,165,3,36,18,0,150,165,3,12,6,0,
+		151,165,3,14,7,0,152,165,3,30,15,0,153,165,3,28,14,0,154,165,3,20,10,0,
+		155,165,3,112,56,0,156,165,3,114,57,0,157,165,3,116,58,0,158,165,3,106,
+		53,0,159,165,3,50,25,0,160,165,3,40,20,0,161,165,3,72,36,0,162,165,3,68,
+		34,0,163,165,3,96,48,0,164,142,1,0,0,0,164,143,1,0,0,0,164,144,1,0,0,0,
+		164,145,1,0,0,0,164,146,1,0,0,0,164,147,1,0,0,0,164,148,1,0,0,0,164,149,
+		1,0,0,0,164,150,1,0,0,0,164,151,1,0,0,0,164,152,1,0,0,0,164,153,1,0,0,
+		0,164,154,1,0,0,0,164,155,1,0,0,0,164,156,1,0,0,0,164,157,1,0,0,0,164,
+		158,1,0,0,0,164,159,1,0,0,0,164,160,1,0,0,0,164,161,1,0,0,0,164,162,1,
+		0,0,0,164,163,1,0,0,0,165,167,1,0,0,0,166,168,3,128,64,0,167,166,1,0,0,
+		0,167,168,1,0,0,0,168,5,1,0,0,0,169,171,3,124,62,0,170,172,3,2,1,0,171,
+		170,1,0,0,0,171,172,1,0,0,0,172,173,1,0,0,0,173,174,3,126,63,0,174,7,1,
+		0,0,0,175,176,5,90,0,0,176,178,3,66,33,0,177,179,5,91,0,0,178,177,1,0,
+		0,0,178,179,1,0,0,0,179,180,1,0,0,0,180,183,3,4,2,0,181,182,5,74,0,0,182,
+		184,3,4,2,0,183,181,1,0,0,0,183,184,1,0,0,0,184,9,1,0,0,0,185,186,5,72,
+		0,0,186,187,3,4,2,0,187,188,5,85,0,0,188,189,3,66,33,0,189,215,1,0,0,0,
+		190,191,5,84,0,0,191,192,3,66,33,0,192,193,3,4,2,0,193,215,1,0,0,0,194,
+		195,5,82,0,0,195,198,5,10,0,0,196,199,3,42,21,0,197,199,3,40,20,0,198,
+		196,1,0,0,0,198,197,1,0,0,0,198,199,1,0,0,0,199,200,1,0,0,0,200,202,5,
+		17,0,0,201,203,3,66,33,0,202,201,1,0,0,0,202,203,1,0,0,0,203,204,1,0,0,
+		0,204,206,5,17,0,0,205,207,3,4,2,0,206,205,1,0,0,0,206,207,1,0,0,0,207,
+		208,1,0,0,0,208,209,5,11,0,0,209,215,3,4,2,0,210,211,5,86,0,0,211,212,
+		3,66,33,0,212,213,3,4,2,0,213,215,1,0,0,0,214,185,1,0,0,0,214,190,1,0,
+		0,0,214,194,1,0,0,0,214,210,1,0,0,0,215,11,1,0,0,0,216,217,5,88,0,0,217,
+		218,3,66,33,0,218,219,3,4,2,0,219,13,1,0,0,0,220,221,5,83,0,0,221,222,
+		3,66,33,0,222,223,3,24,12,0,223,15,1,0,0,0,224,225,5,81,0,0,225,17,1,0,
+		0,0,226,227,5,70,0,0,227,19,1,0,0,0,228,229,5,71,0,0,229,21,1,0,0,0,230,
+		231,5,17,0,0,231,23,1,0,0,0,232,236,3,124,62,0,233,235,3,26,13,0,234,233,
+		1,0,0,0,235,238,1,0,0,0,236,234,1,0,0,0,236,237,1,0,0,0,237,239,1,0,0,
+		0,238,236,1,0,0,0,239,240,3,126,63,0,240,25,1,0,0,0,241,242,5,89,0,0,242,
+		244,5,20,0,0,243,245,3,2,1,0,244,243,1,0,0,0,244,245,1,0,0,0,245,253,1,
+		0,0,0,246,247,5,73,0,0,247,248,3,66,33,0,248,250,5,20,0,0,249,251,3,2,
+		1,0,250,249,1,0,0,0,250,251,1,0,0,0,251,253,1,0,0,0,252,241,1,0,0,0,252,
+		246,1,0,0,0,253,27,1,0,0,0,254,255,5,92,0,0,255,256,3,66,33,0,256,29,1,
+		0,0,0,257,258,5,94,0,0,258,264,3,4,2,0,259,261,3,32,16,0,260,262,3,34,
+		17,0,261,260,1,0,0,0,261,262,1,0,0,0,262,265,1,0,0,0,263,265,3,34,17,0,
+		264,259,1,0,0,0,264,263,1,0,0,0,265,31,1,0,0,0,266,272,5,78,0,0,267,269,
+		5,10,0,0,268,270,3,104,52,0,269,268,1,0,0,0,269,270,1,0,0,0,270,271,1,
+		0,0,0,271,273,5,11,0,0,272,267,1,0,0,0,272,273,1,0,0,0,273,274,1,0,0,0,
+		274,275,3,4,2,0,275,33,1,0,0,0,276,277,5,79,0,0,277,278,3,4,2,0,278,35,
+		1,0,0,0,279,281,5,80,0,0,280,282,3,66,33,0,281,280,1,0,0,0,281,282,1,0,
+		0,0,282,37,1,0,0,0,283,284,5,93,0,0,284,285,3,66,33,0,285,39,1,0,0,0,286,
+		288,3,54,27,0,287,289,3,48,24,0,288,287,1,0,0,0,288,289,1,0,0,0,289,290,
+		1,0,0,0,290,291,3,78,39,0,291,292,3,64,32,0,292,41,1,0,0,0,293,294,3,44,
+		22,0,294,299,3,46,23,0,295,296,5,18,0,0,296,298,3,46,23,0,297,295,1,0,
+		0,0,298,301,1,0,0,0,299,297,1,0,0,0,299,300,1,0,0,0,300,43,1,0,0,0,301,
+		299,1,0,0,0,302,304,5,76,0,0,303,302,1,0,0,0,304,305,1,0,0,0,305,303,1,
+		0,0,0,305,306,1,0,0,0,306,309,1,0,0,0,307,309,5,97,0,0,308,303,1,0,0,0,
+		308,307,1,0,0,0,309,45,1,0,0,0,310,312,3,104,52,0,311,313,3,48,24,0,312,
+		311,1,0,0,0,312,313,1,0,0,0,313,316,1,0,0,0,314,315,5,19,0,0,315,317,3,
+		64,32,0,316,314,1,0,0,0,316,317,1,0,0,0,317,47,1,0,0,0,318,319,5,20,0,
+		0,319,324,3,104,52,0,320,321,5,46,0,0,321,323,3,104,52,0,322,320,1,0,0,
+		0,323,326,1,0,0,0,324,322,1,0,0,0,324,325,1,0,0,0,325,49,1,0,0,0,326,324,
+		1,0,0,0,327,328,5,77,0,0,328,333,3,104,52,0,329,330,5,18,0,0,330,332,3,
+		104,52,0,331,329,1,0,0,0,332,335,1,0,0,0,333,331,1,0,0,0,333,334,1,0,0,
+		0,334,336,1,0,0,0,335,333,1,0,0,0,336,337,5,17,0,0,337,51,1,0,0,0,338,
+		345,3,104,52,0,339,340,5,10,0,0,340,341,3,64,32,0,341,342,5,11,0,0,342,
+		345,1,0,0,0,343,345,3,60,30,0,344,338,1,0,0,0,344,339,1,0,0,0,344,343,
+		1,0,0,0,345,53,1,0,0,0,346,354,3,52,26,0,347,349,3,56,28,0,348,347,1,0,
+		0,0,349,352,1,0,0,0,350,348,1,0,0,0,350,351,1,0,0,0,351,353,1,0,0,0,352,
+		350,1,0,0,0,353,355,3,58,29,0,354,350,1,0,0,0,354,355,1,0,0,0,355,55,1,
+		0,0,0,356,357,3,74,37,0,357,358,3,62,31,0,358,359,5,9,0,0,359,364,1,0,
+		0,0,360,361,5,21,0,0,361,364,3,104,52,0,362,364,3,76,38,0,363,356,1,0,
+		0,0,363,360,1,0,0,0,363,362,1,0,0,0,364,57,1,0,0,0,365,366,3,74,37,0,366,
+		367,3,62,31,0,367,368,5,9,0,0,368,372,1,0,0,0,369,370,5,21,0,0,370,372,
+		3,104,52,0,371,365,1,0,0,0,371,369,1,0,0,0,372,59,1,0,0,0,373,375,5,75,
+		0,0,374,376,3,104,52,0,375,374,1,0,0,0,375,376,1,0,0,0,376,377,1,0,0,0,
+		377,378,3,76,38,0,378,61,1,0,0,0,379,384,3,66,33,0,380,381,5,18,0,0,381,
+		383,3,66,33,0,382,380,1,0,0,0,383,386,1,0,0,0,384,382,1,0,0,0,384,385,
+		1,0,0,0,385,63,1,0,0,0,386,384,1,0,0,0,387,390,3,66,33,0,388,390,3,96,
+		48,0,389,387,1,0,0,0,389,388,1,0,0,0,390,396,1,0,0,0,391,392,5,10,0,0,
+		392,393,3,64,32,0,393,394,5,11,0,0,394,396,1,0,0,0,395,389,1,0,0,0,395,
+		391,1,0,0,0,396,65,1,0,0,0,397,398,6,33,-1,0,398,413,3,72,36,0,399,413,
+		3,68,34,0,400,413,3,54,27,0,401,402,5,25,0,0,402,413,3,66,33,19,403,404,
+		5,26,0,0,404,413,3,66,33,18,405,406,5,27,0,0,406,413,3,66,33,17,407,413,
+		3,80,40,0,408,409,5,10,0,0,409,410,3,66,33,0,410,411,5,11,0,0,411,413,
+		1,0,0,0,412,397,1,0,0,0,412,399,1,0,0,0,412,400,1,0,0,0,412,401,1,0,0,
+		0,412,403,1,0,0,0,412,405,1,0,0,0,412,407,1,0,0,0,412,408,1,0,0,0,413,
+		461,1,0,0,0,414,415,10,16,0,0,415,416,7,0,0,0,416,460,3,66,33,17,417,418,
+		10,15,0,0,418,419,7,1,0,0,419,460,3,66,33,16,420,421,10,14,0,0,421,422,
+		7,2,0,0,422,460,3,66,33,15,423,424,10,13,0,0,424,425,7,3,0,0,425,460,3,
+		66,33,14,426,427,10,12,0,0,427,428,7,4,0,0,428,460,3,66,33,13,429,430,
+		10,11,0,0,430,431,5,43,0,0,431,460,3,66,33,12,432,433,10,10,0,0,433,434,
+		5,48,0,0,434,460,3,66,33,11,435,436,10,9,0,0,436,437,5,47,0,0,437,460,
+		3,66,33,10,438,439,10,8,0,0,439,440,5,49,0,0,440,460,3,66,33,9,441,442,
+		10,7,0,0,442,443,5,34,0,0,443,460,3,66,33,8,444,445,10,6,0,0,445,446,5,
+		44,0,0,446,460,3,66,33,7,447,448,10,5,0,0,448,449,5,46,0,0,449,460,3,66,
+		33,6,450,451,10,4,0,0,451,452,5,45,0,0,452,460,3,66,33,5,453,454,10,3,
+		0,0,454,455,5,33,0,0,455,456,3,66,33,0,456,457,5,20,0,0,457,458,3,66,33,
+		3,458,460,1,0,0,0,459,414,1,0,0,0,459,417,1,0,0,0,459,420,1,0,0,0,459,
+		423,1,0,0,0,459,426,1,0,0,0,459,429,1,0,0,0,459,432,1,0,0,0,459,435,1,
+		0,0,0,459,438,1,0,0,0,459,441,1,0,0,0,459,444,1,0,0,0,459,447,1,0,0,0,
+		459,450,1,0,0,0,459,453,1,0,0,0,460,463,1,0,0,0,461,459,1,0,0,0,461,462,
+		1,0,0,0,462,67,1,0,0,0,463,461,1,0,0,0,464,465,6,34,-1,0,465,466,3,70,
+		35,0,466,467,3,76,38,0,467,472,1,0,0,0,468,469,10,1,0,0,469,471,3,76,38,
+		0,470,468,1,0,0,0,471,474,1,0,0,0,472,470,1,0,0,0,472,473,1,0,0,0,473,
+		69,1,0,0,0,474,472,1,0,0,0,475,484,3,54,27,0,476,479,5,10,0,0,477,480,
+		3,96,48,0,478,480,3,70,35,0,479,477,1,0,0,0,479,478,1,0,0,0,480,481,1,
+		0,0,0,481,482,5,11,0,0,482,484,1,0,0,0,483,475,1,0,0,0,483,476,1,0,0,0,
+		484,71,1,0,0,0,485,486,7,5,0,0,486,491,3,54,27,0,487,488,3,54,27,0,488,
+		489,7,5,0,0,489,491,1,0,0,0,490,485,1,0,0,0,490,487,1,0,0,0,491,73,1,0,
+		0,0,492,493,7,6,0,0,493,75,1,0,0,0,494,506,5,10,0,0,495,500,3,64,32,0,
+		496,497,5,18,0,0,497,499,3,64,32,0,498,496,1,0,0,0,499,502,1,0,0,0,500,
+		498,1,0,0,0,500,501,1,0,0,0,501,504,1,0,0,0,502,500,1,0,0,0,503,505,5,
+		18,0,0,504,503,1,0,0,0,504,505,1,0,0,0,505,507,1,0,0,0,506,495,1,0,0,0,
+		506,507,1,0,0,0,507,508,1,0,0,0,508,509,5,11,0,0,509,77,1,0,0,0,510,511,
+		7,7,0,0,511,79,1,0,0,0,512,525,5,68,0,0,513,525,5,69,0,0,514,525,5,63,
+		0,0,515,525,5,104,0,0,516,525,5,106,0,0,517,525,3,82,41,0,518,525,5,67,
+		0,0,519,525,5,66,0,0,520,525,5,65,0,0,521,525,5,64,0,0,522,525,3,86,43,
+		0,523,525,3,90,45,0,524,512,1,0,0,0,524,513,1,0,0,0,524,514,1,0,0,0,524,
+		515,1,0,0,0,524,516,1,0,0,0,524,517,1,0,0,0,524,518,1,0,0,0,524,519,1,
+		0,0,0,524,520,1,0,0,0,524,521,1,0,0,0,524,522,1,0,0,0,524,523,1,0,0,0,
+		525,81,1,0,0,0,526,530,5,105,0,0,527,529,3,84,42,0,528,527,1,0,0,0,529,
+		532,1,0,0,0,530,528,1,0,0,0,530,531,1,0,0,0,531,533,1,0,0,0,532,530,1,
+		0,0,0,533,534,5,112,0,0,534,83,1,0,0,0,535,541,5,114,0,0,536,537,5,113,
+		0,0,537,538,3,66,33,0,538,539,5,13,0,0,539,541,1,0,0,0,540,535,1,0,0,0,
+		540,536,1,0,0,0,541,85,1,0,0,0,542,543,5,3,0,0,543,544,3,88,44,0,544,545,
+		5,9,0,0,545,87,1,0,0,0,546,548,5,18,0,0,547,546,1,0,0,0,548,551,1,0,0,
+		0,549,547,1,0,0,0,549,550,1,0,0,0,550,553,1,0,0,0,551,549,1,0,0,0,552,
+		554,3,64,32,0,553,552,1,0,0,0,553,554,1,0,0,0,554,563,1,0,0,0,555,557,
+		5,18,0,0,556,555,1,0,0,0,557,558,1,0,0,0,558,556,1,0,0,0,558,559,1,0,0,
+		0,559,560,1,0,0,0,560,562,3,64,32,0,561,556,1,0,0,0,562,565,1,0,0,0,563,
+		561,1,0,0,0,563,564,1,0,0,0,564,567,1,0,0,0,565,563,1,0,0,0,566,568,5,
+		18,0,0,567,566,1,0,0,0,567,568,1,0,0,0,568,89,1,0,0,0,569,581,3,124,62,
+		0,570,575,3,92,46,0,571,572,5,18,0,0,572,574,3,92,46,0,573,571,1,0,0,0,
+		574,577,1,0,0,0,575,573,1,0,0,0,575,576,1,0,0,0,576,579,1,0,0,0,577,575,
+		1,0,0,0,578,580,5,18,0,0,579,578,1,0,0,0,579,580,1,0,0,0,580,582,1,0,0,
+		0,581,570,1,0,0,0,581,582,1,0,0,0,582,583,1,0,0,0,583,584,3,126,63,0,584,
+		91,1,0,0,0,585,588,3,94,47,0,586,588,5,104,0,0,587,585,1,0,0,0,587,586,
+		1,0,0,0,588,589,1,0,0,0,589,590,5,20,0,0,590,591,3,64,32,0,591,93,1,0,
+		0,0,592,596,5,103,0,0,593,596,3,120,60,0,594,596,3,122,61,0,595,592,1,
+		0,0,0,595,593,1,0,0,0,595,594,1,0,0,0,596,95,1,0,0,0,597,599,5,87,0,0,
+		598,600,5,103,0,0,599,598,1,0,0,0,599,600,1,0,0,0,600,601,1,0,0,0,601,
+		603,3,100,50,0,602,604,3,98,49,0,603,602,1,0,0,0,603,604,1,0,0,0,604,605,
+		1,0,0,0,605,606,3,6,3,0,606,97,1,0,0,0,607,608,5,20,0,0,608,609,5,103,
+		0,0,609,611,3,100,50,0,610,607,1,0,0,0,610,611,1,0,0,0,611,612,1,0,0,0,
+		612,613,5,96,0,0,613,99,1,0,0,0,614,626,5,10,0,0,615,620,3,102,51,0,616,
+		617,5,18,0,0,617,619,3,102,51,0,618,616,1,0,0,0,619,622,1,0,0,0,620,618,
+		1,0,0,0,620,621,1,0,0,0,621,624,1,0,0,0,622,620,1,0,0,0,623,625,5,18,0,
+		0,624,623,1,0,0,0,624,625,1,0,0,0,625,627,1,0,0,0,626,615,1,0,0,0,626,
+		627,1,0,0,0,627,628,1,0,0,0,628,629,5,11,0,0,629,101,1,0,0,0,630,632,3,
+		104,52,0,631,633,3,48,24,0,632,631,1,0,0,0,632,633,1,0,0,0,633,636,1,0,
+		0,0,634,635,5,19,0,0,635,637,3,64,32,0,636,634,1,0,0,0,636,637,1,0,0,0,
+		637,103,1,0,0,0,638,641,5,103,0,0,639,641,3,120,60,0,640,638,1,0,0,0,640,
+		639,1,0,0,0,641,105,1,0,0,0,642,643,5,95,0,0,643,644,3,104,52,0,644,646,
+		3,124,62,0,645,647,3,108,54,0,646,645,1,0,0,0,646,647,1,0,0,0,647,648,
+		1,0,0,0,648,649,3,126,63,0,649,107,1,0,0,0,650,655,3,110,55,0,651,652,
+		5,18,0,0,652,654,3,110,55,0,653,651,1,0,0,0,654,657,1,0,0,0,655,653,1,
+		0,0,0,655,656,1,0,0,0,656,659,1,0,0,0,657,655,1,0,0,0,658,660,5,18,0,0,
+		659,658,1,0,0,0,659,660,1,0,0,0,660,109,1,0,0,0,661,664,3,104,52,0,662,
+		663,5,19,0,0,663,665,7,8,0,0,664,662,1,0,0,0,664,665,1,0,0,0,665,111,1,
+		0,0,0,666,667,5,98,0,0,667,669,3,104,52,0,668,670,3,130,65,0,669,668,1,
+		0,0,0,670,671,1,0,0,0,671,669,1,0,0,0,671,672,1,0,0,0,672,673,1,0,0,0,
+		673,674,7,9,0,0,674,113,1,0,0,0,675,676,5,100,0,0,676,677,5,110,0,0,677,
+		678,7,10,0,0,678,115,1,0,0,0,679,681,7,11,0,0,680,682,5,110,0,0,681,680,
+		1,0,0,0,681,682,1,0,0,0,682,683,1,0,0,0,683,684,7,10,0,0,684,117,1,0,0,
+		0,685,686,3,104,52,0,686,119,1,0,0,0,687,688,5,96,0,0,688,121,1,0,0,0,
+		689,690,5,69,0,0,690,123,1,0,0,0,691,692,7,12,0,0,692,125,1,0,0,0,693,
+		694,7,13,0,0,694,127,1,0,0,0,695,696,5,17,0,0,696,129,1,0,0,0,697,698,
+		7,14,0,0,698,131,1,0,0,0,75,133,140,164,167,171,178,183,198,202,206,214,
+		236,244,250,252,261,264,269,272,281,288,299,305,308,312,316,324,333,344,
+		350,354,363,371,375,384,389,395,412,459,461,472,479,483,490,500,504,506,
+		524,530,540,549,553,558,563,567,575,579,581,587,595,599,603,610,620,624,
+		626,632,636,640,646,655,659,664,671,681
 	};
 
 	public static readonly ATN _ATN =

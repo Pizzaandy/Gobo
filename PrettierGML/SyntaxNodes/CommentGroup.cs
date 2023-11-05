@@ -20,7 +20,7 @@ namespace PrettierGML.SyntaxNodes
     }
 
     /// <summary>
-    /// Represents a sequence of comments with no empty lines between them.
+    /// Represents a sequence of comments with no line breaks between them.
     /// </summary>
     internal class CommentGroup
     {
@@ -97,11 +97,6 @@ namespace PrettierGML.SyntaxNodes
                 else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
                 {
                     parts.Add(PrintMultiLineComment(token.Text));
-                }
-                else if (token.Type == GameMakerLanguageLexer.LineTerminator)
-                {
-                    parts.Add(Doc.HardLine);
-                    shouldBreak = true;
                 }
                 else if (token.Type == GameMakerLanguageLexer.WhiteSpaces)
                 {

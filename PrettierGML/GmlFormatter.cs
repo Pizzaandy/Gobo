@@ -9,6 +9,8 @@ namespace PrettierGML
     {
         public static string Format(string input, FormatOptions options)
         {
+            input = input.ReplaceLineEndings();
+
             var parseResult = GmlParser.Parse(input);
 
             GmlSyntaxNode ast = parseResult.Ast;
@@ -20,8 +22,6 @@ namespace PrettierGML
             var docs = ast.Print(new PrintContext(options, tokens));
             ast.EnsureCommentsPrinted();
 
-            //Console.WriteLine(docs);
-
             var printOptions = new Printer.DocPrinterOptions()
             {
                 Width = options.Width,
@@ -29,14 +29,15 @@ namespace PrettierGML
                 UseTabs = options.UseTabs,
             };
 
-            var output = DocPrinter.Print(docs, printOptions, "\n");
+            var output = DocPrinter.Print(docs, printOptions, Environment.NewLine);
 
             if (options.CheckAst)
             {
-                var updatedParseResult = GmlParser.Parse(input);
-                var updatedAst = updatedParseResult.Ast;
+                var updatedParseResult = GmlParser.Parse(output);
 
-                var resultHash = updatedAst.GetHashCode();
+                var resultHash = updatedParseResult.Ast.GetHashCode();
+                Console.WriteLine(updatedParseResult.Ast);
+
                 if (initialHash != resultHash)
                 {
                     Console.Clear();
@@ -45,7 +46,7 @@ namespace PrettierGML
                     Console.WriteLine(ast);
 
                     Console.WriteLine("--- FORMATTED AST ---");
-                    Console.WriteLine(updatedAst);
+                    Console.WriteLine(updatedParseResult.Ast);
                     throw new Exception("Formatting transformed the AST!");
                 }
             }

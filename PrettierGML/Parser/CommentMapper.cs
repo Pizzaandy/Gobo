@@ -208,7 +208,7 @@ namespace PrettierGML.Parser
         }
 
         /// <summary>
-        /// Iterate all tokens and group together comments
+        /// Iterate all tokens and group together comments on the same line
         /// </summary>
         private static List<CommentGroup> GetAllCommentGroups(CommonTokenStream tokenStream)
         {
@@ -224,24 +224,16 @@ namespace PrettierGML.Parser
 
                 if (IsWhiteSpace(token))
                 {
-                    // nothing
+                    if (IsLineBreak(token))
+                    {
+                        breakGroup = true;
+                    }
                 }
                 else if (IsComment(token))
                 {
                     currentGroup ??= new();
                 }
                 else
-                {
-                    breakGroup = true;
-                }
-
-                if (
-                    currentGroup
-                        ?.AsEnumerable()
-                        .Reverse()
-                        .TakeWhile(IsWhiteSpace)
-                        .Count(IsLineBreak) >= 2
-                )
                 {
                     breakGroup = true;
                 }
@@ -283,16 +275,27 @@ namespace PrettierGML.Parser
 
         private bool IsOwnLineComment(CommentGroup comment)
         {
-            var leadingTokens = TokenStream.GetHiddenTokensToLeft(comment.TokenRange.Start);
-            return leadingTokens is not null
-                && leadingTokens.TakeWhile(token => !IsComment(token)).Any(IsLineBreak);
+            var leadingTokens = TokenStream
+                .GetHiddenTokensToLeft(comment.TokenRange.Start)
+                ?.Reverse();
+            var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
+
+            return (leadingTokens is null || leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak))
+                && trailingTokens is not null
+                && trailingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak);
         }
 
         private bool IsEndOfLineComment(CommentGroup comment)
         {
+            var leadingTokens = TokenStream
+                .GetHiddenTokensToLeft(comment.TokenRange.Start)
+                ?.Reverse();
             var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
-            return trailingTokens is not null
-                && trailingTokens.TakeWhile(token => !IsComment(token)).Any(IsLineBreak);
+            return (
+                    leadingTokens is null || !leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
+                )
+                && trailingTokens is not null
+                && trailingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak);
         }
 
         private static bool IsComment(IToken token)

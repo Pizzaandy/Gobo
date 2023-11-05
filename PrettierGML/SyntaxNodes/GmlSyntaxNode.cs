@@ -76,8 +76,16 @@ namespace PrettierGML.SyntaxNodes
         public Doc Print(PrintContext ctx)
         {
             ctx.Stack.Push(this);
-            var printed = WithComments(ctx, PrintNode(ctx));
+
+            Doc printed = PrintNode(ctx);
+
+            if (PrintOwnComments && Comments.Count > 0)
+            {
+                printed = WithComments(ctx, this, printed);
+            }
+
             ctx.Stack.Pop();
+
             return printed;
         }
 
@@ -104,19 +112,14 @@ namespace PrettierGML.SyntaxNodes
             return CommentGroup.PrintGroups(ctx, DanglingComments, CommentType.Leading);
         }
 
-        protected Doc WithComments(PrintContext ctx, Doc printed)
+        protected Doc WithComments(PrintContext ctx, GmlSyntaxNode node, Doc nodeDoc)
         {
-            if (!PrintOwnComments || Comments.Count == 0)
-            {
-                return printed;
-            }
-
             // Print dangling comments as leading by default
             return Doc.Concat(
-                PrintLeadingComments(ctx),
-                PrintDanglingComments(ctx),
-                printed,
-                PrintTrailingComments(ctx)
+                node.PrintLeadingComments(ctx),
+                node.PrintDanglingComments(ctx),
+                nodeDoc,
+                node.PrintTrailingComments(ctx)
             );
         }
 
@@ -138,11 +141,7 @@ namespace PrettierGML.SyntaxNodes
             if (!allCommentsPrinted && isRoot)
             {
                 var unprintedGroups = GetUnprintedCommentGroups();
-                var text = "";
-                foreach (var group in unprintedGroups)
-                {
-                    text += group;
-                }
+                var text = string.Join('\n', unprintedGroups);
                 throw new Exception(
                     $"{unprintedGroups.Count} comment groups were not printed.\nComment Groups:\n{text}"
                 );
@@ -172,6 +171,7 @@ namespace PrettierGML.SyntaxNodes
         public override int GetHashCode()
         {
             var hashCode = new HashCode();
+
             hashCode.Add(Kind);
 
             foreach (var child in Children)

@@ -16,16 +16,8 @@ static string Format(string input)
 }
 
 var input = $$"""
-    if // test
-    ((e)
-    // eee
-    
-    ) // bruh
-    {
-        var foo = ((bar)) // thing
-    }
-    function a() {return}
-    function b(){}
+    globalvar a, // you 
+    constructor;
     """;
 
 Format(input);

@@ -257,40 +257,25 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.CaseBlockContext context
         )
         {
-            var caseClauses = new List<GmlSyntaxNode>();
-            if (context.caseClauses() != null)
+            List<GmlSyntaxNode> caseClauses = new();
+            foreach (var clause in context.caseClause())
             {
-                foreach (var caseList in context.caseClauses())
-                {
-                    caseClauses.AddRange(Visit(caseList).Children);
-                }
-            }
-            if (context.defaultClause() != null)
-            {
-                caseClauses.Add(Visit(context.defaultClause()));
+                caseClauses.Add(Visit(clause));
             }
             return new SwitchBlock(context, caseClauses);
-        }
-
-        public override GmlSyntaxNode VisitCaseClauses(
-            [NotNull] GameMakerLanguageParser.CaseClausesContext context
-        )
-        {
-            var parts = new List<GmlSyntaxNode>();
-            foreach (var caseClause in context.caseClause())
-            {
-                parts.Add(Visit(caseClause));
-            }
-            return parts;
         }
 
         public override GmlSyntaxNode VisitCaseClause(
             [NotNull] GameMakerLanguageParser.CaseClauseContext context
         )
         {
-            var test = Visit(context.expression());
-            GmlSyntaxNode body = GmlSyntaxNode.Empty;
+            GmlSyntaxNode test = GmlSyntaxNode.Empty;
             GmlSyntaxNode statements = GmlSyntaxNode.Empty;
+
+            if (context.expression() != null)
+            {
+                test = Visit(context.expression());
+            }
 
             if (context.statementList() != null)
             {
@@ -298,21 +283,6 @@ namespace PrettierGML.Parser
             }
 
             return new SwitchCase(context, test, statements.Children);
-        }
-
-        public override GmlSyntaxNode VisitDefaultClause(
-            [NotNull] GameMakerLanguageParser.DefaultClauseContext context
-        )
-        {
-            GmlSyntaxNode body = GmlSyntaxNode.Empty;
-            GmlSyntaxNode statements = GmlSyntaxNode.Empty;
-
-            if (context.statementList() != null)
-            {
-                statements = Visit(context.statementList());
-            }
-
-            return new SwitchCase(context, GmlSyntaxNode.Empty, statements.Children);
         }
 
         public override GmlSyntaxNode VisitContinueStatement(
@@ -379,6 +349,10 @@ namespace PrettierGML.Parser
                 declarations.Add(Visit(declaration));
             }
             var kind = context.varModifier().GetText();
+            if (kind.StartsWith("var"))
+            {
+                kind = "var";
+            }
             return new VariableDeclarationList(context, declarations, kind);
         }
 
@@ -1183,6 +1157,18 @@ namespace PrettierGML.Parser
         )
         {
             return new FinallyProduction(context, Visit(context.statement()));
+        }
+
+        public override GmlSyntaxNode VisitGlobalVarStatement(
+            [NotNull] GameMakerLanguageParser.GlobalVarStatementContext context
+        )
+        {
+            var declarations = new List<GmlSyntaxNode>();
+            foreach (var declaration in context.identifier())
+            {
+                declarations.Add(Visit(declaration));
+            }
+            return new GlobalVariableStatement(context, declarations);
         }
     }
 }

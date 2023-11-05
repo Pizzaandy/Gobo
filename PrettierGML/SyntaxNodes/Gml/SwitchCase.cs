@@ -46,10 +46,11 @@ namespace PrettierGML.SyntaxNodes.Gml
                 }
             }
 
+            Test.PrintOwnComments = false;
+
             return Doc.Concat(
                 caseText,
-                Test.Print(ctx),
-                ":",
+                WithComments(ctx, Test, Doc.Concat(Test.Print(ctx), ":")),
                 Statements.Count > 0 ? printedStatements : Doc.Null
             );
         }

@@ -132,23 +132,11 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitCaseBlock([NotNull] GameMakerLanguageParser.CaseBlockContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.caseClauses"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitCaseClauses([NotNull] GameMakerLanguageParser.CaseClausesContext context);
-	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.caseClause"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitCaseClause([NotNull] GameMakerLanguageParser.CaseClauseContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.defaultClause"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitDefaultClause([NotNull] GameMakerLanguageParser.DefaultClauseContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.throwStatement"/>.
 	/// </summary>

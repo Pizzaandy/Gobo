@@ -80,19 +80,12 @@ emptyStatement
     ;
 
 caseBlock
-    : openBlock caseClauses? (defaultClause caseClauses?)? closeBlock
-    ;
-
-caseClauses
-    : caseClause+
+    : openBlock caseClause* closeBlock
     ;
 
 caseClause
-    : Case expression ':' statementList?
-    ;
-
-defaultClause
     : Default ':' statementList?
+    | Case expression ':' statementList?
     ;
 
 throwStatement
