@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class SwitchBlock : GmlSyntaxNode
+    internal sealed class SwitchBlock : GmlSyntaxNode
     {
         public List<GmlSyntaxNode> Cases => Children;
 

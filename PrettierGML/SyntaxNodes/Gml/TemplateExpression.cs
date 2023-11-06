@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class TemplateExpression : GmlSyntaxNode
+    internal sealed class TemplateExpression : GmlSyntaxNode
     {
         public GmlSyntaxNode Expression { get; set; }
 

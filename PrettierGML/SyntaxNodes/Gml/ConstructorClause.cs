@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class ConstructorClause : GmlSyntaxNode
+    internal sealed class ConstructorClause : GmlSyntaxNode
     {
         public GmlSyntaxNode Id { get; set; }
         public GmlSyntaxNode Parameters { get; set; }

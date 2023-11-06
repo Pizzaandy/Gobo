@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class IncDecStatement : GmlSyntaxNode
+    internal sealed class IncDecStatement : GmlSyntaxNode
     {
         public string Operator { get; set; }
         public GmlSyntaxNode Argument { get; set; }

@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class NewExpression : GmlSyntaxNode
+    internal sealed class NewExpression : GmlSyntaxNode
     {
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Arguments { get; set; }

@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class RegionStatement : GmlSyntaxNode
+    internal sealed class RegionStatement : GmlSyntaxNode
     {
         public string? Name { get; set; }
         public bool IsEndRegion { get; set; }

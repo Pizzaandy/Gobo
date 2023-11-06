@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class WhileStatement : GmlSyntaxNode
+    internal sealed class WhileStatement : GmlSyntaxNode
     {
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }

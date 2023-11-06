@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class SwitchCase : GmlSyntaxNode
+    internal sealed class SwitchCase : GmlSyntaxNode
     {
         public GmlSyntaxNode Test { get; set; }
         public List<GmlSyntaxNode> Statements { get; set; }

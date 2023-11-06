@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class ConditionalExpression : GmlSyntaxNode
+    internal sealed class ConditionalExpression : GmlSyntaxNode
     {
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode WhenTrue { get; set; }

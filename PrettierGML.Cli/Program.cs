@@ -21,10 +21,6 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
         [CommandArgument(0, "[file/dir]")]
         public string? FilePath { get; init; }
 
-        [CommandOption("--debug")]
-        [DefaultValue(true)]
-        public bool Debug { get; init; }
-
         [CommandOption("--version")]
         [DefaultValue(false)]
         public bool Version { get; init; }

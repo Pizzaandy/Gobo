@@ -9,7 +9,7 @@ namespace PrettierGML.Parser
     /// <summary>
     /// Visits the Antlr-generated parse tree and returns a GmlSyntaxNode tree.
     /// </summary>
-    internal class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSyntaxNode>
+    internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSyntaxNode>
     {
         public override GmlSyntaxNode VisitProgram(
             [NotNull] GameMakerLanguageParser.ProgramContext context

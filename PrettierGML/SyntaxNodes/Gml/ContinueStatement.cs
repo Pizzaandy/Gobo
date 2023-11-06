@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class ContinueStatement : GmlSyntaxNode
+    internal sealed class ContinueStatement : GmlSyntaxNode
     {
         public ContinueStatement(ParserRuleContext context)
             : base(context) { }

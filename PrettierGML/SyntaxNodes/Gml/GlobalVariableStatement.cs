@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class GlobalVariableStatement : GmlSyntaxNode
+    internal sealed class GlobalVariableStatement : GmlSyntaxNode
     {
         public List<GmlSyntaxNode> Declarations => Children;
 

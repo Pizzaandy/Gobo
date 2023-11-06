@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class MacroDeclaration : GmlSyntaxNode
+    internal sealed class MacroDeclaration : GmlSyntaxNode
     {
         public GmlSyntaxNode Id { get; set; }
         public string Body { get; set; }

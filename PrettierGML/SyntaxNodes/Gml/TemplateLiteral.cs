@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class TemplateLiteral : GmlSyntaxNode
+    internal sealed class TemplateLiteral : GmlSyntaxNode
     {
         public List<GmlSyntaxNode> Parts => Children;
 

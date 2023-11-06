@@ -3,7 +3,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class BreakStatement : GmlSyntaxNode
+    internal sealed class BreakStatement : GmlSyntaxNode
     {
         public BreakStatement(ParserRuleContext context)
             : base(context) { }

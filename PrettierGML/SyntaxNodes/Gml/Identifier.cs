@@ -4,7 +4,7 @@ using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class Identifier : GmlSyntaxNode
+    internal sealed class Identifier : GmlSyntaxNode
     {
         public string Name { get; set; }
 

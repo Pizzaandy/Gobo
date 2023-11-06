@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal class ParameterList : GmlSyntaxNode
+    internal sealed class ParameterList : GmlSyntaxNode
     {
         public List<GmlSyntaxNode> Parameters => Children;
 
