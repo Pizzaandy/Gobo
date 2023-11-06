@@ -21,6 +21,11 @@ namespace PrettierGML.SyntaxNodes.Gml
                 return Expression.Print(ctx);
             }
 
+            if (ShouldNotBreak(Expression) && !Expression.Comments.Any())
+            {
+                return Doc.Concat("(", Expression.Print(ctx), ")");
+            }
+
             return Doc.Group(
                 "(",
                 Doc.Indent(Doc.SoftLine, Expression.Print(ctx)),
@@ -32,6 +37,11 @@ namespace PrettierGML.SyntaxNodes.Gml
         public override int GetHashCode()
         {
             return Expression.GetHashCode();
+        }
+
+        private static bool ShouldNotBreak(GmlSyntaxNode node)
+        {
+            return node is FunctionDeclaration or StructExpression;
         }
     }
 }

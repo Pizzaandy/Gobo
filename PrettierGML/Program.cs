@@ -17,18 +17,7 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    if cond // yep
-    {
-    // eee
-    }
-    call(/* comment!
-
-    */) // yay!
-
-    switch (foo) // e
-    {
-        //bar
-    }
+    (function foo() {return}).a()
     """;
 
 TestFormat(input);

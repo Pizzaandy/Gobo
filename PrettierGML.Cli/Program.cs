@@ -92,9 +92,8 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
     {
         var input = await File.ReadAllTextAsync(filePath);
         var result = GmlFormatter.Format(input, new() { Debug = true });
-
-        AnsiConsole.Write(
-            new Panel(new Text(result.Output)).Header("Formatted Code").RoundedBorder().Expand()
-        );
+        AnsiConsole.WriteLine();
+        AnsiConsole.Write(new Rule("Formatted Code").LeftJustified());
+        AnsiConsole.Write(new Text(result.Output));
     }
 }

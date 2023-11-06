@@ -29,6 +29,10 @@ namespace PrettierGML.Tests
 
             var result = GmlFormatter.Format(input, options);
 
+            output.WriteLine($"Parse: {result.ParseTimeMs}");
+            output.WriteLine($"Format: {result.FormatTimeMs}");
+            output.WriteLine($"Total: {result.TotalTimeMs}");
+
             await File.WriteAllTextAsync(
                 filePath.Replace(TestFileExtension, ActualFileExtension),
                 result.Output
