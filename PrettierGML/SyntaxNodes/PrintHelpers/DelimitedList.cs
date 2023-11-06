@@ -16,7 +16,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         {
             var parts = new List<Doc> { openToken };
 
-            if (arguments.Children.Any())
+            if (arguments.Children.Count > 0)
             {
                 Doc printedArguments = Print(
                     ctx,
@@ -28,23 +28,14 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                 parts.Add(Doc.Indent(Doc.SoftLine, printedArguments));
                 parts.Add(Doc.SoftLine);
             }
-            else if (arguments.DanglingComments.Any())
+            else if (arguments.DanglingComments.Count > 0)
             {
                 if (arguments.DanglingComments.Any(c => c.EndsWithSingleLineComment))
                 {
                     parts.Add(Doc.BreakParent);
                 }
 
-                parts.Add(
-                    Doc.Indent(
-                        Doc.SoftLine,
-                        CommentGroup.PrintGroups(
-                            ctx,
-                            arguments.DanglingComments,
-                            CommentType.Dangling
-                        )
-                    )
-                );
+                parts.Add(Doc.Indent(Doc.SoftLine, arguments.PrintDanglingComments(ctx)));
 
                 parts.Add(Doc.SoftLine);
             }

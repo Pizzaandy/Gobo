@@ -50,7 +50,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
             return Doc.Concat(
                 caseText,
-                WithComments(ctx, Test, Doc.Concat(Test.Print(ctx), ":")),
+                Test.PrintWithOwnComments(ctx, Doc.Concat(Test.Print(ctx), ":")),
                 Statements.Count > 0 ? printedStatements : Doc.Null
             );
         }

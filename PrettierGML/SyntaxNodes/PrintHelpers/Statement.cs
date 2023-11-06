@@ -57,21 +57,29 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                     ")"
                 );
 
-                return GmlSyntaxNode.WithComments(ctx, expression, printedGroup);
+                return expression.PrintWithOwnComments(ctx, printedGroup);
             }
         }
 
         public static Doc PrintStatement(PrintContext ctx, GmlSyntaxNode statement)
         {
-            Doc lineSuffix = NeedsSemicolon(statement) ? ";" : Doc.Null;
-            statement.PrintOwnComments = false;
+            if (NeedsSemicolon(statement))
+            {
+                Doc lineSuffix = NeedsSemicolon(statement) ? ";" : Doc.Null;
 
-            return Doc.Concat(
-                statement.PrintLeadingComments(ctx),
-                statement.Print(ctx),
-                lineSuffix,
-                statement.PrintTrailingComments(ctx)
-            );
+                statement.PrintOwnComments = false;
+
+                return Doc.Concat(
+                    statement.PrintLeadingComments(ctx),
+                    statement.Print(ctx),
+                    lineSuffix,
+                    statement.PrintTrailingComments(ctx)
+                );
+            }
+            else
+            {
+                return statement.Print(ctx);
+            }
         }
 
         public static Doc PrintStatements(PrintContext ctx, List<GmlSyntaxNode> statements)

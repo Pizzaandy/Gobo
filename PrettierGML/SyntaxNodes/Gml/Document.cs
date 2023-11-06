@@ -14,9 +14,13 @@ namespace PrettierGML.SyntaxNodes.Gml
             AsChildren(body);
         }
 
+        public Document()
+            : base() { }
+
         public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat(
+                PrintDanglingComments(ctx),
                 Statement.PrintStatements(ctx, Children),
                 Doc.HardLineIfNoPreviousLine
             );

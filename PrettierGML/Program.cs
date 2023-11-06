@@ -6,7 +6,7 @@ static string TestFormat(string input)
     {
         BraceStyle = BraceStyle.SameLine,
         CheckAst = true,
-        Debug = true
+        GetDebugInfo = true
     };
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
@@ -17,27 +17,8 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    /* this
-        entire
-         comment*/
-    /* sequence *//*should*///be
-    // grouped
-
-    // but not this one!
-    call(
-        foo,
-        bar, // a
-        baz
-    ); // b
-    // break
-    var arr = [
-        a123___________________,
-        456, /* eee*/
-        abc_____________________________________
-    ];
-
-    // flat
-    var arr2 = [a123, 456 /* eee*/, abc];
+    // comment
+    //   comment 2
     """;
 
 TestFormat(input);

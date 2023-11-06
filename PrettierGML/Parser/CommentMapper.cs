@@ -29,6 +29,7 @@ namespace PrettierGML.Parser
                 if (IsOwnLineComment(comment))
                 {
                     comment.Placement = CommentPlacement.OwnLine;
+
                     if (followingNode is not null)
                     {
                         AttachCommentGroup(followingNode, comment, CommentType.Leading);
@@ -70,6 +71,7 @@ namespace PrettierGML.Parser
                 else
                 {
                     comment.Placement = CommentPlacement.Remaining;
+
                     if (precedingNode is not null && followingNode is not null)
                     {
                         if (RemainingCommentIsLeading(followingNode, comment))
@@ -104,7 +106,7 @@ namespace PrettierGML.Parser
         }
 
         /// <summary>
-        /// The tiebreaker for remaining comment groups with a preceding and following node.
+        /// Determine whether a remaining comment group should be attached to the preceding or following node.
         /// </summary>
         private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
         {

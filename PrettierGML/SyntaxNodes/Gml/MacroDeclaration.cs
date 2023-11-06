@@ -17,7 +17,28 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return Doc.Concat("#macro", " ", Id.Print(ctx), " ", Body);
+            // Macro identifiers can't have leading comments
+            Id.PrintOwnComments = false;
+
+            var printed = Doc.Concat("#macro", " ", Id.Print(ctx), " ", Body);
+
+            return Doc.Concat(
+                Id.PrintLeadingComments(ctx),
+                Id.PrintTrailingComments(ctx, CommentType.Leading),
+                Doc.HardLineIfNoPreviousLine,
+                printed
+            );
+        }
+
+        public override Doc PrintWithOwnComments(PrintContext ctx, Doc nodeDoc)
+        {
+            return Doc.Concat(
+                PrintLeadingComments(ctx),
+                PrintDanglingComments(ctx, CommentType.Leading),
+                nodeDoc,
+                Doc.HardLine,
+                PrintTrailingComments(ctx, CommentType.Leading)
+            );
         }
     }
 }

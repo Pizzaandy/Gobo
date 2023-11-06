@@ -15,14 +15,14 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.ProgramContext context
         )
         {
-            if (context.statementList() != null)
+            if (context?.statementList() != null)
             {
                 var statements = Visit(context.statementList());
                 return new Document(context, statements.Children);
             }
             else
             {
-                return GmlSyntaxNode.Empty;
+                return new Document();
             }
         }
 

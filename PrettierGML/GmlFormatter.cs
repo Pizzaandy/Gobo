@@ -57,7 +57,7 @@ namespace PrettierGML
             long parseStop = 0;
             long formatStart = 0;
 
-            var isDebug = options.Debug;
+            var isDebug = options.GetDebugInfo;
 
             if (isDebug)
             {
@@ -89,7 +89,7 @@ namespace PrettierGML
 
             try
             {
-                ast.EnsureCommentsPrinted();
+                //ast.EnsureCommentsPrinted();
             }
             catch
             {

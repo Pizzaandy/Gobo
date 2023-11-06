@@ -24,7 +24,7 @@ namespace PrettierGML.SyntaxNodes
 
         public string Kind => GetType().Name;
 
-        //[JsonIgnore]
+        [JsonIgnore]
         public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
@@ -82,7 +82,7 @@ namespace PrettierGML.SyntaxNodes
 
             if (PrintOwnComments && Comments.Count > 0)
             {
-                printed = WithComments(ctx, this, printed);
+                printed = PrintWithOwnComments(ctx, printed);
             }
 
             ctx.Stack.Pop();
@@ -104,38 +104,42 @@ namespace PrettierGML.SyntaxNodes
             return Children.Select(child => child.Print(ctx)).ToList();
         }
 
-        public virtual Doc PrintLeadingComments(PrintContext ctx)
+        public virtual Doc PrintLeadingComments(
+            PrintContext ctx,
+            CommentType asType = CommentType.Leading
+        )
         {
-            return CommentGroup.PrintGroups(ctx, LeadingComments, CommentType.Leading);
+            return CommentGroup.PrintGroups(ctx, LeadingComments, asType);
         }
 
-        public virtual Doc PrintTrailingComments(PrintContext ctx)
+        public virtual Doc PrintTrailingComments(
+            PrintContext ctx,
+            CommentType asType = CommentType.Trailing
+        )
         {
-            return CommentGroup.PrintGroups(ctx, TrailingComments, CommentType.Trailing);
+            return CommentGroup.PrintGroups(ctx, TrailingComments, asType);
         }
 
-        public virtual Doc PrintDanglingComments(PrintContext ctx)
+        public virtual Doc PrintDanglingComments(
+            PrintContext ctx,
+            CommentType asType = CommentType.Dangling
+        )
         {
             // Print dangling comments as leading by default
-            return CommentGroup.PrintGroups(ctx, DanglingComments, CommentType.Leading);
+            return CommentGroup.PrintGroups(ctx, DanglingComments, asType);
         }
 
-        public static Doc WithComments(PrintContext ctx, GmlSyntaxNode node, Doc nodeDoc)
+        /// <summary>
+        /// Wraps a doc in comments attached to the callee.
+        /// </summary>
+        public virtual Doc PrintWithOwnComments(PrintContext ctx, Doc nodeDoc)
         {
-            // Dangling comments need to be handled manually
-            return Doc.Concat(
-                node.PrintLeadingComments(ctx),
-                nodeDoc,
-                node.PrintTrailingComments(ctx)
-            );
+            // Dangling comments should be handled manually
+            return Doc.Concat(PrintLeadingComments(ctx), nodeDoc, PrintTrailingComments(ctx));
         }
 
         public bool EndsWithSingleLineComment()
         {
-            if (!Comments.Any())
-            {
-                return false;
-            }
             return TrailingComments.LastOrDefault()?.EndsWithSingleLineComment ?? false;
         }
 

@@ -202,8 +202,7 @@ namespace PrettierGML.SyntaxNodes
 
         public static Doc PrintSingleLineComment(string text)
         {
-            // TODO: decide whether to format single-line comments
-            return text;
+            return "//" + text[2..].TrimStart();
         }
 
         public static Doc PrintMultiLineComment(string text)

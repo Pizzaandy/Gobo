@@ -47,7 +47,7 @@ namespace PrettierGML.Parser
             string offendingSymbolMessage = lastRule switch
             {
                 "closeBlock" => $"expected '}}'",
-                "macroStatement" => $"macro is invalid",
+                "macroStatement" => $"macro definition is invalid",
                 _ => $"unexpected {symbolText}"
             };
 

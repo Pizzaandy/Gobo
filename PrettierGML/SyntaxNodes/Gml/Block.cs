@@ -42,12 +42,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             if (hasDanglingComments)
             {
                 danglingCommentSource!.PrintOwnComments = false;
-
-                printedComments = CommentGroup.PrintGroups(
-                    ctx,
-                    danglingCommentSource.DanglingComments,
-                    CommentType.Dangling
-                );
+                printedComments = danglingCommentSource.PrintDanglingComments(ctx);
             }
 
             return Doc.Concat(
