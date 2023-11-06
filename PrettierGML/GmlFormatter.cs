@@ -77,7 +77,6 @@ namespace PrettierGML
 
             var initialHash = options.CheckAst ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
-            ast.EnsureCommentsPrinted();
 
             var printOptions = new Printer.DocPrinterOptions()
             {
@@ -88,9 +87,31 @@ namespace PrettierGML
 
             var output = DocPrinter.Print(docs, printOptions, Environment.NewLine);
 
+            try
+            {
+                ast.EnsureCommentsPrinted();
+            }
+            catch
+            {
+                Console.WriteLine(output);
+                throw;
+            }
+
             if (options.CheckAst)
             {
-                var updatedParseResult = GmlParser.Parse(output);
+                GmlParseResult updatedParseResult;
+
+                try
+                {
+                    updatedParseResult = GmlParser.Parse(output);
+                }
+                catch (GmlSyntaxErrorException ex)
+                {
+                    Console.WriteLine(output);
+                    throw new Exception(
+                        "Formatting made the code invalid. Parse error:\n" + ex.Message
+                    );
+                }
 
                 var resultHash = updatedParseResult.Ast.GetHashCode();
 

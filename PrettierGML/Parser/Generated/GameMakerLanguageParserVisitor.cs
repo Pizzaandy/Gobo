@@ -380,6 +380,13 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitBitOrExpression([NotNull] GameMakerLanguageParser.BitOrExpressionContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>UnaryPlusExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitUnaryPlusExpression([NotNull] GameMakerLanguageParser.UnaryPlusExpressionContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>IncDecExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// </summary>
@@ -557,11 +564,11 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitEnumeratorDeclaration([NotNull] GameMakerLanguageParser.EnumeratorDeclarationContext context);
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.enumeratorList"/>.
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.enumeratorBlock"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitEnumeratorList([NotNull] GameMakerLanguageParser.EnumeratorListContext context);
+	Result VisitEnumeratorBlock([NotNull] GameMakerLanguageParser.EnumeratorBlockContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.enumerator"/>.
 	/// </summary>

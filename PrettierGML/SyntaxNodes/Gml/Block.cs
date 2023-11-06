@@ -29,16 +29,19 @@ namespace PrettierGML.SyntaxNodes.Gml
             GmlSyntaxNode? danglingCommentSource = null
         )
         {
-            if (bodyDoc == Doc.Null && danglingCommentSource is null)
+            var hasDanglingComments =
+                danglingCommentSource is not null && danglingCommentSource.DanglingComments.Any();
+
+            if (bodyDoc == Doc.Null && !hasDanglingComments)
             {
                 return EmptyBlock;
             }
 
             Doc printedComments = Doc.Null;
 
-            if (danglingCommentSource is not null && danglingCommentSource.DanglingComments.Any())
+            if (hasDanglingComments)
             {
-                danglingCommentSource.PrintOwnComments = false;
+                danglingCommentSource!.PrintOwnComments = false;
 
                 printedComments = CommentGroup.PrintGroups(
                     ctx,

@@ -19,7 +19,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public override Doc PrintNode(PrintContext ctx)
         {
             return Doc.Concat(
-                "do ",
+                "do",
+                " ",
                 Statement.EnsureStatementInBlock(ctx, Body),
                 " until ",
                 Statement.EnsureExpressionInParentheses(ctx, Test)

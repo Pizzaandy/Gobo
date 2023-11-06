@@ -30,10 +30,23 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             }
             else if (arguments.DanglingComments.Any())
             {
-                arguments.PrintOwnComments = false;
+                if (arguments.DanglingComments.Any(c => c.EndsWithSingleLineComment))
+                {
+                    parts.Add(Doc.BreakParent);
+                }
+
                 parts.Add(
-                    CommentGroup.PrintGroups(ctx, arguments.DanglingComments, CommentType.Dangling)
+                    Doc.Indent(
+                        Doc.SoftLine,
+                        CommentGroup.PrintGroups(
+                            ctx,
+                            arguments.DanglingComments,
+                            CommentType.Dangling
+                        )
+                    )
                 );
+
+                parts.Add(Doc.SoftLine);
             }
 
             parts.Add(closeToken);
@@ -64,9 +77,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
                 // Ensure end-of-line comments are printed after the separator
                 // if the list breaks.
-                var addCommentAfterSeparatorIfBreak =
-                    hasTrailingComments
-                    && child.TrailingComments.First().Placement == CommentPlacement.EndOfLine;
+                var addCommentAfterSeparatorIfBreak = hasTrailingComments;
 
                 if (hasTrailingComments)
                 {

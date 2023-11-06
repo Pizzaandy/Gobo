@@ -24,7 +24,7 @@ namespace PrettierGML.SyntaxNodes
 
         public string Kind => GetType().Name;
 
-        [JsonIgnore]
+        //[JsonIgnore]
         public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
@@ -52,8 +52,8 @@ namespace PrettierGML.SyntaxNodes
 
         public GmlSyntaxNode(ITerminalNode node)
         {
-            CharacterRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
-            TokenRange = new Range(node.Symbol.StartIndex, node.Symbol.StartIndex);
+            CharacterRange = new Range(node.Symbol.StartIndex, node.Symbol.StopIndex);
+            TokenRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
         }
 
         public static EmptyNode Empty => EmptyNode.Instance;
@@ -92,6 +92,13 @@ namespace PrettierGML.SyntaxNodes
 
         public abstract Doc PrintNode(PrintContext ctx);
 
+        public Doc PrintRaw(PrintContext ctx)
+        {
+            return ctx.Tokens.GetText(
+                new Antlr4.Runtime.Misc.Interval(TokenRange.Start, TokenRange.Stop)
+            );
+        }
+
         public List<Doc> PrintChildren(PrintContext ctx)
         {
             return Children.Select(child => child.Print(ctx)).ToList();
@@ -115,10 +122,9 @@ namespace PrettierGML.SyntaxNodes
 
         public static Doc WithComments(PrintContext ctx, GmlSyntaxNode node, Doc nodeDoc)
         {
-            // Print dangling comments as leading by default
+            // Dangling comments need to be handled manually
             return Doc.Concat(
                 node.PrintLeadingComments(ctx),
-                node.PrintDanglingComments(ctx),
                 nodeDoc,
                 node.PrintTrailingComments(ctx)
             );
@@ -142,9 +148,8 @@ namespace PrettierGML.SyntaxNodes
             if (!allCommentsPrinted && isRoot)
             {
                 var unprintedGroups = GetUnprintedCommentGroups();
-                var text = string.Join('\n', unprintedGroups);
                 throw new Exception(
-                    $"{unprintedGroups.Count} comment groups were not printed.\nComment Groups:\n{text}"
+                    $"{unprintedGroups.Count} comment groups were not printed.\nComment Groups:\n{string.Join('\n', unprintedGroups)}"
                 );
             }
 

@@ -4,8 +4,8 @@ static string TestFormat(string input)
 {
     var formatOptions = new FormatOptions()
     {
-        BraceStyle = BraceStyle.NewLine,
-        CheckAst = false,
+        BraceStyle = BraceStyle.SameLine,
+        CheckAst = true,
         Debug = true
     };
 
@@ -17,7 +17,27 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    (function foo() {return}).a()
+    /* this
+        entire
+         comment*/
+    /* sequence *//*should*///be
+    // grouped
+
+    // but not this one!
+    call(
+        foo,
+        bar, // a
+        baz
+    ); // b
+    // break
+    var arr = [
+        a123___________________,
+        456, /* eee*/
+        abc_____________________________________
+    ];
+
+    // flat
+    var arr2 = [a123, 456 /* eee*/, abc];
     """;
 
 TestFormat(input);

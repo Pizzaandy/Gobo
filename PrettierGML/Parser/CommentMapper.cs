@@ -104,7 +104,7 @@ namespace PrettierGML.Parser
         }
 
         /// <summary>
-        /// The tiebreaker for remaining comment groups.
+        /// The tiebreaker for remaining comment groups with a preceding and following node.
         /// </summary>
         private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
         {
@@ -114,8 +114,11 @@ namespace PrettierGML.Parser
                 .Skip(1)
                 .SkipLast(1);
 
+            Console.WriteLine($"Following node is: {followingNode}");
+
             foreach (var token in tokens)
             {
+                Console.WriteLine(token.Text);
                 if (IsWhiteSpace(token) || token.Type == GameMakerLanguageLexer.OpenParen)
                 {
                     continue;

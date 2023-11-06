@@ -780,16 +780,12 @@ namespace PrettierGML.Parser
         )
         {
             var name = Visit(context.identifier());
-            GmlSyntaxNode members = GmlSyntaxNode.Empty;
-            if (context.enumeratorList() != null)
-            {
-                members = Visit(context.enumeratorList());
-            }
-            return new EnumDeclaration(context, name, members.Children);
+            var members = Visit(context.enumeratorBlock());
+            return new EnumDeclaration(context, name, members);
         }
 
-        public override GmlSyntaxNode VisitEnumeratorList(
-            [NotNull] GameMakerLanguageParser.EnumeratorListContext context
+        public override GmlSyntaxNode VisitEnumeratorBlock(
+            [NotNull] GameMakerLanguageParser.EnumeratorBlockContext context
         )
         {
             var declarations = new List<GmlSyntaxNode>();
@@ -797,7 +793,7 @@ namespace PrettierGML.Parser
             {
                 declarations.Add(Visit(enumDecl));
             }
-            return declarations;
+            return new EnumBlock(context, declarations);
         }
 
         public override GmlSyntaxNode VisitEnumerator(
@@ -1021,6 +1017,14 @@ namespace PrettierGML.Parser
         {
             var expression = context.expression();
             return new UnaryExpression(context, "-", Visit(expression), true);
+        }
+
+        public override GmlSyntaxNode VisitUnaryPlusExpression(
+            [NotNull] GameMakerLanguageParser.UnaryPlusExpressionContext context
+        )
+        {
+            var expression = context.expression();
+            return new UnaryExpression(context, "+", Visit(expression), true);
         }
 
         public override GmlSyntaxNode VisitNotExpression(

@@ -176,7 +176,9 @@ expression
     | callStatement # CallExpression
     | lValueExpression # VariableExpression
 
+    | <assoc=right> '+' expression # UnaryPlusExpression
     | <assoc=right> '-' expression # UnaryMinusExpression
+    
     | <assoc=right> '~' expression # BitNotExpression
     | <assoc=right> Not expression # NotExpression
     
@@ -311,11 +313,11 @@ identifier
     ;
 
 enumeratorDeclaration
-    : Enum identifier openBlock (enumeratorList)? closeBlock
+    : Enum identifier enumeratorBlock
     ;
 
-enumeratorList
-    : enumerator (',' enumerator)* ','?
+enumeratorBlock
+    : openBlock ( enumerator (',' enumerator)* ','? )? closeBlock
     ;
 
 enumerator

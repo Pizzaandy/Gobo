@@ -54,32 +54,30 @@ namespace PrettierGML.SyntaxNodes
         public bool Printed { get; set; } = false;
 
         [JsonIgnore]
-        // TODO: Please rewrite this oh my god
-        public bool EndsWithSingleLineComment =>
-            Tokens
-                .AsEnumerable()
-                .Reverse()
-                .SkipWhile(
-                    token =>
-                        token.Type != GameMakerLanguageLexer.SingleLineComment
-                        && token.Type != GameMakerLanguageLexer.MultiLineComment
-                )
-                .Take(1)
-                .FirstOrDefault()
-                ?.Type == GameMakerLanguageLexer.SingleLineComment;
+        public bool EndsWithSingleLineComment { get; init; }
 
         public CommentGroup(List<IToken> text, Range characterRange, Range tokenRange)
         {
             Tokens = text;
             CharacterRange = characterRange;
             TokenRange = tokenRange;
+
+            foreach (var token in text.AsEnumerable().Reverse())
+            {
+                if (!IsComment(token))
+                {
+                    continue;
+                }
+                EndsWithSingleLineComment = token.Type == GameMakerLanguageLexer.SingleLineComment;
+                break;
+            }
         }
 
         public Doc Print()
         {
             if (Printed)
             {
-                //throw new Exception("Comment printed twice: " + Text);
+                throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -131,6 +129,11 @@ namespace PrettierGML.SyntaxNodes
                         .TakeWhile(token => !IsComment(token))
                         ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
 
+                if (group.EndsWithSingleLineComment)
+                {
+                    leadingLineBreaks = Math.Max(leadingLineBreaks, 1);
+                }
+
                 for (var i = 0; i < Math.Min(leadingLineBreaks, 2); i++)
                 {
                     groupDocs.Add(Doc.HardLine);
@@ -148,7 +151,7 @@ namespace PrettierGML.SyntaxNodes
 
             var parts = new List<Doc>();
 
-            // Add leading or trailing line breaks
+            // Add leading or trailing line breaks depending on type
             if (type == CommentType.Leading)
             {
                 int lineBreaksBetween =
@@ -199,7 +202,7 @@ namespace PrettierGML.SyntaxNodes
 
         public static Doc PrintSingleLineComment(string text)
         {
-            // TODO: decide whether to format comments
+            // TODO: decide whether to format single-line comments
             return text;
         }
 

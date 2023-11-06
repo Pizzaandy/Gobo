@@ -599,6 +599,17 @@ public partial class GameMakerLanguageParserBaseVisitor<Result> : AbstractParseT
 	/// <return>The visitor result.</return>
 	public virtual Result VisitBitOrExpression([NotNull] GameMakerLanguageParser.BitOrExpressionContext context) { return VisitChildren(context); }
 	/// <summary>
+	/// Visit a parse tree produced by the <c>UnaryPlusExpression</c>
+	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitUnaryPlusExpression([NotNull] GameMakerLanguageParser.UnaryPlusExpressionContext context) { return VisitChildren(context); }
+	/// <summary>
 	/// Visit a parse tree produced by the <c>IncDecExpression</c>
 	/// labeled alternative in <see cref="GameMakerLanguageParser.expression"/>.
 	/// <para>
@@ -888,7 +899,7 @@ public partial class GameMakerLanguageParserBaseVisitor<Result> : AbstractParseT
 	/// <return>The visitor result.</return>
 	public virtual Result VisitEnumeratorDeclaration([NotNull] GameMakerLanguageParser.EnumeratorDeclarationContext context) { return VisitChildren(context); }
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.enumeratorList"/>.
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.enumeratorBlock"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -896,7 +907,7 @@ public partial class GameMakerLanguageParserBaseVisitor<Result> : AbstractParseT
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitEnumeratorList([NotNull] GameMakerLanguageParser.EnumeratorListContext context) { return VisitChildren(context); }
+	public virtual Result VisitEnumeratorBlock([NotNull] GameMakerLanguageParser.EnumeratorBlockContext context) { return VisitChildren(context); }
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.enumerator"/>.
 	/// <para>

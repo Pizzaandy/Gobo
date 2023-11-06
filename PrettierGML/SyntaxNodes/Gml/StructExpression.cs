@@ -16,13 +16,13 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            if (Children.Any())
+            if (!Children.Any() && !DanglingComments.Any())
             {
-                return DelimitedList.PrintInBrackets(ctx, "{", this, "}", ",", true);
+                return EmptyStruct;
             }
             else
             {
-                return EmptyStruct;
+                return DelimitedList.PrintInBrackets(ctx, "{", this, "}", ",", true);
             }
         }
 
