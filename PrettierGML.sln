@@ -10,6 +10,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrettierGML.Tests", "Pretti
 		{FA62E0AB-BECA-4321-B702-4EE6F80CEA48} = {FA62E0AB-BECA-4321-B702-4EE6F80CEA48}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettierGML.Cli", "PrettierGML.Cli\PrettierGML.Cli.csproj", "{9900E068-5DE1-4F92-B207-96F112C59317}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{148EC754-CD98-4887-9BF0-E609BC764780}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{148EC754-CD98-4887-9BF0-E609BC764780}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{148EC754-CD98-4887-9BF0-E609BC764780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9900E068-5DE1-4F92-B207-96F112C59317}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9900E068-5DE1-4F92-B207-96F112C59317}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9900E068-5DE1-4F92-B207-96F112C59317}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9900E068-5DE1-4F92-B207-96F112C59317}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

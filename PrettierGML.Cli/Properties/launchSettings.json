@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "PrettierGML.Cli": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -24,6 +24,7 @@ namespace PrettierGML.SyntaxNodes
 
         public string Kind => GetType().Name;
 
+        [JsonIgnore]
         public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
