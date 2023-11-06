@@ -17,8 +17,10 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    // comment
-    //   comment 2
+    // @fmt-ignore
+    call(
+        a, /* thing */     b // foo
+    )
     """;
 
 TestFormat(input);

@@ -24,7 +24,6 @@ namespace PrettierGML.SyntaxNodes
 
         public string Kind => GetType().Name;
 
-        [JsonIgnore]
         public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
@@ -78,7 +77,21 @@ namespace PrettierGML.SyntaxNodes
         {
             ctx.Stack.Push(this);
 
-            Doc printed = PrintNode(ctx);
+            Doc printed;
+
+            if (Comments.Count > 0 && LeadingComments.LastOrDefault(c => c.IsFormatCommand) != null)
+            {
+                var formatCommand = LeadingComments.Last(c => c.IsFormatCommand);
+                printed = formatCommand.FormatCommandText switch
+                {
+                    "@fmt-ignore" => PrintRaw(ctx),
+                    _ => PrintNode(ctx)
+                };
+            }
+            else
+            {
+                printed = PrintNode(ctx);
+            }
 
             if (PrintOwnComments && Comments.Count > 0)
             {
@@ -94,6 +107,8 @@ namespace PrettierGML.SyntaxNodes
 
         public Doc PrintRaw(PrintContext ctx)
         {
+            Children.ForEach(child => child.MarkCommentsAsPrinted());
+
             return ctx.Tokens.GetText(
                 new Antlr4.Runtime.Misc.Interval(TokenRange.Start, TokenRange.Stop)
             );
@@ -190,6 +205,12 @@ namespace PrettierGML.SyntaxNodes
             }
 
             return hashCode.ToHashCode();
+        }
+
+        private void MarkCommentsAsPrinted()
+        {
+            Comments.ForEach(commentGroup => commentGroup.Printed = true);
+            Children.ForEach(child => child.MarkCommentsAsPrinted());
         }
     }
 

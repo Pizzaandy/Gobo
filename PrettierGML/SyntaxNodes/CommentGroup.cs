@@ -56,6 +56,12 @@ namespace PrettierGML.SyntaxNodes
         [JsonIgnore]
         public bool EndsWithSingleLineComment { get; init; }
 
+        [JsonIgnore]
+        public bool IsFormatCommand { get; init; }
+
+        [JsonIgnore]
+        public string? FormatCommandText { get; init; }
+
         public CommentGroup(List<IToken> text, Range characterRange, Range tokenRange)
         {
             Tokens = text;
@@ -68,7 +74,20 @@ namespace PrettierGML.SyntaxNodes
                 {
                     continue;
                 }
+
                 EndsWithSingleLineComment = token.Type == GameMakerLanguageLexer.SingleLineComment;
+
+                if (EndsWithSingleLineComment)
+                {
+                    var trimmedText = token.Text[2..].Trim();
+
+                    if (trimmedText.StartsWith("@fmt"))
+                    {
+                        IsFormatCommand = true;
+                        FormatCommandText = trimmedText;
+                    }
+                }
+
                 break;
             }
         }
@@ -202,7 +221,7 @@ namespace PrettierGML.SyntaxNodes
 
         public static Doc PrintSingleLineComment(string text)
         {
-            return "//" + text[2..].TrimStart();
+            return "// " + text[2..].TrimStart();
         }
 
         public static Doc PrintMultiLineComment(string text)

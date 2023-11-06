@@ -89,7 +89,7 @@ namespace PrettierGML
 
             try
             {
-                //ast.EnsureCommentsPrinted();
+                ast.EnsureCommentsPrinted();
             }
             catch
             {
