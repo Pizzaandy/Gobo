@@ -84,7 +84,7 @@ namespace PrettierGML.SyntaxNodes
                 var formatCommand = LeadingComments.Last(c => c.IsFormatCommand);
                 printed = formatCommand.FormatCommandText switch
                 {
-                    "@fmt-ignore" => PrintRaw(ctx),
+                    "ignore" => PrintRaw(ctx),
                     _ => PrintNode(ctx)
                 };
             }

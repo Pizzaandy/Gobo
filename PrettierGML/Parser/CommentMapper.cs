@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.SyntaxNodes;
+using PrettierGML.SyntaxNodes.Gml;
 using Range = PrettierGML.SyntaxNodes.Range;
 
 namespace PrettierGML.Parser
@@ -275,7 +276,7 @@ namespace PrettierGML.Parser
 
         private static bool CanAttachComment(GmlSyntaxNode node)
         {
-            return !(node is EmptyNode or NodeList);
+            return !(node is EmptyNode or NodeList or BinaryExpression);
         }
 
         private bool IsOwnLineComment(CommentGroup comment)
@@ -285,7 +286,8 @@ namespace PrettierGML.Parser
                 ?.Reverse();
             var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
 
-            return (leadingTokens is null || leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak))
+            return leadingTokens is not null
+                && leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
                 && trailingTokens is not null
                 && trailingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak);
         }

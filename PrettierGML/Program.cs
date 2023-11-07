@@ -2,25 +2,25 @@
 
 static string TestFormat(string input)
 {
-    var formatOptions = new FormatOptions()
-    {
-        BraceStyle = BraceStyle.SameLine,
-        CheckAst = true,
-        GetDebugInfo = true
-    };
+    var formatOptions = FormatOptions.DefaultTestOptions;
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
 
     Console.WriteLine(result);
 
+    FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
+
+    Console.WriteLine(secondResult);
+
     return result.Output;
 }
 
 var input = $$"""
-    // @fmt-ignore
-    call(
-        a, /* thing */     b // foo
-    )
+    x =
+    longStatementName
+    && longerStatementName // foo
+    || evenLongerStatementName
+    && superLongStatementName
     """;
 
 TestFormat(input);

@@ -28,12 +28,23 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            var separator = Doc.Concat(";", Doc.Line);
-            var items = new Doc[] { Init.Print(ctx), Test.Print(ctx), Update.Print(ctx) };
+            var items = new Doc[]
+            {
+                Init.Print(ctx),
+                ";",
+                Init.IsEmpty ? Doc.Null : Doc.Line,
+                Test.Print(ctx),
+                ";",
+                Test.IsEmpty ? Doc.Null : Doc.Line,
+                Update.Print(ctx)
+            };
+
             return Doc.Concat(
-                "for (",
+                "for",
+                " ",
+                "(",
                 Doc.Group(
-                    Doc.Indent(Doc.IfBreak(Doc.Line, Doc.Null), Doc.Join(separator, items)),
+                    Doc.Indent(Doc.IfBreak(Doc.Line, Doc.Null), Doc.Concat(items)),
                     Doc.IfBreak(Doc.Line, Doc.Null)
                 ),
                 ") ",

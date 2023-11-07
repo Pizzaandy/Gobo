@@ -117,6 +117,10 @@ namespace PrettierGML
 
                 if (initialHash != resultHash)
                 {
+                    Console.WriteLine(ast);
+                    Console.WriteLine(updatedParseResult.Ast);
+                    Console.WriteLine(output);
+
                     throw new Exception("Formatting transformed the AST!");
                 }
             }

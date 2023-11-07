@@ -50,12 +50,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             {
                 expression.PrintOwnComments = false;
 
-                var printedGroup = Doc.Group(
-                    "(",
-                    Doc.Indent(Doc.SoftLine, expression.Print(ctx)),
-                    Doc.SoftLine,
-                    ")"
-                );
+                var printedGroup = ParenthesizedExpression.PrintInParens(ctx, expression);
 
                 return expression.PrintWithOwnComments(ctx, printedGroup);
             }

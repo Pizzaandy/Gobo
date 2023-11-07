@@ -21,17 +21,17 @@ namespace PrettierGML.SyntaxNodes.Gml
                 return Expression.Print(ctx);
             }
 
-            if (ShouldNotBreak(Expression) && !Expression.Comments.Any())
+            return PrintInParens(ctx, Expression);
+        }
+
+        public static Doc PrintInParens(PrintContext ctx, GmlSyntaxNode node)
+        {
+            if (ShouldNotBreak(node) && !node.Comments.Any())
             {
-                return Doc.Concat("(", Expression.Print(ctx), ")");
+                return Doc.Concat("(", node.Print(ctx), ")");
             }
 
-            return Doc.Group(
-                "(",
-                Doc.Indent(Doc.SoftLine, Expression.Print(ctx)),
-                Doc.SoftLine,
-                ")"
-            );
+            return Doc.Group("(", Doc.Indent(Doc.SoftLine, node.Print(ctx)), Doc.SoftLine, ")");
         }
 
         public override int GetHashCode()

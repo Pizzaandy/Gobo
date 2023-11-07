@@ -5,8 +5,8 @@ namespace PrettierGML
 {
     internal class PrintContext
     {
-        public FormatOptions Options { get; set; }
-        public CommonTokenStream Tokens { get; set; }
+        public FormatOptions Options { get; init; }
+        public CommonTokenStream Tokens { get; init; }
         public Stack<GmlSyntaxNode> Stack = new();
         public int PrintDepth => Stack.Count;
 

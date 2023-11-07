@@ -36,7 +36,7 @@ namespace PrettierGML.SyntaxNodes.Gml
         {
             var docs = PrintBinaryExpression(this, ctx);
 
-            if (Parent is IfStatement)
+            if (IsCondition())
             {
                 return Doc.Concat(docs);
             }
@@ -95,7 +95,20 @@ namespace PrettierGML.SyntaxNodes.Gml
             );
 
             parts.Add(shouldGroup ? Doc.Group(right) : right);
+
             return parts;
+        }
+
+        private bool IsCondition()
+        {
+            var potentialConditional = Parent;
+
+            while (potentialConditional is ParenthesizedExpression parenthesized)
+            {
+                potentialConditional = parenthesized.Parent;
+            }
+
+            return potentialConditional is IfStatement or WhileStatement or DoStatement;
         }
 
         private static bool ShouldFlatten(string parentToken, string nodeToken)

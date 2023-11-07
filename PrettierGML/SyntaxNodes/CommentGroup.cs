@@ -62,6 +62,8 @@ namespace PrettierGML.SyntaxNodes
         [JsonIgnore]
         public string? FormatCommandText { get; init; }
 
+        public const string FormatCommandPrefix = "#fmt-";
+
         public CommentGroup(List<IToken> text, Range characterRange, Range tokenRange)
         {
             Tokens = text;
@@ -81,10 +83,10 @@ namespace PrettierGML.SyntaxNodes
                 {
                     var trimmedText = token.Text[2..].Trim();
 
-                    if (trimmedText.StartsWith("@fmt"))
+                    if (trimmedText.StartsWith(FormatCommandPrefix))
                     {
                         IsFormatCommand = true;
-                        FormatCommandText = trimmedText;
+                        FormatCommandText = trimmedText[FormatCommandPrefix.Length..];
                     }
                 }
 
@@ -221,7 +223,8 @@ namespace PrettierGML.SyntaxNodes
 
         public static Doc PrintSingleLineComment(string text)
         {
-            return "// " + text[2..].TrimStart();
+            var commentText = "// " + text[2..].TrimStart();
+            return commentText;
         }
 
         public static Doc PrintMultiLineComment(string text)
@@ -235,7 +238,6 @@ namespace PrettierGML.SyntaxNodes
         public override string ToString()
         {
             return string.Join(
-                '\n',
                 $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
                 $"Type: {Type}",
                 $"Range: {CharacterRange}",
