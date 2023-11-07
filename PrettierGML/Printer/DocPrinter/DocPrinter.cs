@@ -1,5 +1,7 @@
+using Microsoft.VisualBasic;
 using PrettierGML.Printer.DocTypes;
 using PrettierGML.Printer.Utilities;
+using System;
 using System.Text;
 
 namespace PrettierGML.Printer.DocPrinter;
@@ -17,6 +19,7 @@ internal class DocPrinter
     protected readonly DocPrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
     protected Stack<Indent> RegionIndents = new();
+    protected Stack<PrintCommand> LineSuffixes = new();
     protected int ConsecutiveIndents = 0;
 
     protected DocPrinter(Doc doc, DocPrinterOptions printerOptions, string endOfLine)
@@ -39,6 +42,15 @@ internal class DocPrinter
         while (RemainingCommands.Count > 0)
         {
             ProcessNextCommand();
+        }
+
+        if (LineSuffixes.Count > 0)
+        {
+            foreach (var cmd in LineSuffixes)
+            {
+                RemainingCommands.Push(cmd);
+                ProcessNextCommand();
+            }
         }
 
         EnsureOutputEndsWithSingleNewLine();
@@ -122,38 +134,26 @@ internal class DocPrinter
 
             var contents =
                 groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
+
             Push(contents, mode, indent);
         }
         else if (doc is LineDoc line)
         {
-            ProcessLine(line, mode, indent);
+            if (LineSuffixes.Count > 0)
+            {
+                Push(line, mode, indent);
+                foreach (var lineSuffix in LineSuffixes)
+                {
+                    RemainingCommands.Push(lineSuffix);
+                }
+                LineSuffixes.Clear();
+            }
+            else
+            {
+                ProcessLine(line, mode, indent);
+            }
         }
         else if (doc is BreakParent) { }
-        else if (doc is LeadingComment leadingComment)
-        {
-            Output.TrimTrailingWhitespace();
-            if (Output.Length != 0 && Output[^1] != '\n' || NewLineNextStringValue)
-            {
-                Output.Append(EndOfLine);
-            }
-
-            AppendComment(leadingComment, indent);
-
-            CurrentWidth = indent.Length;
-            NewLineNextStringValue = false;
-            SkipNextNewLine = false;
-        }
-        else if (doc is TrailingComment trailingComment)
-        {
-            Output.TrimTrailingWhitespace();
-            Output.Append(' ').Append(trailingComment.Comment);
-            CurrentWidth = indent.Length;
-            if (mode != PrintMode.ForceFlat)
-            {
-                NewLineNextStringValue = true;
-                SkipNextNewLine = true;
-            }
-        }
         else if (doc is ForceFlat forceFlat)
         {
             Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
@@ -181,81 +181,13 @@ internal class DocPrinter
         {
             Push(temp.Contents, mode, indent);
         }
+        else if (doc is LineSuffix lineSuffix)
+        {
+            LineSuffixes.Push(new PrintCommand(indent, mode, lineSuffix.Contents));
+        }
         else
         {
             throw new Exception("didn't handle " + doc);
-        }
-    }
-
-    private void AppendComment(LeadingComment leadingComment, Indent indent)
-    {
-        int CalculateIndentLength(string line)
-        {
-            var result = 0;
-            foreach (var character in line)
-            {
-                if (character == ' ')
-                {
-                    result += 1;
-                }
-                else if (character == '\t')
-                {
-                    result += PrinterOptions.TabWidth;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        var stringReader = new StringReader(leadingComment.Comment);
-        var line = stringReader.ReadLine();
-        var numberOfSpacesToAddOrRemove = 0;
-        if (leadingComment.Type == CommentFormat.MultiLine && line != null)
-        {
-            // in order to maintain the formatting inside of a multiline comment
-            // we calculate how much the indentation of the first line is changing
-            // and then change the indentation of all other lines the same amount
-            var firstLineIndentLength = CalculateIndentLength(line);
-            var currentIndent = CalculateIndentLength(indent.Value);
-            numberOfSpacesToAddOrRemove = currentIndent - firstLineIndentLength;
-        }
-
-        while (line != null)
-        {
-            if (leadingComment.Type == CommentFormat.SingleLine)
-            {
-                Output.Append(indent.Value);
-            }
-            else
-            {
-                var spacesToAppend = CalculateIndentLength(line) + numberOfSpacesToAddOrRemove;
-                if (PrinterOptions.UseTabs)
-                {
-                    var indentLength = CalculateIndentLength(indent.Value);
-                    if (spacesToAppend >= indentLength)
-                    {
-                        Output.Append(indent.Value);
-                        spacesToAppend -= indentLength;
-                    }
-                }
-                if (spacesToAppend > 0)
-                {
-                    Output.Append(' ', spacesToAppend);
-                }
-            }
-
-            Output.Append(line.Trim());
-            line = stringReader.ReadLine();
-            if (line == null)
-            {
-                return;
-            }
-
-            Output.Append(EndOfLine);
         }
     }
 

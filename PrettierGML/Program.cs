@@ -1,4 +1,7 @@
 ﻿using PrettierGML;
+using PrettierGML.Printer;
+using PrettierGML.Printer.DocPrinter;
+using PrettierGML.Printer.DocTypes;
 
 static string TestFormat(string input)
 {
@@ -15,12 +18,17 @@ static string TestFormat(string input)
     return result.Output;
 }
 
-var input = $$"""
-    x =
-    longStatementName
-    && longerStatementName // foo
-    || evenLongerStatementName
-    && superLongStatementName
-    """;
+var docs = Doc.Group(
+    "(",
+    Doc.Concat(
+        Doc.Indent(Doc.HardLine, Doc.LineSuffix("// thing")),
+        Doc.Group("xyzxyzabc2_____________________", Doc.HardLine),
+        Doc.Concat(Doc.BreakParent, Doc.LineSuffix("thing"))
+    ),
+    ")"
+);
 
-TestFormat(input);
+Console.WriteLine(docs);
+
+var output = DocPrinter.Print(docs, new DocPrinterOptions(), Environment.NewLine);
+Console.WriteLine(output);

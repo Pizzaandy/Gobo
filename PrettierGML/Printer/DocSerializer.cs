@@ -218,19 +218,14 @@ internal static class DocSerializer
             AppendIndent();
             result.Append(')');
         }
-        else if (doc is LeadingComment leadingComment)
+        else if (doc is LineSuffix lineSuffix)
         {
             AppendIndent();
-            result.Append(
-                $"Doc.LeadingComment(\"{leadingComment.Comment}\", CommentType.{leadingComment.Type})"
-            );
-        }
-        else if (doc is TrailingComment trailingComment)
-        {
+            result.AppendLine("Doc.LineSuffix(");
+            Serialize(lineSuffix.Contents, result, indent + 1, lineSuffix);
+            result.AppendLine();
             AppendIndent();
-            result.Append(
-                $"Doc.TrailingComment(\"{trailingComment.Comment}\", CommentType.{trailingComment.Type})"
-            );
+            result.Append(')');
         }
         else if (doc is Region region)
         {
