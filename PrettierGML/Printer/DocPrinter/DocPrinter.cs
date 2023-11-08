@@ -1,7 +1,5 @@
-using Microsoft.VisualBasic;
 using PrettierGML.Printer.DocTypes;
 using PrettierGML.Printer.Utilities;
-using System;
 using System.Text;
 
 namespace PrettierGML.Printer.DocPrinter;
@@ -13,8 +11,6 @@ internal class DocPrinter
     protected int CurrentWidth;
     protected readonly StringBuilder Output = new();
     protected bool ShouldRemeasure;
-    protected bool NewLineNextStringValue;
-    protected bool SkipNextNewLine;
     protected readonly string EndOfLine;
     protected readonly DocPrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
@@ -115,7 +111,6 @@ internal class DocPrinter
         else if (doc is Trim)
         {
             CurrentWidth -= Output.TrimTrailingWhitespace();
-            NewLineNextStringValue = false;
         }
         else if (doc is Group group)
         {
@@ -139,19 +134,7 @@ internal class DocPrinter
         }
         else if (doc is LineDoc line)
         {
-            if (LineSuffixes.Count > 0)
-            {
-                Push(line, mode, indent);
-                foreach (var lineSuffix in LineSuffixes)
-                {
-                    RemainingCommands.Push(lineSuffix);
-                }
-                LineSuffixes.Clear();
-            }
-            else
-            {
-                ProcessLine(line, mode, indent);
-            }
+            ProcessLine(line, mode, indent);
         }
         else if (doc is BreakParent) { }
         else if (doc is ForceFlat forceFlat)
@@ -198,22 +181,6 @@ internal class DocPrinter
             return;
         }
 
-        // this ensures we don't print extra spaces after a trailing comment
-        // newLineNextStringValue & skipNextNewLine are set to true when we print a trailing comment
-        // when they are set we new line the next string we find. If we new line and then print a " " we end up with an extra space
-        if (NewLineNextStringValue && SkipNextNewLine && stringDoc.Value == " ")
-        {
-            return;
-        }
-
-        if (NewLineNextStringValue)
-        {
-            Output.TrimTrailingWhitespace();
-            Output.Append(EndOfLine).Append(indent.Value);
-            CurrentWidth = indent.Length;
-            NewLineNextStringValue = false;
-        }
-
         Output.Append(stringDoc.Value);
         CurrentWidth += stringDoc.Value.GetPrintedWidth();
     }
@@ -245,6 +212,17 @@ internal class DocPrinter
             return;
         }
 
+        if (LineSuffixes.Count > 0)
+        {
+            Push(line, mode, indent);
+            foreach (var lineSuffix in LineSuffixes)
+            {
+                RemainingCommands.Push(lineSuffix);
+            }
+            LineSuffixes.Clear();
+            return;
+        }
+
         if (line.IsLiteral)
         {
             if (Output.Length > 0)
@@ -255,17 +233,9 @@ internal class DocPrinter
         }
         else
         {
-            if (!SkipNextNewLine || !NewLineNextStringValue)
-            {
-                Output.TrimTrailingWhitespace();
-                Output.Append(EndOfLine).Append(indent.Value);
-                CurrentWidth = indent.Length;
-            }
-
-            if (SkipNextNewLine)
-            {
-                SkipNextNewLine = false;
-            }
+            Output.TrimTrailingWhitespace();
+            Output.Append(EndOfLine).Append(indent.Value);
+            CurrentWidth = indent.Length;
         }
     }
 
