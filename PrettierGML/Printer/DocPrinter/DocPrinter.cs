@@ -18,6 +18,8 @@ internal class DocPrinter
     protected Stack<PrintCommand> EndOfLineComments = new();
     protected int ConsecutiveIndents = 0;
 
+    private static readonly char[] openingDelimiters = { '{', '(', '[' };
+
     protected DocPrinter(Doc doc, DocPrinterOptions printerOptions, string endOfLine)
     {
         EndOfLine = endOfLine;
@@ -224,7 +226,7 @@ internal class DocPrinter
             {
                 Output.TrimTrailingWhitespace();
 
-                if (Output[^1] == '{')
+                if (openingDelimiters.Contains(Output[^1]))
                 {
                     Output.Append(EndOfLine).Append(indent.Value);
                 }

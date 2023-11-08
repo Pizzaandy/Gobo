@@ -28,7 +28,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         /// <summary>
         /// Wraps a doc in brackets and line breaks.
-        /// Adds whitespace in front of the block depending on brace style.
+        /// Adds a line break in front of the block depending on brace style.
         /// </summary>
         public static Doc WrapInBlock(PrintContext ctx, Doc bodyDoc)
         {

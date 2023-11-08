@@ -23,31 +23,14 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    for (;;) return
-
-    for (var i = 0; i < 42; {i++;}) {}
-
-    while ((((condition))))
-        return;
-
-    while (
-    (((longStatementName
-    && longerStatementName
-    && evenLongerStatementName
-    && superLongStatementName)))
-    ) 
-    return;
-
-    do statement() until ((condition));
-
-    do operation()
-    until 
-    longStatementName 
-    && longerStatementName
-    && evenLongerStatementName
-    && superLongStatementName
-
-    repeat((3)) {}
+    if foo // comment
+    { 
+    return
+    }
+    if ((foo) // comment
+    ){ 
+    
+    }
     """;
 
 TestFormat(input);

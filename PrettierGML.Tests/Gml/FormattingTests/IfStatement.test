@@ -7,6 +7,10 @@ if (true) {
 // indent this!
 }
 
+if condition { // this comment should be inside the block
+
+}
+
 if (true)
     DoSomething()
 else if (false)
