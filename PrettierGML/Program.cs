@@ -8,15 +8,23 @@ static string TestFormat(string input)
 
     Console.WriteLine(result);
 
-    FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
+    //FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
 
-    Console.WriteLine(secondResult);
+    //Console.WriteLine(secondResult);
 
     return result.Output;
 }
 
 var input = $$"""
+    if (condition) // this comment should stay outside
+    { 
+        return;
+    }
 
+    if (condition) { // this comment should stay outside
+        return;
+    }
+    
     """;
 
 TestFormat(input);

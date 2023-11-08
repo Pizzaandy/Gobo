@@ -36,24 +36,20 @@ namespace PrettierGML.SyntaxNodes.Gml
         {
             var docs = PrintBinaryExpression(this, ctx);
 
-            if (IsCondition())
-            {
-                return Doc.Concat(docs);
-            }
-
             var shouldNotIndent =
                 Parent
                     is AssignmentExpression
                         or VariableDeclarator
+                        or IfStatement
+                        or DoStatement
                         or WhileStatement
                         or ParenthesizedExpression
-                || Parent?.Parent is MemberIndexExpression
                 || Parent is ConditionalExpression conditionalExpression
                     && conditionalExpression.WhenTrue != this
                     && conditionalExpression.WhenFalse != this;
 
             return shouldNotIndent
-                ? Doc.Group(docs)
+                ? Doc.Concat(docs)
                 : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
         }
 
@@ -87,28 +83,19 @@ namespace PrettierGML.SyntaxNodes.Gml
                 parts.Add(binaryExpression.Left.Print(ctx));
             }
 
+            binaryExpression.Right.PrintOwnComments = false;
+
             var right = Doc.Concat(
                 Doc.Line,
-                binaryExpression.Operator,
-                " ",
-                binaryExpression.Right.Print(ctx)
+                binaryExpression.Right.PrintWithOwnComments(
+                    ctx,
+                    Doc.Concat(binaryExpression.Operator, " ", binaryExpression.Right.Print(ctx))
+                )
             );
 
             parts.Add(shouldGroup ? Doc.Group(right) : right);
 
             return parts;
-        }
-
-        private bool IsCondition()
-        {
-            var potentialConditional = Parent;
-
-            while (potentialConditional is ParenthesizedExpression parenthesized)
-            {
-                potentialConditional = parenthesized.Parent;
-            }
-
-            return potentialConditional is IfStatement or WhileStatement or DoStatement;
         }
 
         private static bool ShouldFlatten(string parentToken, string nodeToken)

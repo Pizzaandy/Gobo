@@ -31,10 +31,6 @@ namespace PrettierGML.SyntaxNodes.Gml
             var parts = new List<Doc>
             {
                 Doc.Concat("function", Id.IsEmpty ? "" : " ", Id.Print(ctx)),
-                Id.EndsWithSingleLineComment() ? Doc.HardLine : Doc.Null,
-                Parameters.LeadingComments.LastOrDefault()?.EndsWithSingleLineComment ?? false
-                    ? " "
-                    : "",
                 Parameters.Print(ctx)
             };
 
@@ -43,12 +39,9 @@ namespace PrettierGML.SyntaxNodes.Gml
                 parts.Add(ConstructorParent.Print(ctx));
             }
 
-            if (
-                ctx.Options.BraceStyle == BraceStyle.NewLine
-                || Parameters.EndsWithSingleLineComment()
-            )
+            if (ctx.Options.BraceStyle == BraceStyle.NewLine)
             {
-                parts.Add(Doc.HardLine);
+                parts.Add(Doc.HardLineIfNoPreviousLine);
             }
             else
             {

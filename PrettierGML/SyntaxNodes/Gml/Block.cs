@@ -16,44 +16,59 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Children), this);
+            if (Children.Count == 0)
+            {
+                return PrintEmptyBlock(ctx, this);
+            }
+            else
+            {
+                return WrapInBlock(Statement.PrintStatements(ctx, Children));
+            }
         }
 
         /// <summary>
         /// Wraps a doc in brackets and line breaks.
+        /// </summary>
+        public static Doc WrapInBlock(Doc bodyDoc)
+        {
+            return Doc.Concat("{", Doc.Indent(Doc.HardLine, bodyDoc), Doc.HardLine, "}");
+        }
+
+        /// <summary>
         /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
         /// </summary>
-        public static Doc PrintInBlock(
+        public static Doc PrintEmptyBlock(
             PrintContext ctx,
-            Doc bodyDoc,
             GmlSyntaxNode? danglingCommentSource = null
         )
         {
-            var hasDanglingComments =
-                danglingCommentSource is not null && danglingCommentSource.DanglingComments.Any();
-
-            if (bodyDoc == Doc.Null && !hasDanglingComments)
+            if (danglingCommentSource is null || danglingCommentSource.Comments.Count == 0)
             {
                 return EmptyBlock;
             }
-
-            Doc printedComments = Doc.Null;
-
-            if (hasDanglingComments)
+            else
             {
-                danglingCommentSource!.PrintOwnComments = false;
-                printedComments = danglingCommentSource.PrintDanglingComments(ctx);
+                return Doc.Group(
+                    "{",
+                    Doc.Indent(Doc.SoftLine, danglingCommentSource.PrintDanglingComments(ctx)),
+                    Doc.SoftLine,
+                    "}"
+                );
             }
-
-            return Doc.Concat(
-                "{",
-                Doc.Indent(Doc.HardLine, printedComments, bodyDoc),
-                Doc.HardLine,
-                "}"
-            );
         }
 
         public static Doc EmptyBlock => "{}";
+
+        public override Doc PrintWithOwnComments(PrintContext ctx, Doc nodeDoc)
+        {
+            // Print dangling comments as leading
+            return Doc.Concat(
+                PrintLeadingComments(ctx),
+                PrintDanglingComments(ctx, CommentType.Leading),
+                nodeDoc,
+                PrintTrailingComments(ctx)
+            );
+        }
 
         public override int GetHashCode()
         {

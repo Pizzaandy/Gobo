@@ -45,8 +45,12 @@ internal class DocPrinter
             foreach (var cmd in LineSuffixes)
             {
                 RemainingCommands.Push(cmd);
-                ProcessNextCommand();
             }
+        }
+
+        while (RemainingCommands.Count > 0)
+        {
+            ProcessNextCommand();
         }
 
         EnsureOutputEndsWithSingleNewLine();
@@ -215,10 +219,18 @@ internal class DocPrinter
         if (LineSuffixes.Count > 0)
         {
             Push(line, mode, indent);
+
+            if (!Output.EndsWithNewLineAndWhitespace())
+            {
+                Output.TrimTrailingWhitespace();
+                Output.Append(' ');
+            }
+
             foreach (var lineSuffix in LineSuffixes)
             {
                 RemainingCommands.Push(lineSuffix);
             }
+
             LineSuffixes.Clear();
             return;
         }

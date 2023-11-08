@@ -75,7 +75,7 @@ namespace PrettierGML
             GmlSyntaxNode ast = parseResult.Ast;
             CommonTokenStream tokens = parseResult.TokenStream;
 
-            var initialHash = options.CheckAst ? ast.GetHashCode() : -1;
+            var initialHash = options.ValidateOutput ? ast.GetHashCode() : -1;
             var docs = ast.Print(new PrintContext(options, tokens));
 
             var printOptions = new Printer.DocPrinterOptions()
@@ -87,18 +87,10 @@ namespace PrettierGML
 
             var output = DocPrinter.Print(docs, printOptions, Environment.NewLine);
 
-            try
+            if (options.ValidateOutput)
             {
                 ast.EnsureCommentsPrinted();
-            }
-            catch
-            {
-                Console.WriteLine(output);
-                throw;
-            }
 
-            if (options.CheckAst)
-            {
                 GmlParseResult updatedParseResult;
 
                 try

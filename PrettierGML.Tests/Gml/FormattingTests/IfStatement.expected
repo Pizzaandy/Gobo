@@ -42,7 +42,10 @@ if (someLongCondition != someOtherCondition) {
 if (longStatementName && longerStatementName && evenLongerStatementName && superLongStatementName) {
     return;
 } else if (
-    longStatementName && longerStatementName && evenLongerStatementName && superLongStatementName
+    longStatementName
+    && longerStatementName
+    && evenLongerStatementName
+    && superLongStatementName
 ) {
     call();
 }

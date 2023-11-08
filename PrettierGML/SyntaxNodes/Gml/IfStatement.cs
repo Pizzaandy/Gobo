@@ -33,7 +33,9 @@ namespace PrettierGML.SyntaxNodes.Gml
             if (Alternate is not EmptyNode)
             {
                 Doc leadingWhitespace =
-                    ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : " ";
+                    ctx.Options.BraceStyle == BraceStyle.NewLine
+                        ? Doc.HardLineIfNoPreviousLine
+                        : " ";
 
                 parts.Add(Doc.Concat(leadingWhitespace, "else", " "));
 

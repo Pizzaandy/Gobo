@@ -31,7 +31,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             };
 
             Doc leadingWhitespace =
-                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : " ";
+                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLineIfNoPreviousLine : " ";
 
             if (!Catch.IsEmpty)
             {
