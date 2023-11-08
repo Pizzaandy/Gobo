@@ -46,8 +46,6 @@ namespace PrettierGML.SyntaxNodes.Gml
                 }
             }
 
-            Test.PrintOwnComments = false;
-
             return Doc.Concat(
                 caseText,
                 Doc.Concat(Test.Print(ctx), ":"),

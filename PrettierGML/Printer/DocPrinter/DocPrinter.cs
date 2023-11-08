@@ -15,7 +15,7 @@ internal class DocPrinter
     protected readonly DocPrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
     protected Stack<Indent> RegionIndents = new();
-    protected Stack<PrintCommand> LineSuffixes = new();
+    protected Stack<PrintCommand> EndOfLineComments = new();
     protected int ConsecutiveIndents = 0;
 
     protected DocPrinter(Doc doc, DocPrinterOptions printerOptions, string endOfLine)
@@ -40,9 +40,9 @@ internal class DocPrinter
             ProcessNextCommand();
         }
 
-        if (LineSuffixes.Count > 0)
+        if (EndOfLineComments.Count > 0)
         {
-            foreach (var cmd in LineSuffixes)
+            foreach (var cmd in EndOfLineComments)
             {
                 RemainingCommands.Push(cmd);
             }
@@ -168,9 +168,9 @@ internal class DocPrinter
         {
             Push(temp.Contents, mode, indent);
         }
-        else if (doc is LineSuffix lineSuffix)
+        else if (doc is EndOfLineComment endOfLineComment)
         {
-            LineSuffixes.Push(new PrintCommand(indent, mode, lineSuffix.Contents));
+            EndOfLineComments.Push(new PrintCommand(indent, mode, endOfLineComment.Contents));
         }
         else
         {
@@ -216,22 +216,30 @@ internal class DocPrinter
             return;
         }
 
-        if (LineSuffixes.Count > 0)
+        if (EndOfLineComments.Count > 0)
         {
             Push(line, mode, indent);
 
-            if (!Output.EndsWithNewLineAndWhitespace())
+            if (!Output.EndsWithNewLineAndWhitespace() && Output.Length > 0)
             {
                 Output.TrimTrailingWhitespace();
-                Output.Append(' ');
+
+                if (Output[^1] == '{')
+                {
+                    Output.Append(EndOfLine).Append(indent.Value);
+                }
+                else
+                {
+                    Output.Append(' ');
+                }
             }
 
-            foreach (var lineSuffix in LineSuffixes)
+            foreach (var lineSuffix in EndOfLineComments)
             {
                 RemainingCommands.Push(lineSuffix);
             }
 
-            LineSuffixes.Clear();
+            EndOfLineComments.Clear();
             return;
         }
 

@@ -8,9 +8,7 @@ for (
     {
         i++;
     }
-) {
-
-}
+) {}
 
 while (condition) {
     return;

@@ -13,18 +13,11 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             GmlSyntaxNode body
         )
         {
-            bool lineBreakBeforeBlock = ctx.Options.BraceStyle == BraceStyle.NewLine;
-
-            Doc clauseDoc = EnsureExpressionInParentheses(ctx, clause);
             Doc bodyDoc = EnsureStatementInBlock(ctx, body);
 
-            return Doc.Concat(
-                keyword,
-                " ",
-                clauseDoc,
-                lineBreakBeforeBlock ? Doc.HardLineIfNoPreviousLine : " ",
-                bodyDoc
-            );
+            Doc clauseDoc = EnsureExpressionInParentheses(ctx, clause);
+
+            return Doc.Concat(keyword, " ", clauseDoc, " ", bodyDoc);
         }
 
         public static Doc EnsureStatementInBlock(PrintContext ctx, GmlSyntaxNode statement)
@@ -33,9 +26,13 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             {
                 return statement.Print(ctx);
             }
+            else if (statement.IsEmpty)
+            {
+                return Block.PrintEmptyBlock(ctx);
+            }
             else
             {
-                return Block.WrapInBlock(PrintStatement(ctx, statement));
+                return Block.WrapInBlock(ctx, PrintStatement(ctx, statement));
             }
         }
 

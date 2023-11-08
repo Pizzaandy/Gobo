@@ -22,16 +22,28 @@ namespace PrettierGML.SyntaxNodes.Gml
             }
             else
             {
-                return WrapInBlock(Statement.PrintStatements(ctx, Children));
+                return WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
             }
         }
 
         /// <summary>
         /// Wraps a doc in brackets and line breaks.
+        /// Adds whitespace in front of the block depending on brace style.
         /// </summary>
-        public static Doc WrapInBlock(Doc bodyDoc)
+        public static Doc WrapInBlock(PrintContext ctx, Doc bodyDoc)
         {
-            return Doc.Concat("{", Doc.Indent(Doc.HardLine, bodyDoc), Doc.HardLine, "}");
+            Doc leadingWhitespace =
+                ctx.Options.BraceStyle is BraceStyle.NewLine
+                    ? Doc.HardLineIfNoPreviousLine
+                    : Doc.Null;
+
+            return Doc.Concat(
+                leadingWhitespace,
+                "{",
+                Doc.Indent(Doc.HardLine, bodyDoc),
+                Doc.HardLine,
+                "}"
+            );
         }
 
         /// <summary>
@@ -42,33 +54,17 @@ namespace PrettierGML.SyntaxNodes.Gml
             GmlSyntaxNode? danglingCommentSource = null
         )
         {
-            if (danglingCommentSource is null || danglingCommentSource.Comments.Count == 0)
+            if (danglingCommentSource is null || danglingCommentSource.DanglingComments.Count == 0)
             {
                 return EmptyBlock;
             }
             else
             {
-                return Doc.Group(
-                    "{",
-                    Doc.Indent(Doc.SoftLine, danglingCommentSource.PrintDanglingComments(ctx)),
-                    Doc.SoftLine,
-                    "}"
-                );
+                return WrapInBlock(ctx, danglingCommentSource.PrintDanglingComments(ctx));
             }
         }
 
         public static Doc EmptyBlock => "{}";
-
-        public override Doc PrintWithOwnComments(PrintContext ctx, Doc nodeDoc)
-        {
-            // Print dangling comments as leading
-            return Doc.Concat(
-                PrintLeadingComments(ctx),
-                PrintDanglingComments(ctx, CommentType.Leading),
-                nodeDoc,
-                PrintTrailingComments(ctx)
-            );
-        }
 
         public override int GetHashCode()
         {

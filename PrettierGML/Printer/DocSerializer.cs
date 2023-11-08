@@ -218,7 +218,7 @@ internal static class DocSerializer
             AppendIndent();
             result.Append(')');
         }
-        else if (doc is LineSuffix lineSuffix)
+        else if (doc is EndOfLineComment lineSuffix)
         {
             AppendIndent();
             result.AppendLine("Doc.LineSuffix(");

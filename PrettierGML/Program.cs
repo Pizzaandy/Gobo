@@ -1,30 +1,53 @@
 ﻿using PrettierGML;
+using PrettierGML.Printer.Utilities;
+using System.Diagnostics;
 
 static string TestFormat(string input)
 {
     var formatOptions = FormatOptions.DefaultTestOptions;
 
+    formatOptions.ValidateOutput = false;
+    //formatOptions.BraceStyle = BraceStyle.NewLine;
+
     FormatResult result = GmlFormatter.Format(input, formatOptions);
 
-    Console.WriteLine(result);
+    //Console.WriteLine(result);
 
-    //FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
+    FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
 
-    //Console.WriteLine(secondResult);
+    Console.WriteLine(secondResult);
+
+    Console.WriteLine(StringDiffer.PrintFirstDifference(result.Output, secondResult.Output));
 
     return result.Output;
 }
 
 var input = $$"""
-    if (condition) // this comment should stay outside
-    { 
-        return;
-    }
+    for (;;) return
 
-    if (condition) { // this comment should stay outside
+    for (var i = 0; i < 42; {i++;}) {}
+
+    while ((((condition))))
         return;
-    }
-    
+
+    while (
+    (((longStatementName
+    && longerStatementName
+    && evenLongerStatementName
+    && superLongStatementName)))
+    ) 
+    return;
+
+    do statement() until ((condition));
+
+    do operation()
+    until 
+    longStatementName 
+    && longerStatementName
+    && evenLongerStatementName
+    && superLongStatementName
+
+    repeat((3)) {}
     """;
 
 TestFormat(input);

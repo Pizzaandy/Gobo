@@ -39,15 +39,7 @@ namespace PrettierGML.SyntaxNodes.Gml
                 parts.Add(ConstructorParent.Print(ctx));
             }
 
-            if (ctx.Options.BraceStyle == BraceStyle.NewLine)
-            {
-                parts.Add(Doc.HardLineIfNoPreviousLine);
-            }
-            else
-            {
-                parts.Add(" ");
-            }
-
+            parts.Add(" ");
             parts.Add(Statement.EnsureStatementInBlock(ctx, Body));
 
             return Doc.Concat(parts);

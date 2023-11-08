@@ -164,9 +164,10 @@ internal abstract class Doc
 
     public static Region EndRegion(string text) => new(text) { IsEnd = true };
 
-    public static LineSuffix LineSuffix(Doc contents) => new(contents, false);
+    public static EndOfLineComment EndOfLineComment(Doc contents) => new(contents, false);
 
-    public static LineSuffix LineSuffix(params Doc[] contents) => new(Concat(contents), false);
+    public static EndOfLineComment EndOfLineComment(params Doc[] contents) =>
+        new(Concat(contents), false);
 }
 
 internal enum CommentFormat

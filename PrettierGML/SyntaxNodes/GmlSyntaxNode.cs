@@ -126,6 +126,8 @@ namespace PrettierGML.SyntaxNodes
             return Children.Select(child => child.Print(ctx)).ToList();
         }
 
+        // TODO: Move comment logic?
+
         public virtual Doc PrintLeadingComments(
             PrintContext ctx,
             CommentType asType = CommentType.Leading
@@ -190,6 +192,15 @@ namespace PrettierGML.SyntaxNodes
                 unprinted.AddRange(child.GetUnprintedCommentGroups());
             }
             return unprinted;
+        }
+
+        public void TransferComments(GmlSyntaxNode target, Func<CommentGroup, bool> predicate)
+        {
+            var commentsToTransfer = Comments.Where(predicate);
+
+            Comments = Comments.Where(c => !predicate(c)).ToList();
+
+            target.Comments.AddRange(commentsToTransfer);
         }
 
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>

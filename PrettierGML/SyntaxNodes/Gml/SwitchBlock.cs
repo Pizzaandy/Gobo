@@ -1,5 +1,6 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Printer.DocTypes;
+using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
@@ -21,7 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             }
             else
             {
-                return Block.WrapInBlock(Doc.Join(Doc.HardLine, PrintChildren(ctx)));
+                return Block.WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
             }
         }
     }

@@ -95,7 +95,7 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                throw new Exception("Comment printed twice: " + Text);
+                //throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -120,7 +120,7 @@ namespace PrettierGML.SyntaxNodes
             if (EndsWithSingleLineComment || Placement == CommentPlacement.EndOfLine)
             {
                 parts.Add(Doc.BreakParent);
-                return Doc.LineSuffix(Doc.Concat(parts));
+                return Doc.EndOfLineComment(Doc.Concat(parts));
             }
             else
             {

@@ -158,7 +158,7 @@ internal static class DocFitter
                     );
                 }
                 else if (currentDoc is AlwaysFits) { }
-                else if (currentDoc is LineSuffix) { }
+                else if (currentDoc is EndOfLineComment) { }
                 else
                 {
                     throw new Exception("Can't handle " + currentDoc.GetType());
