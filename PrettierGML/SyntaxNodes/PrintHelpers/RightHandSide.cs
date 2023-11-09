@@ -54,25 +54,15 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
         private static Layout DetermineLayout(GmlSyntaxNode leftNode, GmlSyntaxNode rightNode)
         {
-            // TODO: make good choices
-            var isTail = rightNode is not AssignmentExpression;
-
-            var shouldUseChainFormatting =
-                leftNode is AssignmentExpression
-                && leftNode.Parent is AssignmentExpression
-                && (!isTail || leftNode.Parent.Parent is not VariableDeclarator);
-
-            if (shouldUseChainFormatting)
+            return rightNode switch
             {
-                return !isTail ? Layout.Chain : Layout.ChainTail;
-            }
-
-            if (rightNode is Literal or BinaryExpression or ConditionalExpression)
-            {
-                return Layout.BreakAfterOperator;
-            }
-
-            return Layout.Fluid;
+                BinaryExpression
+                or ConditionalExpression { Test: BinaryExpression or ParenthesizedExpression }
+                or Literal
+                or TemplateLiteral
+                    => Layout.BreakAfterOperator,
+                _ => Layout.Fluid
+            };
         }
     }
 }

@@ -27,7 +27,8 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public Doc PrintChain(PrintContext ctx)
         {
-            return Doc.Concat(".", Property.Print(ctx));
+            Property.PrintOwnComments = false;
+            return Property.PrintWithOwnComments(ctx, Doc.Concat(".", Property.Print(ctx)));
         }
     }
 }

@@ -172,7 +172,9 @@ internal class DocPrinter
         }
         else if (doc is EndOfLineComment endOfLineComment)
         {
-            EndOfLineComments.Push(new PrintCommand(indent, mode, endOfLineComment.Contents));
+            EndOfLineComments.Push(
+                new PrintCommand(indent, mode, Doc.Concat(endOfLineComment.Contents, " "))
+            );
         }
         else
         {
@@ -236,9 +238,9 @@ internal class DocPrinter
                 }
             }
 
-            foreach (var lineSuffix in EndOfLineComments)
+            foreach (var comment in EndOfLineComments)
             {
-                RemainingCommands.Push(lineSuffix);
+                RemainingCommands.Push(comment);
             }
 
             EndOfLineComments.Clear();

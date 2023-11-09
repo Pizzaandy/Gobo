@@ -47,6 +47,7 @@ namespace PrettierGML.SyntaxNodes.Gml
         }
 
         /// <summary>
+        /// Print an empty block statement.
         /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
         /// </summary>
         public static Doc PrintEmptyBlock(

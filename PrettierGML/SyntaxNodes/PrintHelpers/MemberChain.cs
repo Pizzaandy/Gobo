@@ -5,6 +5,12 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 {
     internal record PrintedNode(GmlSyntaxNode Node, Doc Doc);
 
+    internal interface IMemberChainable
+    {
+        public GmlSyntaxNode Object { get; set; }
+        public Doc PrintChain(PrintContext ctx);
+    }
+
     internal static class MemberChain
     {
         public static Doc PrintMemberChain(PrintContext ctx, GmlSyntaxNode node)
@@ -20,21 +26,6 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
-
-            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
-
-            var forceOneLine =
-                groups.Count <= cutoff
-                && (
-                    groups
-                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
-                        .Any(o => o.Last().Node is not CallExpression)
-                );
-
-            if (forceOneLine)
-            {
-                return Doc.Group(oneLine);
-            }
 
             var expanded = Doc.Concat(
                 Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
@@ -108,11 +99,11 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             //   a().b.c().d().e
             // will be grouped as
             //   [
-            //     [Identifier, InvocationExpression],
-            //     [MemberAccessExpression]
-            //     [MemberAccessExpression, InvocationExpression],
-            //     [MemberAccessExpression, InvocationExpression],
-            //     [MemberAccessExpression],
+            //     [Identifier, ArgumentsList],
+            //     [MemberDotExpression]
+            //     [MemberDotExpression, ArgumentsList],
+            //     [MemberDotExpression, ArgumentsList],
+            //     [MemberDotExpression],
             //   ]
 
             // so that we can print it as
@@ -200,13 +191,13 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         // For example
         /*
             // without merging we get this
-            this
-                .CallMethod()
-                .CallMethod();
+            self
+                .call_method()
+                .call_method();
 
             // merging gives us this
-            this.CallMethod()
-                .CallMethod();
+            self.call_method()
+                .call_method();
          */
         private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
         {

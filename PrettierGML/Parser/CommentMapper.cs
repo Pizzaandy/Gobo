@@ -1,6 +1,8 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.SyntaxNodes;
 using PrettierGML.SyntaxNodes.Gml;
+using PrettierGML.SyntaxNodes.PrintHelpers;
+using System.Xml.Linq;
 using Range = PrettierGML.SyntaxNodes.Range;
 
 namespace PrettierGML.Parser
@@ -31,7 +33,11 @@ namespace PrettierGML.Parser
                 {
                     comment.Placement = CommentPlacement.OwnLine;
 
-                    if (followingNode is not null)
+                    if (HandleOwnLineComment(comment, followingNode, precedingNode, enclosingNode))
+                    {
+                        continue;
+                    }
+                    else if (followingNode is not null)
                     {
                         AttachCommentGroup(followingNode, comment, CommentType.Leading);
                     }
@@ -106,6 +112,20 @@ namespace PrettierGML.Parser
             return ast;
         }
 
+        private static bool HandleOwnLineComment(
+            CommentGroup comment,
+            GmlSyntaxNode? followingNode,
+            GmlSyntaxNode? precedingNode,
+            GmlSyntaxNode? enclosingNode
+        )
+        {
+            if (enclosingNode is MemberDotExpression && followingNode is Identifier)
+            {
+                AttachCommentGroup(enclosingNode, comment, CommentType.Leading);
+            }
+            return false;
+        }
+
         /// <summary>
         /// Determine whether a remaining comment group should be attached to the preceding or following node.
         /// </summary>
@@ -147,17 +167,21 @@ namespace PrettierGML.Parser
 
             while (left < right)
             {
-                var middle = left + right >> 1;
+                var middle = (left + right) >> 1;
                 var child = childNodes[middle];
-                var start = child.CharacterRange.Start;
-                var stop = child.CharacterRange.Stop;
 
-                if (start <= comment.CharacterRange.Start && comment.CharacterRange.Stop <= stop)
+                var childStart = child.CharacterRange.Start;
+                var childStop = child.CharacterRange.Stop + 1;
+
+                var commentStart = comment.CharacterRange.Start;
+                var commentStop = comment.CharacterRange.Stop + 1;
+
+                if (childStart <= commentStart && commentStop <= childStop)
                 {
                     return DecorateComment(child, comment, child);
                 }
 
-                if (stop <= comment.CharacterRange.Start)
+                if (childStop <= commentStart)
                 {
                     // This child node falls completely before the comment.
                     // Because we will never consider this node or any nodes
@@ -168,7 +192,7 @@ namespace PrettierGML.Parser
                     continue;
                 }
 
-                if (comment.CharacterRange.Stop <= start)
+                if (commentStop <= childStart)
                 {
                     // This child node falls completely after the comment.
                     // Because we will never consider this node or any nodes after
@@ -205,7 +229,7 @@ namespace PrettierGML.Parser
                 }
             }
 
-            result = result.Where(CanAttachComment).ToList();
+            //result = result.Where(CanAttachComment).ToList();
             result.Sort(new GmlNodeComparer());
             return result;
         }
@@ -273,7 +297,7 @@ namespace PrettierGML.Parser
 
         private static bool CanAttachComment(GmlSyntaxNode node)
         {
-            return !(node is EmptyNode or NodeList or BinaryExpression or IMemberChainable);
+            return !(node is EmptyNode or NodeList);
         }
 
         private bool IsOwnLineComment(CommentGroup comment)

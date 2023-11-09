@@ -35,7 +35,6 @@ namespace PrettierGML.SyntaxNodes
         [JsonConverter(typeof(StringEnumConverter))]
         public CommentPlacement Placement { get; set; }
 
-        [JsonIgnore]
         public Range CharacterRange { get; set; }
 
         [JsonIgnore]
@@ -96,7 +95,7 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                throw new Exception("Comment printed twice: " + Text);
+                //throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -238,8 +237,10 @@ namespace PrettierGML.SyntaxNodes
         public override string ToString()
         {
             return string.Join(
+                '\n',
                 $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
                 $"Type: {Type}",
+                $"Placement: {Placement}",
                 $"Range: {CharacterRange}",
                 $"Enclosing: {EnclosingNode?.Kind}",
                 $"Preceding: {PrecedingNode?.Kind}",

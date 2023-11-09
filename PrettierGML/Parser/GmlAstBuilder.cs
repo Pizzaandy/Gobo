@@ -2,6 +2,7 @@
 using PrettierGML.SyntaxNodes;
 using PrettierGML.SyntaxNodes.Gml;
 using PrettierGML.SyntaxNodes.GmlExtensions;
+using PrettierGML.SyntaxNodes.PrintHelpers;
 using UnaryExpression = PrettierGML.SyntaxNodes.Gml.UnaryExpression;
 
 namespace PrettierGML.Parser
@@ -568,6 +569,9 @@ namespace PrettierGML.Parser
         {
             GmlSyntaxNode @object = Visit(context.lValueStartExpression());
 
+            var tokenStart = context.SourceInterval.a;
+            var characterStart = context.Start.StartIndex;
+
             if (context.lValueChainOperator()?.Length > 0)
             {
                 var ops = context.lValueChainOperator();
@@ -575,6 +579,8 @@ namespace PrettierGML.Parser
                 {
                     var node = Visit(op);
                     (node as IMemberChainable)!.Object = @object;
+                    node.CharacterRange = new(characterStart, node.CharacterRange.Stop);
+                    node.TokenRange = new(tokenStart, node.TokenRange.Stop);
                     @object = node;
                 }
             }
@@ -583,6 +589,8 @@ namespace PrettierGML.Parser
             {
                 var node = Visit(context.lValueFinalOperator());
                 (node as IMemberChainable)!.Object = @object;
+                node.CharacterRange = new(characterStart, node.CharacterRange.Stop);
+                node.TokenRange = new(tokenStart, node.TokenRange.Stop);
                 @object = node;
             }
 

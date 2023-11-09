@@ -10,21 +10,16 @@ static string TestFormat(string input)
 
     Console.WriteLine(result);
 
-    FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
+    //FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
 
-    Console.WriteLine(StringDiffer.PrintFirstDifference(result.Output, secondResult.Output));
+    //Console.WriteLine(StringDiffer.PrintFirstDifference(result.Output, secondResult.Output));
 
     return result.Output;
 }
 
 var input = $$"""
-    // c1
-    x = CallMethod(
-    // c2
-            firstParameter____________________________,  // c3
-            secondParameter___________________________
-        ).b;
-
+    y = a // comment
+    .b().c()
     """;
 
 TestFormat(input);

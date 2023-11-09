@@ -7,11 +7,14 @@ namespace PrettierGML.SyntaxNodes
 {
     internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     {
-        [JsonIgnore]
-        public Range CharacterRange { get; init; }
+        public int Start => CharacterRange.Start;
+        public int Stop => CharacterRange.Stop;
 
         [JsonIgnore]
-        public Range TokenRange { get; init; }
+        public Range CharacterRange { get; set; }
+
+        [JsonIgnore]
+        public Range TokenRange { get; set; }
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; set; }
@@ -216,11 +219,5 @@ namespace PrettierGML.SyntaxNodes
 
             return hashCode.ToHashCode();
         }
-    }
-
-    internal interface IMemberChainable
-    {
-        public GmlSyntaxNode Object { get; set; }
-        public Doc PrintChain(PrintContext ctx);
     }
 }
