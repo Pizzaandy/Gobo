@@ -4,7 +4,7 @@ using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal sealed class MemberIndexExpression : GmlSyntaxNode, IHasObject
+    internal sealed class MemberIndexExpression : GmlSyntaxNode, IMemberChainable
     {
         public GmlSyntaxNode Object { get; set; }
         public GmlSyntaxNode Properties { get; set; }
@@ -25,11 +25,13 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
+            return MemberChain.PrintMemberChain(ctx, this);
+        }
+
+        public Doc PrintChain(PrintContext ctx)
+        {
             var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
-            return Doc.Concat(
-                Object.Print(ctx),
-                DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",")
-            );
+            return DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",");
         }
     }
 }

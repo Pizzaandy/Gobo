@@ -30,16 +30,13 @@ namespace PrettierGML.SyntaxNodes
         public bool PrintOwnComments { get; set; } = true;
 
         [JsonIgnore]
-        public List<CommentGroup> LeadingComments =>
-            Comments.Where(c => c.Type == CommentType.Leading).ToList();
+        public List<CommentGroup> LeadingComments { get; set; } = new();
 
         [JsonIgnore]
-        public List<CommentGroup> TrailingComments =>
-            Comments.Where(c => c.Type == CommentType.Trailing).ToList();
+        public List<CommentGroup> TrailingComments { get; set; } = new();
 
         [JsonIgnore]
-        public List<CommentGroup> DanglingComments =>
-            Comments.Where(c => c.Type == CommentType.Dangling).ToList();
+        public List<CommentGroup> DanglingComments { get; set; } = new();
 
         public GmlSyntaxNode() { }
 
@@ -221,8 +218,9 @@ namespace PrettierGML.SyntaxNodes
         }
     }
 
-    internal interface IHasObject
+    internal interface IMemberChainable
     {
         public GmlSyntaxNode Object { get; set; }
+        public Doc PrintChain(PrintContext ctx);
     }
 }

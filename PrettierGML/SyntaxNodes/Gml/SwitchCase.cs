@@ -26,7 +26,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
             Doc printedStatements = Doc.Null;
 
-            if (Statements.Any())
+            if (Statements.Count > 0)
             {
                 var onlyBlock = Statements.Count == 1 && Statements.First() is Block;
 

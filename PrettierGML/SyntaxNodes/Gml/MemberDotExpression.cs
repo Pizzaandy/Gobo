@@ -1,9 +1,10 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Printer.DocTypes;
+using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
-    internal sealed class MemberDotExpression : GmlSyntaxNode, IHasObject
+    internal sealed class MemberDotExpression : GmlSyntaxNode, IMemberChainable
     {
         public GmlSyntaxNode Object { get; set; }
         public GmlSyntaxNode Property { get; set; }
@@ -21,7 +22,12 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return Doc.Concat(Object.Print(ctx), ".", Property.Print(ctx));
+            return MemberChain.PrintMemberChain(ctx, this);
+        }
+
+        public Doc PrintChain(PrintContext ctx)
+        {
+            return Doc.Concat(".", Property.Print(ctx));
         }
     }
 }

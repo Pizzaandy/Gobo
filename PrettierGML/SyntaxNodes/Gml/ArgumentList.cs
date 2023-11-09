@@ -34,13 +34,14 @@ namespace PrettierGML.SyntaxNodes.Gml
                     last,
                     ")"
                 );
+
                 var optionB = Doc.Concat(DelimitedList.PrintInBrackets(ctx, "(", this, ")", ","));
 
                 result = Doc.ConditionalGroup(optionA, optionB);
             }
             else
             {
-                result = Doc.Concat(DelimitedList.PrintInBrackets(ctx, "(", this, ")", ","));
+                result = DelimitedList.PrintInBrackets(ctx, "(", this, ")", ",");
             }
 
             return result;

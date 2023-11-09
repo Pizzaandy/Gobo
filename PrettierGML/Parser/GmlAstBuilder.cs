@@ -574,7 +574,7 @@ namespace PrettierGML.Parser
                 foreach (var op in ops)
                 {
                     var node = Visit(op);
-                    (node as IHasObject)!.Object = @object;
+                    (node as IMemberChainable)!.Object = @object;
                     @object = node;
                 }
             }
@@ -582,7 +582,7 @@ namespace PrettierGML.Parser
             if (context.lValueFinalOperator() != null)
             {
                 var node = Visit(context.lValueFinalOperator());
-                (node as IHasObject)!.Object = @object;
+                (node as IMemberChainable)!.Object = @object;
                 @object = node;
             }
 

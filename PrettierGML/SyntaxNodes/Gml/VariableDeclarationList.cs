@@ -28,7 +28,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             {
                 parts.Add(Children.First().Print(ctx));
             }
-            else if (Children.Any())
+            else if (Children.Count > 0)
             {
                 var printedArguments = DelimitedList.Print(ctx, Declarations, ",");
                 parts.Add(Doc.Indent(printedArguments));

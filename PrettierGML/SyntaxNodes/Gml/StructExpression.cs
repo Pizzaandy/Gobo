@@ -16,7 +16,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            if (!Children.Any() && !DanglingComments.Any())
+            if (Children.Count == 0 && DanglingComments.Count == 0)
             {
                 return EmptyStruct;
             }

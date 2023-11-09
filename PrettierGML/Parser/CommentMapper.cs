@@ -273,7 +273,7 @@ namespace PrettierGML.Parser
 
         private static bool CanAttachComment(GmlSyntaxNode node)
         {
-            return !(node is EmptyNode or NodeList or BinaryExpression);
+            return !(node is EmptyNode or NodeList or BinaryExpression or IMemberChainable);
         }
 
         private bool IsOwnLineComment(CommentGroup comment)
@@ -330,6 +330,18 @@ namespace PrettierGML.Parser
         {
             comment.Type = type;
             node.Comments.Add(comment);
+            switch (type)
+            {
+                case CommentType.Leading:
+                    node.LeadingComments.Add(comment);
+                    break;
+                case CommentType.Dangling:
+                    node.DanglingComments.Add(comment);
+                    break;
+                case CommentType.Trailing:
+                    node.TrailingComments.Add(comment);
+                    break;
+            }
         }
     }
 

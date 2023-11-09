@@ -4,14 +4,13 @@ using PrettierGML.Printer.Utilities;
 static string TestFormat(string input)
 {
     var formatOptions = FormatOptions.DefaultTestOptions;
-
-    formatOptions.ValidateOutput = true;
+    formatOptions.ValidateOutput = false;
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
 
-    FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
+    Console.WriteLine(result);
 
-    Console.WriteLine(secondResult);
+    FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
 
     Console.WriteLine(StringDiffer.PrintFirstDifference(result.Output, secondResult.Output));
 
@@ -19,9 +18,13 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    /* comment */ x = greeting // shid
-    .slice // fuck
-    ( 0, 1 ).toUpperCase() + greeting.slice(1).toLowerCase()
+    // c1
+    x = CallMethod(
+    // c2
+            firstParameter____________________________,  // c3
+            secondParameter___________________________
+        ).b;
+
     """;
 
 TestFormat(input);

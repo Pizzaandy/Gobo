@@ -131,9 +131,9 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
             int nodeStartIndex;
 
-            if (node.LeadingComments.Any())
+            if (node.LeadingComments.Count > 0)
             {
-                nodeStartIndex = node.LeadingComments.First().TokenRange.Start;
+                nodeStartIndex = node.LeadingComments[0].TokenRange.Start;
             }
             else
             {

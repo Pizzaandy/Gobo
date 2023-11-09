@@ -32,7 +32,7 @@ namespace PrettierGML
             if (DocTree != string.Empty)
                 result += $"--- DOC TREE ---\n\n{DocTree}\n\n";
 
-            result += $"--- PRINTED OUTPUT ---\n\n{Output}\n\n";
+            result += $"--- PRINTED OUTPUT ---\n{Output}\n\n";
 
             if (ParseTimeMs != null)
                 result += $"Parse: {ParseTimeMs} ms\n";

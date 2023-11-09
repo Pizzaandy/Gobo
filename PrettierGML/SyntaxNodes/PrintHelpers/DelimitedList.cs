@@ -16,6 +16,8 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         {
             var parts = new List<Doc> { openToken };
 
+            var groupId = Guid.NewGuid().ToString();
+
             if (arguments.Children.Count > 0)
             {
                 Doc printedArguments = Print(
@@ -26,7 +28,8 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                     forceBreak
                 );
 
-                parts.Add(Doc.Indent(Doc.SoftLine, printedArguments));
+                var contents = Doc.Concat(Doc.SoftLine, printedArguments);
+                parts.Add(Doc.IndentIfBreak(contents, groupId));
             }
             else if (arguments.DanglingComments.Count > 0)
             {
@@ -34,10 +37,9 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             }
 
             parts.Add(Doc.SoftLine);
-
             parts.Add(closeToken);
 
-            return Doc.Group(parts);
+            return Doc.GroupWithId(groupId, parts);
         }
 
         public static Doc Print(
