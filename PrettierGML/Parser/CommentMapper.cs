@@ -117,11 +117,8 @@ namespace PrettierGML.Parser
                 .Skip(1)
                 .SkipLast(1);
 
-            Console.WriteLine($"Following node is: {followingNode}");
-
             foreach (var token in tokens)
             {
-                Console.WriteLine(token.Text);
                 if (IsWhiteSpace(token) || token.Type == GameMakerLanguageLexer.OpenParen)
                 {
                     continue;
@@ -284,6 +281,7 @@ namespace PrettierGML.Parser
             var leadingTokens = TokenStream
                 .GetHiddenTokensToLeft(comment.TokenRange.Start)
                 ?.Reverse();
+
             var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
 
             return leadingTokens is not null
@@ -297,7 +295,9 @@ namespace PrettierGML.Parser
             var leadingTokens = TokenStream
                 .GetHiddenTokensToLeft(comment.TokenRange.Start)
                 ?.Reverse();
+
             var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
+
             return (
                     leadingTokens is null || !leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
                 )

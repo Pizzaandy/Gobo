@@ -10,7 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrettierGML.Tests", "Pretti
 		{FA62E0AB-BECA-4321-B702-4EE6F80CEA48} = {FA62E0AB-BECA-4321-B702-4EE6F80CEA48}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PrettierGML.Cli", "PrettierGML.Cli\PrettierGML.Cli.csproj", "{9900E068-5DE1-4F92-B207-96F112C59317}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrettierGML.Cli", "PrettierGML.Cli\PrettierGML.Cli.csproj", "{9900E068-5DE1-4F92-B207-96F112C59317}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

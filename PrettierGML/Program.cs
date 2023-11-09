@@ -1,17 +1,13 @@
 ﻿using PrettierGML;
 using PrettierGML.Printer.Utilities;
-using System.Diagnostics;
 
 static string TestFormat(string input)
 {
     var formatOptions = FormatOptions.DefaultTestOptions;
 
-    formatOptions.ValidateOutput = false;
-    //formatOptions.BraceStyle = BraceStyle.NewLine;
+    formatOptions.ValidateOutput = true;
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
-
-    //Console.WriteLine(result);
 
     FormatResult secondResult = GmlFormatter.Format(result.Output, formatOptions);
 
@@ -23,14 +19,9 @@ static string TestFormat(string input)
 }
 
 var input = $$"""
-    if foo // comment
-    { 
-    return
-    }
-    if ((foo) // comment
-    ){ 
-    
-    }
+    /* comment */ x = greeting // shid
+    .slice // fuck
+    ( 0, 1 ).toUpperCase() + greeting.slice(1).toLowerCase()
     """;
 
 TestFormat(input);

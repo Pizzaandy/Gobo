@@ -162,11 +162,6 @@ namespace PrettierGML.SyntaxNodes
             return Doc.Concat(PrintLeadingComments(ctx), nodeDoc, PrintTrailingComments(ctx));
         }
 
-        public bool EndsWithSingleLineComment()
-        {
-            return TrailingComments.LastOrDefault()?.EndsWithSingleLineComment ?? false;
-        }
-
         public bool EnsureCommentsPrinted(bool isRoot = true)
         {
             var allCommentsPrinted =

@@ -54,13 +54,14 @@ namespace PrettierGML.SyntaxNodes
         public bool Printed { get; set; } = false;
 
         [JsonIgnore]
-        public bool EndsWithSingleLineComment { get; init; }
-
-        [JsonIgnore]
         public bool IsFormatCommand { get; init; }
 
         [JsonIgnore]
         public string? FormatCommandText { get; init; }
+
+        private bool endsWithSingleLineComment = false;
+
+        private bool printedAsEndOfLine = false;
 
         public const string FormatCommandPrefix = "#fmt-";
 
@@ -76,7 +77,7 @@ namespace PrettierGML.SyntaxNodes
 
                 if (token.Type == GameMakerLanguageLexer.SingleLineComment)
                 {
-                    EndsWithSingleLineComment = true;
+                    endsWithSingleLineComment = true;
 
                     var trimmedText = token.Text[2..].Trim();
 
@@ -95,7 +96,7 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                //throw new Exception("Comment printed twice: " + Text);
+                throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -117,8 +118,9 @@ namespace PrettierGML.SyntaxNodes
                 }
             }
 
-            if (EndsWithSingleLineComment || Placement == CommentPlacement.EndOfLine)
+            if (endsWithSingleLineComment || Placement is CommentPlacement.EndOfLine)
             {
+                printedAsEndOfLine = true;
                 parts.Add(Doc.BreakParent);
                 return Doc.EndOfLineComment(Doc.Concat(parts));
             }
@@ -193,7 +195,14 @@ namespace PrettierGML.SyntaxNodes
 
                 if (lineBreaksBetween == 0)
                 {
-                    return Doc.Concat(printedGroups);
+                    if (!groups.Last().printedAsEndOfLine)
+                    {
+                        return Doc.Concat(" ", printedGroups);
+                    }
+                    else
+                    {
+                        return Doc.Concat(printedGroups);
+                    }
                 }
 
                 for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)

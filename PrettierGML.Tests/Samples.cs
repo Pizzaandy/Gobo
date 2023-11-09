@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Data;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace PrettierGML.Tests
 {
@@ -21,21 +22,29 @@ namespace PrettierGML.Tests
 
         [Theory]
         [ClassData(typeof(SampleFileProvider))]
-        public async Task FormatSamples(FormatTestFile test)
+        public async Task FormatSamples(TestFile test)
         {
             var filePath = test.FilePath;
 
             var input = await File.ReadAllTextAsync(filePath);
 
-            var result = GmlFormatter.Format(input, options);
+            var firstPass = GmlFormatter.Format(input, options);
 
-            output.WriteLine($"Parse: {result.ParseTimeMs}");
-            output.WriteLine($"Format: {result.FormatTimeMs}");
-            output.WriteLine($"Total: {result.TotalTimeMs}");
+            output.WriteLine($"Parse: {firstPass.ParseTimeMs}");
+            output.WriteLine($"Format: {firstPass.FormatTimeMs}");
+            output.WriteLine($"Total: {firstPass.TotalTimeMs}");
+
+            var secondPass = GmlFormatter.Format(firstPass.Output, options);
+
+            var secondDiff = StringDiffer.PrintFirstDifference(firstPass.Output, secondPass.Output);
+            if (secondDiff != string.Empty)
+            {
+                throw new XunitException($"Second pass:\n{secondDiff}");
+            }
 
             await File.WriteAllTextAsync(
                 filePath.Replace(TestFileExtension, ActualFileExtension),
-                result.Output
+                firstPass.Output
             );
         }
     }
@@ -52,7 +61,7 @@ namespace PrettierGML.Tests
         {
             var filePath = Path.Combine(rootDirectory.FullName, "Gml", "Samples");
             var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
-            return files.Select(fp => new object[] { new FormatTestFile(fp) }).GetEnumerator();
+            return files.Select(fp => new object[] { new TestFile(fp) }).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

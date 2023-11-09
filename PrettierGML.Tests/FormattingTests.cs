@@ -24,7 +24,7 @@ namespace PrettierGML.Tests
 
         [Theory]
         [ClassData(typeof(FormattingTestProvider))]
-        public async Task FormatTests(FormatTestFile test)
+        public async Task FormatTests(TestFile test)
         {
             var testFilePath = test.FilePath;
             var expectedFilePath = testFilePath.Replace(TestFileExtension, ExpectedFileExtension);
@@ -34,6 +34,7 @@ namespace PrettierGML.Tests
             {
                 throw new XunitException($"Test file {testFilePath} does not exist!");
             }
+
             if (!Path.Exists(expectedFilePath))
             {
                 throw new XunitException($"Expected test file {expectedFilePath} does not exist!");
@@ -41,28 +42,28 @@ namespace PrettierGML.Tests
 
             var input = await File.ReadAllTextAsync(testFilePath);
 
-            var firstFormat = GmlFormatter.Format(input, options);
+            var firstPass = GmlFormatter.Format(input, options);
 
-            output.WriteLine($"Parse: {firstFormat.ParseTimeMs}");
-            output.WriteLine($"Format: {firstFormat.FormatTimeMs}");
-            output.WriteLine($"Total: {firstFormat.TotalTimeMs}");
+            output.WriteLine($"Parse: {firstPass.ParseTimeMs}");
+            output.WriteLine($"Format: {firstPass.FormatTimeMs}");
+            output.WriteLine($"Total: {firstPass.TotalTimeMs}");
 
-            await File.WriteAllTextAsync(actualFilePath, firstFormat.Output);
+            await File.WriteAllTextAsync(actualFilePath, firstPass.Output);
 
             var expectedOutput = await File.ReadAllTextAsync(expectedFilePath);
 
-            var firstDiff = StringDiffer.PrintFirstDifference(expectedOutput, firstFormat.Output);
+            var firstDiff = StringDiffer.PrintFirstDifference(expectedOutput, firstPass.Output);
             if (firstDiff != string.Empty)
             {
-                throw new XunitException($"First pass:\n{firstDiff}");
+                throw new XunitException($"Formatting error on first pass:\n{firstDiff}");
             }
 
-            var secondFormat = GmlFormatter.Format(firstFormat.Output, options);
+            var secondPass = GmlFormatter.Format(firstPass.Output, options);
 
-            var secondDiff = StringDiffer.PrintFirstDifference(expectedOutput, secondFormat.Output);
+            var secondDiff = StringDiffer.PrintFirstDifference(expectedOutput, secondPass.Output);
             if (secondDiff != string.Empty)
             {
-                throw new XunitException($"Second pass:\n{secondDiff}");
+                throw new XunitException($"Formatting error on second pass:\n{secondDiff}");
             }
         }
     }
@@ -79,7 +80,7 @@ namespace PrettierGML.Tests
         {
             var filePath = Path.Combine(rootDirectory.FullName, "Gml", "FormattingTests");
             var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
-            return files.Select(fp => new object[] { new FormatTestFile(fp) }).GetEnumerator();
+            return files.Select(fp => new object[] { new TestFile(fp) }).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
