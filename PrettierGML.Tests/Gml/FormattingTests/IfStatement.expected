@@ -6,6 +6,10 @@ if (true) {
     // indent this!
 }
 
+if (condition) {
+    // this comment should be inside the block
+}
+
 if (true) {
     DoSomething();
 } else if (false) {
@@ -42,7 +46,10 @@ if (someLongCondition != someOtherCondition) {
 if (longStatementName && longerStatementName && evenLongerStatementName && superLongStatementName) {
     return;
 } else if (
-    longStatementName && longerStatementName && evenLongerStatementName && superLongStatementName
+    longStatementName
+    && longerStatementName
+    && evenLongerStatementName
+    && superLongStatementName
 ) {
     call();
 }
@@ -51,20 +58,20 @@ if // comment
 (
     // torture
     true // test
-) // just
-{
+) {
+    // just
     // for
     // fun
 } // lol
 
-if (condition) // this comment should stay outside
-{
+if (condition) {
+    // this comment should stay outside
     return;
 }
 
 if (
     object // this comment should stay inside
-) // this comment should stay outside
-{
+) {
+    // this comment should stay outside
     return;
 }

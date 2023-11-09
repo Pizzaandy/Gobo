@@ -79,7 +79,7 @@ namespace PrettierGML.SyntaxNodes
 
             Doc printed;
 
-            if (Comments.Count > 0 && LeadingComments.LastOrDefault(c => c.IsFormatCommand) != null)
+            if (LeadingComments.Count > 0 && LeadingComments.Any(c => c.IsFormatCommand))
             {
                 var formatCommand = LeadingComments.Last(c => c.IsFormatCommand);
                 printed = formatCommand.FormatCommandText switch
@@ -109,15 +109,24 @@ namespace PrettierGML.SyntaxNodes
         {
             Children.ForEach(child => child.MarkCommentsAsPrinted());
 
+            // TODO: factor out Antlr dependency
             return ctx.Tokens.GetText(
                 new Antlr4.Runtime.Misc.Interval(TokenRange.Start, TokenRange.Stop)
             );
+        }
+
+        private void MarkCommentsAsPrinted()
+        {
+            Comments.ForEach(commentGroup => commentGroup.Printed = true);
+            Children.ForEach(child => child.MarkCommentsAsPrinted());
         }
 
         public List<Doc> PrintChildren(PrintContext ctx)
         {
             return Children.Select(child => child.Print(ctx)).ToList();
         }
+
+        // TODO: Move comment logic?
 
         public virtual Doc PrintLeadingComments(
             PrintContext ctx,
@@ -185,6 +194,15 @@ namespace PrettierGML.SyntaxNodes
             return unprinted;
         }
 
+        public void TransferComments(GmlSyntaxNode target, Func<CommentGroup, bool> predicate)
+        {
+            var commentsToTransfer = Comments.Where(predicate);
+
+            Comments = Comments.Where(c => !predicate(c)).ToList();
+
+            target.Comments.AddRange(commentsToTransfer);
+        }
+
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
             new NodeList(contents);
 
@@ -205,12 +223,6 @@ namespace PrettierGML.SyntaxNodes
             }
 
             return hashCode.ToHashCode();
-        }
-
-        private void MarkCommentsAsPrinted()
-        {
-            Comments.ForEach(commentGroup => commentGroup.Printed = true);
-            Children.ForEach(child => child.MarkCommentsAsPrinted());
         }
     }
 

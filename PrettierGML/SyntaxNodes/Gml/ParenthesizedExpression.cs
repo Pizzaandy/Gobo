@@ -26,7 +26,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public static Doc PrintInParens(PrintContext ctx, GmlSyntaxNode node)
         {
-            if (ShouldNotBreak(node) && !node.Comments.Any())
+            if (ShouldNotBreak(node) && node.Comments.Count == 0)
             {
                 return Doc.Concat("(", node.Print(ctx), ")");
             }

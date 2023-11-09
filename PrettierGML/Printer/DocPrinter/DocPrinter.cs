@@ -11,13 +11,14 @@ internal class DocPrinter
     protected int CurrentWidth;
     protected readonly StringBuilder Output = new();
     protected bool ShouldRemeasure;
-    protected bool NewLineNextStringValue;
-    protected bool SkipNextNewLine;
     protected readonly string EndOfLine;
     protected readonly DocPrinterOptions PrinterOptions;
     protected readonly Indenter Indenter;
     protected Stack<Indent> RegionIndents = new();
+    protected Stack<PrintCommand> EndOfLineComments = new();
     protected int ConsecutiveIndents = 0;
+
+    private static readonly char[] openingDelimiters = { '{', '(', '[' };
 
     protected DocPrinter(Doc doc, DocPrinterOptions printerOptions, string endOfLine)
     {
@@ -36,6 +37,19 @@ internal class DocPrinter
 
     public string Print()
     {
+        while (RemainingCommands.Count > 0)
+        {
+            ProcessNextCommand();
+        }
+
+        if (EndOfLineComments.Count > 0)
+        {
+            foreach (var cmd in EndOfLineComments)
+            {
+                RemainingCommands.Push(cmd);
+            }
+        }
+
         while (RemainingCommands.Count > 0)
         {
             ProcessNextCommand();
@@ -103,7 +117,6 @@ internal class DocPrinter
         else if (doc is Trim)
         {
             CurrentWidth -= Output.TrimTrailingWhitespace();
-            NewLineNextStringValue = false;
         }
         else if (doc is Group group)
         {
@@ -122,6 +135,7 @@ internal class DocPrinter
 
             var contents =
                 groupMode == PrintMode.Break ? ifBreak.BreakContents : ifBreak.FlatContents;
+
             Push(contents, mode, indent);
         }
         else if (doc is LineDoc line)
@@ -129,31 +143,6 @@ internal class DocPrinter
             ProcessLine(line, mode, indent);
         }
         else if (doc is BreakParent) { }
-        else if (doc is LeadingComment leadingComment)
-        {
-            Output.TrimTrailingWhitespace();
-            if (Output.Length != 0 && Output[^1] != '\n' || NewLineNextStringValue)
-            {
-                Output.Append(EndOfLine);
-            }
-
-            AppendComment(leadingComment, indent);
-
-            CurrentWidth = indent.Length;
-            NewLineNextStringValue = false;
-            SkipNextNewLine = false;
-        }
-        else if (doc is TrailingComment trailingComment)
-        {
-            Output.TrimTrailingWhitespace();
-            Output.Append(' ').Append(trailingComment.Comment);
-            CurrentWidth = indent.Length;
-            if (mode != PrintMode.ForceFlat)
-            {
-                NewLineNextStringValue = true;
-                SkipNextNewLine = true;
-            }
-        }
         else if (doc is ForceFlat forceFlat)
         {
             Push(forceFlat.Contents, PrintMode.ForceFlat, indent);
@@ -181,81 +170,13 @@ internal class DocPrinter
         {
             Push(temp.Contents, mode, indent);
         }
+        else if (doc is EndOfLineComment endOfLineComment)
+        {
+            EndOfLineComments.Push(new PrintCommand(indent, mode, endOfLineComment.Contents));
+        }
         else
         {
             throw new Exception("didn't handle " + doc);
-        }
-    }
-
-    private void AppendComment(LeadingComment leadingComment, Indent indent)
-    {
-        int CalculateIndentLength(string line)
-        {
-            var result = 0;
-            foreach (var character in line)
-            {
-                if (character == ' ')
-                {
-                    result += 1;
-                }
-                else if (character == '\t')
-                {
-                    result += PrinterOptions.TabWidth;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return result;
-        }
-
-        var stringReader = new StringReader(leadingComment.Comment);
-        var line = stringReader.ReadLine();
-        var numberOfSpacesToAddOrRemove = 0;
-        if (leadingComment.Type == CommentFormat.MultiLine && line != null)
-        {
-            // in order to maintain the formatting inside of a multiline comment
-            // we calculate how much the indentation of the first line is changing
-            // and then change the indentation of all other lines the same amount
-            var firstLineIndentLength = CalculateIndentLength(line);
-            var currentIndent = CalculateIndentLength(indent.Value);
-            numberOfSpacesToAddOrRemove = currentIndent - firstLineIndentLength;
-        }
-
-        while (line != null)
-        {
-            if (leadingComment.Type == CommentFormat.SingleLine)
-            {
-                Output.Append(indent.Value);
-            }
-            else
-            {
-                var spacesToAppend = CalculateIndentLength(line) + numberOfSpacesToAddOrRemove;
-                if (PrinterOptions.UseTabs)
-                {
-                    var indentLength = CalculateIndentLength(indent.Value);
-                    if (spacesToAppend >= indentLength)
-                    {
-                        Output.Append(indent.Value);
-                        spacesToAppend -= indentLength;
-                    }
-                }
-                if (spacesToAppend > 0)
-                {
-                    Output.Append(' ', spacesToAppend);
-                }
-            }
-
-            Output.Append(line.Trim());
-            line = stringReader.ReadLine();
-            if (line == null)
-            {
-                return;
-            }
-
-            Output.Append(EndOfLine);
         }
     }
 
@@ -264,22 +185,6 @@ internal class DocPrinter
         if (string.IsNullOrEmpty(stringDoc.Value))
         {
             return;
-        }
-
-        // this ensures we don't print extra spaces after a trailing comment
-        // newLineNextStringValue & skipNextNewLine are set to true when we print a trailing comment
-        // when they are set we new line the next string we find. If we new line and then print a " " we end up with an extra space
-        if (NewLineNextStringValue && SkipNextNewLine && stringDoc.Value == " ")
-        {
-            return;
-        }
-
-        if (NewLineNextStringValue)
-        {
-            Output.TrimTrailingWhitespace();
-            Output.Append(EndOfLine).Append(indent.Value);
-            CurrentWidth = indent.Length;
-            NewLineNextStringValue = false;
         }
 
         Output.Append(stringDoc.Value);
@@ -313,6 +218,33 @@ internal class DocPrinter
             return;
         }
 
+        if (EndOfLineComments.Count > 0)
+        {
+            Push(line, mode, indent);
+
+            if (!Output.EndsWithNewLineAndWhitespace() && Output.Length > 0)
+            {
+                Output.TrimTrailingWhitespace();
+
+                if (openingDelimiters.Contains(Output[^1]))
+                {
+                    Output.Append(EndOfLine).Append(indent.Value);
+                }
+                else
+                {
+                    Output.Append(' ');
+                }
+            }
+
+            foreach (var lineSuffix in EndOfLineComments)
+            {
+                RemainingCommands.Push(lineSuffix);
+            }
+
+            EndOfLineComments.Clear();
+            return;
+        }
+
         if (line.IsLiteral)
         {
             if (Output.Length > 0)
@@ -323,17 +255,9 @@ internal class DocPrinter
         }
         else
         {
-            if (!SkipNextNewLine || !NewLineNextStringValue)
-            {
-                Output.TrimTrailingWhitespace();
-                Output.Append(EndOfLine).Append(indent.Value);
-                CurrentWidth = indent.Length;
-            }
-
-            if (SkipNextNewLine)
-            {
-                SkipNextNewLine = false;
-            }
+            Output.TrimTrailingWhitespace();
+            Output.Append(EndOfLine).Append(indent.Value);
+            CurrentWidth = indent.Length;
         }
     }
 

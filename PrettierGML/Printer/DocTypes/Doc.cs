@@ -33,12 +33,6 @@ internal abstract class Doc
 
     public static readonly Trim Trim = new();
 
-    public static LeadingComment LeadingComment(string comment, CommentFormat commentType) =>
-        new() { Type = commentType, Comment = comment };
-
-    public static TrailingComment TrailingComment(string comment, CommentFormat commentType) =>
-        new() { Type = commentType, Comment = comment };
-
     public static Doc Concat(IList<Doc> contents) =>
         contents.Count == 1 ? contents[0] : new Concat(contents);
 
@@ -169,6 +163,11 @@ internal abstract class Doc
     public static Region BeginRegion(string text) => new(text);
 
     public static Region EndRegion(string text) => new(text) { IsEnd = true };
+
+    public static EndOfLineComment EndOfLineComment(Doc contents) => new(contents, false);
+
+    public static EndOfLineComment EndOfLineComment(params Doc[] contents) =>
+        new(Concat(contents), false);
 }
 
 internal enum CommentFormat

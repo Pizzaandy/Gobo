@@ -25,7 +25,7 @@ internal static class DocFitter
 
         var output = new StringBuilder();
 
-        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0;)
+        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0; )
         {
             if (remainingWidth < 0)
             {
@@ -63,14 +63,7 @@ internal static class DocFitter
             }
             else if (currentDoc != Doc.Null)
             {
-                if (currentDoc is LeadingComment or TrailingComment)
-                {
-                    if (output.Length > 0 && currentMode is not PrintMode.ForceFlat)
-                    {
-                        returnFalseIfMoreStringsFound = true;
-                    }
-                }
-                else if (currentDoc is Region)
+                if (currentDoc is Region)
                 {
                     return false;
                 }
@@ -165,6 +158,7 @@ internal static class DocFitter
                     );
                 }
                 else if (currentDoc is AlwaysFits) { }
+                else if (currentDoc is EndOfLineComment) { }
                 else
                 {
                     throw new Exception("Can't handle " + currentDoc.GetType());

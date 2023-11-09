@@ -64,23 +64,20 @@ namespace PrettierGML.SyntaxNodes
 
         public const string FormatCommandPrefix = "#fmt-";
 
-        public CommentGroup(List<IToken> text, Range characterRange, Range tokenRange)
+        public CommentGroup(List<IToken> tokens, Range characterRange, Range tokenRange)
         {
-            Tokens = text;
+            Tokens = tokens;
             CharacterRange = characterRange;
             TokenRange = tokenRange;
 
-            foreach (var token in text.AsEnumerable().Reverse())
+            for (var i = tokens.Count - 1; i >= 0; i--)
             {
-                if (!IsComment(token))
-                {
-                    continue;
-                }
+                var token = tokens[i];
 
-                EndsWithSingleLineComment = token.Type == GameMakerLanguageLexer.SingleLineComment;
-
-                if (EndsWithSingleLineComment)
+                if (token.Type == GameMakerLanguageLexer.SingleLineComment)
                 {
+                    EndsWithSingleLineComment = true;
+
                     var trimmedText = token.Text[2..].Trim();
 
                     if (trimmedText.StartsWith(FormatCommandPrefix))
@@ -88,9 +85,9 @@ namespace PrettierGML.SyntaxNodes
                         IsFormatCommand = true;
                         FormatCommandText = trimmedText[FormatCommandPrefix.Length..];
                     }
-                }
 
-                break;
+                    break;
+                }
             }
         }
 
@@ -98,20 +95,17 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                throw new Exception("Comment printed twice: " + Text);
+                //throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
             var parts = new List<Doc>();
-
-            bool shouldBreak = false;
 
             foreach (var token in Tokens)
             {
                 if (token.Type == GameMakerLanguageLexer.SingleLineComment)
                 {
                     parts.Add(PrintSingleLineComment(token.Text));
-                    shouldBreak = true;
                 }
                 else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
                 {
@@ -123,12 +117,15 @@ namespace PrettierGML.SyntaxNodes
                 }
             }
 
-            if (shouldBreak)
+            if (EndsWithSingleLineComment || Placement == CommentPlacement.EndOfLine)
             {
                 parts.Add(Doc.BreakParent);
+                return Doc.EndOfLineComment(Doc.Concat(parts));
             }
-
-            return Doc.Concat(parts);
+            else
+            {
+                return Doc.Concat(parts);
+            }
         }
 
         public static Doc PrintGroups(PrintContext ctx, List<CommentGroup> groups, CommentType type)
@@ -149,11 +146,6 @@ namespace PrettierGML.SyntaxNodes
                         .Reverse()
                         .TakeWhile(token => !IsComment(token))
                         ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
-
-                if (group.EndsWithSingleLineComment)
-                {
-                    leadingLineBreaks = Math.Max(leadingLineBreaks, 1);
-                }
 
                 for (var i = 0; i < Math.Min(leadingLineBreaks, 2); i++)
                 {
@@ -201,7 +193,7 @@ namespace PrettierGML.SyntaxNodes
 
                 if (lineBreaksBetween == 0)
                 {
-                    return Doc.Concat(" ", printedGroups);
+                    return Doc.Concat(printedGroups);
                 }
 
                 for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
@@ -223,8 +215,7 @@ namespace PrettierGML.SyntaxNodes
 
         public static Doc PrintSingleLineComment(string text)
         {
-            var commentText = "// " + text[2..].TrimStart();
-            return commentText;
+            return text;
         }
 
         public static Doc PrintMultiLineComment(string text)
@@ -245,11 +236,6 @@ namespace PrettierGML.SyntaxNodes
                 $"Preceding: {PrecedingNode?.Kind}",
                 $"Following: {FollowingNode?.Kind}\n"
             );
-        }
-
-        public override int GetHashCode()
-        {
-            return Text.GetHashCode();
         }
     }
 }

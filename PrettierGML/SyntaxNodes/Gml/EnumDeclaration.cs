@@ -21,9 +21,7 @@ namespace PrettierGML.SyntaxNodes.Gml
                 "enum",
                 " ",
                 Name.Print(ctx),
-                ctx.Options.BraceStyle == BraceStyle.NewLine || Name.EndsWithSingleLineComment()
-                    ? Doc.HardLine
-                    : " ",
+                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLineIfNoPreviousLine : " ",
                 Members.Print(ctx)
             );
         }

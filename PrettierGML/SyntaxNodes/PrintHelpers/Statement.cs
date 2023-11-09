@@ -13,19 +13,11 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             GmlSyntaxNode body
         )
         {
-            bool lineBreakBeforeBlock =
-                ctx.Options.BraceStyle == BraceStyle.NewLine || clause.EndsWithSingleLineComment();
-
-            Doc clauseDoc = EnsureExpressionInParentheses(ctx, clause);
             Doc bodyDoc = EnsureStatementInBlock(ctx, body);
 
-            return Doc.Concat(
-                keyword,
-                " ",
-                clauseDoc,
-                lineBreakBeforeBlock ? Doc.HardLine : " ",
-                bodyDoc
-            );
+            Doc clauseDoc = EnsureExpressionInParentheses(ctx, clause);
+
+            return Doc.Concat(keyword, " ", clauseDoc, " ", bodyDoc);
         }
 
         public static Doc EnsureStatementInBlock(PrintContext ctx, GmlSyntaxNode statement)
@@ -34,9 +26,13 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             {
                 return statement.Print(ctx);
             }
+            else if (statement.IsEmpty)
+            {
+                return Block.PrintEmptyBlock(ctx);
+            }
             else
             {
-                return Block.PrintInBlock(ctx, PrintStatement(ctx, statement));
+                return Block.WrapInBlock(ctx, PrintStatement(ctx, statement));
             }
         }
 
@@ -60,16 +56,9 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         {
             if (NeedsSemicolon(statement))
             {
-                Doc lineSuffix = NeedsSemicolon(statement) ? ";" : Doc.Null;
-
                 statement.PrintOwnComments = false;
 
-                return Doc.Concat(
-                    statement.PrintLeadingComments(ctx),
-                    statement.Print(ctx),
-                    lineSuffix,
-                    statement.PrintTrailingComments(ctx)
-                );
+                return statement.PrintWithOwnComments(ctx, Doc.Concat(statement.Print(ctx), ";"));
             }
             else
             {

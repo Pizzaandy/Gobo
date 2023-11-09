@@ -16,41 +16,52 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return PrintInBlock(ctx, Statement.PrintStatements(ctx, Children), this);
+            if (Children.Count == 0)
+            {
+                return PrintEmptyBlock(ctx, this);
+            }
+            else
+            {
+                return WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
+            }
         }
 
         /// <summary>
         /// Wraps a doc in brackets and line breaks.
-        /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
+        /// Adds a line break in front of the block depending on brace style.
         /// </summary>
-        public static Doc PrintInBlock(
-            PrintContext ctx,
-            Doc bodyDoc,
-            GmlSyntaxNode? danglingCommentSource = null
-        )
+        public static Doc WrapInBlock(PrintContext ctx, Doc bodyDoc)
         {
-            var hasDanglingComments =
-                danglingCommentSource is not null && danglingCommentSource.DanglingComments.Any();
-
-            if (bodyDoc == Doc.Null && !hasDanglingComments)
-            {
-                return EmptyBlock;
-            }
-
-            Doc printedComments = Doc.Null;
-
-            if (hasDanglingComments)
-            {
-                danglingCommentSource!.PrintOwnComments = false;
-                printedComments = danglingCommentSource.PrintDanglingComments(ctx);
-            }
+            Doc leadingWhitespace =
+                ctx.Options.BraceStyle is BraceStyle.NewLine
+                    ? Doc.HardLineIfNoPreviousLine
+                    : Doc.Null;
 
             return Doc.Concat(
+                leadingWhitespace,
                 "{",
-                Doc.Indent(Doc.HardLine, printedComments, bodyDoc),
+                Doc.Indent(Doc.HardLine, bodyDoc),
                 Doc.HardLine,
                 "}"
             );
+        }
+
+        /// <summary>
+        /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
+        /// </summary>
+        public static Doc PrintEmptyBlock(
+            PrintContext ctx,
+            GmlSyntaxNode? danglingCommentSource = null
+        )
+        {
+            if (danglingCommentSource is null || danglingCommentSource.DanglingComments.Count == 0)
+            {
+                return EmptyBlock;
+            }
+            else
+            {
+                return WrapInBlock(ctx, danglingCommentSource.PrintDanglingComments(ctx));
+            }
         }
 
         public static Doc EmptyBlock => "{}";

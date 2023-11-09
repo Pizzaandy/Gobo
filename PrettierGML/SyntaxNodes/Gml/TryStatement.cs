@@ -25,13 +25,13 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
+            Doc leadingWhitespace =
+                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLineIfNoPreviousLine : " ";
+
             var parts = new List<Doc>
             {
                 Doc.Concat("try", " ", Statement.EnsureStatementInBlock(ctx, Body))
             };
-
-            Doc leadingWhitespace =
-                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLine : " ";
 
             if (!Catch.IsEmpty)
             {

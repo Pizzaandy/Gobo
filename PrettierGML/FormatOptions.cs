@@ -2,11 +2,11 @@
 {
     public class FormatOptions
     {
-        public BraceStyle BraceStyle { get; init; } = BraceStyle.SameLine;
-        public bool UseTabs { get; init; } = false;
-        public int TabWidth { get; init; } = 4;
-        public int Width { get; init; } = 80;
-        public bool CheckAst { get; init; } = true;
+        public BraceStyle BraceStyle { get; set; } = BraceStyle.SameLine;
+        public bool UseTabs { get; set; } = false;
+        public int TabWidth { get; set; } = 4;
+        public int Width { get; set; } = 80;
+        public bool ValidateOutput { get; set; } = true;
         public bool RemoveSyntaxExtensions { get; set; } = false;
         public bool GetDebugInfo { get; set; } = false;
 

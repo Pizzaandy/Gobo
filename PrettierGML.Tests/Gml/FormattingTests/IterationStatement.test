@@ -1,21 +1,25 @@
-for (var i:=-1; ++i<>10; { var j=-1; while ++j<10 begin // comment1
-    array[i, j] = 0; // comment2
-} end) continue
-
 for (;;) return
 
-while ((((condition)))) // this comment should stay outside
+for (var i = 0; i < 42; {i++;}) {}
+
+while ((((condition))))
     return;
 
 while (
 (((longStatementName
 && longerStatementName
 && evenLongerStatementName
-&& superLongStatementName))) // this comment should stay inside
-) // this comment should stay outside
-    return;
+&& superLongStatementName)))
+) 
+return;
 
-do operation() until longStatementName
+do statement() until ((condition));
+
+do operation()
+until 
+longStatementName 
 && longerStatementName
 && evenLongerStatementName
 && superLongStatementName
+
+repeat((3)) {}

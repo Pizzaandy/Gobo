@@ -53,12 +53,7 @@ namespace PrettierGML.Parser
 
             var syntaxErrorMessage = $"Syntax error at line {Line}, column {CharPositionInLine}:\n";
 
-            var message =
-                syntaxErrorMessage
-                + offendingSymbolMessage
-                + "\n"
-                + Message
-                + $"\nStack: {stackText}";
+            var message = syntaxErrorMessage + offendingSymbolMessage;
 
             throw new GmlSyntaxErrorException(message);
         }
