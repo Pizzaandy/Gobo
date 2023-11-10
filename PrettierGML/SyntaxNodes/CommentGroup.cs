@@ -24,16 +24,19 @@ namespace PrettierGML.SyntaxNodes
     /// </summary>
     internal class CommentGroup
     {
-        [JsonIgnore]
-        public List<IToken> Tokens { get; init; }
-
         public string Text => string.Concat(Tokens.Select(t => t.Text));
+
+        public int Start => CharacterRange.Start;
+        public int End => CharacterRange.Stop;
 
         [JsonConverter(typeof(StringEnumConverter))]
         public CommentType Type { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public CommentPlacement Placement { get; set; }
+
+        [JsonIgnore]
+        public List<IToken> Tokens { get; init; }
 
         [JsonIgnore]
         public Range CharacterRange { get; set; }
@@ -96,7 +99,7 @@ namespace PrettierGML.SyntaxNodes
         {
             if (Printed)
             {
-                throw new Exception("Comment printed twice: " + Text);
+                //throw new Exception("Comment printed twice: " + Text);
             }
             Printed = true;
 
@@ -238,8 +241,10 @@ namespace PrettierGML.SyntaxNodes
         public override string ToString()
         {
             return string.Join(
+                '\n',
                 $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
                 $"Type: {Type}",
+                $"Placement: {Placement}",
                 $"Range: {CharacterRange}",
                 $"Enclosing: {EnclosingNode?.Kind}",
                 $"Preceding: {PrecedingNode?.Kind}",

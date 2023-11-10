@@ -33,5 +33,10 @@ namespace PrettierGML.SyntaxNodes.Gml
             var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
             return DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",");
         }
+
+        public void SetObject(GmlSyntaxNode node)
+        {
+            Object = AsChild(node);
+        }
     }
 }

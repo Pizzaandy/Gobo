@@ -5,6 +5,13 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 {
     internal record PrintedNode(GmlSyntaxNode Node, Doc Doc);
 
+    internal interface IMemberChainable
+    {
+        public GmlSyntaxNode Object { get; set; }
+        public Doc PrintChain(PrintContext ctx);
+        public void SetObject(GmlSyntaxNode node);
+    }
+
     internal static class MemberChain
     {
         public static Doc PrintMemberChain(PrintContext ctx, GmlSyntaxNode node)
@@ -108,11 +115,11 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             //   a().b.c().d().e
             // will be grouped as
             //   [
-            //     [Identifier, InvocationExpression],
-            //     [MemberAccessExpression]
-            //     [MemberAccessExpression, InvocationExpression],
-            //     [MemberAccessExpression, InvocationExpression],
-            //     [MemberAccessExpression],
+            //     [Identifier, ArgumentsList],
+            //     [MemberDotExpression]
+            //     [MemberDotExpression, ArgumentsList],
+            //     [MemberDotExpression, ArgumentsList],
+            //     [MemberDotExpression],
             //   ]
 
             // so that we can print it as
@@ -200,13 +207,13 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         // For example
         /*
             // without merging we get this
-            this
-                .CallMethod()
-                .CallMethod();
+            self
+                .call_method()
+                .call_method();
 
             // merging gives us this
-            this.CallMethod()
-                .CallMethod();
+            self.call_method()
+                .call_method();
          */
         private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
         {

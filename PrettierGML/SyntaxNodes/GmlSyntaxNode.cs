@@ -7,11 +7,16 @@ namespace PrettierGML.SyntaxNodes
 {
     internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     {
-        [JsonIgnore]
-        public Range CharacterRange { get; init; }
+        public string Kind => GetType().Name;
+        public int Start => CharacterRange.Start;
+        public int End => CharacterRange.Stop;
+        public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
-        public Range TokenRange { get; init; }
+        public Range CharacterRange { get; set; }
+
+        [JsonIgnore]
+        public Range TokenRange { get; set; }
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; set; }
@@ -21,10 +26,6 @@ namespace PrettierGML.SyntaxNodes
 
         [JsonIgnore]
         public bool IsEmpty => this is EmptyNode;
-
-        public string Kind => GetType().Name;
-
-        public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
         public bool PrintOwnComments { get; set; } = true;
@@ -54,21 +55,7 @@ namespace PrettierGML.SyntaxNodes
 
         public static EmptyNode Empty => EmptyNode.Instance;
 
-        protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
-        {
-            Children.Add(child);
-            child.Parent = this;
-            return child;
-        }
-
-        protected List<GmlSyntaxNode> AsChildren(List<GmlSyntaxNode> children)
-        {
-            foreach (var child in children)
-            {
-                AsChild(child);
-            }
-            return children;
-        }
+        public abstract Doc PrintNode(PrintContext ctx);
 
         public Doc Print(PrintContext ctx)
         {
@@ -100,8 +87,6 @@ namespace PrettierGML.SyntaxNodes
             return printed;
         }
 
-        public abstract Doc PrintNode(PrintContext ctx);
-
         public Doc PrintRaw(PrintContext ctx)
         {
             Children.ForEach(child => child.MarkCommentsAsPrinted());
@@ -110,12 +95,6 @@ namespace PrettierGML.SyntaxNodes
             return ctx.Tokens.GetText(
                 new Antlr4.Runtime.Misc.Interval(TokenRange.Start, TokenRange.Stop)
             );
-        }
-
-        private void MarkCommentsAsPrinted()
-        {
-            Comments.ForEach(commentGroup => commentGroup.Printed = true);
-            Children.ForEach(child => child.MarkCommentsAsPrinted());
         }
 
         public List<Doc> PrintChildren(PrintContext ctx)
@@ -195,6 +174,11 @@ namespace PrettierGML.SyntaxNodes
             target.Comments.AddRange(commentsToTransfer);
         }
 
+        public bool ShouldSerializeComments()
+        {
+            return Comments.Count > 0;
+        }
+
         public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
             new NodeList(contents);
 
@@ -216,11 +200,27 @@ namespace PrettierGML.SyntaxNodes
 
             return hashCode.ToHashCode();
         }
-    }
 
-    internal interface IMemberChainable
-    {
-        public GmlSyntaxNode Object { get; set; }
-        public Doc PrintChain(PrintContext ctx);
+        protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
+        {
+            Children.Add(child);
+            child.Parent = this;
+            return child;
+        }
+
+        protected List<GmlSyntaxNode> AsChildren(List<GmlSyntaxNode> children)
+        {
+            foreach (var child in children)
+            {
+                AsChild(child);
+            }
+            return children;
+        }
+
+        private void MarkCommentsAsPrinted()
+        {
+            Comments.ForEach(commentGroup => commentGroup.Printed = true);
+            Children.ForEach(child => child.MarkCommentsAsPrinted());
+        }
     }
 }
