@@ -578,7 +578,7 @@ namespace PrettierGML.Parser
                 foreach (var op in ops)
                 {
                     var node = Visit(op);
-                    (node as IMemberChainable)!.Object = @object;
+                    (node as IMemberChainable)!.SetObject(@object);
                     node.CharacterRange = new(characterStart, node.CharacterRange.Stop);
                     node.TokenRange = new(tokenStart, node.TokenRange.Stop);
                     @object = node;
@@ -588,7 +588,7 @@ namespace PrettierGML.Parser
             if (context.lValueFinalOperator() != null)
             {
                 var node = Visit(context.lValueFinalOperator());
-                (node as IMemberChainable)!.Object = @object;
+                (node as IMemberChainable)!.SetObject(@object);
                 node.CharacterRange = new(characterStart, node.CharacterRange.Stop);
                 node.TokenRange = new(tokenStart, node.TokenRange.Stop);
                 @object = node;

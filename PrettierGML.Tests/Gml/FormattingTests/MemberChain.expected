@@ -15,9 +15,7 @@ self.Method(
     someParameter__________________________________
 );
 
-self.SomeMethod(
-    SomeOtherMethod(parameter__________________________________________________)
-);
+self.SomeMethod(SomeOtherMethod(parameter__________________________________________________));
 
 var superLongName____________________________________ =
     someOtherName.CallSomeMethod________________();
@@ -78,23 +76,15 @@ CallSomeMethod(
 
 var someVariable = someObject
     .Property
-    .CallMethod(
-        someValue.SomeProperty == someOtherValue___________________________________
-    );
+    .CallMethod(someValue.SomeProperty == someOtherValue___________________________________);
 
-CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
+CallMethod(firstParameter____________________________, secondParameter___________________________)
     .CallMethod(
         firstParameter____________________________,
         secondParameter___________________________
     );
 
-CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
+CallMethod(firstParameter____________________________, secondParameter___________________________)
     .CallMethod(
         firstParameter____________________________,
         secondParameter___________________________
@@ -105,6 +95,16 @@ CallMethod(
     );
 
 this.CallMethod(
+    firstParameter____________________________,
+    secondParameter___________________________
+)
+    .CallMethod(
+        firstParameter____________________________,
+        secondParameter___________________________
+    );
+
+string
+    .CallMethod(
         firstParameter____________________________,
         secondParameter___________________________
     )
@@ -113,32 +113,14 @@ this.CallMethod(
         secondParameter___________________________
     );
 
-string.CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
+o.CallMethod(firstParameter____________________________, secondParameter___________________________)
     .CallMethod(
         firstParameter____________________________,
         secondParameter___________________________
     );
 
-o.CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    );
-
-CallMethod(
-        one__________________________________,
-        two__________________________________
-    )
-    .CallMethod[
-        one__________________________________,
-        two__________________________________
-    ]();
+CallMethod(one__________________________________, two__________________________________)
+    .CallMethod[one__________________________________, two__________________________________]();
 
 SomeObject
     .CallMethod(parameter_______________________________________________________________)
@@ -154,23 +136,19 @@ SomeObject.CallMethod();
 o.CallMethod(parameter_____________, parameter_____________)
     .CallMethod(parameter_____________, parameter_____________);
 
-this.CallMethod()
-    .CallMethod__________________(one_____________________, two_____________________);
+this.CallMethod().CallMethod__________________(one_____________________, two_____________________);
 
 var someValue = CallMethod__________________(longParameter________________________________)
     .CallMethod__________________();
 
-var someValue = CallMethod__________________[longParameter________________________________]
+var someValue = CallMethod__________________[
+    longParameter________________________________
+].CallMethod__________________();
+
+var someValue = CallMethod__________________(longParameter_______________________________________)
     .CallMethod__________________();
 
-var someValue = CallMethod__________________(
-        longParameter_______________________________________
-    )
-    .CallMethod__________________();
-
-var someValue = CallMethod__________________(
-        longParameter_______________________________________
-    )
+var someValue = CallMethod__________________(longParameter_______________________________________)
     .CallMethod__________________();
 
 someThing_______________________

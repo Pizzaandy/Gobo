@@ -1,10 +1,9 @@
 ﻿using PrettierGML;
-using PrettierGML.Printer.Utilities;
 
 static string TestFormat(string input)
 {
     var formatOptions = FormatOptions.DefaultTestOptions;
-    formatOptions.ValidateOutput = false;
+    formatOptions.ValidateOutput = true;
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
 
@@ -17,9 +16,10 @@ static string TestFormat(string input)
     return result.Output;
 }
 
-var input = $$"""
-    y = a // comment
-    .b().c()
-    """;
+var input =
+    @"var someValue = CallMethod__________________(
+        longParameter_______________________________________
+    )
+    .CallMethod__________________();";
 
 TestFormat(input);

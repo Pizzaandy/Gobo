@@ -1,8 +1,5 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.SyntaxNodes;
-using PrettierGML.SyntaxNodes.Gml;
-using PrettierGML.SyntaxNodes.PrintHelpers;
-using System.Xml.Linq;
 using Range = PrettierGML.SyntaxNodes.Range;
 
 namespace PrettierGML.Parser
@@ -119,10 +116,11 @@ namespace PrettierGML.Parser
             GmlSyntaxNode? enclosingNode
         )
         {
-            if (enclosingNode is MemberDotExpression && followingNode is Identifier)
-            {
-                AttachCommentGroup(enclosingNode, comment, CommentType.Leading);
-            }
+            //if (enclosingNode is MemberDotExpression && followingNode is Identifier)
+            //{
+            //    AttachCommentGroup(enclosingNode, comment, CommentType.Leading);
+            //    return true;
+            //}
             return false;
         }
 
@@ -171,17 +169,19 @@ namespace PrettierGML.Parser
                 var child = childNodes[middle];
 
                 var childStart = child.CharacterRange.Start;
-                var childStop = child.CharacterRange.Stop + 1;
+                var childStop = child.CharacterRange.Stop;
 
                 var commentStart = comment.CharacterRange.Start;
-                var commentStop = comment.CharacterRange.Stop + 1;
+                var commentStop = comment.CharacterRange.Stop;
 
+                // The comment is completely contained by this child node
+                // Abandon the binary search at this level.
                 if (childStart <= commentStart && commentStop <= childStop)
                 {
                     return DecorateComment(child, comment, child);
                 }
 
-                if (childStop <= commentStart)
+                if (childStop < commentStart)
                 {
                     // This child node falls completely before the comment.
                     // Because we will never consider this node or any nodes
@@ -192,7 +192,7 @@ namespace PrettierGML.Parser
                     continue;
                 }
 
-                if (commentStop <= childStart)
+                if (commentStop < childStart)
                 {
                     // This child node falls completely after the comment.
                     // Because we will never consider this node or any nodes after
@@ -308,10 +308,18 @@ namespace PrettierGML.Parser
 
             var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
 
-            return leadingTokens is not null
-                && leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
-                && trailingTokens is not null
+            bool firstInLine =
+                leadingTokens is not null
+                && (
+                    leadingTokens.Last().TokenIndex == 0
+                    || leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
+                );
+
+            bool lastInLine =
+                trailingTokens is not null
                 && trailingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak);
+
+            return firstInLine && lastInLine;
         }
 
         private bool IsEndOfLineComment(CommentGroup comment)
@@ -353,7 +361,9 @@ namespace PrettierGML.Parser
         )
         {
             comment.Type = type;
+
             node.Comments.Add(comment);
+
             switch (type)
             {
                 case CommentType.Leading:

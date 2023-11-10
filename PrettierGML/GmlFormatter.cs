@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Parser;
 using PrettierGML.Printer.DocPrinter;
+using PrettierGML.Printer.Utilities;
 using PrettierGML.SyntaxNodes;
 using System.Diagnostics;
 
@@ -57,16 +58,16 @@ namespace PrettierGML
             long parseStop = 0;
             long formatStart = 0;
 
-            var isDebug = options.GetDebugInfo;
+            var getDebugInfo = options.GetDebugInfo;
 
-            if (isDebug)
+            if (getDebugInfo)
             {
                 parseStart = Stopwatch.GetTimestamp();
             }
 
             var parseResult = GmlParser.Parse(code);
 
-            if (isDebug)
+            if (getDebugInfo)
             {
                 parseStop = Stopwatch.GetTimestamp();
                 formatStart = Stopwatch.GetTimestamp();
@@ -101,7 +102,7 @@ namespace PrettierGML
                 {
                     Console.WriteLine(output);
                     throw new Exception(
-                        "Formatting made the code invalid. Parse error:\n" + ex.Message
+                        "Formatting made the code invalid!\nParse error:\n" + ex.Message
                     );
                 }
 
@@ -109,15 +110,19 @@ namespace PrettierGML
 
                 if (initialHash != resultHash)
                 {
+                    Console.WriteLine("Original AST:");
                     Console.WriteLine(ast);
+                    Console.WriteLine("Formatted AST:");
                     Console.WriteLine(updatedParseResult.Ast);
-                    Console.WriteLine(output);
-
-                    throw new Exception("Formatting transformed the AST!");
+                    var diff = StringDiffer.PrintFirstDifference(
+                        ast.ToString(),
+                        updatedParseResult.Ast.ToString()
+                    );
+                    throw new Exception($"Formatting transformed the AST:\n{diff}");
                 }
             }
 
-            if (isDebug)
+            if (getDebugInfo)
             {
                 long formatStop = Stopwatch.GetTimestamp();
                 return new FormatResult(output)

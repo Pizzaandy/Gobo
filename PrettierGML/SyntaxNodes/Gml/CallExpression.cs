@@ -29,5 +29,10 @@ namespace PrettierGML.SyntaxNodes.Gml
         {
             return Arguments.Print(ctx);
         }
+
+        public void SetObject(GmlSyntaxNode node)
+        {
+            Object = AsChild(node);
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
     {
         public GmlSyntaxNode Object { get; set; }
         public Doc PrintChain(PrintContext ctx);
+        public void SetObject(GmlSyntaxNode node);
     }
 
     internal static class MemberChain
@@ -26,6 +27,21 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             var oneLine = groups.SelectMany(o => o).Select(o => o.Doc).ToArray();
 
             var shouldMergeFirstTwoGroups = ShouldMergeFirstTwoGroups(groups);
+
+            var cutoff = shouldMergeFirstTwoGroups ? 3 : 2;
+
+            var forceOneLine =
+                groups.Count <= cutoff
+                && (
+                    groups
+                        .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
+                        .Any(o => o.Last().Node is not CallExpression)
+                );
+
+            if (forceOneLine)
+            {
+                return Doc.Group(oneLine);
+            }
 
             var expanded = Doc.Concat(
                 Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),

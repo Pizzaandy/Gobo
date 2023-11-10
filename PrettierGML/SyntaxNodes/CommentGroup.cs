@@ -24,10 +24,10 @@ namespace PrettierGML.SyntaxNodes
     /// </summary>
     internal class CommentGroup
     {
-        [JsonIgnore]
-        public List<IToken> Tokens { get; init; }
-
         public string Text => string.Concat(Tokens.Select(t => t.Text));
+
+        public int Start => CharacterRange.Start;
+        public int End => CharacterRange.Stop;
 
         [JsonConverter(typeof(StringEnumConverter))]
         public CommentType Type { get; set; }
@@ -35,6 +35,10 @@ namespace PrettierGML.SyntaxNodes
         [JsonConverter(typeof(StringEnumConverter))]
         public CommentPlacement Placement { get; set; }
 
+        [JsonIgnore]
+        public List<IToken> Tokens { get; init; }
+
+        [JsonIgnore]
         public Range CharacterRange { get; set; }
 
         [JsonIgnore]
