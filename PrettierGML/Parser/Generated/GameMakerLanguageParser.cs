@@ -4469,8 +4469,8 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Constructor() { return GetToken(GameMakerLanguageParser.Constructor, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Identifier() { return GetToken(GameMakerLanguageParser.Identifier, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ParameterListContext parameterList() {
-			return GetRuleContext<ParameterListContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ArgumentsContext arguments() {
+			return GetRuleContext<ArgumentsContext>(0);
 		}
 		public ConstructorClauseContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -4503,7 +4503,7 @@ public partial class GameMakerLanguageParser : Parser {
 				State = 610;
 				Match(Identifier);
 				State = 611;
-				parameterList();
+				arguments();
 				}
 			}
 
@@ -5770,7 +5770,7 @@ public partial class GameMakerLanguageParser : Parser {
 		1,0,0,0,598,95,1,0,0,0,599,601,5,87,0,0,600,602,5,103,0,0,601,600,1,0,
 		0,0,601,602,1,0,0,0,602,603,1,0,0,0,603,605,3,100,50,0,604,606,3,98,49,
 		0,605,604,1,0,0,0,605,606,1,0,0,0,606,607,1,0,0,0,607,608,3,6,3,0,608,
-		97,1,0,0,0,609,610,5,20,0,0,610,611,5,103,0,0,611,613,3,100,50,0,612,609,
+		97,1,0,0,0,609,610,5,20,0,0,610,611,5,103,0,0,611,613,3,76,38,0,612,609,
 		1,0,0,0,612,613,1,0,0,0,613,614,1,0,0,0,614,615,5,96,0,0,615,99,1,0,0,
 		0,616,628,5,10,0,0,617,622,3,102,51,0,618,619,5,18,0,0,619,621,3,102,51,
 		0,620,618,1,0,0,0,621,624,1,0,0,0,622,620,1,0,0,0,622,623,1,0,0,0,623,

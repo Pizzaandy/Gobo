@@ -1,13 +1,12 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Printer.DocTypes;
-using PrettierGML.SyntaxNodes.PrintHelpers;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
     internal sealed class ConstructorClause : GmlSyntaxNode
     {
         public GmlSyntaxNode Id { get; set; }
-        public GmlSyntaxNode Parameters { get; set; }
+        public GmlSyntaxNode Arguments { get; set; }
 
         public ConstructorClause(
             ParserRuleContext context,
@@ -17,20 +16,14 @@ namespace PrettierGML.SyntaxNodes.Gml
             : base(context)
         {
             Id = AsChild(id);
-            Parameters = AsChild(parameters);
+            Arguments = AsChild(parameters);
         }
 
         public override Doc PrintNode(PrintContext ctx)
         {
             if (!Id.IsEmpty)
             {
-                return Doc.Concat(
-                    ": ",
-                    Id.Print(ctx),
-                    DelimitedList.PrintInBrackets(ctx, "(", Parameters, ")", ","),
-                    " ",
-                    "constructor"
-                );
+                return Doc.Concat(": ", Id.Print(ctx), Arguments.Print(ctx), " ", "constructor");
             }
             else
             {

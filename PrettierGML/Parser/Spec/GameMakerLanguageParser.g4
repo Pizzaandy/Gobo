@@ -296,7 +296,7 @@ functionDeclaration
     ;
 
 constructorClause
-    : (':' Identifier parameterList)? Constructor
+    : (':' Identifier arguments)? Constructor
     ;
 
 parameterList

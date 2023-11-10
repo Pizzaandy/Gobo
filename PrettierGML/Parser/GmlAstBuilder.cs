@@ -419,9 +419,9 @@ namespace PrettierGML.Parser
         {
             GmlSyntaxNode id = GmlSyntaxNode.Empty;
             GmlSyntaxNode parameters = GmlSyntaxNode.Empty;
-            if (context.parameterList() != null)
+            if (context.arguments() != null)
             {
-                parameters = Visit(context.parameterList());
+                parameters = Visit(context.arguments());
             }
             if (context.Identifier() != null)
             {
