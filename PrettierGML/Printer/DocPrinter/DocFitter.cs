@@ -1,6 +1,6 @@
-using System.Text;
 using PrettierGML.Printer.DocTypes;
 using PrettierGML.Printer.Utilities;
+using System.Text;
 
 namespace PrettierGML.Printer.DocPrinter;
 
@@ -85,7 +85,7 @@ internal static class DocFitter
                 {
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
                 }
-                else if (currentDoc is Trim)
+                else if (currentDoc is CollapsedSpace)
                 {
                     remainingWidth += output.TrimTrailingWhitespace();
                 }
@@ -159,6 +159,7 @@ internal static class DocFitter
                 }
                 else if (currentDoc is AlwaysFits) { }
                 else if (currentDoc is EndOfLineComment) { }
+                else if (currentDoc is InlineComment) { }
                 else
                 {
                     throw new Exception("Can't handle " + currentDoc.GetType());

@@ -31,13 +31,16 @@ namespace PrettierGML.SyntaxNodes
         public bool PrintOwnComments { get; set; } = true;
 
         [JsonIgnore]
-        public List<CommentGroup> LeadingComments { get; set; } = new();
+        public List<CommentGroup> LeadingComments =>
+            Comments.Where(g => g.Type == CommentType.Leading).ToList();
 
         [JsonIgnore]
-        public List<CommentGroup> TrailingComments { get; set; } = new();
+        public List<CommentGroup> TrailingComments =>
+            Comments.Where(g => g.Type == CommentType.Trailing).ToList();
 
         [JsonIgnore]
-        public List<CommentGroup> DanglingComments { get; set; } = new();
+        public List<CommentGroup> DanglingComments =>
+            Comments.Where(g => g.Type == CommentType.Dangling).ToList();
 
         public GmlSyntaxNode() { }
 
@@ -171,7 +174,10 @@ namespace PrettierGML.SyntaxNodes
 
             Comments = Comments.Where(c => !predicate(c)).ToList();
 
-            target.Comments.AddRange(commentsToTransfer);
+            foreach (var comment in commentsToTransfer)
+            {
+                target.Comments.Add(comment);
+            }
         }
 
         public bool ShouldSerializeComments()

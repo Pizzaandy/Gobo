@@ -1,179 +1,117 @@
-// TODO: make this look more like GML
-this.DoSomething().DoSomething();
+self.do_something().do_something_else();
 
-self.DoSomething___________________()
-    .DoSomething___________________()
-    .DoSomething___________________();
+self.do_something()
+    .do_something()
+    .do_something();
 
-AnIdentifier
-    .DoSomething___________________()
-    .DoSomething___________________()
-    .DoSomething___________________();
+longer_identifier
+    .do_something()
+    .do_something()
+    .do_something();
 
-self.Method(
-    someParameter__________________________________,
-    someParameter__________________________________
+self.method(
+    some_parameter__________________________________,
+    some_parameter__________________________________
 );
 
-self.SomeMethod(
-    SomeOtherMethod(parameter__________________________________________________)
+self.some_method(
+    some_other_method(parameter__________________________________________________)
 );
 
-var superLongName____________________________________ =
-    someOtherName.CallSomeMethod________________();
+var super_long_name____________________________________ =
+    other_name.call_method________________();
 
-var superLongName_______________ = someOtherName____________
-    .CallSomeMethod______________()
-    .CallSomeMethod______________();
+var super_long_name_______________ = other_name____________
+    .call_some_method______________()
+    .call_some_method______________();
 
-var someValue = someOtherValue.Where(someLongCondition).Where(someLongCondition);
+var super_long_name_______________ = other_name____________  // c1
+    .get_some_property______________
+    // c2
+    .call_some_method______________()
+    /* comment */
+    .get_some_property______________; // c3
 
-var someValue = someOtherValue
-    .Where(someLongCondition__________________________)
-    .Where(someLongCondition__________________________);
+var some_value = this().should().be().one().line()
 
-var someValue = someOtherValue
-    .Where(someLongCondition__________________________)
-    .Where(someLongCondition__________________________);
-
-var someValue = someOtherValue
-    .Thing
-    .Where(someLongCondition__________________________)
-    .Where(someLongCondition__________________________);
-
-var someValue = someOtherValue
-    .Thing
-    .Where(someLongCondition__________________________)
-    .Where(someLongCondition__________________________);
-
-var someValue = someOtherValue
-    .Where(someLongCondition__________________________)
-    .Where(someLongCondition__________________________)
-    .Where(someLongCondition__________________________);
-
-return someCondition
-    ? CallMethod(
-        someLongParameter____________________________,
-        someLongParameter____________________________
+return some_condition
+    ? call_method(
+        some_long_parameter____________________________,
+        some_long_parameter____________________________
     )
-    : Something.CallMethod(
-        someLongParameter____________________________,
-        someLongParameter____________________________
+    : something.call_method(
+        some_long_parameter____________________________,
+        some_long_parameter____________________________
     );
 
-someValue.CallMethod(
-    someLongParameter____________________________,
-    someLongParameter____________________________
-);
+return some_value.call_method
+(
+    some_long_parameter____________________________,
+    some_long_parameter____________________________
+)
+.xyz;
 
-someValue.CallMethod(
-    someLongParameter____________________________,
-    someLongParameter____________________________
-);
-
-CallSomeMethod(
-    someParameter____________________________________,
-    someParameter____________________________________
-);
-
-var someVariable = someObject
-    .Property
-    .CallMethod(
-        someValue.SomeProperty == someOtherValue___________________________________
+var some_variable = some_object
+    .property
+    .call_method(
+        something.some_property == some_other_value___________________________________
     );
 
-CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
+call_method(
+        first_parameter____________________________,
+        second_parameter___________________________
     )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
+    .call_method(
+        first_parameter____________________________,
+        second_parameter___________________________
     );
 
-CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
+call_method( // c1
+        first_parameter____________________________, // c2
+        second_parameter___________________________ // c3
+    ) // c4
+    // c5
+    .call_method(
+        first_parameter____________________________,
+        second_parameter___________________________
     )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
+    .call_method(
+        first_parameter____________________________,
+        second_parameter___________________________
     );
-
-this.CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    );
-
-string.CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    );
-
-o.CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    )
-    .CallMethod(
-        firstParameter____________________________,
-        secondParameter___________________________
-    );
-
-CallMethod(
-        one__________________________________,
-        two__________________________________
-    )
-    .CallMethod[
-        one__________________________________,
-        two__________________________________
-    ]();
-
-SomeObject
-    .CallMethod(parameter_______________________________________________________________)
-    .ToArray();
-
-SomeObject
-    .CallMethod(parameter_______________________________________________________________)
-    .ToArray();
-
-// comment shouldn't do weird stuff
-SomeObject.CallMethod();
-
-o.CallMethod(parameter_____________, parameter_____________)
-    .CallMethod(parameter_____________, parameter_____________);
-
-this.CallMethod()
-    .CallMethod__________________(one_____________________, two_____________________);
-
-var someValue = CallMethod__________________(longParameter________________________________)
-    .CallMethod__________________();
-
-var someValue = CallMethod__________________[longParameter________________________________]
-    .CallMethod__________________();
-
-var someValue = CallMethod__________________(
-        longParameter_______________________________________
-    )
-    .CallMethod__________________();
-
-var someValue = CallMethod__________________(
-        longParameter_______________________________________
-    )
-    .CallMethod__________________();
 
 someThing_______________________
     .Property
     .CallMethod__________________()
     .CallMethod__________________();
+
+// shoutouts to meseta
+CLIENTS
+.items
+.reduce_user_items(
+    _player_id,
+    _items_check,
+    "player_death",
+    this.session_id
+)
+.chain_callback(method({this: this, player_id: _player_id}, function() {
+    this.parent_components.send_action_to_player(
+        player_id,
+        "notify_ring_of_life"
+    );
+}))
+.on_error(method({this: this, player_id: _player_id}, function(_err) {
+    // reduce will fail if player doesn't have item
+    LOGGER.info // reduce will fail if player doesn't have item
+    ("Wiping bag for player:", {player_id: player_id});
+    CLIENTS.items.delete_all_items_in_equipped_bag(player_id);
+    // Quest flag death flag
+    CLIENTS
+        .quests
+        .set_quest_flag // Quest flag death flag
+        (player_id, "player_has_died_dc");
+    this.parent_components.send_action_to_player(
+        player_id,
+        "notify_bag_wipe"
+    );
+}));

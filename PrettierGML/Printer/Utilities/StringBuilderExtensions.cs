@@ -1,3 +1,4 @@
+using PrettierGML.Printer.DocPrinter;
 using System.Text;
 
 namespace PrettierGML.Printer.Utilities;
@@ -44,5 +45,27 @@ internal static class StringBuilderExtensions
 
         stringBuilder.Length -= trimmed;
         return trimmed;
+    }
+
+    public static int TrimTrailingWhitespacePreserveIndent(
+        this StringBuilder stringBuilder,
+        Indent indent
+    )
+    {
+        if (stringBuilder.Length == 0)
+        {
+            return 0;
+        }
+
+        if (stringBuilder.EndsWithNewLineAndWhitespace())
+        {
+            var trimmedLength = stringBuilder.TrimTrailingWhitespace();
+            stringBuilder.Append(indent.Value);
+            return trimmedLength - indent.Length;
+        }
+        else
+        {
+            return stringBuilder.TrimTrailingWhitespace();
+        }
     }
 }

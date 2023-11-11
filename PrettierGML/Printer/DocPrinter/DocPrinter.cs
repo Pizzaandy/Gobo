@@ -114,9 +114,13 @@ internal class DocPrinter
         {
             Push(indentDoc.Contents, mode, Indenter.IncreaseIndent(indent));
         }
-        else if (doc is Trim)
+        else if (doc is CollapsedSpace)
         {
-            CurrentWidth -= Output.TrimTrailingWhitespace();
+            CurrentWidth -= Output.TrimTrailingWhitespacePreserveIndent(indent);
+            if (CurrentWidth != indent.Length)
+            {
+                Output.Append(' ');
+            }
         }
         else if (doc is Group group)
         {
@@ -172,8 +176,14 @@ internal class DocPrinter
         }
         else if (doc is EndOfLineComment endOfLineComment)
         {
-            EndOfLineComments.Push(
-                new PrintCommand(indent, mode, Doc.Concat(endOfLineComment.Contents, " "))
+            EndOfLineComments.Push(new PrintCommand(indent, mode, endOfLineComment.Contents));
+        }
+        else if (doc is InlineComment inlineComment)
+        {
+            Push(
+                Doc.Concat(Doc.CollapsedSpace, inlineComment.Contents, Doc.CollapsedSpace),
+                mode,
+                indent
             );
         }
         else
@@ -220,6 +230,7 @@ internal class DocPrinter
             return;
         }
 
+        // Append end-of-line comments
         if (EndOfLineComments.Count > 0)
         {
             Push(line, mode, indent);
@@ -230,6 +241,18 @@ internal class DocPrinter
 
                 if (openingDelimiters.Contains(Output[^1]))
                 {
+                    // Move end-of-line comments to a new line if next to an opening bracket delimiter
+                    // example:
+                    /*
+                     * before:
+                     * if condition { // comment
+                     * }
+                     *
+                     * after:
+                     * if condition {
+                     *     // comment
+                     * }
+                    */
                     Output.Append(EndOfLine).Append(indent.Value);
                 }
                 else

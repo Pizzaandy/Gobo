@@ -64,9 +64,7 @@ namespace PrettierGML.SyntaxNodes
 
         private bool endsWithSingleLineComment = false;
 
-        private bool printedAsEndOfLine = false;
-
-        public const string FormatCommandPrefix = "#fmt-";
+        public const string FormatCommandPrefix = "fmt-";
 
         public CommentGroup(List<IToken> tokens, Range characterRange, Range tokenRange)
         {
@@ -110,6 +108,7 @@ namespace PrettierGML.SyntaxNodes
                 if (token.Type == GameMakerLanguageLexer.SingleLineComment)
                 {
                     parts.Add(PrintSingleLineComment(token.Text));
+                    parts.Add(" ");
                 }
                 else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
                 {
@@ -123,13 +122,12 @@ namespace PrettierGML.SyntaxNodes
 
             if (endsWithSingleLineComment || Placement is CommentPlacement.EndOfLine)
             {
-                printedAsEndOfLine = true;
                 parts.Add(Doc.BreakParent);
                 return Doc.EndOfLineComment(Doc.Concat(parts));
             }
             else
             {
-                return Doc.Concat(parts);
+                return Doc.InlineComment(parts);
             }
         }
 
@@ -145,14 +143,14 @@ namespace PrettierGML.SyntaxNodes
             // Add line breaks between comment groups
             foreach (var group in groups.Skip(1))
             {
-                int leadingLineBreaks =
+                int lineBreaksBetween =
                     ctx.Tokens
                         .GetHiddenTokensToLeft(group.TokenRange.Start)
                         .Reverse()
                         .TakeWhile(token => !IsComment(token))
                         ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
 
-                for (var i = 0; i < Math.Min(leadingLineBreaks, 2); i++)
+                for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
                 {
                     groupDocs.Add(Doc.HardLine);
                 }
@@ -172,43 +170,39 @@ namespace PrettierGML.SyntaxNodes
             // Add leading or trailing line breaks depending on type
             if (type == CommentType.Leading)
             {
-                int lineBreaksBetween =
+                int leadingLineBreakCount =
                     ctx.Tokens
                         .GetHiddenTokensToRight(groups.Last().TokenRange.Stop)
+                        ?.Reverse()
+                        .TakeWhile(IsWhiteSpace)
                         ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
 
-                if (lineBreaksBetween == 0)
+                if (leadingLineBreakCount == 0)
                 {
-                    return Doc.Concat(printedGroups, " ");
+                    return Doc.Concat(printedGroups);
                 }
 
                 parts.Add(printedGroups);
 
-                for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
+                for (var i = 0; i < Math.Min(leadingLineBreakCount, 2); i++)
                 {
                     parts.Add(Doc.HardLine);
                 }
             }
             else
             {
-                int lineBreaksBetween =
+                int trailingLineBreakCount =
                     ctx.Tokens
                         .GetHiddenTokensToLeft(groups.First().TokenRange.Start)
+                        ?.TakeWhile(IsWhiteSpace)
                         ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
 
-                if (lineBreaksBetween == 0)
+                if (trailingLineBreakCount == 0)
                 {
-                    if (!groups.Last().printedAsEndOfLine)
-                    {
-                        return Doc.Concat(" ", printedGroups);
-                    }
-                    else
-                    {
-                        return Doc.Concat(printedGroups);
-                    }
+                    return Doc.Concat(printedGroups);
                 }
 
-                for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
+                for (var i = 0; i < Math.Min(trailingLineBreakCount, 2); i++)
                 {
                     parts.Add(Doc.HardLine);
                 }
@@ -225,8 +219,29 @@ namespace PrettierGML.SyntaxNodes
                 || token.Type == GameMakerLanguageLexer.MultiLineComment;
         }
 
+        private static bool IsWhiteSpace(IToken token)
+        {
+            return token.Type == GameMakerLanguageLexer.LineTerminator
+                || token.Type == GameMakerLanguageLexer.WhiteSpaces;
+        }
+
         public static Doc PrintSingleLineComment(string text)
         {
+            for (var i = 0; i < Math.Min(4, text.Length); i++)
+            {
+                var character = text[i];
+
+                if (character == '/')
+                {
+                    continue;
+                }
+
+                if (character != ' ')
+                {
+                    return text[..i] + " " + text[i..];
+                }
+                break;
+            }
             return text;
         }
 

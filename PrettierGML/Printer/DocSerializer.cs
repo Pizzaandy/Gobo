@@ -41,10 +41,10 @@ internal static class DocSerializer
             AppendIndent();
             result.Append(')');
         }
-        else if (doc is Trim)
+        else if (doc is CollapsedSpace)
         {
             AppendIndent();
-            result.Append("Doc.Trim");
+            result.Append("Doc.CollapsedSpace");
         }
         else if (doc is StringDoc stringDoc)
         {
@@ -221,8 +221,17 @@ internal static class DocSerializer
         else if (doc is EndOfLineComment lineSuffix)
         {
             AppendIndent();
-            result.AppendLine("Doc.LineSuffix(");
+            result.AppendLine("Doc.EndOfLineComment(");
             Serialize(lineSuffix.Contents, result, indent + 1, lineSuffix);
+            result.AppendLine();
+            AppendIndent();
+            result.Append(')');
+        }
+        else if (doc is InlineComment inlineComment)
+        {
+            AppendIndent();
+            result.AppendLine("Doc.InlineComment(");
+            Serialize(inlineComment.Contents, result, indent + 1, inlineComment);
             result.AppendLine();
             AppendIndent();
             result.Append(')');

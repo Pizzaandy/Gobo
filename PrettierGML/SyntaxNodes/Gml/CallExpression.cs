@@ -25,7 +25,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             return MemberChain.PrintMemberChain(ctx, this);
         }
 
-        public Doc PrintChain(PrintContext ctx)
+        public Doc PrintInChain(PrintContext ctx)
         {
             return Arguments.Print(ctx);
         }

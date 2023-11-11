@@ -28,10 +28,11 @@ namespace PrettierGML.SyntaxNodes.Gml
             return MemberChain.PrintMemberChain(ctx, this);
         }
 
-        public Doc PrintChain(PrintContext ctx)
+        public Doc PrintInChain(PrintContext ctx)
         {
             var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
-            return DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",");
+            var printed = DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",");
+            return printed;
         }
 
         public void SetObject(GmlSyntaxNode node)

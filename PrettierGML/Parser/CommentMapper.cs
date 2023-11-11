@@ -18,6 +18,7 @@ namespace PrettierGML.Parser
         public GmlSyntaxNode AttachComments(GmlSyntaxNode ast)
         {
             var comments = GetAllCommentGroups(TokenStream);
+
             CommentGroups = comments.Select(comment => DecorateComment(ast, comment)).ToList();
 
             foreach (var comment in CommentGroups)
@@ -309,11 +310,14 @@ namespace PrettierGML.Parser
             var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
 
             bool firstInLine =
-                leadingTokens is not null
-                && (
-                    leadingTokens.Last().TokenIndex == 0
-                    || leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
-                );
+                (
+                    leadingTokens is not null
+                    && (
+                        leadingTokens.Last().TokenIndex == 0
+                        || leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
+                    )
+                )
+                || comment.TokenRange.Start == 0;
 
             bool lastInLine =
                 trailingTokens is not null
@@ -361,21 +365,7 @@ namespace PrettierGML.Parser
         )
         {
             comment.Type = type;
-
             node.Comments.Add(comment);
-
-            switch (type)
-            {
-                case CommentType.Leading:
-                    node.LeadingComments.Add(comment);
-                    break;
-                case CommentType.Dangling:
-                    node.DanglingComments.Add(comment);
-                    break;
-                case CommentType.Trailing:
-                    node.TrailingComments.Add(comment);
-                    break;
-            }
         }
     }
 

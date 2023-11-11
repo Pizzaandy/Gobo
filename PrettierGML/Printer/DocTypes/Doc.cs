@@ -31,7 +31,7 @@ internal abstract class Doc
 
     public static readonly LineDoc SoftLine = new() { Type = LineDoc.LineType.Soft };
 
-    public static readonly Trim Trim = new();
+    public static readonly CollapsedSpace CollapsedSpace = new();
 
     public static Doc Concat(IList<Doc> contents) =>
         contents.Count == 1 ? contents[0] : new Concat(contents);
@@ -166,8 +166,9 @@ internal abstract class Doc
 
     public static EndOfLineComment EndOfLineComment(Doc contents) => new(contents, false);
 
-    public static EndOfLineComment EndOfLineComment(params Doc[] contents) =>
-        new(Concat(contents), false);
+    public static InlineComment InlineComment(Doc contents) => new(contents);
+
+    public static InlineComment InlineComment(List<Doc> contents) => new(Concat(contents));
 }
 
 internal enum CommentFormat

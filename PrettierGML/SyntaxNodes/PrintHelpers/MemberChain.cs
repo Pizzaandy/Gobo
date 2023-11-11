@@ -3,12 +3,22 @@ using PrettierGML.SyntaxNodes.Gml;
 
 namespace PrettierGML.SyntaxNodes.PrintHelpers
 {
-    internal record PrintedNode(GmlSyntaxNode Node, Doc Doc);
+    internal class PrintedNode
+    {
+        public Doc Doc;
+        public GmlSyntaxNode Node;
+
+        public PrintedNode(GmlSyntaxNode node, Doc doc)
+        {
+            Doc = doc;
+            Node = node;
+        }
+    };
 
     internal interface IMemberChainable
     {
         public GmlSyntaxNode Object { get; set; }
-        public Doc PrintChain(PrintContext ctx);
+        public Doc PrintInChain(PrintContext ctx);
         public void SetObject(GmlSyntaxNode node);
     }
 
@@ -19,6 +29,16 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             var printedNodes = new List<PrintedNode>();
 
             FlattenAndPrintNodes(ctx, node, printedNodes);
+
+            // The last node in the chain does not need its comments handled.
+            foreach (var printedNode in printedNodes.SkipLast(1))
+            {
+                printedNode.Doc = Doc.Concat(
+                    printedNode.Node.PrintLeadingComments(ctx, CommentType.Trailing),
+                    printedNode.Doc,
+                    printedNode.Node.PrintTrailingComments(ctx, CommentType.Leading)
+                );
+            }
 
             var groups = printedNodes.Any(o => o.Node is CallExpression)
                 ? GroupPrintedNodesPrettierStyle(printedNodes)
@@ -65,7 +85,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             if (expression is IMemberChainable chainable)
             {
                 FlattenAndPrintNodes(ctx, chainable.Object, printedNodes);
-                printedNodes.Add(new PrintedNode(expression, chainable.PrintChain(ctx)));
+                printedNodes.Add(new PrintedNode(expression, chainable.PrintInChain(ctx)));
             }
             else
             {
@@ -204,27 +224,44 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
         }
 
         // There are cases where merging the first two groups looks better
-        // For example
+        // Examples:
         /*
-            // without merging we get this
+            // without merging we get this:
             self
                 .call_method()
                 .call_method();
 
-            // merging gives us this
+            x = call_method(
+              first_parameter____________________________,
+              second_parameter___________________________,
+            )
+              .call_method()
+
+            // merging gives us this:
             self.call_method()
                 .call_method();
-         */
+
+            x = call_method(
+              first_parameter____________________________,
+              second_parameter___________________________,
+            ).call_method()
+
+        */
         private static bool ShouldMergeFirstTwoGroups(List<List<PrintedNode>> groups)
         {
-            if (groups.Count < 2 || groups[0].Count != 1)
+            if (groups.Count < 2)
             {
                 return false;
             }
 
             var firstNode = groups[0][0].Node;
 
-            if (firstNode is Identifier { Name.Length: <= 4 })
+            if (groups[0].Count == 1 && firstNode is Identifier { Name.Length: <= 4 })
+            {
+                return true;
+            }
+
+            if (groups.All(g => g.Count > 1 && g[1].Node is CallExpression))
             {
                 return true;
             }
