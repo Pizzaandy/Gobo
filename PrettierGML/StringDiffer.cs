@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PrettierGML.Tests;
+namespace PrettierGML;
 
 public static class StringDiffer
 {

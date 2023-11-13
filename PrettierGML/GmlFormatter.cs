@@ -1,7 +1,6 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.Parser;
 using PrettierGML.Printer.DocPrinter;
-using PrettierGML.Printer.Utilities;
 using PrettierGML.SyntaxNodes;
 using System.Diagnostics;
 

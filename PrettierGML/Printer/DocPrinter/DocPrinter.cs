@@ -85,6 +85,7 @@ internal class DocPrinter
     private void ProcessNextCommand()
     {
         var (indent, mode, doc) = RemainingCommands.Pop();
+
         if (doc == Doc.Null)
         {
             return;
@@ -117,6 +118,7 @@ internal class DocPrinter
         else if (doc is CollapsedSpace)
         {
             CurrentWidth -= Output.TrimTrailingWhitespacePreserveIndent(indent);
+
             if (CurrentWidth != indent.Length)
             {
                 Output.Append(' ');
@@ -176,7 +178,13 @@ internal class DocPrinter
         }
         else if (doc is EndOfLineComment endOfLineComment)
         {
-            EndOfLineComments.Push(new PrintCommand(indent, mode, endOfLineComment.Contents));
+            EndOfLineComments.Push(
+                new PrintCommand(
+                    indent,
+                    mode,
+                    Doc.Concat(endOfLineComment.Contents, Doc.CollapsedSpace)
+                )
+            );
         }
         else if (doc is InlineComment inlineComment)
         {
@@ -230,15 +238,13 @@ internal class DocPrinter
             return;
         }
 
-        // Append end-of-line comments
         if (EndOfLineComments.Count > 0)
         {
             Push(line, mode, indent);
 
+            // TODO: Find a way to optimize out some of these checks
             if (!Output.EndsWithNewLineAndWhitespace() && Output.Length > 0)
             {
-                Output.TrimTrailingWhitespace();
-
                 if (openingDelimiters.Contains(Output[^1]))
                 {
                     // Move end-of-line comments to a new line if next to an opening bracket delimiter
@@ -254,11 +260,18 @@ internal class DocPrinter
                      * }
                     */
                     Output.Append(EndOfLine).Append(indent.Value);
+                    CurrentWidth = indent.Length;
                 }
                 else
                 {
+                    Output.TrimTrailingWhitespace();
                     Output.Append(' ');
                 }
+            }
+
+            for (var i = 0; i < EndOfLineComments.Count; i++)
+            {
+                RemainingCommands.Push(EndOfLineComments.Pop());
             }
 
             foreach (var comment in EndOfLineComments)

@@ -22,7 +22,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
-            return Statement.PrintSingleClauseStatement(ctx, "switch", Discriminant, Cases);
+            return Statement.PrintControlFlowStatement(ctx, "switch", Discriminant, Cases);
         }
     }
 }

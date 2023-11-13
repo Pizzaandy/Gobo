@@ -11,12 +11,15 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             string closeToken,
             string separator,
             bool allowTrailingSeparator = false,
-            bool forceBreak = false
+            bool forceBreak = false,
+            Doc? leadingContents = null
         )
         {
             var parts = new List<Doc> { openToken };
 
             var groupId = Guid.NewGuid().ToString();
+
+            leadingContents ??= Doc.Null;
 
             if (arguments.Children.Count > 0)
             {
@@ -25,15 +28,18 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                     arguments,
                     separator,
                     allowTrailingSeparator,
-                    forceBreak
+                    forceBreak,
+                    leadingContents
                 );
 
                 var contents = Doc.Concat(Doc.SoftLine, printedArguments);
                 parts.Add(Doc.IndentIfBreak(contents, groupId));
             }
-            else if (arguments.DanglingComments.Count > 0)
+            else
             {
-                parts.Add(Doc.Indent(Doc.SoftLine, arguments.PrintDanglingComments(ctx)));
+                parts.Add(
+                    Doc.Indent(Doc.SoftLine, leadingContents, arguments.PrintDanglingComments(ctx))
+                );
             }
 
             parts.Add(Doc.SoftLine);
@@ -47,15 +53,18 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             GmlSyntaxNode list,
             string separator,
             bool allowTrailingSeparator = false,
-            bool forceBreak = false
+            bool forceBreak = false,
+            Doc? leadingContents = null
         )
         {
-            if (list.Children.Count == 0)
+            leadingContents ??= Doc.Null;
+
+            if (list.Children.Count == 0 && leadingContents is NullDoc)
             {
                 return Doc.Null;
             }
 
-            var parts = new List<Doc>();
+            var parts = new List<Doc> { leadingContents };
 
             for (var i = 0; i < list.Children.Count; i++)
             {

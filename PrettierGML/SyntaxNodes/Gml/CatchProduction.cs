@@ -24,7 +24,7 @@ namespace PrettierGML.SyntaxNodes.Gml
             }
             else
             {
-                return Statement.PrintSingleClauseStatement(ctx, "catch", Id, Body);
+                return Statement.PrintControlFlowStatement(ctx, "catch", Id, Body);
             }
         }
     }

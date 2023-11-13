@@ -31,11 +31,7 @@ namespace PrettierGML.Parser
                 {
                     comment.Placement = CommentPlacement.OwnLine;
 
-                    if (HandleOwnLineComment(comment, followingNode, precedingNode, enclosingNode))
-                    {
-                        continue;
-                    }
-                    else if (followingNode is not null)
+                    if (followingNode is not null)
                     {
                         AttachCommentGroup(followingNode, comment, CommentType.Leading);
                     }
@@ -108,21 +104,6 @@ namespace PrettierGML.Parser
             }
 
             return ast;
-        }
-
-        private static bool HandleOwnLineComment(
-            CommentGroup comment,
-            GmlSyntaxNode? followingNode,
-            GmlSyntaxNode? precedingNode,
-            GmlSyntaxNode? enclosingNode
-        )
-        {
-            //if (enclosingNode is MemberDotExpression && followingNode is Identifier)
-            //{
-            //    AttachCommentGroup(enclosingNode, comment, CommentType.Leading);
-            //    return true;
-            //}
-            return false;
         }
 
         /// <summary>

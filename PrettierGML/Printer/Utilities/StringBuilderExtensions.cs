@@ -27,6 +27,39 @@ internal static class StringBuilderExtensions
         return false;
     }
 
+    public static bool EndsWithSingleLineComment(this StringBuilder stringBuilder)
+    {
+        int consecutiveSlashes = 0;
+
+        for (var index = 1; index <= stringBuilder.Length; index++)
+        {
+            var next = stringBuilder[^index];
+            if (next == ' ' || next == '\t')
+            {
+                continue;
+            }
+            else if (next == '/')
+            {
+                consecutiveSlashes++;
+                if (consecutiveSlashes >= 2)
+                {
+                    return true;
+                }
+                continue;
+            }
+            else if (next == '\n')
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
     public static int TrimTrailingWhitespace(this StringBuilder stringBuilder)
     {
         if (stringBuilder.Length == 0)

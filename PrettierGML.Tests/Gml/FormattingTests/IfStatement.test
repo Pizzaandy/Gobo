@@ -3,6 +3,8 @@ if (true)
     return;
 }
 
+if true return
+
 if (true) {
 // indent this!
 }
@@ -57,10 +59,10 @@ true // test
 // fun
 } // lol
 
-if ((((condition)))) // this comment should stay outside
+if ((((condition)))) // this comment should be inside the block
     return;
 
 if (
-(((object))) // this comment should stay inside
-) // this comment should stay outside
+(((object))) // this comment should be inside parens
+) // this comment should be inside the block
     return;

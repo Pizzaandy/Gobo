@@ -690,18 +690,28 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.MemberIndexLValueContext context
         )
         {
-            var property = Visit(context.expressionSequence());
+            var properties = Visit(context.expressionSequence());
             var accessor = context.accessor().GetText();
-            return new MemberIndexExpression(context, GmlSyntaxNode.Empty, property, accessor);
+            return new MemberIndexExpression(
+                context,
+                GmlSyntaxNode.Empty,
+                properties.Children,
+                accessor
+            );
         }
 
         public override GmlSyntaxNode VisitMemberIndexLValueFinal(
             [NotNull] GameMakerLanguageParser.MemberIndexLValueFinalContext context
         )
         {
-            var property = Visit(context.expressionSequence());
+            var properties = Visit(context.expressionSequence());
             var accessor = context.accessor().GetText();
-            return new MemberIndexExpression(context, GmlSyntaxNode.Empty, property, accessor);
+            return new MemberIndexExpression(
+                context,
+                GmlSyntaxNode.Empty,
+                properties.Children,
+                accessor
+            );
         }
 
         public override GmlSyntaxNode VisitExpressionSequence(

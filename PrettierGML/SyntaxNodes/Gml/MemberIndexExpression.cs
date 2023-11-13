@@ -7,19 +7,19 @@ namespace PrettierGML.SyntaxNodes.Gml
     internal sealed class MemberIndexExpression : GmlSyntaxNode, IMemberChainable
     {
         public GmlSyntaxNode Object { get; set; }
-        public GmlSyntaxNode Properties { get; set; }
+        public List<GmlSyntaxNode> Properties { get; set; }
         public string Accessor { get; set; }
 
         public MemberIndexExpression(
             ParserRuleContext context,
             GmlSyntaxNode @object,
-            GmlSyntaxNode properties,
+            List<GmlSyntaxNode> properties,
             string accessor
         )
             : base(context)
         {
             Object = AsChild(@object);
-            Properties = AsChild(properties);
+            Properties = AsChildren(properties);
             Accessor = accessor;
         }
 

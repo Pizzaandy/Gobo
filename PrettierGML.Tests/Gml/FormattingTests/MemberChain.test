@@ -57,6 +57,7 @@ var some_variable = some_object
         something.some_property == some_other_value___________________________________
     );
 
+// This should not indent
 call_method(
         first_parameter____________________________,
         second_parameter___________________________
@@ -66,11 +67,18 @@ call_method(
         second_parameter___________________________
     );
 
-call_method( // c1
-        first_parameter____________________________, // c2
-        second_parameter___________________________ // c3
-    ) // c4
-    // c5
+call_method() // trailing comment
+.call_method(); // <- This should indent
+
+call_method() 
+// leading comment
+.call_method(); // <- This should indent
+
+// This should indent
+call_method(
+        first_parameter____________________________,
+        second_parameter___________________________ 
+    ) 
     .call_method(
         first_parameter____________________________,
         second_parameter___________________________

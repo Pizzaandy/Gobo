@@ -6,7 +6,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 {
     internal static class Statement
     {
-        public static Doc PrintSingleClauseStatement(
+        public static Doc PrintControlFlowStatement(
             PrintContext ctx,
             string keyword,
             GmlSyntaxNode clause,
@@ -44,11 +44,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             }
             else
             {
-                expression.PrintOwnComments = false;
-
-                var printedGroup = ParenthesizedExpression.PrintInParens(ctx, expression);
-
-                return expression.PrintWithOwnComments(ctx, printedGroup);
+                return ParenthesizedExpression.PrintInParens(ctx, expression);
             }
         }
 
@@ -57,7 +53,6 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             if (NeedsSemicolon(statement))
             {
                 statement.PrintOwnComments = false;
-
                 return statement.PrintWithOwnComments(ctx, Doc.Concat(statement.Print(ctx), ";"));
             }
             else

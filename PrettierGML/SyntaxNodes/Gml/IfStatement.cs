@@ -27,7 +27,7 @@ namespace PrettierGML.SyntaxNodes.Gml
         {
             var parts = new List<Doc>
             {
-                Statement.PrintSingleClauseStatement(ctx, "if", Test, Consequent)
+                Statement.PrintControlFlowStatement(ctx, "if", Test, Consequent)
             };
 
             if (Alternate is not EmptyNode)

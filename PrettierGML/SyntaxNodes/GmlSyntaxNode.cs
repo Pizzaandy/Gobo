@@ -66,7 +66,7 @@ namespace PrettierGML.SyntaxNodes
 
             Doc printed;
 
-            if (LeadingComments.Count > 0 && LeadingComments.Any(c => c.IsFormatCommand))
+            if (LeadingComments.Any(c => c.IsFormatCommand))
             {
                 var formatCommand = LeadingComments.Last(c => c.IsFormatCommand);
                 printed = formatCommand.FormatCommandText switch
@@ -168,7 +168,11 @@ namespace PrettierGML.SyntaxNodes
             return unprinted;
         }
 
-        public void TransferComments(GmlSyntaxNode target, Func<CommentGroup, bool> predicate)
+        public void TransferComments(
+            GmlSyntaxNode target,
+            Func<CommentGroup, bool> predicate,
+            Func<CommentGroup, CommentGroup>? selector = null
+        )
         {
             var commentsToTransfer = Comments.Where(predicate);
 
@@ -176,7 +180,7 @@ namespace PrettierGML.SyntaxNodes
 
             foreach (var comment in commentsToTransfer)
             {
-                target.Comments.Add(comment);
+                target.Comments.Add(selector is null ? comment : selector(comment));
             }
         }
 

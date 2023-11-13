@@ -3,6 +3,10 @@ if (true) {
 }
 
 if (true) {
+    return;
+}
+
+if (true) {
     // indent this!
 }
 
@@ -54,9 +58,8 @@ if (longStatementName && longerStatementName && evenLongerStatementName && super
     call();
 }
 
-if // comment
-(
-    // torture
+if (
+    // comment
     true // test
 ) {
     // just
@@ -65,13 +68,13 @@ if // comment
 } // lol
 
 if (condition) {
-    // this comment should stay outside
+    // this comment should be inside the block
     return;
 }
 
 if (
-    object // this comment should stay inside
+    object // this comment should be inside parens
 ) {
-    // this comment should stay outside
+    // this comment should be inside the block
     return;
 }

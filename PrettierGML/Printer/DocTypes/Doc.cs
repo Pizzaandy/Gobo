@@ -166,6 +166,9 @@ internal abstract class Doc
 
     public static EndOfLineComment EndOfLineComment(Doc contents) => new(contents, false);
 
+    public static EndOfLineComment EndOfLineComment(List<Doc> contents) =>
+        new(Concat(contents), false);
+
     public static InlineComment InlineComment(Doc contents) => new(contents);
 
     public static InlineComment InlineComment(List<Doc> contents) => new(Concat(contents));

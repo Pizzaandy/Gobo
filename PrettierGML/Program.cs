@@ -1,11 +1,11 @@
 ﻿using PrettierGML;
-using PrettierGML.Printer.Utilities;
 
 static string TestFormat(string input)
 {
     var formatOptions = FormatOptions.DefaultTestOptions;
 
-    formatOptions.ValidateOutput = true;
+    formatOptions.ValidateOutput = false;
+    formatOptions.BraceStyle = BraceStyle.SameLine;
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
 
@@ -19,11 +19,17 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-if (/*foo*/(((cond))) // comment
-) // paisan
-{// bar
-return
-}
+return some_condition
+/*outside*/.
+// inside
+call_method(
+    some_long_parameter____________________________,
+    some_long_parameter____________________________
+)
+.something.call_method(
+    some_long_parameter____________________________,
+    some_long_parameter____________________________
+);
 """;
 
 TestFormat(input);

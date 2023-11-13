@@ -30,16 +30,6 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
             FlattenAndPrintNodes(ctx, node, printedNodes);
 
-            // The last node in the chain does not need its comments handled.
-            foreach (var printedNode in printedNodes.SkipLast(1))
-            {
-                printedNode.Doc = Doc.Concat(
-                    printedNode.Node.PrintLeadingComments(ctx, CommentType.Trailing),
-                    printedNode.Doc,
-                    printedNode.Node.PrintTrailingComments(ctx, CommentType.Leading)
-                );
-            }
-
             var groups = printedNodes.Any(o => o.Node is CallExpression)
                 ? GroupPrintedNodesPrettierStyle(printedNodes)
                 : GroupPrintedNodesOnLines(printedNodes);
@@ -56,7 +46,8 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                     groups
                         .Skip(shouldMergeFirstTwoGroups ? 1 : 0)
                         .Any(o => o.Last().Node is not CallExpression)
-                );
+                )
+                && !oneLine.Any(DocUtilities.ContainsBreak);
 
             if (forceOneLine)
             {
@@ -85,7 +76,42 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
             if (expression is IMemberChainable chainable)
             {
                 FlattenAndPrintNodes(ctx, chainable.Object, printedNodes);
-                printedNodes.Add(new PrintedNode(expression, chainable.PrintInChain(ctx)));
+
+                Doc printed;
+
+                if (expression.Parent is IMemberChainable)
+                {
+                    if (
+                        expression.TrailingComments.Count > 0
+                        && expression is MemberDotExpression
+                        && expression.Parent is CallExpression or MemberIndexExpression
+                    )
+                    {
+                        // We are attempting to print a comment before an argument list or element access.
+                        // Print comments as leading instead.
+
+                        printed = Doc.Concat(
+                            Doc.HardLineIfNoPreviousLine,
+                            expression.PrintTrailingComments(ctx, CommentType.Dangling),
+                            Doc.HardLine,
+                            chainable.PrintInChain(ctx)
+                        );
+                    }
+                    else
+                    {
+                        printed = Doc.Concat(
+                            chainable.PrintInChain(ctx),
+                            expression.PrintTrailingComments(ctx)
+                        );
+                    }
+                }
+                else
+                {
+                    // Top-level parent nodes in chain expressions do not need comment handling
+                    printed = chainable.PrintInChain(ctx);
+                }
+
+                printedNodes.Add(new PrintedNode(expression, printed));
             }
             else
             {
@@ -261,8 +287,22 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                 return true;
             }
 
-            if (groups.All(g => g.Count > 1 && g[1].Node is CallExpression))
+            if (groups.Count == 2 && groups.All(g => g.Count == 2 && g[1].Node is CallExpression))
             {
+                var firstGroup = groups[0];
+                var lastGroup = groups[1];
+
+                if (
+                    firstGroup.Last().Node.TrailingComments.Count > 0
+                    || (
+                        lastGroup[0].Node is MemberDotExpression member
+                        && member.Property.LeadingComments.Count > 0
+                    )
+                )
+                {
+                    return false;
+                }
+
                 return true;
             }
 
