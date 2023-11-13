@@ -49,7 +49,7 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         private bool ShouldBreakOnLastArgument()
         {
-            if (Children.Count == 0 || LeadingComments.Count > 0)
+            if (Children.Count < 2 || LeadingComments.Count > 0)
             {
                 return false;
             }

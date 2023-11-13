@@ -136,6 +136,10 @@ namespace PrettierGML.Parser
             {
                 return Visit(context.regionStatement());
             }
+            else if (context.deleteStatement() != null)
+            {
+                return Visit(context.deleteStatement());
+            }
 
             return GmlSyntaxNode.Empty;
         }
@@ -309,6 +313,15 @@ namespace PrettierGML.Parser
                 expression = Visit(context.expression());
             }
             return new ReturnStatement(context, expression);
+        }
+
+        public override GmlSyntaxNode VisitDeleteStatement(
+            [NotNull] GameMakerLanguageParser.DeleteStatementContext context
+        )
+        {
+            var expression = Visit(context.expression());
+
+            return new DeleteStatement(context, expression);
         }
 
         public override GmlSyntaxNode VisitAssignmentExpression(

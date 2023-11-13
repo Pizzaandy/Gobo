@@ -32,6 +32,7 @@ statement
     | incDecStatement
     | callStatement
     | functionDeclaration
+    | deleteStatement
     ) eos?
     ;
 

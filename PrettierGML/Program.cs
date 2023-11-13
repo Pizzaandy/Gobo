@@ -4,7 +4,7 @@ static string TestFormat(string input)
 {
     var formatOptions = FormatOptions.DefaultTestOptions;
 
-    formatOptions.ValidateOutput = false;
+    formatOptions.ValidateOutput = true;
     formatOptions.BraceStyle = BraceStyle.SameLine;
 
     FormatResult result = GmlFormatter.Format(input, formatOptions);
@@ -19,7 +19,7 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-for (;;) {}
+delete bar
 """;
 
 TestFormat(input);

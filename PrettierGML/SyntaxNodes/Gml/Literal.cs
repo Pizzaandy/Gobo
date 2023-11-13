@@ -23,6 +23,14 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public override Doc PrintNode(PrintContext ctx)
         {
+            if (int.TryParse(Text, out var asInt))
+            {
+                return asInt.ToString();
+            }
+            else if (decimal.TryParse(Text, out var asDecimal))
+            {
+                return asDecimal.ToString();
+            }
             return Text;
         }
     }

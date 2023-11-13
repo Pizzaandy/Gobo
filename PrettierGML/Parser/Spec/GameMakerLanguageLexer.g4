@@ -201,12 +201,11 @@ fragment HexDigit
     ;
 
 fragment SingleEscapeCharacter
-    : ['"\\bfnrtv]
+    : ['"\\bfnrtvu]
     ;
 
 fragment DecimalIntegerLiteral
-    : '0'
-    | [1-9] [0-9_]*
+    : [0-9] [0-9_]*
     ;
 
 mode REGION_NAME;
