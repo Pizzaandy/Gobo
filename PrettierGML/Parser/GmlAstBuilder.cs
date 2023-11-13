@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using PrettierGML.SyntaxNodes;
 using PrettierGML.SyntaxNodes.Gml;
 using PrettierGML.SyntaxNodes.GmlExtensions;
@@ -204,34 +205,25 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.ForStatementContext context
         )
         {
-            GmlSyntaxNode init = GmlSyntaxNode.Empty;
-            GmlSyntaxNode test = GmlSyntaxNode.Empty;
-            GmlSyntaxNode update = GmlSyntaxNode.Empty;
-            GmlSyntaxNode body;
+            var index = 2;
 
-            if (context.variableDeclarationList() != null)
-            {
-                init = Visit(context.variableDeclarationList());
-            }
-            else if (context.assignmentExpression() != null)
-            {
-                init = Visit(context.assignmentExpression());
-            }
+            var init = context.children[index] is not ITerminalNode
+                ? Visit(context.children[index])
+                : GmlSyntaxNode.Empty;
 
-            if (context.expression() != null)
-            {
-                test = Visit(context.expression());
-            }
+            index += init.IsEmpty ? 1 : 2;
 
-            if (context.statement().Length > 1)
-            {
-                update = Visit(context.statement()[0]);
-                body = Visit(context.statement()[1]);
-            }
-            else
-            {
-                body = Visit(context.statement()[0]);
-            }
+            var test = context.children[index] is not ITerminalNode
+                ? Visit(context.children[index])
+                : GmlSyntaxNode.Empty;
+
+            index += test.IsEmpty ? 1 : 2;
+
+            var update = context.children[index] is not ITerminalNode
+                ? Visit(context.children[index])
+                : GmlSyntaxNode.Empty;
+
+            var body = Visit(context.children[^1]);
 
             return new ForStatement(context, init, test, update, body);
         }

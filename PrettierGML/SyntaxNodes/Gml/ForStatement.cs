@@ -32,10 +32,10 @@ namespace PrettierGML.SyntaxNodes.Gml
             {
                 Init.Print(ctx),
                 ";",
-                Init.IsEmpty ? Doc.Null : Doc.Line,
+                Test.IsEmpty ? Doc.Null : Doc.Line,
                 Test.Print(ctx),
                 ";",
-                Test.IsEmpty ? Doc.Null : Doc.Line,
+                Update.IsEmpty ? Doc.Null : Doc.Line,
                 Update.Print(ctx)
             };
 

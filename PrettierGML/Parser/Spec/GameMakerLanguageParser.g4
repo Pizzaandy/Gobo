@@ -47,11 +47,7 @@ ifStatement
 iterationStatement
     : Do statement Until expression # DoStatement
     | While expression statement # WhileStatement
-    | For '('
-        (variableDeclarationList | assignmentExpression)? ';'
-        expression? ';'
-        statement?
-    ')' statement # ForStatement
+    | For '(' statement? ';' expression? ';' statement? ')' statement # ForStatement
     | Repeat expression statement # RepeatStatement
     ;
 
