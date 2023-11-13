@@ -6,10 +6,12 @@
     internal class InlineComment : Doc, IHasContents
     {
         public Doc Contents { get; set; } = Null;
+        public string Id { get; init; }
 
-        public InlineComment(Doc contents)
+        public InlineComment(Doc contents, string id)
         {
             Contents = contents;
+            Id = id;
         }
     }
 }

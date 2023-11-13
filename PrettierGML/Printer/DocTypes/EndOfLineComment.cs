@@ -3,11 +3,11 @@
 internal class EndOfLineComment : Doc, IHasContents
 {
     public Doc Contents { get; set; } = Null;
-    public bool OwnLine { get; set; }
+    public string Id { get; init; }
 
-    public EndOfLineComment(Doc contents, bool ownLine)
+    public EndOfLineComment(Doc contents, string id)
     {
         Contents = contents;
-        OwnLine = ownLine;
+        Id = id;
     }
 }

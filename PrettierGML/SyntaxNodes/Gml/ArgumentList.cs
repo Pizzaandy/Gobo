@@ -18,40 +18,67 @@ namespace PrettierGML.SyntaxNodes.Gml
         {
             Doc result;
 
+            PrintOwnComments = false;
+
             if (ShouldBreakOnLastArgument())
             {
                 var printedArguments = PrintChildren(ctx);
 
-                var last = printedArguments.Last();
-                var allExceptLast = printedArguments.GetRange(0, printedArguments.Count - 1);
+                Doc optionA;
 
-                var separator = Doc.Concat(",", " ");
+                if (Children.Count == 1)
+                {
+                    optionA = Doc.Concat("(", Doc.Concat(printedArguments), ")");
+                }
+                else
+                {
+                    var last = printedArguments.Last();
+                    var allExceptLast = printedArguments.GetRange(0, printedArguments.Count - 1);
 
-                var optionA = Doc.Concat(
-                    "(",
-                    Doc.Join(separator, allExceptLast),
-                    separator,
-                    last,
-                    ")"
-                );
+                    var separator = Doc.Concat(",", " ");
 
-                var optionB = Doc.Concat(DelimitedList.PrintInBrackets(ctx, "(", this, ")", ","));
+                    optionA = Doc.Concat(
+                        "(",
+                        Doc.Join(separator, allExceptLast),
+                        separator,
+                        last,
+                        ")"
+                    );
+                }
+
+                var optionB = DelimitedList.PrintInBrackets(ctx, "(", this, ")", ",");
 
                 result = Doc.ConditionalGroup(optionA, optionB);
             }
             else
             {
-                result = DelimitedList.PrintInBrackets(ctx, "(", this, ")", ",");
+                result = DelimitedList.PrintInBrackets(
+                    ctx,
+                    "(",
+                    this,
+                    ")",
+                    ",",
+                    leadingContents: PrintLeadingComments(ctx)
+                );
             }
 
-            return result;
+            return Doc.Concat(result, PrintTrailingComments(ctx));
         }
 
         private bool ShouldBreakOnLastArgument()
         {
-            if (Children.Count < 2 || LeadingComments.Count > 0)
+            if (
+                Children.Count == 0
+                || LeadingComments.Count > 0 // Leading comments will end up inside the argument list
+                || Children.Any(c => c.Comments.Any(g => g.Placement == CommentPlacement.OwnLine))
+            )
             {
                 return false;
+            }
+
+            if (Children.Count == 1)
+            {
+                return Children[0] is FunctionDeclaration or StructExpression;
             }
 
             return Children.Last() is FunctionDeclaration or StructExpression

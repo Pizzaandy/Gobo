@@ -6,6 +6,13 @@ namespace PrettierGML.Printer.DocPrinter;
 
 internal class DocPrinter
 {
+    public struct DocPrinterResult
+    {
+        public string Output;
+        public HashSet<string> CommentsPrinted;
+        public HashSet<string> CommentsPrintedTwice;
+    }
+
     protected readonly Stack<PrintCommand> RemainingCommands = new();
     protected readonly Dictionary<string, PrintMode> GroupModeMap = new();
     protected int CurrentWidth;
@@ -18,6 +25,9 @@ internal class DocPrinter
     protected Stack<PrintCommand> EndOfLineComments = new();
     protected int ConsecutiveIndents = 0;
 
+    protected readonly HashSet<string> CommentsPrinted = new();
+    protected readonly HashSet<string> CommentsPrintedTwice = new();
+
     private static readonly char[] openingDelimiters = { '{', '(', '[' };
 
     protected DocPrinter(Doc doc, DocPrinterOptions printerOptions, string endOfLine)
@@ -28,11 +38,22 @@ internal class DocPrinter
         RemainingCommands.Push(new PrintCommand(Indenter.GenerateRoot(), PrintMode.Break, doc));
     }
 
-    public static string Print(Doc document, DocPrinterOptions printerOptions, string endOfLine)
+    public static DocPrinterResult Print(
+        Doc document,
+        DocPrinterOptions printerOptions,
+        string endOfLine
+    )
     {
         PropagateBreaks.RunOn(document);
 
-        return new DocPrinter(document, printerOptions, endOfLine).Print();
+        var printer = new DocPrinter(document, printerOptions, endOfLine);
+
+        return new DocPrinterResult()
+        {
+            Output = printer.Print(),
+            CommentsPrinted = printer.CommentsPrinted,
+            CommentsPrintedTwice = printer.CommentsPrintedTwice
+        };
     }
 
     public string Print()
@@ -178,6 +199,11 @@ internal class DocPrinter
         }
         else if (doc is EndOfLineComment endOfLineComment)
         {
+            if (!CommentsPrinted.Add(endOfLineComment.Id))
+            {
+                CommentsPrintedTwice.Add(endOfLineComment.Id);
+            }
+
             EndOfLineComments.Push(
                 new PrintCommand(
                     indent,
@@ -188,11 +214,12 @@ internal class DocPrinter
         }
         else if (doc is InlineComment inlineComment)
         {
-            Push(
-                Doc.Concat(Doc.CollapsedSpace, inlineComment.Contents, Doc.CollapsedSpace),
-                mode,
-                indent
-            );
+            if (!CommentsPrinted.Add(inlineComment.Id))
+            {
+                CommentsPrintedTwice.Add(inlineComment.Id);
+            }
+
+            Push(Doc.Concat(inlineComment.Contents), mode, indent);
         }
         else
         {

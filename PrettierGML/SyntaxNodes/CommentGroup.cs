@@ -29,6 +29,13 @@ namespace PrettierGML.SyntaxNodes
         public int Start => CharacterRange.Start;
         public int End => CharacterRange.Stop;
 
+        public string Id { get; init; }
+
+        /// <summary>
+        /// Whether this comment group was ignored during formatting.
+        /// </summary>
+        public bool PrintedRaw = false;
+
         [JsonConverter(typeof(StringEnumConverter))]
         public CommentType Type { get; set; }
 
@@ -54,9 +61,6 @@ namespace PrettierGML.SyntaxNodes
         public GmlSyntaxNode? FollowingNode { get; set; }
 
         [JsonIgnore]
-        public bool Printed { get; set; } = false;
-
-        [JsonIgnore]
         public bool IsFormatCommand { get; init; }
 
         [JsonIgnore]
@@ -71,6 +75,8 @@ namespace PrettierGML.SyntaxNodes
             Tokens = tokens;
             CharacterRange = characterRange;
             TokenRange = tokenRange;
+
+            Id = Guid.NewGuid().ToString();
 
             for (var i = tokens.Count - 1; i >= 0; i--)
             {
@@ -93,14 +99,8 @@ namespace PrettierGML.SyntaxNodes
             }
         }
 
-        public Doc Print()
+        public Doc Print(PrintContext ctx)
         {
-            if (Printed)
-            {
-                //throw new Exception("Comment printed twice: " + Text);
-            }
-            Printed = true;
-
             var parts = new List<Doc>();
 
             foreach (var token in Tokens)
@@ -122,11 +122,11 @@ namespace PrettierGML.SyntaxNodes
             if (endsWithSingleLineComment || Placement is CommentPlacement.EndOfLine)
             {
                 parts.Add(Doc.BreakParent);
-                return Doc.EndOfLineComment(parts);
+                return Doc.EndOfLineComment(parts, Id);
             }
             else
             {
-                return Doc.InlineComment(parts);
+                return Doc.InlineComment(parts, Id);
             }
         }
 
@@ -141,7 +141,7 @@ namespace PrettierGML.SyntaxNodes
                 return Doc.Null;
             }
 
-            var groupDocs = new List<Doc>() { groups.First().Print() };
+            var groupDocs = new List<Doc>() { groups.First().Print(ctx) };
 
             // Add line breaks between comment groups
             foreach (var group in groups.Skip(1))
@@ -158,7 +158,7 @@ namespace PrettierGML.SyntaxNodes
                     groupDocs.Add(Doc.HardLine);
                 }
 
-                groupDocs.Add(group.Print());
+                groupDocs.Add(group.Print(ctx));
             }
 
             var printedGroups = Doc.Concat(groupDocs);
@@ -180,7 +180,7 @@ namespace PrettierGML.SyntaxNodes
 
                 if (trailingLineBreakCount == 0)
                 {
-                    return Doc.Concat(printedGroups);
+                    return Doc.Concat(printedGroups, " ");
                 }
 
                 parts.Add(printedGroups);
@@ -199,7 +199,7 @@ namespace PrettierGML.SyntaxNodes
 
                 if (leadingLineBreakCount == 0)
                 {
-                    return Doc.Concat(printedGroups);
+                    return Doc.Concat(" ", printedGroups);
                 }
 
                 for (var i = 0; i < Math.Min(leadingLineBreakCount, 2); i++)
@@ -217,12 +217,6 @@ namespace PrettierGML.SyntaxNodes
         {
             return token.Type == GameMakerLanguageLexer.SingleLineComment
                 || token.Type == GameMakerLanguageLexer.MultiLineComment;
-        }
-
-        private static bool IsWhiteSpace(IToken token)
-        {
-            return token.Type == GameMakerLanguageLexer.LineTerminator
-                || token.Type == GameMakerLanguageLexer.WhiteSpaces;
         }
 
         public static Doc PrintSingleLineComment(string text)
@@ -266,7 +260,8 @@ namespace PrettierGML.SyntaxNodes
                 $"Range: {CharacterRange}",
                 $"Enclosing: {EnclosingNode?.Kind}",
                 $"Preceding: {PrecedingNode?.Kind}",
-                $"Following: {FollowingNode?.Kind}\n"
+                $"Following: {FollowingNode?.Kind}",
+                $"Id: {Id}\n"
             );
         }
     }

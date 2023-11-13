@@ -85,11 +85,46 @@ namespace PrettierGML
                 UseTabs = options.UseTabs,
             };
 
-            var output = DocPrinter.Print(docs, printOptions, Environment.NewLine);
+            var result = DocPrinter.Print(docs, printOptions, Environment.NewLine);
+            var output = result.Output;
 
             if (options.ValidateOutput)
             {
-                ast.EnsureCommentsPrinted();
+                // Check that all comments are printed once
+                var comments = ast.GetFormattedCommentGroups();
+
+                var unprinted = new List<CommentGroup>();
+                var doublePrinted = new List<CommentGroup>();
+
+                foreach (var comment in comments)
+                {
+                    if (!result.CommentsPrinted.Contains(comment.Id))
+                    {
+                        unprinted.Add(comment);
+                    }
+                    else if (result.CommentsPrintedTwice.Contains(comment.Id))
+                    {
+                        doublePrinted.Add(comment);
+                    }
+                }
+
+                if (unprinted.Count > 0 || doublePrinted.Count > 0)
+                {
+                    string message = "";
+
+                    if (unprinted.Count > 0)
+                    {
+                        message +=
+                            $"{unprinted.Count} comment group(s) were not printed:\n{string.Join('\n', unprinted)}";
+                    }
+                    if (doublePrinted.Count > 0)
+                    {
+                        message +=
+                            $"{doublePrinted.Count} comment group(s) were printed multiple times:\n{string.Join('\n', doublePrinted)}";
+                    }
+
+                    throw new Exception(message);
+                }
 
                 GmlParseResult updatedParseResult;
 

@@ -9,6 +9,7 @@ namespace PrettierGML
         public CommonTokenStream Tokens { get; init; }
         public Stack<GmlSyntaxNode> Stack = new();
         public int PrintDepth => Stack.Count;
+        public string PrintedStack => $"[{string.Join(", ", Stack.Select(node => node.Kind))}]";
 
         public PrintContext(FormatOptions options, CommonTokenStream tokenStream)
         {

@@ -19,7 +19,27 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-x = 000.01
+on_error(method({this: this, player_id: _player_id}, 
+ function(_err /* foo*/ // bar
+ ) {
+    // reduce will fail if player doesn't have item
+    LOGGER.info // reduce will fail if player doesn't have item
+    ("Wiping bag for player:", {player_id: player_id});
+    CLIENTS.items.delete_all_items_in_equipped_bag(player_id);
+    // Quest flag death flag
+    CLIENTS // e
+    // e
+
+
+    //e
+        .quests
+        .set_quest_flag // Quest flag death flag
+        (player_id, "player_has_died_dc");
+    this.parent_components.send_action_to_player(
+        player_id,
+        "notify_bag_wipe"
+    );
+}));
 """;
 
 TestFormat(input);

@@ -17,7 +17,7 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
             Doc clauseDoc = EnsureExpressionInParentheses(ctx, clause);
 
-            return Doc.Concat(keyword, " ", clauseDoc, " ", bodyDoc);
+            return Doc.Concat(keyword, Doc.CollapsedSpace, clauseDoc, Doc.CollapsedSpace, bodyDoc);
         }
 
         public static Doc EnsureStatementInBlock(PrintContext ctx, GmlSyntaxNode statement)

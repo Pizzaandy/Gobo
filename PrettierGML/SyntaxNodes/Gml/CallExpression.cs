@@ -27,7 +27,6 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public Doc PrintInChain(PrintContext ctx)
         {
-            Arguments.PrintOwnComments = false;
             return Arguments.Print(ctx);
         }
 

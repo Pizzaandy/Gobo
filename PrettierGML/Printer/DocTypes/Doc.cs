@@ -164,14 +164,15 @@ internal abstract class Doc
 
     public static Region EndRegion(string text) => new(text) { IsEnd = true };
 
-    public static EndOfLineComment EndOfLineComment(Doc contents) => new(contents, false);
+    public static EndOfLineComment EndOfLineComment(Doc contents, string id) => new(contents, id);
 
-    public static EndOfLineComment EndOfLineComment(List<Doc> contents) =>
-        new(Concat(contents), false);
+    public static EndOfLineComment EndOfLineComment(List<Doc> contents, string id) =>
+        new(Concat(contents), id);
 
-    public static InlineComment InlineComment(Doc contents) => new(contents);
+    public static InlineComment InlineComment(Doc contents, string id) => new(contents, id);
 
-    public static InlineComment InlineComment(List<Doc> contents) => new(Concat(contents));
+    public static InlineComment InlineComment(List<Doc> contents, string id) =>
+        new(Concat(contents), id);
 }
 
 internal enum CommentFormat

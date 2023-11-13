@@ -141,29 +141,12 @@ namespace PrettierGML.SyntaxNodes
             return Doc.Concat(PrintLeadingComments(ctx), nodeDoc, PrintTrailingComments(ctx));
         }
 
-        public bool EnsureCommentsPrinted(bool isRoot = true)
+        public List<CommentGroup> GetFormattedCommentGroups()
         {
-            var allCommentsPrinted =
-                Comments.All(c => c.Printed)
-                && Children.All(c => c.EnsureCommentsPrinted(isRoot: false));
-
-            if (!allCommentsPrinted && isRoot)
-            {
-                var unprintedGroups = GetUnprintedCommentGroups();
-                throw new Exception(
-                    $"{unprintedGroups.Count} comment groups were not printed.\nComment Groups:\n{string.Join('\n', unprintedGroups)}"
-                );
-            }
-
-            return allCommentsPrinted;
-        }
-
-        public List<CommentGroup> GetUnprintedCommentGroups()
-        {
-            var unprinted = Comments.Where(c => !c.Printed).ToList();
+            var unprinted = Comments.Where(c => !c.PrintedRaw).ToList();
             foreach (var child in Children)
             {
-                unprinted.AddRange(child.GetUnprintedCommentGroups());
+                unprinted.AddRange(child.GetFormattedCommentGroups());
             }
             return unprinted;
         }
@@ -213,7 +196,7 @@ namespace PrettierGML.SyntaxNodes
 
         private void MarkCommentsAsPrinted()
         {
-            Comments.ForEach(commentGroup => commentGroup.Printed = true);
+            Comments.ForEach(commentGroup => commentGroup.PrintedRaw = true);
             Children.ForEach(child => child.MarkCommentsAsPrinted());
         }
     }
