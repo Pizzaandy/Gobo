@@ -7,12 +7,11 @@ program
     ;
 
 statementList
-    : statement+
+    : (statement | emptyStatement)+
     ;
 
 statement
     : (block
-    | emptyStatement
     | ifStatement
     | variableDeclarationList
     | iterationStatement

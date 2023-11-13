@@ -228,6 +228,12 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public StatementContext statement(int i) {
 			return GetRuleContext<StatementContext>(i);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatementContext[] emptyStatement() {
+			return GetRuleContexts<EmptyStatementContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatementContext emptyStatement(int i) {
+			return GetRuleContext<EmptyStatementContext>(i);
+		}
 		public StatementListContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -249,17 +255,60 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 138;
+			State = 139;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
-				{
-				State = 137;
-				statement();
+				State = 139;
+				ErrorHandler.Sync(this);
+				switch (TokenStream.LA(1)) {
+				case OpenParen:
+				case OpenBrace:
+				case Begin:
+				case PlusPlus:
+				case MinusMinus:
+				case Break:
+				case Exit:
+				case Do:
+				case New:
+				case Var:
+				case GlobalVar:
+				case Return:
+				case Continue:
+				case For:
+				case Switch:
+				case While:
+				case Repeat:
+				case Function:
+				case With:
+				case If:
+				case Throw:
+				case Try:
+				case Enum:
+				case Constructor:
+				case Static:
+				case Macro:
+				case Define:
+				case Region:
+				case EndRegion:
+				case Identifier:
+					{
+					State = 137;
+					statement();
+					}
+					break;
+				case SemiColon:
+					{
+					State = 138;
+					emptyStatement();
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
 				}
 				}
-				State = 140;
+				State = 141;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0) );
@@ -279,9 +328,6 @@ public partial class GameMakerLanguageParser : Parser {
 	public partial class StatementContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
 			return GetRuleContext<BlockContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public EmptyStatementContext emptyStatement() {
-			return GetRuleContext<EmptyStatementContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public IfStatementContext ifStatement() {
 			return GetRuleContext<IfStatementContext>(0);
@@ -368,134 +414,128 @@ public partial class GameMakerLanguageParser : Parser {
 			{
 			State = 164;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,2,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,3,Context) ) {
 			case 1:
 				{
-				State = 142;
+				State = 143;
 				block();
 				}
 				break;
 			case 2:
 				{
-				State = 143;
-				emptyStatement();
-				}
-				break;
-			case 3:
-				{
 				State = 144;
 				ifStatement();
 				}
 				break;
-			case 4:
+			case 3:
 				{
 				State = 145;
 				variableDeclarationList();
 				}
 				break;
-			case 5:
+			case 4:
 				{
 				State = 146;
 				iterationStatement();
 				}
 				break;
-			case 6:
+			case 5:
 				{
 				State = 147;
 				continueStatement();
 				}
 				break;
-			case 7:
+			case 6:
 				{
 				State = 148;
 				breakStatement();
 				}
 				break;
-			case 8:
+			case 7:
 				{
 				State = 149;
 				returnStatement();
 				}
 				break;
-			case 9:
+			case 8:
 				{
 				State = 150;
 				withStatement();
 				}
 				break;
-			case 10:
+			case 9:
 				{
 				State = 151;
 				switchStatement();
 				}
 				break;
-			case 11:
+			case 10:
 				{
 				State = 152;
 				tryStatement();
 				}
 				break;
-			case 12:
+			case 11:
 				{
 				State = 153;
 				throwStatement();
 				}
 				break;
-			case 13:
+			case 12:
 				{
 				State = 154;
 				exitStatement();
 				}
 				break;
-			case 14:
+			case 13:
 				{
 				State = 155;
 				macroStatement();
 				}
 				break;
-			case 15:
+			case 14:
 				{
 				State = 156;
 				defineStatement();
 				}
 				break;
-			case 16:
+			case 15:
 				{
 				State = 157;
 				regionStatement();
 				}
 				break;
-			case 17:
+			case 16:
 				{
 				State = 158;
 				enumeratorDeclaration();
 				}
 				break;
-			case 18:
+			case 17:
 				{
 				State = 159;
 				globalVarStatement();
 				}
 				break;
-			case 19:
+			case 18:
 				{
 				State = 160;
 				assignmentExpression();
 				}
 				break;
-			case 20:
+			case 19:
 				{
 				State = 161;
 				incDecStatement();
 				}
 				break;
-			case 21:
+			case 20:
 				{
 				State = 162;
 				callStatement(0);
 				}
 				break;
-			case 22:
+			case 21:
 				{
 				State = 163;
 				functionDeclaration();
@@ -504,7 +544,7 @@ public partial class GameMakerLanguageParser : Parser {
 			}
 			State = 167;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,3,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,4,Context) ) {
 			case 1:
 				{
 				State = 166;
@@ -635,7 +675,7 @@ public partial class GameMakerLanguageParser : Parser {
 			statement();
 			State = 183;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,6,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,7,Context) ) {
 			case 1:
 				{
 				State = 181;
@@ -790,14 +830,14 @@ public partial class GameMakerLanguageParser : Parser {
 				Match(OpenParen);
 				State = 197;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,7,Context) ) {
-				case 1:
+				_la = TokenStream.LA(1);
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12620800L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
 					{
 					State = 196;
 					statement();
 					}
-					break;
 				}
+
 				State = 199;
 				Match(SemiColon);
 				State = 201;
@@ -815,7 +855,7 @@ public partial class GameMakerLanguageParser : Parser {
 				State = 205;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12620800L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16631954663L) != 0)) {
 					{
 					State = 204;
 					statement();
@@ -1335,7 +1375,7 @@ public partial class GameMakerLanguageParser : Parser {
 				catchProduction();
 				State = 260;
 				ErrorHandler.Sync(this);
-				switch ( Interpreter.AdaptivePredict(TokenStream,15,Context) ) {
+				switch ( Interpreter.AdaptivePredict(TokenStream,16,Context) ) {
 				case 1:
 					{
 					State = 259;
@@ -1402,7 +1442,7 @@ public partial class GameMakerLanguageParser : Parser {
 			Match(Catch);
 			State = 271;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,18,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,19,Context) ) {
 			case 1:
 				{
 				State = 266;
@@ -1508,7 +1548,7 @@ public partial class GameMakerLanguageParser : Parser {
 			Match(Return);
 			State = 280;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,19,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,20,Context) ) {
 			case 1:
 				{
 				State = 279;
@@ -2087,12 +2127,12 @@ public partial class GameMakerLanguageParser : Parser {
 			lValueStartExpression();
 			State = 353;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,30,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,31,Context) ) {
 			case 1:
 				{
 				State = 349;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,29,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,30,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
@@ -2104,7 +2144,7 @@ public partial class GameMakerLanguageParser : Parser {
 					}
 					State = 351;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,29,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,30,Context);
 				}
 				State = 352;
 				lValueFinalOperator();
@@ -2479,7 +2519,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			State = 394;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,36,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,37,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
@@ -2929,7 +2969,7 @@ public partial class GameMakerLanguageParser : Parser {
 			{
 			State = 413;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,37,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,38,Context) ) {
 			case 1:
 				{
 				_localctx = new IncDecExpressionContext(_localctx);
@@ -3028,7 +3068,7 @@ public partial class GameMakerLanguageParser : Parser {
 			Context.Stop = TokenStream.LT(-1);
 			State = 462;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,39,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
@@ -3037,7 +3077,7 @@ public partial class GameMakerLanguageParser : Parser {
 					{
 					State = 460;
 					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,38,Context) ) {
+					switch ( Interpreter.AdaptivePredict(TokenStream,39,Context) ) {
 					case 1:
 						{
 						_localctx = new MultiplicativeExpressionContext(new ExpressionContext(_parentctx, _parentState));
@@ -3250,7 +3290,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 				State = 464;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,39,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
 			}
 			}
 		}
@@ -3313,7 +3353,7 @@ public partial class GameMakerLanguageParser : Parser {
 			Context.Stop = TokenStream.LT(-1);
 			State = 473;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,41,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( ParseListeners!=null )
@@ -3332,7 +3372,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 				State = 475;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,41,Context);
 			}
 			}
 		}
@@ -3379,7 +3419,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			State = 484;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,42,Context) ) {
+			switch ( Interpreter.AdaptivePredict(TokenStream,43,Context) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
@@ -3629,7 +3669,7 @@ public partial class GameMakerLanguageParser : Parser {
 				expressionOrFunction();
 				State = 501;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,44,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,45,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
@@ -3643,7 +3683,7 @@ public partial class GameMakerLanguageParser : Parser {
 					}
 					State = 503;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,44,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,45,Context);
 				}
 				State = 505;
 				ErrorHandler.Sync(this);
@@ -4071,7 +4111,7 @@ public partial class GameMakerLanguageParser : Parser {
 			{
 			State = 550;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,51,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
@@ -4083,7 +4123,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 				State = 552;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,51,Context);
 			}
 			State = 554;
 			ErrorHandler.Sync(this);
@@ -4097,7 +4137,7 @@ public partial class GameMakerLanguageParser : Parser {
 
 			State = 564;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,53,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,54,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
@@ -4123,7 +4163,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 				State = 566;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,53,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,54,Context);
 			}
 			State = 568;
 			ErrorHandler.Sync(this);
@@ -4198,7 +4238,7 @@ public partial class GameMakerLanguageParser : Parser {
 				propertyAssignment();
 				State = 576;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,56,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
@@ -4212,7 +4252,7 @@ public partial class GameMakerLanguageParser : Parser {
 					}
 					State = 578;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,56,Context);
 				}
 				State = 580;
 				ErrorHandler.Sync(this);
@@ -4548,7 +4588,7 @@ public partial class GameMakerLanguageParser : Parser {
 				parameter();
 				State = 621;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,63,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,64,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
@@ -4562,7 +4602,7 @@ public partial class GameMakerLanguageParser : Parser {
 					}
 					State = 623;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,63,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,64,Context);
 				}
 				State = 625;
 				ErrorHandler.Sync(this);
@@ -4813,7 +4853,7 @@ public partial class GameMakerLanguageParser : Parser {
 				enumerator();
 				State = 653;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,69,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,70,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
@@ -4827,7 +4867,7 @@ public partial class GameMakerLanguageParser : Parser {
 					}
 					State = 655;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,69,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,70,Context);
 				}
 				State = 657;
 				ErrorHandler.Sync(this);
@@ -5546,16 +5586,16 @@ public partial class GameMakerLanguageParser : Parser {
 		2,43,7,43,2,44,7,44,2,45,7,45,2,46,7,46,2,47,7,47,2,48,7,48,2,49,7,49,
 		2,50,7,50,2,51,7,51,2,52,7,52,2,53,7,53,2,54,7,54,2,55,7,55,2,56,7,56,
 		2,57,7,57,2,58,7,58,2,59,7,59,2,60,7,60,2,61,7,61,2,62,7,62,2,63,7,63,
-		2,64,7,64,2,65,7,65,1,0,3,0,134,8,0,1,0,1,0,1,1,4,1,139,8,1,11,1,12,1,
-		140,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,
-		2,1,2,1,2,1,2,1,2,1,2,3,2,165,8,2,1,2,3,2,168,8,2,1,3,1,3,3,3,172,8,3,
-		1,3,1,3,1,4,1,4,1,4,3,4,179,8,4,1,4,1,4,1,4,3,4,184,8,4,1,5,1,5,1,5,1,
-		5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,198,8,5,1,5,1,5,3,5,202,8,5,1,5,
-		1,5,3,5,206,8,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,214,8,5,1,6,1,6,1,6,1,6,1,
-		7,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,1,12,1,12,5,12,234,8,
-		12,10,12,12,12,237,9,12,1,12,1,12,1,13,1,13,1,13,3,13,244,8,13,1,13,1,
-		13,1,13,1,13,3,13,250,8,13,3,13,252,8,13,1,14,1,14,1,14,1,15,1,15,1,15,
-		1,15,3,15,261,8,15,1,15,3,15,264,8,15,1,16,1,16,1,16,3,16,269,8,16,1,16,
+		2,64,7,64,2,65,7,65,1,0,3,0,134,8,0,1,0,1,0,1,1,1,1,4,1,140,8,1,11,1,12,
+		1,141,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
+		1,2,1,2,1,2,1,2,1,2,3,2,165,8,2,1,2,3,2,168,8,2,1,3,1,3,3,3,172,8,3,1,
+		3,1,3,1,4,1,4,1,4,3,4,179,8,4,1,4,1,4,1,4,3,4,184,8,4,1,5,1,5,1,5,1,5,
+		1,5,1,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,198,8,5,1,5,1,5,3,5,202,8,5,1,5,1,
+		5,3,5,206,8,5,1,5,1,5,1,5,1,5,1,5,1,5,3,5,214,8,5,1,6,1,6,1,6,1,6,1,7,
+		1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,1,12,1,12,5,12,234,8,12,
+		10,12,12,12,237,9,12,1,12,1,12,1,13,1,13,1,13,3,13,244,8,13,1,13,1,13,
+		1,13,1,13,3,13,250,8,13,3,13,252,8,13,1,14,1,14,1,14,1,15,1,15,1,15,1,
+		15,3,15,261,8,15,1,15,3,15,264,8,15,1,16,1,16,1,16,3,16,269,8,16,1,16,
 		3,16,272,8,16,1,16,1,16,1,17,1,17,1,17,1,18,1,18,3,18,281,8,18,1,19,1,
 		19,1,19,1,20,1,20,3,20,288,8,20,1,20,1,20,1,20,1,21,1,21,1,21,1,21,5,21,
 		297,8,21,10,21,12,21,300,9,21,1,22,4,22,303,8,22,11,22,12,22,304,1,22,
@@ -5597,7 +5637,7 @@ public partial class GameMakerLanguageParser : Parser {
 		130,0,15,1,0,28,31,1,0,24,25,1,0,36,37,1,0,38,41,2,0,19,19,42,42,1,0,22,
 		23,1,0,3,8,3,0,19,19,35,35,50,59,2,0,64,64,66,67,1,1,108,108,1,1,111,111,
 		1,0,101,102,2,0,12,12,15,15,2,0,14,14,16,16,4,0,3,97,99,99,103,106,112,
-		114,764,0,133,1,0,0,0,2,138,1,0,0,0,4,164,1,0,0,0,6,169,1,0,0,0,8,175,
+		114,764,0,133,1,0,0,0,2,139,1,0,0,0,4,164,1,0,0,0,6,169,1,0,0,0,8,175,
 		1,0,0,0,10,213,1,0,0,0,12,215,1,0,0,0,14,219,1,0,0,0,16,223,1,0,0,0,18,
 		225,1,0,0,0,20,227,1,0,0,0,22,229,1,0,0,0,24,231,1,0,0,0,26,251,1,0,0,
 		0,28,253,1,0,0,0,30,256,1,0,0,0,32,265,1,0,0,0,34,275,1,0,0,0,36,278,1,
@@ -5612,14 +5652,14 @@ public partial class GameMakerLanguageParser : Parser {
 		668,1,0,0,0,114,677,1,0,0,0,116,681,1,0,0,0,118,687,1,0,0,0,120,689,1,
 		0,0,0,122,691,1,0,0,0,124,693,1,0,0,0,126,695,1,0,0,0,128,697,1,0,0,0,
 		130,699,1,0,0,0,132,134,3,2,1,0,133,132,1,0,0,0,133,134,1,0,0,0,134,135,
-		1,0,0,0,135,136,5,0,0,1,136,1,1,0,0,0,137,139,3,4,2,0,138,137,1,0,0,0,
-		139,140,1,0,0,0,140,138,1,0,0,0,140,141,1,0,0,0,141,3,1,0,0,0,142,165,
-		3,6,3,0,143,165,3,22,11,0,144,165,3,8,4,0,145,165,3,42,21,0,146,165,3,
-		10,5,0,147,165,3,16,8,0,148,165,3,18,9,0,149,165,3,36,18,0,150,165,3,12,
-		6,0,151,165,3,14,7,0,152,165,3,30,15,0,153,165,3,28,14,0,154,165,3,20,
-		10,0,155,165,3,112,56,0,156,165,3,114,57,0,157,165,3,116,58,0,158,165,
-		3,106,53,0,159,165,3,50,25,0,160,165,3,40,20,0,161,165,3,72,36,0,162,165,
-		3,68,34,0,163,165,3,96,48,0,164,142,1,0,0,0,164,143,1,0,0,0,164,144,1,
+		1,0,0,0,135,136,5,0,0,1,136,1,1,0,0,0,137,140,3,4,2,0,138,140,3,22,11,
+		0,139,137,1,0,0,0,139,138,1,0,0,0,140,141,1,0,0,0,141,139,1,0,0,0,141,
+		142,1,0,0,0,142,3,1,0,0,0,143,165,3,6,3,0,144,165,3,8,4,0,145,165,3,42,
+		21,0,146,165,3,10,5,0,147,165,3,16,8,0,148,165,3,18,9,0,149,165,3,36,18,
+		0,150,165,3,12,6,0,151,165,3,14,7,0,152,165,3,30,15,0,153,165,3,28,14,
+		0,154,165,3,20,10,0,155,165,3,112,56,0,156,165,3,114,57,0,157,165,3,116,
+		58,0,158,165,3,106,53,0,159,165,3,50,25,0,160,165,3,40,20,0,161,165,3,
+		72,36,0,162,165,3,68,34,0,163,165,3,96,48,0,164,143,1,0,0,0,164,144,1,
 		0,0,0,164,145,1,0,0,0,164,146,1,0,0,0,164,147,1,0,0,0,164,148,1,0,0,0,
 		164,149,1,0,0,0,164,150,1,0,0,0,164,151,1,0,0,0,164,152,1,0,0,0,164,153,
 		1,0,0,0,164,154,1,0,0,0,164,155,1,0,0,0,164,156,1,0,0,0,164,157,1,0,0,
@@ -5774,11 +5814,11 @@ public partial class GameMakerLanguageParser : Parser {
 		686,7,10,0,0,686,117,1,0,0,0,687,688,3,104,52,0,688,119,1,0,0,0,689,690,
 		5,96,0,0,690,121,1,0,0,0,691,692,5,69,0,0,692,123,1,0,0,0,693,694,7,12,
 		0,0,694,125,1,0,0,0,695,696,7,13,0,0,696,127,1,0,0,0,697,698,5,17,0,0,
-		698,129,1,0,0,0,699,700,7,14,0,0,700,131,1,0,0,0,75,133,140,164,167,171,
-		178,183,197,201,205,213,235,243,249,251,260,263,268,271,280,287,298,304,
-		307,311,315,323,332,343,349,353,362,370,374,383,388,394,413,460,462,473,
-		480,484,491,501,505,507,525,531,541,550,554,559,564,568,576,580,582,588,
-		596,600,604,611,621,625,627,633,637,641,653,657,659,666,673,683
+		698,129,1,0,0,0,699,700,7,14,0,0,700,131,1,0,0,0,76,133,139,141,164,167,
+		171,178,183,197,201,205,213,235,243,249,251,260,263,268,271,280,287,298,
+		304,307,311,315,323,332,343,349,353,362,370,374,383,388,394,413,460,462,
+		473,480,484,491,501,505,507,525,531,541,550,554,559,564,568,576,580,582,
+		588,596,600,604,611,621,625,627,633,637,641,653,657,659,666,673,683
 	};
 
 	public static readonly ATN _ATN =

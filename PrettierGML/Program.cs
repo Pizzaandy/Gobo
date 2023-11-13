@@ -19,7 +19,7 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-for (a++; foo(); { b++; c.d().e()./*comment*/f()} ) {}
+for (;;) {}
 """;
 
 TestFormat(input);
