@@ -19,7 +19,7 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-delete bar
+x = 000.01
 """;
 
 TestFormat(input);
