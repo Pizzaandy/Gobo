@@ -168,22 +168,6 @@ namespace PrettierGML.SyntaxNodes
             return unprinted;
         }
 
-        public void TransferComments(
-            GmlSyntaxNode target,
-            Func<CommentGroup, bool> predicate,
-            Func<CommentGroup, CommentGroup>? selector = null
-        )
-        {
-            var commentsToTransfer = Comments.Where(predicate);
-
-            Comments = Comments.Where(c => !predicate(c)).ToList();
-
-            foreach (var comment in commentsToTransfer)
-            {
-                target.Comments.Add(selector is null ? comment : selector(comment));
-            }
-        }
-
         public bool ShouldSerializeComments()
         {
             return Comments.Count > 0;

@@ -74,7 +74,7 @@ call_method()
 // leading comment
 .call_method(); // <- This should indent
 
-// This should indent
+// Last two calls should indent
 call_method(
         first_parameter____________________________,
         second_parameter___________________________ 
@@ -87,6 +87,18 @@ call_method(
         first_parameter____________________________,
         second_parameter___________________________
     );
+
+return some_condition(
+    some_long_parameter____________________________,
+    some_long_parameter____________________________
+)
+/* this comment should indent */
+.
+// so should this
+call_method(
+    some_long_parameter____________________________,
+    some_long_parameter____________________________
+)
 
 someThing_______________________
     .Property

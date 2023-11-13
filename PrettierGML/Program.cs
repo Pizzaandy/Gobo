@@ -19,17 +19,11 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-return some_condition
-/*outside*/.
-// inside
-call_method(
-    some_long_parameter____________________________,
-    some_long_parameter____________________________
-)
-.something.call_method(
-    some_long_parameter____________________________,
-    some_long_parameter____________________________
-);
+if (CATSPEAK_DEBUG_MODE) {
+    __catspeak_check_arg("operator", operator, is_numeric); // TODO :: proper bounds check
+    __catspeak_check_arg_struct("lhs", lhs, "type", is_numeric);
+    __catspeak_check_arg_struct("rhs", rhs, "type", is_numeric);
+}
 """;
 
 TestFormat(input);

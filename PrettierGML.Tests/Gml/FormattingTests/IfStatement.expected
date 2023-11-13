@@ -58,8 +58,9 @@ if (longStatementName && longerStatementName && evenLongerStatementName && super
     call();
 }
 
-if (
-    // comment
+if // comment
+(
+    // torture
     true // test
 ) {
     // just

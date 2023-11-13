@@ -54,6 +54,13 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                 return Doc.Group(oneLine);
             }
 
+            if (groups.Count > 1 && groups[0].Last().Node.TrailingComments.Count > 0)
+            {
+                // Indent trailing comment doc at the end of the first group
+                var contents = ((Concat)groups[0].Last().Doc).Contents;
+                contents[^1] = Doc.Indent(contents[^1]);
+            }
+
             var expanded = Doc.Concat(
                 Doc.Concat(groups[0].Select(o => o.Doc).ToArray()),
                 shouldMergeFirstTwoGroups
