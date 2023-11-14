@@ -13,7 +13,7 @@ namespace PrettierGML.SyntaxNodes
         public List<CommentGroup> Comments { get; set; } = new();
 
         [JsonIgnore]
-        public Range CharacterRange { get; set; }
+        public Range CharacterRange { get; set; } = Range.Invalid;
 
         [JsonIgnore]
         public Range TokenRange { get; set; }

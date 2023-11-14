@@ -628,7 +628,7 @@ namespace PrettierGML.Parser
             {
                 if (child is ITerminalNode && previousChildWasComma)
                 {
-                    parts.Add(new EmptyNode(isArgument: true));
+                    parts.Add(EmptyNode.UndefinedArgument);
                     Debug.Assert(parts.Last() is not null);
                 }
                 else if (child is GameMakerLanguageParser.ExpressionOrFunctionContext)
@@ -641,7 +641,7 @@ namespace PrettierGML.Parser
 
             if (previousChildWasComma)
             {
-                parts.Add(new EmptyNode(isArgument: true));
+                parts.Add(EmptyNode.UndefinedArgument);
             }
 
             return parts;

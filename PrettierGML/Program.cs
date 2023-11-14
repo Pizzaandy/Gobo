@@ -19,7 +19,7 @@ static string TestFormat(string input)
 }
 
 var input = $$$"""
-
+call(,,2)
 """;
 
 TestFormat(input);
