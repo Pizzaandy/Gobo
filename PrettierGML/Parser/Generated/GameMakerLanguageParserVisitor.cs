@@ -474,6 +474,12 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <return>The visitor result.</return>
 	Result VisitArguments([NotNull] GameMakerLanguageParser.ArgumentsContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.argumentList"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArgumentList([NotNull] GameMakerLanguageParser.ArgumentListContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.assignmentOperator"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -503,12 +509,6 @@ public interface IGameMakerLanguageParserVisitor<Result> : IParseTreeVisitor<Res
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitArrayLiteral([NotNull] GameMakerLanguageParser.ArrayLiteralContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.elementList"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitElementList([NotNull] GameMakerLanguageParser.ElementListContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GameMakerLanguageParser.structLiteral"/>.
 	/// </summary>

@@ -32,7 +32,10 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
                     leadingContents
                 );
 
-                var contents = Doc.Concat(Doc.SoftLine, printedArguments);
+                var contents = Doc.Concat(
+                    forceBreak ? Doc.HardLine : Doc.SoftLine,
+                    printedArguments
+                );
                 parts.Add(Doc.IndentIfBreak(contents, groupId));
             }
             else

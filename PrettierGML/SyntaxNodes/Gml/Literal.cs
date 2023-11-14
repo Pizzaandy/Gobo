@@ -20,6 +20,8 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         private static Regex isDecimal = IsDecimal();
 
+        public static string Undefined = "undefined";
+
         public Literal(ParserRuleContext context, string text)
             : base(context)
         {
@@ -53,6 +55,16 @@ namespace PrettierGML.SyntaxNodes.Gml
                 return trimmed;
             }
             return Text;
+        }
+
+        public override int GetHashCode()
+        {
+            // TODO: separate classes for literals
+            if (Text == Undefined)
+            {
+                return Undefined.GetHashCode();
+            }
+            return base.GetHashCode();
         }
     }
 }

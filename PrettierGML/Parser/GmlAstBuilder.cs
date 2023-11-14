@@ -4,6 +4,7 @@ using PrettierGML.SyntaxNodes;
 using PrettierGML.SyntaxNodes.Gml;
 using PrettierGML.SyntaxNodes.GmlExtensions;
 using PrettierGML.SyntaxNodes.PrintHelpers;
+using System.Diagnostics;
 using UnaryExpression = PrettierGML.SyntaxNodes.Gml.UnaryExpression;
 
 namespace PrettierGML.Parser
@@ -606,13 +607,44 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.ArgumentsContext context
         )
         {
+            var argumentsList = Visit(context.argumentList());
+            return new ArgumentList(context, argumentsList.Children);
+        }
+
+        public override GmlSyntaxNode VisitArgumentList(
+            [NotNull] GameMakerLanguageParser.ArgumentListContext context
+        )
+        {
             var parts = new List<GmlSyntaxNode>();
-            foreach (var expressionContext in context.expressionOrFunction())
+
+            if (context.children == null)
             {
-                var arg = Visit(expressionContext);
-                parts.Add(arg);
+                return parts;
             }
-            return new ArgumentList(context, parts);
+
+            bool previousChildWasComma = true;
+
+            foreach (var child in context.children)
+            {
+                if (child is ITerminalNode && previousChildWasComma)
+                {
+                    parts.Add(new EmptyNode(isArgument: true));
+                    Debug.Assert(parts.Last() is not null);
+                }
+                else if (child is GameMakerLanguageParser.ExpressionOrFunctionContext)
+                {
+                    parts.Add(Visit(child));
+                }
+
+                previousChildWasComma = child is ITerminalNode;
+            }
+
+            if (previousChildWasComma)
+            {
+                parts.Add(new EmptyNode(isArgument: true));
+            }
+
+            return parts;
         }
 
         public override GmlSyntaxNode VisitCallExpression(
@@ -743,13 +775,9 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.ArrayLiteralContext context
         )
         {
-            if (context.elementList() == null)
-            {
-                return new ArrayExpression(context, new());
-            }
-
             var elementNodes = new List<GmlSyntaxNode>();
-            foreach (var element in context.elementList().expressionOrFunction())
+
+            foreach (var element in context.expressionOrFunction())
             {
                 elementNodes.Add(Visit(element));
             }
@@ -784,7 +812,10 @@ namespace PrettierGML.Parser
             }
             else
             {
-                name = new Literal(context.StringLiteral(), context.StringLiteral().GetText());
+                name = new Identifier(
+                    context.StringLiteral(),
+                    context.StringLiteral().GetText().Trim('"')
+                );
             }
 
             var expression = Visit(context.expressionOrFunction());
@@ -825,30 +856,12 @@ namespace PrettierGML.Parser
         {
             var id = Visit(context.identifier());
             GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
-            if (context.Assign() != null)
+
+            if (context.expression() != null)
             {
-                if (context.IntegerLiteral() != null)
-                {
-                    initializer = new Literal(
-                        context.IntegerLiteral(),
-                        context.IntegerLiteral().GetText()
-                    );
-                }
-                if (context.HexIntegerLiteral() != null)
-                {
-                    initializer = new Literal(
-                        context.HexIntegerLiteral(),
-                        context.HexIntegerLiteral().GetText()
-                    );
-                }
-                if (context.BinaryLiteral() != null)
-                {
-                    initializer = new Literal(
-                        context.BinaryLiteral(),
-                        context.BinaryLiteral().GetText()
-                    );
-                }
+                initializer = Visit(context.expression());
             }
+
             return new EnumMember(context, id, initializer);
         }
 
@@ -1154,14 +1167,20 @@ namespace PrettierGML.Parser
             [NotNull] GameMakerLanguageParser.TryStatementContext context
         )
         {
-            var finallyProduction = context.finallyProduction() is null
-                ? GmlSyntaxNode.Empty
-                : Visit(context.finallyProduction());
+            var catchProduction =
+                context.catchProduction() != null
+                    ? Visit(context.catchProduction())
+                    : GmlSyntaxNode.Empty;
+
+            var finallyProduction =
+                context.finallyProduction() != null
+                    ? Visit(context.finallyProduction())
+                    : GmlSyntaxNode.Empty;
 
             return new TryStatement(
                 context,
                 Visit(context.statement()),
-                Visit(context.catchProduction()),
+                catchProduction,
                 finallyProduction
             );
         }

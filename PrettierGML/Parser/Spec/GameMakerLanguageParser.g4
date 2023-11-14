@@ -225,7 +225,11 @@ accessor
     ;
 
 arguments
-    : '(' ( expressionOrFunction (',' expressionOrFunction)* ','? )? ')'
+    : '(' argumentList ')'
+    ;
+
+argumentList
+    : ','* expressionOrFunction? (','+ expressionOrFunction)* ','*
     ;
 
 assignmentOperator
@@ -268,11 +272,7 @@ templateStringAtom
     ;
 
 arrayLiteral
-    : '[' elementList ']'
-    ;
-
-elementList
-    : ','* expressionOrFunction? (','+ expressionOrFunction)* ','? // Yes, everything is optional
+    : '[' (expressionOrFunction (',' expressionOrFunction)* ','? )? ']'
     ;
 
 structLiteral
@@ -317,7 +317,7 @@ enumeratorBlock
     ;
 
 enumerator
-    : identifier (Assign (IntegerLiteral | HexIntegerLiteral | BinaryLiteral))?
+    : identifier (Assign expression)?
     ;
 
 macroStatement

@@ -1,5 +1,4 @@
 ﻿using PrettierGML;
-using PrettierGML.Parser;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel;
@@ -91,16 +90,19 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
 
     private static async Task DebugFormatFile(string filePath)
     {
+        AnsiConsole.WriteLine($"Formatting {filePath}");
+
         var input = await File.ReadAllTextAsync(filePath);
+
         try
         {
             GmlFormatter.Format(input, new() { GetDebugInfo = true });
         }
-        catch (GmlSyntaxErrorException)
+        catch (Exception)
         {
-            Console.WriteLine($"In {filePath}");
             throw;
         }
+
         AnsiConsole.WriteLine("Success!");
     }
 }

@@ -14,19 +14,21 @@ namespace PrettierGML.SyntaxNodes.Gml
             ParserRuleContext context,
             GmlSyntaxNode body,
             GmlSyntaxNode @catch,
-            GmlSyntaxNode alternate
+            GmlSyntaxNode @finally
         )
             : base(context)
         {
             Body = AsChild(body);
             Catch = AsChild(@catch);
-            Finally = AsChild(alternate);
+            Finally = AsChild(@finally);
         }
 
         public override Doc PrintNode(PrintContext ctx)
         {
             Doc leadingWhitespace =
-                ctx.Options.BraceStyle == BraceStyle.NewLine ? Doc.HardLineIfNoPreviousLine : " ";
+                ctx.Options.BraceStyle == BraceStyle.NewLine
+                    ? Doc.HardLineIfNoPreviousLine
+                    : Doc.CollapsedSpace;
 
             var parts = new List<Doc>
             {
