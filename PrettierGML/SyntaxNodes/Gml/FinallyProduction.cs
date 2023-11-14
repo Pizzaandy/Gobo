@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public GmlSyntaxNode Body { get; set; }
 
-        public FinallyProduction(ParserRuleContext context, GmlSyntaxNode body)
-            : base(context)
+        public FinallyProduction(TextSpan span, GmlSyntaxNode body)
+            : base(span)
         {
             Body = AsChild(body);
         }

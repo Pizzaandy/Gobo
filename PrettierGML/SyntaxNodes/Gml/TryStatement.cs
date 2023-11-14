@@ -11,12 +11,12 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Finally { get; set; }
 
         public TryStatement(
-            ParserRuleContext context,
+            TextSpan span,
             GmlSyntaxNode body,
             GmlSyntaxNode @catch,
             GmlSyntaxNode @finally
         )
-            : base(context)
+            : base(span)
         {
             Body = AsChild(body);
             Catch = AsChild(@catch);

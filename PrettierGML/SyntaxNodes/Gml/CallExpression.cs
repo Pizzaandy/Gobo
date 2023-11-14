@@ -9,12 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Object { get; set; }
         public GmlSyntaxNode Arguments { get; set; }
 
-        public CallExpression(
-            ParserRuleContext context,
-            GmlSyntaxNode @object,
-            GmlSyntaxNode arguments
-        )
-            : base(context)
+        public CallExpression(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode arguments)
+            : base(span)
         {
             Object = AsChild(@object);
             Arguments = AsChild(arguments);

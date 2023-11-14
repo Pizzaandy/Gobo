@@ -8,14 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public string Name { get; set; }
 
-        public Identifier(ITerminalNode context, string name)
-            : base(context)
-        {
-            Name = name;
-        }
-
-        public Identifier(ParserRuleContext context, string name)
-            : base(context)
+        public Identifier(TextSpan span, string name)
+            : base(span)
         {
             Name = name;
         }

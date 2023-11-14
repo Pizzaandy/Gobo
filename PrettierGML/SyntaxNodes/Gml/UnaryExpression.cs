@@ -10,12 +10,12 @@ namespace PrettierGML.SyntaxNodes.Gml
         public bool IsPrefix { get; set; }
 
         public UnaryExpression(
-            ParserRuleContext context,
+            TextSpan span,
             string @operator,
             GmlSyntaxNode argument,
             bool isPrefix
         )
-            : base(context)
+            : base(span)
         {
             Operator = @operator;
             Argument = AsChild(argument);

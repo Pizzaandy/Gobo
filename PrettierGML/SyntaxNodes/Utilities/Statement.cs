@@ -113,39 +113,12 @@ namespace PrettierGML.SyntaxNodes.PrintHelpers
 
         public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
         {
-            static bool IsWhiteSpace(IToken token)
-            {
-                return token.Type == GameMakerLanguageLexer.LineTerminator
-                    || token.Type == GameMakerLanguageLexer.WhiteSpaces;
-            }
+            var startSpan =
+                node.LeadingComments.Count > 0 ? node.LeadingComments[0].Span : node.Span;
 
-            static bool IsLineTerminator(IToken token)
-            {
-                return token.Type == GameMakerLanguageLexer.LineTerminator;
-            }
+            var leadingLineBreaks = ctx.SourceText.GetLineBreaksToLeft(startSpan);
 
-            int nodeStartIndex;
-
-            if (node.LeadingComments.Count > 0)
-            {
-                nodeStartIndex = node.LeadingComments[0].TokenRange.Start;
-            }
-            else
-            {
-                nodeStartIndex = node.TokenRange.Start;
-            }
-
-            var leadingTokens = ctx.Tokens.GetHiddenTokensToLeft(nodeStartIndex);
-
-            if (leadingTokens is null)
-            {
-                return false;
-            }
-
-            var leadingWhitespace = leadingTokens.Reverse().TakeWhile(IsWhiteSpace);
-
-            return leadingWhitespace is not null
-                && (leadingWhitespace.Count(IsLineTerminator)) >= 2;
+            return leadingLineBreaks >= 2;
         }
 
         private static bool NeedsSemicolon(GmlSyntaxNode node)

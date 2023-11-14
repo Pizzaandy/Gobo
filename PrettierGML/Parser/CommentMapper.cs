@@ -1,25 +1,23 @@
 ﻿using Antlr4.Runtime;
 using PrettierGML.SyntaxNodes;
-using Range = PrettierGML.SyntaxNodes.Range;
 
 namespace PrettierGML.Parser
 {
     internal class CommentMapper
     {
-        public CommonTokenStream TokenStream { get; set; }
+        public SourceText SourceText { get; set; }
 
-        public List<CommentGroup> CommentGroups { get; set; } = new();
+        public List<CommentGroup> CommentGroups { get; set; }
 
-        public CommentMapper(CommonTokenStream tokenStream)
+        public CommentMapper(SourceText sourceText, List<CommentGroup> commentGroups)
         {
-            TokenStream = tokenStream;
+            SourceText = sourceText;
+            CommentGroups = commentGroups;
         }
 
         public GmlSyntaxNode AttachComments(GmlSyntaxNode ast)
         {
-            var comments = GetAllCommentGroups(TokenStream);
-
-            CommentGroups = comments.Select(comment => DecorateComment(ast, comment)).ToList();
+            CommentGroups.ForEach(comment => DecorateComment(ast, comment));
 
             foreach (var comment in CommentGroups)
             {
@@ -112,14 +110,12 @@ namespace PrettierGML.Parser
         private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
         {
             // Check if all tokens between the comment and followingNode are whitespace or parentheses
-            var tokens = TokenStream
-                .GetTokens(comment.TokenRange.Stop, followingNode.TokenRange.Start)
-                .Skip(1)
-                .SkipLast(1);
 
-            foreach (var token in tokens)
+            var whitespaceBetween = SourceText.GetSpan(comment.Span.End, followingNode.Span.Start);
+
+            foreach (var character in whitespaceBetween)
             {
-                if (IsWhiteSpace(token) || token.Type == GameMakerLanguageLexer.OpenParen)
+                if (char.IsWhiteSpace(character) || character == '(')
                 {
                     continue;
                 }
@@ -150,20 +146,19 @@ namespace PrettierGML.Parser
                 var middle = (left + right) >> 1;
                 var child = childNodes[middle];
 
-                var childStart = child.CharacterRange.Start;
-                var childStop = child.CharacterRange.Stop;
-
-                var commentStart = comment.CharacterRange.Start;
-                var commentStop = comment.CharacterRange.Stop;
+                var start = child.Span.Start;
+                var end = child.Span.End;
+                var commentStart = comment.Span.Start;
+                var commentEnd = comment.Span.End;
 
                 // The comment is completely contained by this child node
                 // Abandon the binary search at this level.
-                if (childStart <= commentStart && commentStop <= childStop)
+                if (start <= commentStart && commentEnd <= end)
                 {
                     return DecorateComment(child, comment, child);
                 }
 
-                if (childStop < commentStart)
+                if (end <= commentStart)
                 {
                     // This child node falls completely before the comment.
                     // Because we will never consider this node or any nodes
@@ -174,7 +169,7 @@ namespace PrettierGML.Parser
                     continue;
                 }
 
-                if (commentStop < childStart)
+                if (commentEnd <= start)
                 {
                     // This child node falls completely after the comment.
                     // Because we will never consider this node or any nodes after
@@ -216,67 +211,6 @@ namespace PrettierGML.Parser
             return result;
         }
 
-        /// <summary>
-        /// Iterate all tokens and group together comments on the same line
-        /// </summary>
-        private static List<CommentGroup> GetAllCommentGroups(CommonTokenStream tokenStream)
-        {
-            tokenStream.Fill();
-
-            var tokens = tokenStream.GetTokens(0, tokenStream.Size - 1);
-            var groups = new List<CommentGroup>();
-            List<IToken>? currentGroup = null;
-
-            foreach (var token in tokens)
-            {
-                bool breakGroup = false;
-
-                if (IsWhiteSpace(token))
-                {
-                    if (IsLineBreak(token))
-                    {
-                        breakGroup = true;
-                    }
-                }
-                else if (IsComment(token))
-                {
-                    currentGroup ??= new();
-                }
-                else
-                {
-                    breakGroup = true;
-                }
-
-                if (breakGroup && currentGroup?.Count > 0)
-                {
-                    // Remove whitespace from end of group
-                    var trimmedGroup = currentGroup.AsEnumerable();
-
-                    while (IsWhiteSpace(trimmedGroup.Last()))
-                    {
-                        trimmedGroup = trimmedGroup.SkipLast(1);
-                    }
-
-                    var first = trimmedGroup.First();
-                    var last = trimmedGroup.Last();
-
-                    groups.Add(
-                        new CommentGroup(
-                            trimmedGroup.ToList(),
-                            new Range(first.StartIndex, last.StopIndex),
-                            new Range(first.TokenIndex, last.TokenIndex)
-                        )
-                    );
-
-                    currentGroup = IsComment(token) ? new() : null;
-                }
-
-                currentGroup?.Add(token);
-            }
-
-            return groups;
-        }
-
         private static bool CanAttachComment(GmlSyntaxNode node)
         {
             return !(node is EmptyNode or NodeList);
@@ -284,59 +218,25 @@ namespace PrettierGML.Parser
 
         private bool IsOwnLineComment(CommentGroup comment)
         {
-            var leadingTokens = TokenStream
-                .GetHiddenTokensToLeft(comment.TokenRange.Start)
-                ?.Reverse();
-
-            var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
-
             bool firstInLine =
-                (
-                    leadingTokens is not null
-                    && (
-                        leadingTokens.Last().TokenIndex == 0
-                        || leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
-                    )
-                )
-                || comment.TokenRange.Start == 0;
+                SourceText.GetLineBreaksToLeft(comment.Span) > 0 || comment.Span.Start == 0;
 
             bool lastInLine =
-                trailingTokens is not null
-                && trailingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak);
+                SourceText.GetLineBreaksToRight(comment.Span) > 0
+                || comment.Span.End == SourceText.Length;
 
             return firstInLine && lastInLine;
         }
 
         private bool IsEndOfLineComment(CommentGroup comment)
         {
-            var leadingTokens = TokenStream
-                .GetHiddenTokensToLeft(comment.TokenRange.Start)
-                ?.Reverse();
+            bool noLeadingLineBreaks = SourceText.GetLineBreaksToLeft(comment.Span) == 0;
 
-            var trailingTokens = TokenStream.GetHiddenTokensToRight(comment.TokenRange.Stop);
+            bool lastInLine =
+                SourceText.GetLineBreaksToRight(comment.Span) > 0
+                || comment.Span.End == SourceText.Length;
 
-            return (
-                    leadingTokens is null || !leadingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak)
-                )
-                && trailingTokens is not null
-                && trailingTokens.TakeWhile(IsWhiteSpace).Any(IsLineBreak);
-        }
-
-        private static bool IsComment(IToken token)
-        {
-            return token.Type == GameMakerLanguageLexer.SingleLineComment
-                || token.Type == GameMakerLanguageLexer.MultiLineComment;
-        }
-
-        private static bool IsLineBreak(IToken token)
-        {
-            return token.Type == GameMakerLanguageLexer.LineTerminator;
-        }
-
-        private static bool IsWhiteSpace(IToken token)
-        {
-            return token.Type == GameMakerLanguageLexer.LineTerminator
-                || token.Type == GameMakerLanguageLexer.WhiteSpaces;
+            return noLeadingLineBreaks && lastInLine;
         }
 
         private static void AttachCommentGroup(
@@ -354,13 +254,13 @@ namespace PrettierGML.Parser
     {
         public override int Compare(GmlSyntaxNode? nodeA, GmlSyntaxNode? nodeB)
         {
-            if (nodeA!.CharacterRange.Start == nodeB!.CharacterRange.Start)
+            if (nodeA!.Span.Start == nodeB!.Span.Start)
             {
-                return nodeA.CharacterRange.Stop - nodeB.CharacterRange.Stop;
+                return nodeA.Span.End - nodeB.Span.End;
             }
             else
             {
-                return nodeA.CharacterRange.Start - nodeB.CharacterRange.Start;
+                return nodeA.Span.Start - nodeB.Span.Start;
             }
         }
     }

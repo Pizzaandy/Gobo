@@ -13,8 +13,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public string Text { get; set; }
 
-        public TemplateText(ParserRuleContext context, string text)
-            : base(context)
+        public TemplateText(TextSpan span, string text)
+            : base(span)
         {
             Text = text;
         }

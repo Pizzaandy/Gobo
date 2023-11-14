@@ -7,8 +7,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public string Name { get; set; }
 
-        public DefineStatement(ParserRuleContext context, string name)
-            : base(context)
+        public DefineStatement(TextSpan span, string name)
+            : base(span)
         {
             Name = name;
         }

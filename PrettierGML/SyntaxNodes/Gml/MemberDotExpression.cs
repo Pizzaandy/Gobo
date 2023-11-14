@@ -9,12 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Object { get; set; }
         public GmlSyntaxNode Property { get; set; }
 
-        public MemberDotExpression(
-            ParserRuleContext context,
-            GmlSyntaxNode @object,
-            GmlSyntaxNode property
-        )
-            : base(context)
+        public MemberDotExpression(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode property)
+            : base(span)
         {
             Object = AsChild(@object);
             Property = AsChild(property);

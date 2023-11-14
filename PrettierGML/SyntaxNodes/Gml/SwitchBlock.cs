@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public List<GmlSyntaxNode> Cases => Children;
 
-        public SwitchBlock(ParserRuleContext context, List<GmlSyntaxNode> cases)
-            : base(context)
+        public SwitchBlock(TextSpan span, List<GmlSyntaxNode> cases)
+            : base(span)
         {
             AsChildren(cases);
         }

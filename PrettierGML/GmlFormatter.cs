@@ -73,10 +73,9 @@ namespace PrettierGML
             }
 
             GmlSyntaxNode ast = parseResult.Ast;
-            CommonTokenStream tokens = parseResult.TokenStream;
 
             var initialHash = options.ValidateOutput ? ast.GetHashCode() : -1;
-            var docs = ast.Print(new PrintContext(options, tokens));
+            var docs = ast.Print(new PrintContext(options, new SourceText(code)));
 
             var printOptions = new Printer.DocPrinterOptions()
             {

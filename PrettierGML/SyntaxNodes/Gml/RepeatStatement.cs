@@ -9,8 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public RepeatStatement(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
-            : base(context)
+        public RepeatStatement(TextSpan span, GmlSyntaxNode test, GmlSyntaxNode body)
+            : base(span)
         {
             Test = AsChild(test);
             Body = AsChild(body);

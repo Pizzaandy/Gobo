@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public string? Name { get; set; }
         public bool IsEndRegion { get; set; }
 
-        public RegionStatement(ParserRuleContext context, string? name, bool isEndRegion)
-            : base(context)
+        public RegionStatement(TextSpan span, string? name, bool isEndRegion)
+            : base(span)
         {
             Name = name;
             IsEndRegion = isEndRegion;

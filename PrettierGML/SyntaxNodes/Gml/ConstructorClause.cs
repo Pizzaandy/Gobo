@@ -8,12 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Id { get; set; }
         public GmlSyntaxNode Arguments { get; set; }
 
-        public ConstructorClause(
-            ParserRuleContext context,
-            GmlSyntaxNode id,
-            GmlSyntaxNode parameters
-        )
-            : base(context)
+        public ConstructorClause(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode parameters)
+            : base(span)
         {
             Id = AsChild(id);
             Arguments = AsChild(parameters);

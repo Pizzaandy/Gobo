@@ -1,5 +1,4 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes.Gml
 {
@@ -8,8 +7,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Id { get; set; }
         public string Body { get; set; }
 
-        public MacroDeclaration(ParserRuleContext context, GmlSyntaxNode id, string body)
-            : base(context)
+        public MacroDeclaration(TextSpan span, GmlSyntaxNode id, string body)
+            : base(span)
         {
             Id = AsChild(id);
             Body = body;
@@ -27,17 +26,6 @@ namespace PrettierGML.SyntaxNodes.Gml
                 Id.PrintTrailingComments(ctx, CommentType.Leading),
                 Doc.HardLineIfNoPreviousLine,
                 printed
-            );
-        }
-
-        public override Doc PrintWithOwnComments(PrintContext ctx, Doc nodeDoc)
-        {
-            return Doc.Concat(
-                PrintLeadingComments(ctx),
-                PrintDanglingComments(ctx, CommentType.Leading),
-                nodeDoc,
-                Doc.HardLine,
-                PrintTrailingComments(ctx, CommentType.Leading)
             );
         }
     }

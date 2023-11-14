@@ -26,9 +26,6 @@ namespace PrettierGML.SyntaxNodes
     {
         public string Text => string.Concat(Tokens.Select(t => t.Text));
 
-        public int Start => CharacterRange.Start;
-        public int End => CharacterRange.Stop;
-
         public string Id { get; init; }
 
         /// <summary>
@@ -46,10 +43,7 @@ namespace PrettierGML.SyntaxNodes
         public List<IToken> Tokens { get; init; }
 
         [JsonIgnore]
-        public Range CharacterRange { get; set; }
-
-        [JsonIgnore]
-        public Range TokenRange { get; set; }
+        public TextSpan Span { get; set; }
 
         [JsonIgnore]
         public GmlSyntaxNode? EnclosingNode { get; set; }
@@ -70,11 +64,10 @@ namespace PrettierGML.SyntaxNodes
 
         public const string FormatCommandPrefix = "fmt-";
 
-        public CommentGroup(List<IToken> tokens, Range characterRange, Range tokenRange)
+        public CommentGroup(List<IToken> tokens, TextSpan span)
         {
             Tokens = tokens;
-            CharacterRange = characterRange;
-            TokenRange = tokenRange;
+            Span = span;
 
             Id = Guid.NewGuid().ToString();
 
@@ -146,12 +139,7 @@ namespace PrettierGML.SyntaxNodes
             // Add line breaks between comment groups
             foreach (var group in groups.Skip(1))
             {
-                int lineBreaksBetween =
-                    ctx.Tokens
-                        .GetHiddenTokensToLeft(group.TokenRange.Start)
-                        .Reverse()
-                        .TakeWhile(token => !IsComment(token))
-                        ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+                int lineBreaksBetween = ctx.SourceText.GetLineBreaksToLeft(group.Span);
 
                 for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
                 {
@@ -173,10 +161,9 @@ namespace PrettierGML.SyntaxNodes
             // Add leading or trailing line breaks depending on type
             if (type == CommentType.Leading)
             {
-                int trailingLineBreakCount =
-                    ctx.Tokens
-                        .GetHiddenTokensToRight(groups.Last().TokenRange.Stop)
-                        ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+                int trailingLineBreakCount = ctx.SourceText.GetLineBreaksToRight(
+                    groups.Last().Span
+                );
 
                 if (trailingLineBreakCount == 0)
                 {
@@ -192,10 +179,7 @@ namespace PrettierGML.SyntaxNodes
             }
             else
             {
-                int leadingLineBreakCount =
-                    ctx.Tokens
-                        .GetHiddenTokensToLeft(groups.First().TokenRange.Start)
-                        ?.Count(token => token.Type == GameMakerLanguageLexer.LineTerminator) ?? 0;
+                int leadingLineBreakCount = ctx.SourceText.GetLineBreaksToLeft(groups.First().Span);
 
                 if (leadingLineBreakCount == 0)
                 {
@@ -211,12 +195,6 @@ namespace PrettierGML.SyntaxNodes
             }
 
             return Doc.Concat(parts);
-        }
-
-        private static bool IsComment(IToken token)
-        {
-            return token.Type == GameMakerLanguageLexer.SingleLineComment
-                || token.Type == GameMakerLanguageLexer.MultiLineComment;
         }
 
         public static Doc PrintSingleLineComment(string text)
@@ -257,7 +235,7 @@ namespace PrettierGML.SyntaxNodes
                 $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
                 $"Type: {Type}",
                 $"Placement: {Placement}",
-                $"Range: {CharacterRange}",
+                $"Range: {Span}",
                 $"Enclosing: {EnclosingNode?.Kind}",
                 $"Preceding: {PrecedingNode?.Kind}",
                 $"Following: {FollowingNode?.Kind}",

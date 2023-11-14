@@ -5,8 +5,8 @@ namespace PrettierGML.SyntaxNodes.Gml
 {
     internal sealed class ContinueStatement : GmlSyntaxNode
     {
-        public ContinueStatement(ParserRuleContext context)
-            : base(context) { }
+        public ContinueStatement(TextSpan span)
+            : base(span) { }
 
         public override Doc PrintNode(PrintContext ctx)
         {

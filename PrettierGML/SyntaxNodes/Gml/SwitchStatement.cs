@@ -9,12 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Discriminant { get; set; }
         public GmlSyntaxNode Cases { get; set; }
 
-        public SwitchStatement(
-            ParserRuleContext context,
-            GmlSyntaxNode discriminant,
-            GmlSyntaxNode cases
-        )
-            : base(context)
+        public SwitchStatement(TextSpan span, GmlSyntaxNode discriminant, GmlSyntaxNode cases)
+            : base(span)
         {
             Discriminant = AsChild(discriminant);
             Cases = AsChild(cases);

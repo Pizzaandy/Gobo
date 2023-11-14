@@ -22,14 +22,8 @@ namespace PrettierGML.SyntaxNodes.Gml
 
         public static string Undefined = "undefined";
 
-        public Literal(ParserRuleContext context, string text)
-            : base(context)
-        {
-            Text = text;
-        }
-
-        public Literal(ITerminalNode context, string text)
-            : base(context)
+        public Literal(TextSpan span, string text)
+            : base(span)
         {
             Text = text;
         }

@@ -10,11 +10,11 @@ namespace PrettierGML.SyntaxNodes.Gml
         public string Modifier { get; set; }
 
         public VariableDeclarationList(
-            ParserRuleContext context,
+            TextSpan span,
             List<GmlSyntaxNode> declarations,
             string modifier
         )
-            : base(context)
+            : base(span)
         {
             Declarations = AsChildren(declarations);
             Modifier = modifier;

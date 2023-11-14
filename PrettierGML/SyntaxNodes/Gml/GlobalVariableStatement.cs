@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public List<GmlSyntaxNode> Declarations => Children;
 
-        public GlobalVariableStatement(ParserRuleContext context, List<GmlSyntaxNode> declarations)
-            : base(context)
+        public GlobalVariableStatement(TextSpan span, List<GmlSyntaxNode> declarations)
+            : base(span)
         {
             AsChildren(declarations);
         }

@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Id { get; set; }
         public GmlSyntaxNode Initializer { get; set; }
 
-        public EnumMember(ParserRuleContext context, GmlSyntaxNode id, GmlSyntaxNode initializer)
-            : base(context)
+        public EnumMember(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode initializer)
+            : base(span)
         {
             Id = AsChild(id);
             Initializer = AsChild(initializer);

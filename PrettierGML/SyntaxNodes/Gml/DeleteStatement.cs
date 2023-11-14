@@ -7,8 +7,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public GmlSyntaxNode Argument { get; set; }
 
-        public DeleteStatement(ParserRuleContext context, GmlSyntaxNode argument)
-            : base(context)
+        public DeleteStatement(TextSpan span, GmlSyntaxNode argument)
+            : base(span)
         {
             Argument = AsChild(argument);
         }
