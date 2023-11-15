@@ -7,8 +7,8 @@ namespace PrettierGML.SyntaxNodes.GmlExtensions
     {
         public List<string> Types { get; set; }
 
-        public TypeAnnotation(ParserRuleContext context, List<string> types)
-            : base(context)
+        public TypeAnnotation(TextSpan span, List<string> types)
+            : base(span)
         {
             Types = types;
         }

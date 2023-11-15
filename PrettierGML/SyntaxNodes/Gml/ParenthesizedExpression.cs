@@ -7,8 +7,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public GmlSyntaxNode Expression { get; set; }
 
-        public ParenthesizedExpression(ParserRuleContext context, GmlSyntaxNode expression)
-            : base(context)
+        public ParenthesizedExpression(TextSpan span, GmlSyntaxNode expression)
+            : base(span)
         {
             Expression = AsChild(expression);
         }

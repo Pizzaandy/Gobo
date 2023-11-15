@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Members { get; set; }
 
-        public EnumDeclaration(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode members)
-            : base(context)
+        public EnumDeclaration(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode members)
+            : base(span)
         {
             Name = AsChild(name);
             Members = AsChild(members);

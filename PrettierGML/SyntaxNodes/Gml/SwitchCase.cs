@@ -9,12 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Test { get; set; }
         public List<GmlSyntaxNode> Statements { get; set; }
 
-        public SwitchCase(
-            ParserRuleContext context,
-            GmlSyntaxNode test,
-            List<GmlSyntaxNode> statements
-        )
-            : base(context)
+        public SwitchCase(TextSpan span, GmlSyntaxNode test, List<GmlSyntaxNode> statements)
+            : base(span)
         {
             Test = AsChild(test);
             Statements = AsChildren(statements);

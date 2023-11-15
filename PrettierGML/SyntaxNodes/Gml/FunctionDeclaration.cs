@@ -12,13 +12,13 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode ConstructorParent { get; set; }
 
         public FunctionDeclaration(
-            ParserRuleContext context,
+            TextSpan span,
             GmlSyntaxNode id,
             GmlSyntaxNode parameters,
             GmlSyntaxNode body,
             GmlSyntaxNode parent
         )
-            : base(context)
+            : base(span)
         {
             Id = AsChild(id);
             Parameters = AsChild(parameters);

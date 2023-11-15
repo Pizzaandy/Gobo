@@ -10,12 +10,12 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Right { get; set; }
 
         public BinaryExpression(
-            ParserRuleContext context,
+            TextSpan span,
             string @operator,
             GmlSyntaxNode left,
             GmlSyntaxNode right
         )
-            : base(context)
+            : base(span)
         {
             Operator = @operator switch
             {

@@ -2,6 +2,7 @@
 using Spectre.Console;
 using Spectre.Console.Cli;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 var app = new CommandApp<FormatCommand>();
@@ -31,6 +32,11 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
         [NotNull] Settings settings
     )
     {
+        if (settings.Version)
+        {
+            AnsiConsole.WriteLine(typeof(FormatCommand).Assembly.FullName ?? "Version not found");
+        }
+
         var filePath = settings.FilePath ?? "";
         filePath = filePath.Trim('"');
 
@@ -43,7 +49,7 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
 
         while (true)
         {
-            filePath = AnsiConsole.Ask<string>("Path: ");
+            filePath = AnsiConsole.Ask<string>("");
             filePath = filePath.Trim('"');
             if (Path.Exists(filePath))
             {
@@ -59,7 +65,7 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
 
         if (File.Exists(filePath))
         {
-            await DebugFormatFile(filePath);
+            await DebugFormatFile(filePath, settings);
         }
         else if (Directory.Exists(filePath))
         {
@@ -71,13 +77,18 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
             if (!files.Any())
             {
                 AnsiConsole.Write(new Markup($"[bold red]No .gml files found in {filePath}[/]"));
-                return 0;
+                return 2;
             }
 
-            foreach (var file in files)
-            {
-                await DebugFormatFile(file.FullName);
-            }
+            var stopWatch = Stopwatch.StartNew();
+
+            await Task.WhenAll(files.Select(file => DebugFormatFile(file.FullName, settings)));
+
+            stopWatch.Stop();
+
+            AnsiConsole.WriteLine(
+                $"Formatted {files.Count()} files in {stopWatch.Elapsed.ToString(@"s\.fff")} seconds"
+            );
         }
         else
         {
@@ -85,24 +96,20 @@ internal sealed class FormatCommand : AsyncCommand<FormatCommand.Settings>
             return 2;
         }
 
-        return 2;
+        return 0;
     }
 
-    private static async Task DebugFormatFile(string filePath)
+    private static async Task DebugFormatFile(string filePath, Settings settings)
     {
-        AnsiConsole.WriteLine($"Formatting {filePath}");
-
         var input = await File.ReadAllTextAsync(filePath);
 
         try
         {
-            GmlFormatter.Format(input, new() { GetDebugInfo = true });
+            GmlFormatter.Format(input, new() { GetDebugInfo = false, ValidateOutput = false });
         }
         catch (Exception)
         {
             throw;
         }
-
-        AnsiConsole.WriteLine("Success!");
     }
 }

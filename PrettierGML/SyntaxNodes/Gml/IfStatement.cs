@@ -11,12 +11,12 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Alternate { get; set; }
 
         public IfStatement(
-            ParserRuleContext context,
+            TextSpan span,
             GmlSyntaxNode test,
             GmlSyntaxNode consequent,
             GmlSyntaxNode alternate
         )
-            : base(context)
+            : base(span)
         {
             Test = AsChild(test);
             Consequent = AsChild(consequent);

@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public List<GmlSyntaxNode> Elements => Children;
 
-        public ArrayExpression(ParserRuleContext context, List<GmlSyntaxNode> elements)
-            : base(context)
+        public ArrayExpression(TextSpan span, List<GmlSyntaxNode> elements)
+            : base(span)
         {
             AsChildren(elements);
         }

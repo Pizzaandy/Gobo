@@ -8,12 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Initializer { get; set; }
 
-        public StructProperty(
-            ParserRuleContext context,
-            GmlSyntaxNode name,
-            GmlSyntaxNode initializer
-        )
-            : base(context)
+        public StructProperty(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode initializer)
+            : base(span)
         {
             Name = AsChild(name);
             Initializer = AsChild(initializer);

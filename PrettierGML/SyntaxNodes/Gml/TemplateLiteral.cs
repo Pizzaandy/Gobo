@@ -7,8 +7,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public List<GmlSyntaxNode> Parts => Children;
 
-        public TemplateLiteral(ParserRuleContext context, List<GmlSyntaxNode> atoms)
-            : base(context)
+        public TemplateLiteral(TextSpan span, List<GmlSyntaxNode> atoms)
+            : base(span)
         {
             Children = AsChildren(atoms);
         }

@@ -12,13 +12,13 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Type { get; set; }
 
         public AssignmentExpression(
-            ParserRuleContext context,
+            TextSpan span,
             string @operator,
             GmlSyntaxNode left,
             GmlSyntaxNode right,
             GmlSyntaxNode type
         )
-            : base(context)
+            : base(span)
         {
             Operator = @operator;
             Left = AsChild(left);

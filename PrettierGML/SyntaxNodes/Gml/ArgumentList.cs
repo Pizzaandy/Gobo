@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public List<GmlSyntaxNode> Arguments => Children;
 
-        public ArgumentList(ParserRuleContext context, List<GmlSyntaxNode> arguments)
-            : base(context)
+        public ArgumentList(TextSpan span, List<GmlSyntaxNode> arguments)
+            : base(span)
         {
             AsChildren(arguments);
         }

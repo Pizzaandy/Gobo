@@ -9,8 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Name { get; set; }
         public GmlSyntaxNode Arguments { get; set; }
 
-        public NewExpression(ParserRuleContext context, GmlSyntaxNode name, GmlSyntaxNode arguments)
-            : base(context)
+        public NewExpression(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode arguments)
+            : base(span)
         {
             Name = AsChild(name);
             Arguments = AsChild(arguments);

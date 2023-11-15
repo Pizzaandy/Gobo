@@ -8,15 +8,9 @@ namespace PrettierGML.SyntaxNodes
     internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     {
         public string Kind => GetType().Name;
-        public int Start => CharacterRange.Start;
-        public int End => CharacterRange.Stop;
         public List<CommentGroup> Comments { get; set; } = new();
 
-        [JsonIgnore]
-        public Range CharacterRange { get; set; } = Range.Invalid;
-
-        [JsonIgnore]
-        public Range TokenRange { get; set; }
+        public TextSpan Span { get; set; }
 
         [JsonIgnore]
         public GmlSyntaxNode? Parent { get; set; }
@@ -44,16 +38,9 @@ namespace PrettierGML.SyntaxNodes
 
         public GmlSyntaxNode() { }
 
-        public GmlSyntaxNode(ParserRuleContext node)
+        public GmlSyntaxNode(TextSpan textSpan)
         {
-            CharacterRange = new Range(node.Start.StartIndex, node.Stop.StopIndex);
-            TokenRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
-        }
-
-        public GmlSyntaxNode(ITerminalNode node)
-        {
-            CharacterRange = new Range(node.Symbol.StartIndex, node.Symbol.StopIndex);
-            TokenRange = new Range(node.SourceInterval.a, node.SourceInterval.b);
+            Span = textSpan;
         }
 
         public static EmptyNode Empty => EmptyNode.Instance;
@@ -93,11 +80,7 @@ namespace PrettierGML.SyntaxNodes
         public Doc PrintRaw(PrintContext ctx)
         {
             Children.ForEach(child => child.MarkCommentsAsPrinted());
-
-            // TODO: factor out Antlr dependency
-            return ctx.Tokens.GetText(
-                new Antlr4.Runtime.Misc.Interval(TokenRange.Start, TokenRange.Stop)
-            );
+            return ctx.SourceText.GetSpan(Span);
         }
 
         public List<Doc> PrintChildren(PrintContext ctx)

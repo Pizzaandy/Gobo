@@ -9,8 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Object { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public WithStatement(ParserRuleContext context, GmlSyntaxNode @object, GmlSyntaxNode body)
-            : base(context)
+        public WithStatement(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode body)
+            : base(span)
         {
             Object = AsChild(@object);
             Body = AsChild(body);

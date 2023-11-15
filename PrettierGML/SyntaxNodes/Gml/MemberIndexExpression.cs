@@ -11,12 +11,12 @@ namespace PrettierGML.SyntaxNodes.Gml
         public string Accessor { get; set; }
 
         public MemberIndexExpression(
-            ParserRuleContext context,
+            TextSpan span,
             GmlSyntaxNode @object,
             List<GmlSyntaxNode> properties,
             string accessor
         )
-            : base(context)
+            : base(span)
         {
             Object = AsChild(@object);
             Properties = AsChildren(properties);

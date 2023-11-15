@@ -9,8 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Test { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public WhileStatement(ParserRuleContext context, GmlSyntaxNode test, GmlSyntaxNode body)
-            : base(context)
+        public WhileStatement(TextSpan span, GmlSyntaxNode test, GmlSyntaxNode body)
+            : base(span)
         {
             Test = AsChild(test);
             Body = AsChild(body);

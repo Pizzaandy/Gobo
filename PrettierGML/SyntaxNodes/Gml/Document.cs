@@ -8,8 +8,8 @@ namespace PrettierGML.SyntaxNodes.Gml
     {
         public List<GmlSyntaxNode> Statements => Children;
 
-        public Document(ParserRuleContext context, List<GmlSyntaxNode> body)
-            : base(context)
+        public Document(TextSpan span, List<GmlSyntaxNode> body)
+            : base(span)
         {
             AsChildren(body);
         }

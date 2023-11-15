@@ -11,12 +11,12 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Initializer { get; set; }
 
         public VariableDeclarator(
-            ParserRuleContext context,
+            TextSpan span,
             GmlSyntaxNode id,
             GmlSyntaxNode type,
             GmlSyntaxNode initializer
         )
-            : base(context)
+            : base(span)
         {
             Id = AsChild(id);
             Type = AsChild(type);

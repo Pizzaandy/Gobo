@@ -9,8 +9,8 @@ namespace PrettierGML.SyntaxNodes.Gml
         public GmlSyntaxNode Id { get; set; }
         public GmlSyntaxNode Body { get; set; }
 
-        public CatchProduction(ParserRuleContext context, GmlSyntaxNode id, GmlSyntaxNode body)
-            : base(context)
+        public CatchProduction(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode body)
+            : base(span)
         {
             Id = AsChild(id);
             Body = AsChild(body);
