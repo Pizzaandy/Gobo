@@ -1,41 +1,39 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class MemberDotExpression : GmlSyntaxNode, IMemberChainable
 {
-    internal sealed class MemberDotExpression : GmlSyntaxNode, IMemberChainable
+    public GmlSyntaxNode Object { get; set; }
+    public GmlSyntaxNode Property { get; set; }
+
+    public MemberDotExpression(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode property)
+        : base(span)
     {
-        public GmlSyntaxNode Object { get; set; }
-        public GmlSyntaxNode Property { get; set; }
+        Object = AsChild(@object);
+        Property = AsChild(property);
+    }
 
-        public MemberDotExpression(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode property)
-            : base(span)
-        {
-            Object = AsChild(@object);
-            Property = AsChild(property);
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return MemberChain.PrintMemberChain(ctx, this);
+    }
 
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return MemberChain.PrintMemberChain(ctx, this);
-        }
+    public Doc PrintInChain(PrintContext ctx)
+    {
+        Property.PrintOwnComments = false;
 
-        public Doc PrintInChain(PrintContext ctx)
-        {
-            Property.PrintOwnComments = false;
+        return Doc.Concat(
+            Property.PrintLeadingComments(ctx),
+            ".",
+            Property.Print(ctx),
+            Property.PrintTrailingComments(ctx)
+        );
+    }
 
-            return Doc.Concat(
-                Property.PrintLeadingComments(ctx),
-                ".",
-                Property.Print(ctx),
-                Property.PrintTrailingComments(ctx)
-            );
-        }
-
-        public void SetObject(GmlSyntaxNode node)
-        {
-            Object = AsChild(node);
-        }
+    public void SetObject(GmlSyntaxNode node)
+    {
+        Object = AsChild(node);
     }
 }

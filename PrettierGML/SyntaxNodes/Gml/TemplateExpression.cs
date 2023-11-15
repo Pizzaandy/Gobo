@@ -1,26 +1,24 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class TemplateExpression : GmlSyntaxNode
 {
-    internal sealed class TemplateExpression : GmlSyntaxNode
+    public GmlSyntaxNode Expression { get; set; }
+
+    public TemplateExpression(TextSpan span, GmlSyntaxNode expression)
+        : base(span)
     {
-        public GmlSyntaxNode Expression { get; set; }
+        Expression = AsChild(expression);
+    }
 
-        public TemplateExpression(TextSpan span, GmlSyntaxNode expression)
-            : base(span)
-        {
-            Expression = AsChild(expression);
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Doc.Group(
-                "{",
-                Doc.Indent(Doc.SoftLine, Expression.Print(ctx)),
-                Doc.SoftLine,
-                "}"
-            );
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Doc.Group(
+            "{",
+            Doc.Indent(Doc.SoftLine, Expression.Print(ctx)),
+            Doc.SoftLine,
+            "}"
+        );
     }
 }

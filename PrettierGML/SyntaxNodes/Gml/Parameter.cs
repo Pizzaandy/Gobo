@@ -1,46 +1,44 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class Parameter : GmlSyntaxNode
 {
-    internal sealed class Parameter : GmlSyntaxNode
+    public GmlSyntaxNode Name { get; set; }
+    public GmlSyntaxNode Type { get; set; }
+    public GmlSyntaxNode Initializer { get; set; }
+
+    public Parameter(
+        TextSpan span,
+        GmlSyntaxNode name,
+        GmlSyntaxNode type,
+        GmlSyntaxNode initializer
+    )
+        : base(span)
     {
-        public GmlSyntaxNode Name { get; set; }
-        public GmlSyntaxNode Type { get; set; }
-        public GmlSyntaxNode Initializer { get; set; }
+        Name = AsChild(name);
+        Type = AsChild(type);
+        Initializer = AsChild(initializer);
+    }
 
-        public Parameter(
-            TextSpan span,
-            GmlSyntaxNode name,
-            GmlSyntaxNode type,
-            GmlSyntaxNode initializer
-        )
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        var typeAnnotation = Type.Print(ctx);
+
+        if (Initializer.IsEmpty)
         {
-            Name = AsChild(name);
-            Type = AsChild(type);
-            Initializer = AsChild(initializer);
+            return Doc.Concat(Name.Print(ctx), typeAnnotation);
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            var typeAnnotation = Type.Print(ctx);
-
-            if (Initializer.IsEmpty)
-            {
-                return Doc.Concat(Name.Print(ctx), typeAnnotation);
-            }
-            else
-            {
-                return Doc.Concat(
-                    Name.Print(ctx),
-                    typeAnnotation,
-                    " ",
-                    "=",
-                    " ",
-                    Initializer.Print(ctx)
-                );
-            }
+            return Doc.Concat(
+                Name.Print(ctx),
+                typeAnnotation,
+                " ",
+                "=",
+                " ",
+                Initializer.Print(ctx)
+            );
         }
     }
 }

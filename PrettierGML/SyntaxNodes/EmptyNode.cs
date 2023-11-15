@@ -1,18 +1,13 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using PrettierGML.Printer.DocTypes;
-using PrettierGML.SyntaxNodes.Gml;
-using System.Net.Http.Headers;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes
+namespace PrettierGML.SyntaxNodes;
+
+internal class EmptyNode : GmlSyntaxNode
 {
-    internal class EmptyNode : GmlSyntaxNode
-    {
-        public static EmptyNode Instance { get; } = new();
+    public static EmptyNode Instance { get; } = new();
 
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Doc.Null;
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Doc.Null;
     }
 }

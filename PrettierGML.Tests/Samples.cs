@@ -3,67 +3,66 @@ using System.Data;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
-namespace PrettierGML.Tests
+namespace PrettierGML.Tests;
+
+public class Samples
 {
-    public class Samples
+    private readonly FormatOptions options = FormatOptions.DefaultTestOptions;
+
+    private readonly ITestOutputHelper output;
+
+    public const string TestFileExtension = ".test";
+
+    private const string ActualFileExtension = ".actual";
+
+    public Samples(ITestOutputHelper output)
     {
-        private readonly FormatOptions options = FormatOptions.DefaultTestOptions;
-
-        private readonly ITestOutputHelper output;
-
-        public const string TestFileExtension = ".test";
-
-        private const string ActualFileExtension = ".actual";
-
-        public Samples(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
-
-        [Theory]
-        [ClassData(typeof(SampleFileProvider))]
-        public async Task FormatSamples(TestFile test)
-        {
-            var filePath = test.FilePath;
-
-            var input = await File.ReadAllTextAsync(filePath);
-
-            var firstPass = GmlFormatter.Format(input, options);
-
-            output.WriteLine($"Parse: {firstPass.ParseTimeMs}");
-            output.WriteLine($"Format: {firstPass.FormatTimeMs}");
-            output.WriteLine($"Total: {firstPass.TotalTimeMs}");
-
-            var secondPass = GmlFormatter.Format(firstPass.Output, options);
-
-            var secondDiff = StringDiffer.PrintFirstDifference(firstPass.Output, secondPass.Output);
-            if (secondDiff != string.Empty)
-            {
-                throw new XunitException($"Second pass:\n{secondDiff}");
-            }
-
-            await File.WriteAllTextAsync(
-                filePath.Replace(TestFileExtension, ActualFileExtension),
-                firstPass.Output
-            );
-        }
+        this.output = output;
     }
 
-    public class SampleFileProvider : IEnumerable<object[]>
+    [Theory]
+    [ClassData(typeof(SampleFileProvider))]
+    public async Task FormatSamples(TestFile test)
     {
-        private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent(
-            "PrettierGML.Tests"
+        var filePath = test.FilePath;
+
+        var input = await File.ReadAllTextAsync(filePath);
+
+        var firstPass = GmlFormatter.Format(input, options);
+
+        output.WriteLine($"Parse: {firstPass.ParseTimeMs}");
+        output.WriteLine($"Format: {firstPass.FormatTimeMs}");
+        output.WriteLine($"Total: {firstPass.TotalTimeMs}");
+
+        var secondPass = GmlFormatter.Format(firstPass.Output, options);
+
+        var secondDiff = StringDiffer.PrintFirstDifference(firstPass.Output, secondPass.Output);
+        if (secondDiff != string.Empty)
+        {
+            throw new XunitException($"Second pass:\n{secondDiff}");
+        }
+
+        await File.WriteAllTextAsync(
+            filePath.Replace(TestFileExtension, ActualFileExtension),
+            firstPass.Output
         );
-
-        public SampleFileProvider() { }
-
-        public IEnumerator<object[]> GetEnumerator()
-        {
-            var filePath = Path.Combine(rootDirectory.FullName, "Gml", "Samples");
-            var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
-            return files.Select(fp => new object[] { new TestFile(fp) }).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
+}
+
+public class SampleFileProvider : IEnumerable<object[]>
+{
+    private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent(
+        "PrettierGML.Tests"
+    );
+
+    public SampleFileProvider() { }
+
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        var filePath = Path.Combine(rootDirectory.FullName, "Gml", "Samples");
+        var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
+        return files.Select(fp => new object[] { new TestFile(fp) }).GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }

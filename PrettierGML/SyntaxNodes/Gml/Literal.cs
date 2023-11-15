@@ -1,64 +1,61 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Tree;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using System.Text.RegularExpressions;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+// TODO: disambiguate literal types?
+internal sealed partial class Literal : GmlSyntaxNode
 {
-    // TODO: disambiguate literal types?
-    internal sealed partial class Literal : GmlSyntaxNode
+    public string Text { get; set; }
+
+    [GeneratedRegex("^[0-9]+$", RegexOptions.Compiled)]
+    private static partial Regex IsInteger();
+
+    [GeneratedRegex("^[0-9]*[.][0-9]+$", RegexOptions.Compiled)]
+    private static partial Regex IsDecimal();
+
+    private static Regex isInteger = IsInteger();
+
+    private static Regex isDecimal = IsDecimal();
+
+    public static string Undefined = "undefined";
+
+    public Literal(TextSpan span, string text)
+        : base(span)
     {
-        public string Text { get; set; }
+        Text = text;
+    }
 
-        [GeneratedRegex("^[0-9]+$", RegexOptions.Compiled)]
-        private static partial Regex IsInteger();
-
-        [GeneratedRegex("^[0-9]*[.][0-9]+$", RegexOptions.Compiled)]
-        private static partial Regex IsDecimal();
-
-        private static Regex isInteger = IsInteger();
-
-        private static Regex isDecimal = IsDecimal();
-
-        public static string Undefined = "undefined";
-
-        public Literal(TextSpan span, string text)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (isInteger.IsMatch(Text))
         {
-            Text = text;
+            var trimmed = Text.TrimStart('0');
+            if (trimmed.Length == 0)
+            {
+                return "0";
+            }
+            return trimmed;
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else if (isDecimal.IsMatch(Text))
         {
-            if (isInteger.IsMatch(Text))
+            var trimmed = Text.TrimStart('0');
+            if (trimmed[0] == '.')
             {
-                var trimmed = Text.TrimStart('0');
-                if (trimmed.Length == 0)
-                {
-                    return "0";
-                }
-                return trimmed;
+                return "0" + trimmed;
             }
-            else if (isDecimal.IsMatch(Text))
-            {
-                var trimmed = Text.TrimStart('0');
-                if (trimmed[0] == '.')
-                {
-                    return "0" + trimmed;
-                }
-                return trimmed;
-            }
-            return Text;
+            return trimmed;
         }
+        return Text;
+    }
 
-        public override int GetHashCode()
+    public override int GetHashCode()
+    {
+        // TODO: separate classes for literals
+        if (Text == Undefined)
         {
-            // TODO: separate classes for literals
-            if (Text == Undefined)
-            {
-                return Undefined.GetHashCode();
-            }
-            return base.GetHashCode();
+            return Undefined.GetHashCode();
         }
+        return base.GetHashCode();
     }
 }

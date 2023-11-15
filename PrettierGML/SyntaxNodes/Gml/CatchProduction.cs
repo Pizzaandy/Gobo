@@ -1,31 +1,29 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class CatchProduction : GmlSyntaxNode
 {
-    internal sealed class CatchProduction : GmlSyntaxNode
+    public GmlSyntaxNode Id { get; set; }
+    public GmlSyntaxNode Body { get; set; }
+
+    public CatchProduction(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode body)
+        : base(span)
     {
-        public GmlSyntaxNode Id { get; set; }
-        public GmlSyntaxNode Body { get; set; }
+        Id = AsChild(id);
+        Body = AsChild(body);
+    }
 
-        public CatchProduction(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode body)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (Id.IsEmpty)
         {
-            Id = AsChild(id);
-            Body = AsChild(body);
+            return Doc.Concat("catch", " ", Statement.EnsureStatementInBlock(ctx, Body));
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            if (Id.IsEmpty)
-            {
-                return Doc.Concat("catch", " ", Statement.EnsureStatementInBlock(ctx, Body));
-            }
-            else
-            {
-                return Statement.PrintControlFlowStatement(ctx, "catch", Id, Body);
-            }
+            return Statement.PrintControlFlowStatement(ctx, "catch", Id, Body);
         }
     }
 }

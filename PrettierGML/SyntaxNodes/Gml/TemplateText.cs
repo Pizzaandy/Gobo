@@ -1,28 +1,20 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
-using PrettierGML.SyntaxNodes.PrintHelpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class TemplateText : GmlSyntaxNode
 {
-    internal sealed class TemplateText : GmlSyntaxNode
+    public string Text { get; set; }
+
+    public TemplateText(TextSpan span, string text)
+        : base(span)
     {
-        public string Text { get; set; }
+        Text = text;
+    }
 
-        public TemplateText(TextSpan span, string text)
-            : base(span)
-        {
-            Text = text;
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            // Template strings don't contain line breaks
-            return Text;
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        // Template strings don't contain line breaks
+        return Text;
     }
 }

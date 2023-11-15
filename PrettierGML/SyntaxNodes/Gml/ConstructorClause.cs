@@ -1,30 +1,28 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class ConstructorClause : GmlSyntaxNode
 {
-    internal sealed class ConstructorClause : GmlSyntaxNode
+    public GmlSyntaxNode Id { get; set; }
+    public GmlSyntaxNode Arguments { get; set; }
+
+    public ConstructorClause(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode parameters)
+        : base(span)
     {
-        public GmlSyntaxNode Id { get; set; }
-        public GmlSyntaxNode Arguments { get; set; }
+        Id = AsChild(id);
+        Arguments = AsChild(parameters);
+    }
 
-        public ConstructorClause(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode parameters)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (!Id.IsEmpty)
         {
-            Id = AsChild(id);
-            Arguments = AsChild(parameters);
+            return Doc.Concat(": ", Id.Print(ctx), Arguments.Print(ctx), " ", "constructor");
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            if (!Id.IsEmpty)
-            {
-                return Doc.Concat(": ", Id.Print(ctx), Arguments.Print(ctx), " ", "constructor");
-            }
-            else
-            {
-                return Doc.Concat(" ", "constructor");
-            }
+            return Doc.Concat(" ", "constructor");
         }
     }
 }

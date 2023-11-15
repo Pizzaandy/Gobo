@@ -1,82 +1,80 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class Block : GmlSyntaxNode
 {
-    internal sealed class Block : GmlSyntaxNode
+    public List<GmlSyntaxNode> Statements => Children;
+
+    public Block(TextSpan span, List<GmlSyntaxNode> body)
+        : base(span)
     {
-        public List<GmlSyntaxNode> Statements => Children;
+        AsChildren(body);
+    }
 
-        public Block(TextSpan span, List<GmlSyntaxNode> body)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (Children.Count == 0)
         {
-            AsChildren(body);
+            return PrintEmptyBlock(ctx, this);
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            if (Children.Count == 0)
-            {
-                return PrintEmptyBlock(ctx, this);
-            }
-            else
-            {
-                return WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
-            }
+            return WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
         }
+    }
 
-        /// <summary>
-        /// Wraps a doc in brackets and line breaks.
-        /// Adds a line break in front of the block depending on brace style.
-        /// </summary>
-        public static Doc WrapInBlock(PrintContext ctx, Doc bodyDoc)
+    /// <summary>
+    /// Wraps a doc in brackets and line breaks.
+    /// Adds a line break in front of the block depending on brace style.
+    /// </summary>
+    public static Doc WrapInBlock(PrintContext ctx, Doc bodyDoc)
+    {
+        Doc leadingWhitespace =
+            ctx.Options.BraceStyle is BraceStyle.NewLine
+                ? Doc.HardLineIfNoPreviousLine
+                : Doc.Null;
+
+        return Doc.Concat(
+            leadingWhitespace,
+            "{",
+            Doc.Indent(Doc.HardLine, bodyDoc),
+            Doc.HardLine,
+            "}"
+        );
+    }
+
+    /// <summary>
+    /// Print an empty block statement.
+    /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
+    /// </summary>
+    public static Doc PrintEmptyBlock(
+        PrintContext ctx,
+        GmlSyntaxNode? danglingCommentSource = null
+    )
+    {
+        if (danglingCommentSource is null || danglingCommentSource.DanglingComments.Count == 0)
         {
-            Doc leadingWhitespace =
-                ctx.Options.BraceStyle is BraceStyle.NewLine
-                    ? Doc.HardLineIfNoPreviousLine
-                    : Doc.Null;
-
-            return Doc.Concat(
-                leadingWhitespace,
-                "{",
-                Doc.Indent(Doc.HardLine, bodyDoc),
-                Doc.HardLine,
-                "}"
-            );
+            return EmptyBlock;
         }
-
-        /// <summary>
-        /// Print an empty block statement.
-        /// If any dangling comments exist on danglingCommentSource, they are printed inside the block.
-        /// </summary>
-        public static Doc PrintEmptyBlock(
-            PrintContext ctx,
-            GmlSyntaxNode? danglingCommentSource = null
-        )
+        else
         {
-            if (danglingCommentSource is null || danglingCommentSource.DanglingComments.Count == 0)
-            {
-                return EmptyBlock;
-            }
-            else
-            {
-                return WrapInBlock(ctx, danglingCommentSource.PrintDanglingComments(ctx));
-            }
+            return WrapInBlock(ctx, danglingCommentSource.PrintDanglingComments(ctx));
         }
+    }
 
-        public static Doc EmptyBlock => "{}";
+    public static Doc EmptyBlock => "{}";
 
-        public override int GetHashCode()
+    public override int GetHashCode()
+    {
+        if (Children.Count == 1)
         {
-            if (Children.Count == 1)
-            {
-                return Children.First().GetHashCode();
-            }
-            else
-            {
-                return base.GetHashCode();
-            }
+            return Children.First().GetHashCode();
+        }
+        else
+        {
+            return base.GetHashCode();
         }
     }
 }

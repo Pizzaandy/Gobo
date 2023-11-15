@@ -1,31 +1,29 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class EnumDeclaration : GmlSyntaxNode
 {
-    internal sealed class EnumDeclaration : GmlSyntaxNode
+    public GmlSyntaxNode Name { get; set; }
+    public GmlSyntaxNode Members { get; set; }
+
+    public EnumDeclaration(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode members)
+        : base(span)
     {
-        public GmlSyntaxNode Name { get; set; }
-        public GmlSyntaxNode Members { get; set; }
+        Name = AsChild(name);
+        Members = AsChild(members);
+    }
 
-        public EnumDeclaration(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode members)
-            : base(span)
-        {
-            Name = AsChild(name);
-            Members = AsChild(members);
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Doc.Concat(
-                "enum",
-                " ",
-                Name.Print(ctx),
-                ctx.Options.BraceStyle == BraceStyle.NewLine
-                    ? Doc.HardLineIfNoPreviousLine
-                    : Doc.CollapsedSpace,
-                Members.Print(ctx)
-            );
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Doc.Concat(
+            "enum",
+            " ",
+            Name.Print(ctx),
+            ctx.Options.BraceStyle == BraceStyle.NewLine
+                ? Doc.HardLineIfNoPreviousLine
+                : Doc.CollapsedSpace,
+            Members.Print(ctx)
+        );
     }
 }

@@ -1,21 +1,19 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class DefineStatement : GmlSyntaxNode
 {
-    internal sealed class DefineStatement : GmlSyntaxNode
+    public string Name { get; set; }
+
+    public DefineStatement(TextSpan span, string name)
+        : base(span)
     {
-        public string Name { get; set; }
+        Name = name;
+    }
 
-        public DefineStatement(TextSpan span, string name)
-            : base(span)
-        {
-            Name = name;
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Doc.Concat("#define", " ", Name);
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Doc.Concat("#define", " ", Name);
     }
 }

@@ -1,154 +1,152 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class BinaryExpression : GmlSyntaxNode
 {
-    internal sealed class BinaryExpression : GmlSyntaxNode
+    public string Operator { get; set; }
+    public GmlSyntaxNode Left { get; set; }
+    public GmlSyntaxNode Right { get; set; }
+
+    public BinaryExpression(
+        TextSpan span,
+        string @operator,
+        GmlSyntaxNode left,
+        GmlSyntaxNode right
+    )
+        : base(span)
     {
-        public string Operator { get; set; }
-        public GmlSyntaxNode Left { get; set; }
-        public GmlSyntaxNode Right { get; set; }
+        Operator = @operator switch
+        {
+            "and" => "&&",
+            "or" => "||",
+            "xor" => "^^",
+            "<>" => "!=",
+            "mod" => "%",
+            "=" => "==",
+            _ => @operator
+        };
 
-        public BinaryExpression(
-            TextSpan span,
-            string @operator,
-            GmlSyntaxNode left,
-            GmlSyntaxNode right
+        Left = AsChild(left);
+        Right = AsChild(right);
+    }
+
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        var docs = PrintBinaryExpression(this, ctx);
+
+        var shouldNotIndent =
+            Parent
+                is AssignmentExpression
+                    or VariableDeclarator
+                    or IfStatement
+                    or DoStatement
+                    or WhileStatement
+                    or ParenthesizedExpression
+            || Parent is ConditionalExpression conditionalExpression
+                && conditionalExpression.WhenTrue != this
+                && conditionalExpression.WhenFalse != this;
+
+        return shouldNotIndent
+            ? Doc.Concat(docs)
+            : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
+    }
+
+    // Because GML operator precedence is inconsistent across platforms, we can't
+    // group binary expressions in a syntactically meaningful way like Prettier. Our parser uses an
+    // inaccurate operator precedence to optimize for readability rather than correctness.
+    public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node, PrintContext ctx)
+    {
+        if (node is not BinaryExpression binaryExpression)
+        {
+            return new List<Doc> { Doc.Group(node.Print(ctx)) };
+        }
+
+        var parts = new List<Doc>();
+
+        var shouldGroup =
+            GetKindOrOperator(binaryExpression.Parent!) != GetKindOrOperator(binaryExpression)
+            && GetPrecedence(binaryExpression) != GetPrecedence(binaryExpression.Parent!)
+            && binaryExpression.Left is not BinaryExpression
+            && binaryExpression.Right is not BinaryExpression;
+
+        if (
+            binaryExpression.Left is BinaryExpression leftBinary
+            && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
         )
-            : base(span)
         {
-            Operator = @operator switch
-            {
-                "and" => "&&",
-                "or" => "||",
-                "xor" => "^^",
-                "<>" => "!=",
-                "mod" => "%",
-                "=" => "==",
-                _ => @operator
-            };
-
-            Left = AsChild(left);
-            Right = AsChild(right);
+            parts.AddRange(PrintBinaryExpression(leftBinary, ctx));
+        }
+        else
+        {
+            parts.Add(binaryExpression.Left.Print(ctx));
         }
 
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            var docs = PrintBinaryExpression(this, ctx);
+        binaryExpression.Right.PrintOwnComments = false;
 
-            var shouldNotIndent =
-                Parent
-                    is AssignmentExpression
-                        or VariableDeclarator
-                        or IfStatement
-                        or DoStatement
-                        or WhileStatement
-                        or ParenthesizedExpression
-                || Parent is ConditionalExpression conditionalExpression
-                    && conditionalExpression.WhenTrue != this
-                    && conditionalExpression.WhenFalse != this;
-
-            return shouldNotIndent
-                ? Doc.Concat(docs)
-                : Doc.Group(docs[0], Doc.Indent(docs.Skip(1).ToList()));
-        }
-
-        // Because GML operator precedence is inconsistent across platforms, we can't
-        // group binary expressions in a syntactically meaningful way like Prettier. Our parser uses an
-        // inaccurate operator precedence to optimize for readability rather than correctness.
-        public static List<Doc> PrintBinaryExpression(GmlSyntaxNode node, PrintContext ctx)
-        {
-            if (node is not BinaryExpression binaryExpression)
-            {
-                return new List<Doc> { Doc.Group(node.Print(ctx)) };
-            }
-
-            var parts = new List<Doc>();
-
-            var shouldGroup =
-                GetKindOrOperator(binaryExpression.Parent!) != GetKindOrOperator(binaryExpression)
-                && GetPrecedence(binaryExpression) != GetPrecedence(binaryExpression.Parent!)
-                && binaryExpression.Left is not BinaryExpression
-                && binaryExpression.Right is not BinaryExpression;
-
-            if (
-                binaryExpression.Left is BinaryExpression leftBinary
-                && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
+        var right = Doc.Concat(
+            Doc.Line,
+            binaryExpression.Right.PrintWithOwnComments(
+                ctx,
+                Doc.Concat(binaryExpression.Operator, " ", binaryExpression.Right.Print(ctx))
             )
-            {
-                parts.AddRange(PrintBinaryExpression(leftBinary, ctx));
-            }
-            else
-            {
-                parts.Add(binaryExpression.Left.Print(ctx));
-            }
+        );
 
-            binaryExpression.Right.PrintOwnComments = false;
+        parts.Add(shouldGroup ? Doc.Group(right) : right);
 
-            var right = Doc.Concat(
-                Doc.Line,
-                binaryExpression.Right.PrintWithOwnComments(
-                    ctx,
-                    Doc.Concat(binaryExpression.Operator, " ", binaryExpression.Right.Print(ctx))
-                )
-            );
+        return parts;
+    }
 
-            parts.Add(shouldGroup ? Doc.Group(right) : right);
+    private static bool ShouldFlatten(string parentToken, string nodeToken)
+    {
+        return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
+    }
 
-            return parts;
-        }
-
-        private static bool ShouldFlatten(string parentToken, string nodeToken)
+    private static string GetKindOrOperator(GmlSyntaxNode node)
+    {
+        if (node is BinaryExpression binaryExpression)
         {
-            return GetPrecedence(parentToken) == GetPrecedence(nodeToken);
+            return binaryExpression.Operator;
         }
+        return node is null ? "null" : node.Kind;
+    }
 
-        private static string GetKindOrOperator(GmlSyntaxNode node)
+    private static int GetPrecedence(GmlSyntaxNode node)
+    {
+        if (node is BinaryExpression binaryExpression)
         {
-            if (node is BinaryExpression binaryExpression)
-            {
-                return binaryExpression.Operator;
-            }
-            return node is null ? "null" : node.Kind;
+            return GetPrecedence(binaryExpression.Operator);
         }
 
-        private static int GetPrecedence(GmlSyntaxNode node)
+        return -1;
+    }
+
+    private static int GetPrecedence(string @operator)
+    {
+        return @operator switch
         {
-            if (node is BinaryExpression binaryExpression)
-            {
-                return GetPrecedence(binaryExpression.Operator);
-            }
-
-            return -1;
-        }
-
-        private static int GetPrecedence(string @operator)
-        {
-            return @operator switch
-            {
-                "*" => 21,
-                "/" => 21,
-                "%" => 21,
-                "div" => 21,
-                "+" => 16,
-                "-" => 16,
-                "??" => 15,
-                "<<" => 14,
-                ">>" => 14,
-                "||" => 12,
-                "&&" => 11,
-                "^^" => 10,
-                "==" => 9,
-                "!=" => 8,
-                "<" => 7,
-                ">" => 7,
-                "<=" => 7,
-                ">=" => 7,
-                "&" => 3,
-                "|" => 2,
-                "^" => 1,
-                _ => throw new Exception($"No precedence defined for {@operator}")
-            };
-        }
+            "*" => 21,
+            "/" => 21,
+            "%" => 21,
+            "div" => 21,
+            "+" => 16,
+            "-" => 16,
+            "??" => 15,
+            "<<" => 14,
+            ">>" => 14,
+            "||" => 12,
+            "&&" => 11,
+            "^^" => 10,
+            "==" => 9,
+            "!=" => 8,
+            "<" => 7,
+            ">" => 7,
+            "<=" => 7,
+            ">=" => 7,
+            "&" => 3,
+            "|" => 2,
+            "^" => 1,
+            _ => throw new Exception($"No precedence defined for {@operator}")
+        };
     }
 }

@@ -1,32 +1,30 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class StructProperty : GmlSyntaxNode
 {
-    internal sealed class StructProperty : GmlSyntaxNode
+    public GmlSyntaxNode Name { get; set; }
+    public GmlSyntaxNode Initializer { get; set; }
+
+    public StructProperty(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode initializer)
+        : base(span)
     {
-        public GmlSyntaxNode Name { get; set; }
-        public GmlSyntaxNode Initializer { get; set; }
+        Name = AsChild(name);
+        Initializer = AsChild(initializer);
+    }
 
-        public StructProperty(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode initializer)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        var name = Name is Literal literal ? literal.Text.Trim('"') : Name.Print(ctx);
+
+        if (Initializer.IsEmpty)
         {
-            Name = AsChild(name);
-            Initializer = AsChild(initializer);
+            return name;
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            var name = Name is Literal literal ? literal.Text.Trim('"') : Name.Print(ctx);
-
-            if (Initializer.IsEmpty)
-            {
-                return name;
-            }
-            else
-            {
-                return Doc.Concat(name, ":", " ", Initializer.Print(ctx));
-            }
+            return Doc.Concat(name, ":", " ", Initializer.Print(ctx));
         }
     }
 }

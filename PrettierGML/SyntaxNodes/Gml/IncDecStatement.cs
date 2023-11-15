@@ -1,37 +1,35 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class IncDecStatement : GmlSyntaxNode
 {
-    internal sealed class IncDecStatement : GmlSyntaxNode
+    public string Operator { get; set; }
+    public GmlSyntaxNode Argument { get; set; }
+    public bool IsPrefix { get; set; }
+
+    public IncDecStatement(
+        TextSpan span,
+        string @operator,
+        GmlSyntaxNode argument,
+        bool isPrefix
+    )
+        : base(span)
     {
-        public string Operator { get; set; }
-        public GmlSyntaxNode Argument { get; set; }
-        public bool IsPrefix { get; set; }
+        Operator = @operator;
+        Argument = AsChild(argument);
+        IsPrefix = isPrefix;
+    }
 
-        public IncDecStatement(
-            TextSpan span,
-            string @operator,
-            GmlSyntaxNode argument,
-            bool isPrefix
-        )
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (IsPrefix)
         {
-            Operator = @operator;
-            Argument = AsChild(argument);
-            IsPrefix = isPrefix;
+            return Doc.Concat(Operator, Argument.Print(ctx));
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            if (IsPrefix)
-            {
-                return Doc.Concat(Operator, Argument.Print(ctx));
-            }
-            else
-            {
-                return Doc.Concat(Argument.Print(ctx), Operator);
-            }
+            return Doc.Concat(Argument.Print(ctx), Operator);
         }
     }
 }

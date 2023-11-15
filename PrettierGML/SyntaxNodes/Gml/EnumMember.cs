@@ -1,30 +1,28 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class EnumMember : GmlSyntaxNode
 {
-    internal sealed class EnumMember : GmlSyntaxNode
+    public GmlSyntaxNode Id { get; set; }
+    public GmlSyntaxNode Initializer { get; set; }
+
+    public EnumMember(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode initializer)
+        : base(span)
     {
-        public GmlSyntaxNode Id { get; set; }
-        public GmlSyntaxNode Initializer { get; set; }
+        Id = AsChild(id);
+        Initializer = AsChild(initializer);
+    }
 
-        public EnumMember(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode initializer)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (Initializer.IsEmpty)
         {
-            Id = AsChild(id);
-            Initializer = AsChild(initializer);
+            return Id.Print(ctx);
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            if (Initializer.IsEmpty)
-            {
-                return Id.Print(ctx);
-            }
-            else
-            {
-                return Doc.Concat(Id.Print(ctx), " ", "=", " ", Initializer.Print(ctx));
-            }
+            return Doc.Concat(Id.Print(ctx), " ", "=", " ", Initializer.Print(ctx));
         }
     }
 }

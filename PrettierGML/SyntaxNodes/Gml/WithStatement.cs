@@ -1,24 +1,22 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class WithStatement : GmlSyntaxNode
 {
-    internal sealed class WithStatement : GmlSyntaxNode
+    public GmlSyntaxNode Object { get; set; }
+    public GmlSyntaxNode Body { get; set; }
+
+    public WithStatement(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode body)
+        : base(span)
     {
-        public GmlSyntaxNode Object { get; set; }
-        public GmlSyntaxNode Body { get; set; }
+        Object = AsChild(@object);
+        Body = AsChild(body);
+    }
 
-        public WithStatement(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode body)
-            : base(span)
-        {
-            Object = AsChild(@object);
-            Body = AsChild(body);
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Statement.PrintControlFlowStatement(ctx, "with", Object, Body);
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Statement.PrintControlFlowStatement(ctx, "with", Object, Body);
     }
 }

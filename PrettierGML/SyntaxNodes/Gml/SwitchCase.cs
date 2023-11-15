@@ -1,52 +1,50 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class SwitchCase : GmlSyntaxNode
 {
-    internal sealed class SwitchCase : GmlSyntaxNode
+    public GmlSyntaxNode Test { get; set; }
+    public List<GmlSyntaxNode> Statements { get; set; }
+
+    public SwitchCase(TextSpan span, GmlSyntaxNode test, List<GmlSyntaxNode> statements)
+        : base(span)
     {
-        public GmlSyntaxNode Test { get; set; }
-        public List<GmlSyntaxNode> Statements { get; set; }
+        Test = AsChild(test);
+        Statements = AsChildren(statements);
+    }
 
-        public SwitchCase(TextSpan span, GmlSyntaxNode test, List<GmlSyntaxNode> statements)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        var caseText = Test.IsEmpty ? "default" : $"{"case"} ";
+
+        Doc printedStatements = Doc.Null;
+
+        if (Statements.Count > 0)
         {
-            Test = AsChild(test);
-            Statements = AsChildren(statements);
-        }
+            var onlyBlock = Statements.Count == 1 && Statements.First() is Block;
 
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            var caseText = Test.IsEmpty ? "default" : $"{"case"} ";
-
-            Doc printedStatements = Doc.Null;
-
-            if (Statements.Count > 0)
+            if (onlyBlock)
             {
-                var onlyBlock = Statements.Count == 1 && Statements.First() is Block;
-
-                if (onlyBlock)
-                {
-                    printedStatements = Doc.Concat(
-                        " ",
-                        Statement.PrintStatement(ctx, Statements.First())
-                    );
-                }
-                else
-                {
-                    printedStatements = Doc.Indent(
-                        Doc.HardLine,
-                        Statement.PrintStatements(ctx, Statements)
-                    );
-                }
+                printedStatements = Doc.Concat(
+                    " ",
+                    Statement.PrintStatement(ctx, Statements.First())
+                );
             }
-
-            return Doc.Concat(
-                caseText,
-                Doc.Concat(Test.Print(ctx), ":"),
-                Statements.Count > 0 ? printedStatements : Doc.Null
-            );
+            else
+            {
+                printedStatements = Doc.Indent(
+                    Doc.HardLine,
+                    Statement.PrintStatements(ctx, Statements)
+                );
+            }
         }
+
+        return Doc.Concat(
+            caseText,
+            Doc.Concat(Test.Print(ctx), ":"),
+            Statements.Count > 0 ? printedStatements : Doc.Null
+        );
     }
 }

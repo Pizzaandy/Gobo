@@ -1,19 +1,18 @@
 ﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal class UndefinedArgument : EmptyNode
 {
-    internal class UndefinedArgument : EmptyNode
+    public static new UndefinedArgument Instance { get; } = new();
+
+    public override Doc PrintNode(PrintContext ctx)
     {
-        public static new UndefinedArgument Instance { get; } = new();
+        return Literal.Undefined;
+    }
 
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Literal.Undefined;
-        }
-
-        public override int GetHashCode()
-        {
-            return Literal.Undefined.GetHashCode();
-        }
+    public override int GetHashCode()
+    {
+        return Literal.Undefined.GetHashCode();
     }
 }

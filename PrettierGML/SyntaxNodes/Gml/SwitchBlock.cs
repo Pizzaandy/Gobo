@@ -1,29 +1,27 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class SwitchBlock : GmlSyntaxNode
 {
-    internal sealed class SwitchBlock : GmlSyntaxNode
+    public List<GmlSyntaxNode> Cases => Children;
+
+    public SwitchBlock(TextSpan span, List<GmlSyntaxNode> cases)
+        : base(span)
     {
-        public List<GmlSyntaxNode> Cases => Children;
+        AsChildren(cases);
+    }
 
-        public SwitchBlock(TextSpan span, List<GmlSyntaxNode> cases)
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        if (Children.Count == 0)
         {
-            AsChildren(cases);
+            return Block.PrintEmptyBlock(ctx, this);
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            if (Children.Count == 0)
-            {
-                return Block.PrintEmptyBlock(ctx, this);
-            }
-            else
-            {
-                return Block.WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
-            }
+            return Block.WrapInBlock(ctx, Statement.PrintStatements(ctx, Children));
         }
     }
 }

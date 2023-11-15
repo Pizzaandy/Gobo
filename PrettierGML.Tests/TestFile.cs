@@ -1,19 +1,18 @@
-﻿namespace PrettierGML.Tests
+﻿namespace PrettierGML.Tests;
+
+public class TestFile
 {
-    public class TestFile
+    public string FilePath;
+    public string Name;
+
+    public TestFile(string filePath)
     {
-        public string FilePath;
-        public string Name;
+        FilePath = filePath;
+        Name = Path.GetFileName(filePath);
+    }
 
-        public TestFile(string filePath)
-        {
-            FilePath = filePath;
-            Name = Path.GetFileName(filePath);
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
+    public override string ToString()
+    {
+        return Name;
     }
 }

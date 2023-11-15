@@ -1,23 +1,22 @@
-﻿namespace PrettierGML.Tests
-{
-    public static class DirectoryFinder
-    {
-        public static DirectoryInfo FindParent(string name)
-        {
-            var rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (rootDirectory.Name != name)
-            {
-                if (rootDirectory.Parent == null)
-                {
-                    throw new Exception(
-                        $"There was no parent directory found with the name '{name}'"
-                    );
-                }
+﻿namespace PrettierGML.Tests;
 
-                rootDirectory = rootDirectory.Parent;
+public static class DirectoryFinder
+{
+    public static DirectoryInfo FindParent(string name)
+    {
+        var rootDirectory = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (rootDirectory.Name != name)
+        {
+            if (rootDirectory.Parent == null)
+            {
+                throw new Exception(
+                    $"There was no parent directory found with the name '{name}'"
+                );
             }
 
-            return rootDirectory;
+            rootDirectory = rootDirectory.Parent;
         }
+
+        return rootDirectory;
     }
 }

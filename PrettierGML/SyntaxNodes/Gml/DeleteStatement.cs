@@ -1,21 +1,19 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class DeleteStatement : GmlSyntaxNode
 {
-    internal sealed class DeleteStatement : GmlSyntaxNode
+    public GmlSyntaxNode Argument { get; set; }
+
+    public DeleteStatement(TextSpan span, GmlSyntaxNode argument)
+        : base(span)
     {
-        public GmlSyntaxNode Argument { get; set; }
+        Argument = AsChild(argument);
+    }
 
-        public DeleteStatement(TextSpan span, GmlSyntaxNode argument)
-            : base(span)
-        {
-            Argument = AsChild(argument);
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Doc.Concat("delete", " ", Argument.Print(ctx));
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Doc.Concat("delete", " ", Argument.Print(ctx));
     }
 }

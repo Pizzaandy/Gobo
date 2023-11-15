@@ -1,45 +1,43 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 using PrettierGML.SyntaxNodes.PrintHelpers;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class VariableDeclarator : GmlSyntaxNode
 {
-    internal sealed class VariableDeclarator : GmlSyntaxNode
+    public GmlSyntaxNode Id { get; set; }
+    public GmlSyntaxNode Type { get; set; }
+    public GmlSyntaxNode Initializer { get; set; }
+
+    public VariableDeclarator(
+        TextSpan span,
+        GmlSyntaxNode id,
+        GmlSyntaxNode type,
+        GmlSyntaxNode initializer
+    )
+        : base(span)
     {
-        public GmlSyntaxNode Id { get; set; }
-        public GmlSyntaxNode Type { get; set; }
-        public GmlSyntaxNode Initializer { get; set; }
+        Id = AsChild(id);
+        Type = AsChild(type);
+        Initializer = AsChild(initializer);
+    }
 
-        public VariableDeclarator(
-            TextSpan span,
-            GmlSyntaxNode id,
-            GmlSyntaxNode type,
-            GmlSyntaxNode initializer
-        )
-            : base(span)
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        var typeAnnotation = Type.Print(ctx);
+
+        if (Initializer.IsEmpty)
         {
-            Id = AsChild(id);
-            Type = AsChild(type);
-            Initializer = AsChild(initializer);
+            return Doc.Concat(Id.Print(ctx), typeAnnotation);
         }
-
-        public override Doc PrintNode(PrintContext ctx)
+        else
         {
-            var typeAnnotation = Type.Print(ctx);
-
-            if (Initializer.IsEmpty)
-            {
-                return Doc.Concat(Id.Print(ctx), typeAnnotation);
-            }
-            else
-            {
-                return RightHandSide.Print(
-                    ctx,
-                    Id,
-                    Doc.Concat(typeAnnotation, " ", "="),
-                    Initializer
-                );
-            }
+            return RightHandSide.Print(
+                ctx,
+                Id,
+                Doc.Concat(typeAnnotation, " ", "="),
+                Initializer
+            );
         }
     }
 }

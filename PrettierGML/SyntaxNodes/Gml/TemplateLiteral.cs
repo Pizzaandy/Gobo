@@ -1,21 +1,19 @@
-﻿using Antlr4.Runtime;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
 
-namespace PrettierGML.SyntaxNodes.Gml
+namespace PrettierGML.SyntaxNodes.Gml;
+
+internal sealed class TemplateLiteral : GmlSyntaxNode
 {
-    internal sealed class TemplateLiteral : GmlSyntaxNode
+    public List<GmlSyntaxNode> Parts => Children;
+
+    public TemplateLiteral(TextSpan span, List<GmlSyntaxNode> atoms)
+        : base(span)
     {
-        public List<GmlSyntaxNode> Parts => Children;
+        Children = AsChildren(atoms);
+    }
 
-        public TemplateLiteral(TextSpan span, List<GmlSyntaxNode> atoms)
-            : base(span)
-        {
-            Children = AsChildren(atoms);
-        }
-
-        public override Doc PrintNode(PrintContext ctx)
-        {
-            return Doc.Concat("$\"", Doc.Concat(PrintChildren(ctx)), "\"");
-        }
+    public override Doc PrintNode(PrintContext ctx)
+    {
+        return Doc.Concat("$\"", Doc.Concat(PrintChildren(ctx)), "\"");
     }
 }

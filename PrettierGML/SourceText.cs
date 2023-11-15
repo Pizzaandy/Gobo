@@ -1,83 +1,80 @@
-﻿using System;
+﻿namespace PrettierGML;
 
-namespace PrettierGML
+internal class SourceText
 {
-    internal class SourceText
+    public readonly string Text;
+
+    public readonly string? FilePath;
+
+    public int Length => Text.Length;
+
+    public SourceText(string text, string? filePath = null)
     {
-        public readonly string Text;
+        Text = text;
+        FilePath = filePath;
+    }
 
-        public readonly string? FilePath;
+    public string GetSpan(TextSpan span)
+    {
+        return Text.Substring(span.Start, span.Length);
+    }
 
-        public int Length => Text.Length;
+    public string GetSpan(int start, int end)
+    {
+        return Text[start..end];
+    }
 
-        public SourceText(string text, string? filePath = null)
+    public int GetLineBreaksToLeft(TextSpan span)
+    {
+        var start = span.Start;
+
+        if (start <= 0)
         {
-            Text = text;
-            FilePath = filePath;
+            return 0;
         }
 
-        public string GetSpan(TextSpan span)
-        {
-            return Text.Substring(span.Start, span.Length);
-        }
+        var lineBreakCount = 0;
 
-        public string GetSpan(int start, int end)
+        for (var index = start - 1; index >= 0; index--)
         {
-            return Text[start..end];
-        }
-
-        public int GetLineBreaksToLeft(TextSpan span)
-        {
-            var start = span.Start;
-
-            if (start <= 0)
+            var character = Text[index];
+            if (character == '\n')
             {
-                return 0;
+                lineBreakCount++;
             }
-
-            var lineBreakCount = 0;
-
-            for (var index = start - 1; index >= 0; index--)
+            else if (!char.IsWhiteSpace(character))
             {
-                var character = Text[index];
-                if (character == '\n')
-                {
-                    lineBreakCount++;
-                }
-                else if (!char.IsWhiteSpace(character))
-                {
-                    break;
-                }
+                break;
             }
-
-            return lineBreakCount;
         }
 
-        public int GetLineBreaksToRight(TextSpan span)
+        return lineBreakCount;
+    }
+
+    public int GetLineBreaksToRight(TextSpan span)
+    {
+        var end = span.End;
+
+        if (end >= Text.Length - 1)
         {
-            var end = span.End;
-
-            if (end >= Text.Length - 1)
-            {
-                return 0;
-            }
-
-            var lineBreakCount = 0;
-
-            for (var index = end; index < Text.Length; index++)
-            {
-                var character = Text[index];
-                if (character == '\n')
-                {
-                    lineBreakCount++;
-                }
-                else if (!char.IsWhiteSpace(character))
-                {
-                    break;
-                }
-            }
-
-            return lineBreakCount;
+            return 0;
         }
+
+        var lineBreakCount = 0;
+
+        for (var index = end; index < Text.Length; index++)
+        {
+            var character = Text[index];
+            if (character == '\n')
+            {
+                lineBreakCount++;
+            }
+            else if (!char.IsWhiteSpace(character))
+            {
+                break;
+            }
+        }
+
+        return lineBreakCount;
     }
 }
