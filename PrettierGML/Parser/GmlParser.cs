@@ -1,5 +1,4 @@
 ﻿using Antlr4.Runtime;
-using Newtonsoft.Json.Linq;
 using PrettierGML.SyntaxNodes;
 
 namespace PrettierGML.Parser
@@ -27,8 +26,11 @@ namespace PrettierGML.Parser
             var ast = builder.Visit(parser.program());
 
             // 3) Attach comment groups
-            var commentGroups = CreateCommentGroups(tokenStream);
-            ast = new CommentMapper(new SourceText(input), commentGroups).AttachComments(ast);
+            if (attachComments)
+            {
+                var commentGroups = CreateCommentGroups(tokenStream);
+                ast = new CommentMapper(new SourceText(input), commentGroups).AttachComments(ast);
+            }
 
             return new GmlParseResult() { Ast = ast, TokenStream = tokenStream };
         }

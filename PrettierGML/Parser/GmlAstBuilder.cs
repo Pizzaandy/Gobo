@@ -598,8 +598,7 @@ namespace PrettierGML.Parser
         {
             GmlSyntaxNode @object = Visit(context.lValueStartExpression());
 
-            var tokenStart = context.SourceInterval.a;
-            var characterStart = context.Start.StartIndex;
+            var startIndex = context.Start.StartIndex;
 
             if (context.lValueChainOperator()?.Length > 0)
             {
@@ -608,7 +607,7 @@ namespace PrettierGML.Parser
                 {
                     var node = Visit(op);
                     (node as IMemberChainable)!.SetObject(@object);
-                    node.Span = new(characterStart, node.Span.End);
+                    node.Span = new(startIndex, node.Span.End);
                     @object = node;
                 }
             }
@@ -617,7 +616,7 @@ namespace PrettierGML.Parser
             {
                 var node = Visit(context.lValueFinalOperator());
                 (node as IMemberChainable)!.SetObject(@object);
-                node.Span = new(characterStart, node.Span.End);
+                node.Span = new(startIndex, node.Span.End);
                 @object = node;
             }
 
