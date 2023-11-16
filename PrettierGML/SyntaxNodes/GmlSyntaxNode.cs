@@ -1,14 +1,19 @@
-﻿using Newtonsoft.Json;
-using PrettierGML.Printer.DocTypes;
+﻿using PrettierGML.Printer.DocTypes;
+using PrettierGML.SyntaxNodes.Gml;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace PrettierGML.SyntaxNodes;
 
+[JsonDerivedType(typeof(Document))]
 internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 {
     public string Kind => GetType().Name;
-    public List<CommentGroup> Comments { get; set; } = new();
 
     public TextSpan Span { get; set; }
+
+    [JsonIgnore]
+    public List<CommentGroup> Comments { get; set; } = new();
 
     [JsonIgnore]
     public GmlSyntaxNode? Parent { get; set; }
@@ -132,17 +137,9 @@ internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
         return unprinted;
     }
 
-    public bool ShouldSerializeComments()
-    {
-        return Comments.Count > 0;
-    }
-
-    public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
-        new NodeList(contents);
-
     public override string ToString()
     {
-        return JsonConvert.SerializeObject(this, Formatting.Indented);
+        return JsonSerializer.Serialize(this, SyntaxNodeSerializerContext.Default.GmlSyntaxNode);
     }
 
     public override int GetHashCode()
@@ -158,6 +155,9 @@ internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
         return hashCode.ToHashCode();
     }
+
+    public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
+        new NodeList(contents);
 
     protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
     {

@@ -44,9 +44,7 @@ public class FormattingTests
 
         var firstPass = GmlFormatter.Format(input, options);
 
-        output.WriteLine($"Parse: {firstPass.ParseTimeMs}");
-        output.WriteLine($"Format: {firstPass.FormatTimeMs}");
-        output.WriteLine($"Total: {firstPass.TotalTimeMs}");
+        output.WriteLine(firstPass.ToString());
 
         await File.WriteAllTextAsync(actualFilePath, firstPass.Output);
 
@@ -70,9 +68,7 @@ public class FormattingTests
 
 public class FormattingTestProvider : IEnumerable<object[]>
 {
-    private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent(
-        "PrettierGML.Tests"
-    );
+    private readonly DirectoryInfo rootDirectory = DirectoryFinder.FindParent("PrettierGML.Tests");
 
     public FormattingTestProvider() { }
 
