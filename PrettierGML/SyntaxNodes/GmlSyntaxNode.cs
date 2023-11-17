@@ -1,12 +1,10 @@
 ﻿using PrettierGML.Printer.DocTypes;
-using PrettierGML.SyntaxNodes.Gml;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PrettierGML.SyntaxNodes;
 
-[JsonDerivedType(typeof(Document))]
-internal abstract class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
+internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 {
     public string Kind => GetType().Name;
 
