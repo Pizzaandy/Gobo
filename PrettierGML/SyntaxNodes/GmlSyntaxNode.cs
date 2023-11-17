@@ -1,6 +1,7 @@
 ﻿using PrettierGML.Printer.DocTypes;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace PrettierGML.SyntaxNodes;
 
@@ -137,7 +138,12 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
     public override string ToString()
     {
-        return JsonSerializer.Serialize(this, SyntaxNodeSerializerContext.Default.GmlSyntaxNode);
+        var result = JsonSerializer.Serialize(
+            this,
+            SyntaxNodeSerializerContext.Default.GmlSyntaxNode
+        );
+
+        return Regex.Unescape(result);
     }
 
     public override int GetHashCode()

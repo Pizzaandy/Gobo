@@ -6,7 +6,8 @@ namespace PrettierGML.SyntaxNodes;
 
 [JsonSourceGenerationOptions(
     WriteIndented = true,
-    GenerationMode = JsonSourceGenerationMode.Serialization
+    GenerationMode = JsonSourceGenerationMode.Serialization,
+    MaxDepth = 256
 )]
 [JsonSerializable(typeof(GmlSyntaxNode))]
 internal partial class SyntaxNodeSerializerContext : JsonSerializerContext { }
