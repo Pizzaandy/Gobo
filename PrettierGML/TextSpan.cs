@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace PrettierGML;
 
@@ -38,11 +39,13 @@ public readonly struct TextSpan : IEquatable<TextSpan>, IComparable<TextSpan>
     /// Length of the span.
     /// </summary>
     [DataMember(Order = 1)]
+    [JsonIgnore]
     public int Length { get; }
 
     /// <summary>
     /// Determines whether or not the span is empty.
     /// </summary>
+    [JsonIgnore]
     public bool IsEmpty => Length == 0;
 
     /// <summary>

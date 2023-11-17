@@ -1,6 +1,4 @@
 ﻿using Antlr4.Runtime;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using PrettierGML.Printer.DocTypes;
 
 namespace PrettierGML.SyntaxNodes;
@@ -33,31 +31,22 @@ internal class CommentGroup
     /// </summary>
     public bool PrintedRaw = false;
 
-    [JsonConverter(typeof(StringEnumConverter))]
     public CommentType Type { get; set; }
 
-    [JsonConverter(typeof(StringEnumConverter))]
     public CommentPlacement Placement { get; set; }
 
-    [JsonIgnore]
     public List<IToken> Tokens { get; init; }
 
-    [JsonIgnore]
     public TextSpan Span { get; set; }
 
-    [JsonIgnore]
     public GmlSyntaxNode? EnclosingNode { get; set; }
 
-    [JsonIgnore]
     public GmlSyntaxNode? PrecedingNode { get; set; }
 
-    [JsonIgnore]
     public GmlSyntaxNode? FollowingNode { get; set; }
 
-    [JsonIgnore]
     public bool IsFormatCommand { get; init; }
 
-    [JsonIgnore]
     public string? FormatCommandText { get; init; }
 
     private bool endsWithSingleLineComment = false;
@@ -161,9 +150,7 @@ internal class CommentGroup
         // Add leading or trailing line breaks depending on type
         if (type == CommentType.Leading)
         {
-            int trailingLineBreakCount = ctx.SourceText.GetLineBreaksToRight(
-                groups.Last().Span
-            );
+            int trailingLineBreakCount = ctx.SourceText.GetLineBreaksToRight(groups.Last().Span);
 
             if (trailingLineBreakCount == 0)
             {
