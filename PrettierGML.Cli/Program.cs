@@ -1,4 +1,5 @@
 ﻿using PrettierGML;
+using PrettierGML.Parser;
 using System.Diagnostics;
 
 if (args.Length == 0)
@@ -71,9 +72,10 @@ public static class Commands
         {
             result = GmlFormatter.Format(input, new() { GetDebugInfo = false });
         }
-        catch (Exception)
+        catch (GmlSyntaxErrorException e)
         {
-            throw;
+            Console.WriteLine(e.Message);
+            return FormatResult.Empty;
         }
 
         return result;

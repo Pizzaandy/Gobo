@@ -7,6 +7,8 @@ namespace PrettierGML;
 
 public struct FormatResult
 {
+    public static readonly FormatResult Empty = new();
+
     public string Output;
 
     public string Ast = string.Empty;
@@ -162,9 +164,7 @@ public static partial class GmlFormatter
                 Ast = ast.ToString(),
                 DocTree = docs.ToString(),
                 ParseTimeMs = Stopwatch.GetElapsedTime(parseStart, parseStop).TotalMilliseconds,
-                FormatTimeMs = Stopwatch
-                    .GetElapsedTime(formatStart, formatStop)
-                    .TotalMilliseconds,
+                FormatTimeMs = Stopwatch.GetElapsedTime(formatStart, formatStop).TotalMilliseconds,
                 TotalTimeMs = Stopwatch.GetElapsedTime(parseStart, formatStop).TotalMilliseconds
             };
         }

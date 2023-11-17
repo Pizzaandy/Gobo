@@ -19,6 +19,7 @@ internal static class GmlParser
         var tokenStream = new CommonTokenStream(lexer);
         var parser = new GameMakerLanguageParser(tokenStream);
         parser.Interpreter.PredictionMode = Antlr4.Runtime.Atn.PredictionMode.SLL;
+        parser.RemoveErrorListeners();
         parser.AddErrorListener(new GameMakerLanguageErrorListener());
 
         // 2) Build custom syntax tree with Antlr visitor
