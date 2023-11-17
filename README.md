@@ -4,6 +4,8 @@ Gobo is an opinionated formatter for GameMaker Language. It enforces a consisten
 
 Gobo currently provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier.
 
+Gobo is currently only available as a native CLI tool, but it will eventually be available as an IDE plugin.
+
 ### Input
 
 ```js
@@ -29,8 +31,6 @@ do {
 } until (!constructor < 10)
 return call();
 ```
-
-Gobo is currently only available as a CLI tool, but it will eventually be available as an IDE plugin.
 
 ## How does it work?
 Gobo is written in C# and compiles to a self-contained binary using Native AOT in .NET 8. This may be changed in the future!
