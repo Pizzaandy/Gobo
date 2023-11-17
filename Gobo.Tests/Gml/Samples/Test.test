@@ -1,0 +1,13 @@
+assert_array_equals(
+    _destArray,
+    _expected,
+    "#4 array_copy, copy partially (from middle) past the end of empty array"
+);
+
+add(function () {
+    assert_array_equals(
+    _destArray,
+    _expected,
+    "#4 array_copy, copy partially (from middle) past the end of empty array"
+);
+})

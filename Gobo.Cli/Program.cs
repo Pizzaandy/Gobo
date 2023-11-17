@@ -1,82 +1,164 @@
-﻿using Gobo;
+﻿using DocoptNet;
+using Gobo;
 using System.Diagnostics;
 
-if (args.Length == 0)
-{
-    Console.WriteLine("Please specify a file or directory to format.");
-    Console.WriteLine("Usage: gobo [file/dir]");
-    return 1;
-}
+const string usage =
+    @"Usage:
+  gobo [options] <file-or-directory>
 
-var filePath = args[0];
+Options:
+  -h --help       Show this screen.
+  -v --version    Show version.
+  --check         Check that the files are formatted. Will not write any changes.
+  --fast          Skip validation of formatted syntax tree and comments.
+  --write-stdout  Write the results of formatting any files to stdout.
+  --skip-write    Skip writing changes. Used for testing to ensure Gobo doesn't throw any errors.
 
-if (!Path.Exists(filePath))
-{
-    Console.WriteLine(
-        $"{filePath} is not a valid path. Please specify a valid path to a file or directory."
+";
+
+return await Docopt
+    .CreateParser(usage)
+    .WithVersion("Gobo 0.1")
+    .Parse(args)
+    .Match(
+        Run,
+        result => ShowHelp(result.Help),
+        result => ShowVersion(result.Version),
+        result => OnError(result.Usage)
     );
+
+static async Task<int> ShowHelp(string help)
+{
+    Console.WriteLine(help);
+    return 0;
+}
+
+static async Task<int> ShowVersion(string version)
+{
+    Console.WriteLine(version);
+    return 0;
+}
+
+static async Task<int> OnError(string usage)
+{
+    Console.Error.WriteLine(usage);
     return 1;
 }
 
-await Commands.Format(filePath);
-
-return 0;
-
-public static class Commands
+// TODO: Clean this up...
+static async Task<int> Run(IDictionary<string, ArgValue> arguments)
 {
-    public const string GmlExtension = ".gml";
+    var filePath = arguments["<file-or-directory>"].ToString();
 
-    public static async Task Format(string filePath)
+    if (!Path.Exists(filePath))
     {
-        if (File.Exists(filePath))
-        {
-            if (Path.GetExtension(filePath) != GmlExtension) { }
-            var result = await DebugFormatFile(filePath);
-            Console.WriteLine(result.Output);
-            return;
-        }
-        else if (Directory.Exists(filePath))
-        {
-            var files = new DirectoryInfo(filePath).EnumerateFiles(
-                $"*{GmlExtension}",
-                SearchOption.AllDirectories
-            );
-
-            if (!files.Any())
-            {
-                Console.WriteLine($"No *{GmlExtension} files found in {filePath}");
-                return;
-            }
-
-            var stopWatch = Stopwatch.StartNew();
-
-            await Task.WhenAll(files.Select(file => DebugFormatFile(file.FullName)));
-
-            stopWatch.Stop();
-
-            Console.WriteLine(
-                $"Formatted {files.Count()} files in {stopWatch.Elapsed:s\\.fff} seconds"
-            );
-
-            return;
-        }
+        Console.WriteLine(
+            $"{filePath} is not a valid path. Please specify a valid path to a file or directory."
+        );
+        return 1;
     }
 
-    private static async Task<FormatResult> DebugFormatFile(string filePath)
+    var check = arguments["--check"].IsTrue;
+    Func<string, IDictionary<string, ArgValue>, Task> processFile = check ? CheckFile : FormatFile;
+
+    const string GmlExtension = ".gml";
+
+    if (File.Exists(filePath))
     {
-        var input = await File.ReadAllTextAsync(filePath);
-        FormatResult result;
-
-        try
+        if (Path.GetExtension(filePath) != GmlExtension)
         {
-            result = GmlFormatter.Format(input, new() { GetDebugInfo = false });
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-            return FormatResult.Empty;
+            Console.WriteLine($"{filePath} is not a *.gml file.");
+            return 1;
         }
 
-        return result;
+        Console.WriteLine(check ? "Checking" : "Formatting" + $" {Path.GetFileName(filePath)}...");
+
+        var stopWatch = Stopwatch.StartNew();
+        await processFile(filePath, arguments);
+        stopWatch.Stop();
+
+        Console.WriteLine("Done");
+    }
+    else if (Directory.Exists(filePath))
+    {
+        var files = new DirectoryInfo(filePath).EnumerateFiles(
+            $"*{GmlExtension}",
+            SearchOption.AllDirectories
+        );
+
+        if (!files.Any())
+        {
+            Console.WriteLine($"No *{GmlExtension} files found in {filePath}");
+            return 1;
+        }
+
+        Console.WriteLine(check ? "Checking" : "Formatting" + " files...");
+        var stopWatch = Stopwatch.StartNew();
+
+        await Task.WhenAll(files.Select(file => processFile(file.FullName, arguments)));
+
+        stopWatch.Stop();
+
+        Console.WriteLine(
+            (check ? "Checked" : "Formatted")
+                + $" {files.Count()} files in {stopWatch.Elapsed:s\\.fff} seconds"
+        );
+    }
+
+    return 0;
+}
+
+static async Task FormatFile(string filePath, IDictionary<string, ArgValue> arguments)
+{
+    var input = await File.ReadAllTextAsync(filePath);
+    FormatResult result;
+
+    var options = new FormatOptions
+    {
+        ValidateOutput = arguments["--fast"].IsFalse,
+        GetDebugInfo = false
+    };
+
+    try
+    {
+        result = GmlFormatter.Format(input, options);
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e.Message);
+        return;
+    }
+
+    if (arguments["--skip-write"].IsFalse)
+    {
+        await File.WriteAllTextAsync(filePath, result.Output);
+    }
+
+    if (arguments["--write-stdout"].IsTrue)
+    {
+        Console.WriteLine(result.Output);
+    }
+}
+
+static async Task CheckFile(string filePath, IDictionary<string, ArgValue> arguments)
+{
+    var input = await File.ReadAllTextAsync(filePath);
+    bool success;
+
+    var options = new FormatOptions { GetDebugInfo = false };
+
+    try
+    {
+        success = GmlFormatter.Check(input, options);
+    }
+    catch (Exception e)
+    {
+        Console.Error.WriteLine(e.Message);
+        return;
+    }
+
+    if (!success)
+    {
+        Console.WriteLine($"[Warn] {filePath}");
     }
 }

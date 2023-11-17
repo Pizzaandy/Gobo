@@ -18,7 +18,7 @@ internal sealed class ConstructorClause : GmlSyntaxNode
     {
         if (!Id.IsEmpty)
         {
-            return Doc.Concat(": ", Id.Print(ctx), Arguments.Print(ctx), " ", "constructor");
+            return Doc.Concat(" : ", Id.Print(ctx), Arguments.Print(ctx), " ", "constructor");
         }
         else
         {

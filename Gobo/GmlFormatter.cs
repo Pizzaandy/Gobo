@@ -174,6 +174,12 @@ public static partial class GmlFormatter
         }
     }
 
+    public static bool Check(string code, FormatOptions options)
+    {
+        var result = Format(code, options);
+        return result.Output == code;
+    }
+
     public static async Task FormatFileAsync(string filePath, FormatOptions options)
     {
         string input = await File.ReadAllTextAsync(filePath);

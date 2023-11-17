@@ -27,16 +27,16 @@ internal sealed class ArgumentList : GmlSyntaxNode
 
             if (Children.Count == 1)
             {
-                optionA = Doc.Concat("(", Doc.Concat(printedArguments), ")");
+                optionA = Doc.Group("(", Doc.Concat(printedArguments), ")");
             }
             else
             {
                 var last = printedArguments.Last();
-                var allExceptLast = printedArguments.GetRange(0, printedArguments.Count - 1);
+                var allExceptLast = printedArguments.SkipLast(1);
 
                 var separator = Doc.Concat(",", " ");
 
-                optionA = Doc.Concat("(", Doc.Join(separator, allExceptLast), separator, last, ")");
+                optionA = Doc.Group("(", Doc.Join(separator, allExceptLast), separator, last, ")");
             }
 
             var optionB = DelimitedList.PrintInBrackets(ctx, "(", this, ")", ",");
