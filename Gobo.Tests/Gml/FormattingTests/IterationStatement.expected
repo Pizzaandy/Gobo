@@ -1,6 +1,22 @@
 for (;;) {
     return;
 }
+for (;; i++) {
+    return;
+}
+for (++j;;) {
+    return;
+}
+
+for (
+    foo = bar;
+    ;
+    {
+        foo();
+    }
+) {
+    return;
+}
 
 for (
     var i = 0;

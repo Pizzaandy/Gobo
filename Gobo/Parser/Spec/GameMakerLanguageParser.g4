@@ -10,7 +10,7 @@ statementList
     : (statement | emptyStatement)+
     ;
 
-statement
+statementNoSemicolon
     : (block
     | ifStatement
     | variableDeclarationList
@@ -33,7 +33,11 @@ statement
     | callStatement
     | functionDeclaration
     | deleteStatement
-    ) eos?
+    )
+    ;
+
+statement 
+    : statementNoSemicolon eos*
     ;
 
 block
@@ -47,7 +51,11 @@ ifStatement
 iterationStatement
     : Do statement Until expression # DoStatement
     | While expression statement # WhileStatement
-    | For '(' statement? ';' expression? ';' statement? ')' statement # ForStatement
+    | For '(' 
+        statementNoSemicolon? ';' 
+        expression? ';' 
+        statement? 
+        ')' statement # ForStatement
     | Repeat expression statement # RepeatStatement
     ;
 

@@ -12,9 +12,7 @@ public class FormattingTests
     private readonly ITestOutputHelper output;
 
     public const string TestFileExtension = ".test";
-
     public const string ExpectedFileExtension = ".expected";
-
     public const string ActualFileExtension = ".actual";
 
     public FormattingTests(ITestOutputHelper output)
@@ -75,7 +73,7 @@ public class FormattingTestProvider : IEnumerable<object[]>
     public IEnumerator<object[]> GetEnumerator()
     {
         var filePath = Path.Combine(rootDirectory.FullName, "Gml", "FormattingTests");
-        var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
+        var files = Directory.EnumerateFiles(filePath, $"*{SampleTests.TestFileExtension}");
         return files.Select(fp => new object[] { new TestFile(fp) }).GetEnumerator();
     }
 

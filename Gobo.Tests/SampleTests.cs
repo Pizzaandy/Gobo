@@ -5,17 +5,16 @@ using Xunit.Sdk;
 
 namespace Gobo.Tests;
 
-public class Samples
+public class SampleTests
 {
     private readonly FormatOptions options = FormatOptions.DefaultTestOptions;
 
     private readonly ITestOutputHelper output;
 
     public const string TestFileExtension = ".test";
+    public const string ActualFileExtension = ".actual";
 
-    private const string ActualFileExtension = ".actual";
-
-    public Samples(ITestOutputHelper output)
+    public SampleTests(ITestOutputHelper output)
     {
         this.output = output;
     }
@@ -58,7 +57,7 @@ public class SampleFileProvider : IEnumerable<object[]>
     public IEnumerator<object[]> GetEnumerator()
     {
         var filePath = Path.Combine(rootDirectory.FullName, "Gml", "Samples");
-        var files = Directory.EnumerateFiles(filePath, $"*{Samples.TestFileExtension}");
+        var files = Directory.EnumerateFiles(filePath, $"*{SampleTests.TestFileExtension}");
         return files.Select(fp => new object[] { new TestFile(fp) }).GetEnumerator();
     }
 

@@ -63,9 +63,12 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         return parts;
     }
 
-    public override GmlSyntaxNode VisitStatement(
-        [NotNull] GameMakerLanguageParser.StatementContext context
-    )
+    public override GmlSyntaxNode VisitStatement([NotNull] GameMakerLanguageParser.StatementContext context)
+    {
+        return Visit(context.statementNoSemicolon());
+    }
+
+    public override GmlSyntaxNode VisitStatementNoSemicolon([NotNull] GameMakerLanguageParser.StatementNoSemicolonContext context)
     {
         if (context.block() != null)
         {

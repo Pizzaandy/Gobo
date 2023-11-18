@@ -9,9 +9,12 @@ self.method(
     some_parameter__________________________________
 );
 
-self.some_method(some_other_method(parameter__________________________________________________));
+self.some_method(
+    some_other_method(parameter__________________________________________________)
+);
 
-var super_long_name____________________________________ = other_name.call_method________________();
+var super_long_name____________________________________ =
+    other_name.call_method________________();
 
 var super_long_name_______________ = other_name____________
     .call_some_method______________()
@@ -45,7 +48,9 @@ return some_value
 
 var some_variable = some_object
     .property
-    .call_method(something.some_property == some_other_value___________________________________);
+    .call_method(
+        something.some_property == some_other_value___________________________________
+    );
 
 // This should not indent
 call_method(

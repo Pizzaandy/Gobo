@@ -11,7 +11,7 @@ public class FormatOptions
     public bool GetDebugInfo { get; set; } = false;
 
     public static FormatOptions DefaultTestOptions { get; } =
-        new() { Width = 100, GetDebugInfo = true };
+        new() { GetDebugInfo = true };
 }
 
 public enum BraceStyle

@@ -31,10 +31,10 @@ internal sealed class ForStatement : GmlSyntaxNode
         {
             Init.Print(ctx),
             ";",
-            Test.IsEmpty ? Doc.Null : Doc.Line,
+            Test.IsEmpty ? Doc.IfBreak(Doc.Line, Doc.Null) : Doc.Line,
             Test.Print(ctx),
             ";",
-            Update.IsEmpty ? Doc.Null : Doc.Line,
+            Update.IsEmpty ? Doc.IfBreak(Doc.Line, Doc.Null) : Doc.Line,
             Update.Print(ctx)
         };
 

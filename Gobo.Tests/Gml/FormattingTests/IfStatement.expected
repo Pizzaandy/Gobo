@@ -47,7 +47,12 @@ if (someLongCondition != someOtherCondition) {
     DoSomeLongMethodCall________________________________________();
 }
 
-if (longStatementName && longerStatementName && evenLongerStatementName && superLongStatementName) {
+if (
+    longStatementName
+    && longerStatementName
+    && evenLongerStatementName
+    && superLongStatementName
+) {
     return;
 } else if (
     longStatementName
