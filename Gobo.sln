@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gobo.Cli", "Gobo.Cli\Gobo.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gobo.Tests", "Gobo.Tests\Gobo.Tests.csproj", "{07F8A412-2F6D-4DC2-B9E7-8424B88B1EDF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gobo.Playground", "Gobo.Playground\Gobo.Playground.csproj", "{9415B850-A105-423D-88C6-5ED331EDB256}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{07F8A412-2F6D-4DC2-B9E7-8424B88B1EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07F8A412-2F6D-4DC2-B9E7-8424B88B1EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07F8A412-2F6D-4DC2-B9E7-8424B88B1EDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9415B850-A105-423D-88C6-5ED331EDB256}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9415B850-A105-423D-88C6-5ED331EDB256}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9415B850-A105-423D-88C6-5ED331EDB256}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9415B850-A105-423D-88C6-5ED331EDB256}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,69 @@
+﻿@inherits ComponentBase
+@implements IDisposable
+@inject IJSRuntime JS
+
+<div id="@Id"
+     @onkeyup="TriggerAceInstance"
+     @onpaste="TriggerAceInstance"
+     @onclick="TriggerAceInstance"
+     style="@Style">
+    @Text
+</div>
+
+@code {
+    [Parameter]
+    public string Text { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> TextChanged { get; set; }
+
+    [Parameter]
+    public string Style { get; set; } = "width:100%;height:100%;font-size:14px";
+
+    [Parameter]
+    public string Theme { get; set; } = "monokai";
+
+    [Parameter]
+    public string? Language { get; set; } = null;
+
+    [Parameter]
+    public bool IsReadonly { get; set; } = false;
+
+    public string Id { get; set; } = "editor_" + Guid.NewGuid().ToString("N");
+
+    private DotNetObjectReference<AceEditor> _objRef = default!;
+
+    [JSInvokable]
+    public async Task ReceiveCode(string code)
+    {
+        Text = code;
+        await TextChanged.InvokeAsync(Text);
+    }
+
+    public async Task SetText(string code)
+    {
+        _objRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("SetCode", _objRef, Id, code);
+    }
+
+    public void SetLanguage(string? language)
+    {
+        Language = language;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await JS.InvokeVoidAsync("editorRender", Id, Language, Theme, IsReadonly);
+    }
+
+    protected async Task TriggerAceInstance()
+    {
+        _objRef = DotNetObjectReference.Create(this);
+        await JS.InvokeVoidAsync("GetCode", _objRef, Id);
+    }
+
+    public void Dispose()
+    {
+        _objRef?.Dispose();
+    }
+}

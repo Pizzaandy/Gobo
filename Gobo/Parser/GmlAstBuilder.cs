@@ -1,11 +1,11 @@
-﻿using Antlr4.Runtime;
+﻿using System.Diagnostics;
+using Antlr4.Runtime;
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.GmlExtensions;
 using Gobo.SyntaxNodes.PrintHelpers;
-using System.Diagnostics;
 using UnaryExpression = Gobo.SyntaxNodes.Gml.UnaryExpression;
 
 namespace Gobo.Parser;
@@ -63,12 +63,16 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         return parts;
     }
 
-    public override GmlSyntaxNode VisitStatement([NotNull] GameMakerLanguageParser.StatementContext context)
+    public override GmlSyntaxNode VisitStatement(
+        [NotNull] GameMakerLanguageParser.StatementContext context
+    )
     {
         return Visit(context.statementNoSemicolon());
     }
 
-    public override GmlSyntaxNode VisitStatementNoSemicolon([NotNull] GameMakerLanguageParser.StatementNoSemicolonContext context)
+    public override GmlSyntaxNode VisitStatementNoSemicolon(
+        [NotNull] GameMakerLanguageParser.StatementNoSemicolonContext context
+    )
     {
         if (context.block() != null)
         {
@@ -1149,9 +1153,9 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
             var lastToken = context.macroToken().Last().Stop;
             var source = firstToken.TokenSource;
 
-            body = source.InputStream.GetText(
-                new Interval(firstToken.StartIndex, lastToken.StopIndex)
-            );
+            body = source
+                .InputStream
+                .GetText(new Interval(firstToken.StartIndex, lastToken.StopIndex));
         }
 
         return new MacroDeclaration(context.ToSpan(), id, body);

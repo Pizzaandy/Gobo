@@ -1,0 +1,74 @@
+﻿@page "/"
+@using Gobo;
+@using Gobo.Playground.Components;
+@inject IJSRuntime JSRuntime
+
+<div id="text-panels" class="container-fluid vh-100">
+    <div class="row h-100">
+        <div class="col">
+            <AceEditor Text="@_initialText"
+                       Language="game_maker_language"
+                       TextChanged="@Format"></AceEditor>
+        </div>
+        <div class="col">
+            <AceEditor @ref="outputEditor"
+                       Language="game_maker_language"
+                       IsReadonly="true"></AceEditor>
+        </div>
+    </div>
+</div>
+
+@functions
+{
+    bool _error;
+    AceEditor outputEditor;
+
+    const string _initialText = @"x = a and b or c  a=0xFG=1 var var var i := 0
+do begin
+;;;;show_debug_message(i)
+;;;;++constructor
+end until not constructor < 10 return
+
+call()";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await Format(_initialText);
+        }
+    }
+
+    async Task Format(string _input)
+    {
+        if (string.IsNullOrEmpty(_input))
+        {
+            return;
+        }
+
+        FormatResult result;
+        _error = false;
+
+        if (_input.Length > 10000)
+        {
+            _error = true;
+            outputEditor.SetLanguage("json");
+            await outputEditor.SetText("Code length cannot exceed 10,000 characters.");
+            return;
+        }
+
+        try
+        {
+            result = await Task.Run(() => GmlFormatter.Format(_input, new()));
+        }
+        catch (Exception e)
+        {
+            _error = true;
+            outputEditor.SetLanguage("json");
+            await outputEditor.SetText(e.Message);
+            return;
+        }
+
+        await outputEditor.SetText(result.Output);
+    }
+}
