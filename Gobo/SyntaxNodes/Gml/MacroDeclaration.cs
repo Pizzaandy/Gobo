@@ -19,7 +19,7 @@ internal sealed class MacroDeclaration : GmlSyntaxNode
         // Macro identifiers can't have leading comments
         Id.PrintOwnComments = false;
 
-        var printed = Doc.Concat("#macro", " ", Id.Print(ctx), " ", Body);
+        var printed = Doc.Concat("#macro", " ", Id.Print(ctx), " ", Body.TrimEnd());
 
         return Doc.Concat(
             Id.PrintLeadingComments(ctx),

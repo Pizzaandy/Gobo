@@ -9,11 +9,10 @@
     editor.setOptions({
         autoScrollEditorIntoView: true
     });
+
     // enable autocompletion and snippets
     editor.setOptions({
         enableBasicAutocompletion: true,
-        enableSnippets: true,
-        enableLiveAutocompletion: true
     });
 
 };
