@@ -394,3 +394,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/Gobo.Playground/wwwroot/BlazorAceEditor.min.js

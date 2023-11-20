@@ -6,12 +6,10 @@
     editor.setReadOnly(readOnly);
     editor.session.setMode(defineMode);
     editor.renderer.setScrollMargin(10, 10);
-    editor.setOptions({
-        autoScrollEditorIntoView: true
-    });
-
+   
     // enable autocompletion and snippets
     editor.setOptions({
+        autoScrollEditorIntoView: true,
         enableBasicAutocompletion: true,
     });
 

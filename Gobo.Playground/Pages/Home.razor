@@ -5,12 +5,12 @@
 
 <div id="text-panels" class="container-fluid vh-100">
     <div class="row h-100">
-        <div class="col">
+        <div class="col-lg">
             <AceEditor Text="@_initialText"
                        Language="game_maker_language"
                        TextChanged="@Format"></AceEditor>
         </div>
-        <div class="col">
+        <div class="col-lg">
             <AceEditor @ref="outputEditor"
                        Language="game_maker_language"
                        IsReadonly="true"></AceEditor>
