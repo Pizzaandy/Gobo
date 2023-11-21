@@ -3,9 +3,7 @@
 @using Gobo.Playground.Shared;
 @inject IJSRuntime JSRuntime
 
-
 <div class="d-flex">
-
     <div class="side-panel p-3">
         <h5>Gobo Playground</h5>
         <label for="printWidth">Print width</label>
@@ -30,18 +28,17 @@
             </div>
         </div>
     </div>
-
 </div>
 
 @functions
 {
-    FormatOptions _formatOptions = new();
-
     string _input = string.Empty;
-    bool _error;
+    FormatOptions _formatOptions = new();
 
     AceEditor inputEditor = null!;
     AceEditor outputEditor = null!;
+
+    bool _error;
 
     const string _initialText = @"x = a and b or c  a=0xFG=1 var var var i := 0
 do begin
@@ -96,6 +93,7 @@ call()";
             return;
         }
 
+        await outputEditor.SetLanguage("game_maker_language");
         await outputEditor.SetText(result.Output);
     }
 
