@@ -99,7 +99,7 @@ call()";
 
     async Task OnWidthChanged(ChangeEventArgs args)
     {
-        var value = args.Value.ToString();
+        var value = args?.Value?.ToString();
 
         if (!int.TryParse(value, out var number))
         {
