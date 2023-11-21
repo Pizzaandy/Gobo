@@ -6,6 +6,7 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class ArgumentList : GmlSyntaxNode
 {
     public List<GmlSyntaxNode> Arguments => Children;
+    public static Doc EmptyArguments => "()";
 
     public ArgumentList(TextSpan span, List<GmlSyntaxNode> arguments)
         : base(span)
@@ -18,6 +19,11 @@ internal sealed class ArgumentList : GmlSyntaxNode
         Doc result;
 
         PrintOwnComments = false;
+
+        if (Children.Count == 0 && DanglingComments.Count == 0)
+        {
+            return EmptyArguments;
+        }
 
         if (ShouldBreakOnLastArgument())
         {

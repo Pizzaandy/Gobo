@@ -7,18 +7,18 @@
      @onpaste="TriggerAceInstance"
      @onclick="TriggerAceInstance"
      style="@Style">
-    @Text
+    @Value
 </div>
 
 @code {
     [Parameter]
-    public string Text { get; set; } = string.Empty;
+    public string Value { get; set; } = string.Empty;
 
     [Parameter]
-    public EventCallback<string> TextChanged { get; set; }
+    public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
-    public string Style { get; set; } = "width:100%; height:100%; font-size:14px";
+    public string Style { get; set; } = "width:100%; height:100%; font-size:14px; border:1px solid black;";
 
     [Parameter]
     public string Theme { get; set; } = "one_dark";
@@ -36,8 +36,8 @@
     [JSInvokable]
     public async Task ReceiveCode(string code)
     {
-        Text = code;
-        await TextChanged.InvokeAsync(Text);
+        Value = code;
+        await ValueChanged.InvokeAsync(Value);
     }
 
     public async Task SetText(string code)
@@ -50,6 +50,11 @@
     {
         Language = language;
         await JS.InvokeVoidAsync("editorRender", Id, Language, Theme, IsReadonly);
+    }
+
+    public async Task SetWidth(int width)
+    {
+        await JS.InvokeVoidAsync("SetWidth", Id, width);
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)

@@ -6,6 +6,7 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class Block : GmlSyntaxNode
 {
     public List<GmlSyntaxNode> Statements => Children;
+    public static Doc EmptyBlock => "{}";
 
     public Block(TextSpan span, List<GmlSyntaxNode> body)
         : base(span)
@@ -58,8 +59,6 @@ internal sealed class Block : GmlSyntaxNode
             return WrapInBlock(ctx, danglingCommentSource.PrintDanglingComments(ctx));
         }
     }
-
-    public static Doc EmptyBlock => "{}";
 
     public override int GetHashCode()
     {

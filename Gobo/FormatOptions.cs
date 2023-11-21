@@ -10,8 +10,14 @@ public class FormatOptions
     public bool RemoveSyntaxExtensions { get; set; } = false;
     public bool GetDebugInfo { get; set; } = false;
 
-    public static FormatOptions DefaultTestOptions { get; } =
-        new() { GetDebugInfo = true };
+    public static FormatOptions DefaultTestOptions { get; } = new() { GetDebugInfo = true };
+
+    public static FormatOptions Default { get; }
+
+    static FormatOptions()
+    {
+        Default = new();
+    }
 }
 
 public enum BraceStyle

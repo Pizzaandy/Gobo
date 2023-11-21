@@ -2,6 +2,11 @@ html, body, #app {
     height: 100%;
 }
 
+.side-panel {
+    flex: 0 0 200px;
+    height: 100%;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

@@ -53,6 +53,8 @@ internal class CommentGroup
 
     public const string FormatCommandPrefix = "fmt-";
 
+    private static readonly string[] newlines = new string[] { "\r\n", "\n" };
+
     public CommentGroup(List<IToken> tokens, TextSpan span)
     {
         Tokens = tokens;
@@ -194,7 +196,7 @@ internal class CommentGroup
             {
                 continue;
             }
-            else if (character != ' ')
+            else if (character != ' ' || character != '\t')
             {
                 return text[..i] + " " + text[i..];
             }
@@ -209,9 +211,7 @@ internal class CommentGroup
 
     public static Doc PrintMultiLineComment(string text)
     {
-        var lines = text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
-            .Select(line => (Doc)line);
-
+        var lines = text.Split(newlines, StringSplitOptions.None).Select(line => (Doc)line);
         return Doc.Join(Doc.HardLine, lines);
     }
 

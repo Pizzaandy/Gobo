@@ -19,6 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gobo\Gobo.csproj" />
+    <Compile Remove="wwwroot\js\ace\*.*" />
+    <None Include="wwwroot\js\ace\*.*" />
   </ItemGroup>
 
 </Project>

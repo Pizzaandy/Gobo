@@ -1,27 +1,47 @@
 ﻿@page "/"
 @using Gobo;
-@using Gobo.Playground.Components;
+@using Gobo.Playground.Shared;
 @inject IJSRuntime JSRuntime
 
-<div id="text-panels" class="container-fluid vh-100">
-    <div class="row h-100">
-        <div class="col-lg">
-            <AceEditor Text="@_initialText"
-                       Language="game_maker_language"
-                       TextChanged="@Format"></AceEditor>
-        </div>
-        <div class="col-lg">
-            <AceEditor @ref="outputEditor"
-                       Language="game_maker_language"
-                       IsReadonly="true"></AceEditor>
+
+<div class="d-flex">
+
+    <div class="side-panel p-3">
+        <h5>Gobo Playground</h5>
+        <label for="printWidth">Print width</label>
+        <input type="text"
+               class="form-control"
+               id="printWidth"
+               value="@_formatOptions.Width" @oninput="@OnWidthChanged" />
+    </div>
+
+    <div id="panels" class="flex-grow-1 vh-100">
+        <div class="row h-100 g-0">
+            <div class="col-lg">
+                <AceEditor @ref="inputEditor"
+                           Value="@_input"
+                           ValueChanged="@OnInputChanged"
+                           Language="game_maker_language"></AceEditor>
+            </div>
+            <div class="col-lg">
+                <AceEditor @ref="outputEditor"
+                           Language="game_maker_language"
+                           IsReadonly="true"></AceEditor>
+            </div>
         </div>
     </div>
+
 </div>
 
 @functions
 {
+    FormatOptions _formatOptions = new();
+
+    string _input = string.Empty;
     bool _error;
-    AceEditor outputEditor;
+
+    AceEditor inputEditor = null!;
+    AceEditor outputEditor = null!;
 
     const string _initialText = @"x = a and b or c  a=0xFG=1 var var var i := 0
 do begin
@@ -35,11 +55,18 @@ call()";
     {
         if (firstRender)
         {
-            await Format(_initialText);
+            await inputEditor.SetText(_initialText);
+            await Format();
         }
     }
 
-    async Task Format(string _input)
+    async Task OnInputChanged(string input)
+    {
+        _input = input;
+        await Format();
+    }
+
+    async Task Format()
     {
         if (string.IsNullOrEmpty(_input))
         {
@@ -59,7 +86,7 @@ call()";
 
         try
         {
-            result = await Task.Run(() => GmlFormatter.Format(_input, new()));
+            result = await Task.Run(() => GmlFormatter.Format(_input, _formatOptions));
         }
         catch (Exception e)
         {
@@ -70,5 +97,21 @@ call()";
         }
 
         await outputEditor.SetText(result.Output);
+    }
+
+    async Task OnWidthChanged(ChangeEventArgs args)
+    {
+        var value = args.Value.ToString();
+
+        if (!int.TryParse(value, out var number))
+        {
+            return;
+        }
+
+        _formatOptions.Width = Math.Max(number, 0);
+
+        await outputEditor.SetWidth(_formatOptions.Width);
+
+        await Format();
     }
 }

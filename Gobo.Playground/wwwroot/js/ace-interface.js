@@ -4,6 +4,7 @@
     editor.setTheme("ace/theme/" + theme);
 
     editor.setReadOnly(readOnly);
+    //editor.setShowPrintMargin(false);
     editor.session.setMode(defineMode);
     editor.renderer.setScrollMargin(10, 10);
    
@@ -12,7 +13,6 @@
         autoScrollEditorIntoView: true,
         enableBasicAutocompletion: true,
     });
-
 };
 
 window.ace_destroy = function(element) {
@@ -38,4 +38,9 @@ window.SetCode = function (dotNetHelper, element, code) {
     editor.getSession().setValue(code);
     editor.renderer.updateFull();
     dotNetHelper.invokeMethodAsync('ReceiveCode', code);
+}
+
+window.SetWidth = function (element, width) {
+    var editor = ace.edit(element);
+    editor.setOption("printMarginColumn", width);
 }
