@@ -19,6 +19,10 @@ jobs:
       with:
         dotnet-version: 8.x
 
+    # Install dotnet wasm buildtools workload
+    - name: Install .NET WASM Build Tools
+      run: dotnet workload install wasm-tools
+
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
       run: dotnet publish Gobo.Playground/Gobo.Playground.csproj -c Release -o release --nologo
