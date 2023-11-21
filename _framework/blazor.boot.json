@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Gobo.Playground",
   "resources": {
-    "hash": "sha256-3YfFeWI5LsJ82MuwMLjirnlge7ABe+2RcFArbM2kq+w=",
+    "hash": "sha256-bkVADTOSOGbHasl56ROQwweKM/0R6j4ogjX24zeI62s=",
     "jsModuleNative": {
       "dotnet.native.8.0.0.anr06xvywq.js": "sha256-ET2iq3eTDo37leb2FCYjvBeCrPK4ApYMnn3jvhA9R2U="
     },
@@ -9,12 +9,12 @@
       "dotnet.runtime.8.0.0.yv1mnms20m.js": "sha256-WdSX3HQvnBYF0KJLZoOyHvTzMHetaob6PV0Kn2K+QXw="
     },
     "wasmNative": {
-      "dotnet.native.wasm": "sha256-n8rJnVGbLNAlutN1/RP8AAztRx3tPinyZAlWR2Tf4hs="
+      "dotnet.native.wasm": "sha256-4UHnSBW4Kpn2Pmmbq0ujDT42CtN/fulgT944q17gv5M="
     },
     "assembly": {
       "Antlr4.Runtime.Standard.wasm": "sha256-GsVuVwvDGFwJRUNTzsonKc/B8sivkkpU2Dmt+2RcwaM=",
-      "Gobo.Playground.wasm": "sha256-Yro2jr3syL9xWEb+lQzJRbsn2tiJqF6XL5Zu6cNLI1c=",
-      "gobolib.wasm": "sha256-r7hAP6QztKwxwT6jSExe9MBnRTXjQtrQnYDKhdiEQZU=",
+      "Gobo.Playground.wasm": "sha256-H54dJH/N6va9qWx/RTyrktRukFMRNoG91QtXuYIei4o=",
+      "gobolib.wasm": "sha256-OUM9U38ov61Vv4VpL5GXbsZUAZjHtfs56gfS4XYEv2c=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-Su08H2tQHiTVunvJqFjAYh9zNBQoLpEaqzTuyagxta8=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-gTKuMxvm6ua/BhdM8kA8uv5ZMbBUA7hKzf2yA+BoH84=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-SsITn2DoH87CbGRvmKLUaXFlVqho1ZNhJtkP+vXlbhw=",
@@ -23,7 +23,7 @@
       "Microsoft.Extensions.Configuration.wasm": "sha256-aANTfeU/o7PeEBxMhvB0Xd7aQlc1ix3/y6+7nqsMnrA=",
       "Microsoft.Extensions.DependencyInjection.Abstractions.wasm": "sha256-UiNCOfTXMAzO3f+R705LOBfQIG8cZsnz6R+xcAzVvIY=",
       "Microsoft.Extensions.DependencyInjection.wasm": "sha256-YNQPHVRif3boPHLeGSBKbFiN9IDc7BLlt1jZHlterPs=",
-      "Microsoft.Extensions.Logging.Abstractions.wasm": "sha256-N6zeHTckzCx+QT5rNvr0QoQMqzgTKjiDGdkjHJRuEeE=",
+      "Microsoft.Extensions.Logging.Abstractions.wasm": "sha256-+Fgk2a7GOZ76M3YfJ+0IDUowOMx8/LBnDwuIKQr+/IA=",
       "Microsoft.Extensions.Logging.wasm": "sha256-fPOxqV1l8YSZOjRVlQ84uCkDyzNFPB/NfymjdkclH50=",
       "Microsoft.Extensions.Options.wasm": "sha256-FBm2ObnLuV1wlwiHaQsn7XJqOrJ8NlGLCjPQwd3cxdQ=",
       "Microsoft.Extensions.Primitives.wasm": "sha256-OG8fE+vLRI2p7gaxusbs18GEzN9h6xeB5Vx2xBsBVJo=",
