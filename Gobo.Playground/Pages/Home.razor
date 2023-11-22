@@ -4,13 +4,17 @@
 @inject IJSRuntime JSRuntime
 
 <div class="d-flex">
-    <div class="side-panel p-3" data-bs-theme="dark">
+    <div class="side-panel p-3 d-flex flex-column" data-bs-theme="dark">
         <h5 class="text-light">Gobo Playground</h5>
         <label for="printWidth" class="text-light">Print width</label>
         <input type="number"
                class="form-control"
                id="printWidth"
                value="@_formatOptions.Width" @oninput="@OnWidthChanged" />
+
+        <a class="btn btn-secondary mt-auto" href="https://github.com/Pizzaandy/Gobo" target="_blank">
+            <i class="bi-github"></i> GitHub
+        </a>
     </div>
 
     <div id="panels" class="flex-grow-1 vh-100">
