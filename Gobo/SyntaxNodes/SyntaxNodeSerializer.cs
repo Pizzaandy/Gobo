@@ -72,6 +72,7 @@ internal partial class SyntaxNodeSerializerContext : JsonSerializerContext { }
 [JsonDerivedType(typeof(IntegerLiteral))]
 [JsonDerivedType(typeof(DecimalLiteral))]
 [JsonDerivedType(typeof(UndefinedLiteral))]
+[JsonDerivedType(typeof(StringLiteral))]
 // Syntax extensions
 [JsonDerivedType(typeof(TypeAnnotation))]
 internal abstract partial class GmlSyntaxNode { }

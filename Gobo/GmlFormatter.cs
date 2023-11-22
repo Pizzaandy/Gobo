@@ -113,12 +113,12 @@ public static partial class GmlFormatter
                 if (unprinted.Count > 0)
                 {
                     message +=
-                        $"{unprinted.Count} comment group(s) were not printed:\n{string.Join('\n', unprinted)}";
+                        $"{unprinted.Count} comment group(s) were not printed:\n{string.Join('\n', unprinted)}\n\n{output}";
                 }
                 if (doublePrinted.Count > 0)
                 {
                     message +=
-                        $"{doublePrinted.Count} comment group(s) were printed multiple times:\n{string.Join('\n', doublePrinted)}";
+                        $"{doublePrinted.Count} comment group(s) were printed multiple times:\n{string.Join('\n', doublePrinted)}\n\n{output}";
                 }
 
                 throw new Exception(message);
@@ -132,9 +132,8 @@ public static partial class GmlFormatter
             }
             catch (GmlSyntaxErrorException ex)
             {
-                Console.WriteLine(output);
                 throw new Exception(
-                    "Formatting made the code invalid!\nParse error:\n" + ex.Message
+                    "Formatting made the code invalid!\n" + ex.Message + "\n\n" + output
                 );
             }
 

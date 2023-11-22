@@ -530,6 +530,10 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         {
             return Visit(context.templateStringLiteral());
         }
+        else if (context.StringLiteral() != null)
+        {
+            return new StringLiteral(context.ToSpan(), context.GetText());
+        }
         else if (context.IntegerLiteral() != null)
         {
             return new IntegerLiteral(context.ToSpan(), context.GetText());
@@ -847,9 +851,9 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         }
         else
         {
-            name = new Identifier(
+            name = new StringLiteral(
                 context.StringLiteral().ToSpan(),
-                context.StringLiteral().GetText().Trim('"')
+                context.StringLiteral().GetText()
             );
         }
 
