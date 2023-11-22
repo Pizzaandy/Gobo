@@ -100,9 +100,9 @@ internal static class Statement
         var isMethod =
             node is VariableDeclarationList variableDeclarationList
             && variableDeclarationList.Modifier == "static"
-            && variableDeclarationList.Declarations.Any(
-                c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration
-            )
+            && variableDeclarationList
+                .Declarations
+                .Any(c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration)
             && variableDeclarationList.Parent?.Parent is Block block
             && block.Parent is FunctionDeclaration potentialConstructor
             && potentialConstructor.IsConstructor;
@@ -112,7 +112,7 @@ internal static class Statement
 
     public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
     {
-        var startSpan = node.LeadingComments.Count > 0 ? node.LeadingComments[0].Span : node.Span;
+        var startSpan = node.LeadingComments.Any() ? node.LeadingComments.First().Span : node.Span;
 
         var leadingLineBreaks = ctx.SourceText.GetLineBreaksToLeft(startSpan);
 

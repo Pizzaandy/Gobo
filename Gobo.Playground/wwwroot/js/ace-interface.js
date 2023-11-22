@@ -4,14 +4,12 @@
     editor.setTheme("ace/theme/" + theme);
 
     editor.setReadOnly(readOnly);
-    //editor.setShowPrintMargin(false);
     editor.session.setMode(defineMode);
     editor.renderer.setScrollMargin(10, 10);
    
     // enable autocompletion and snippets
     editor.setOptions({
-        autoScrollEditorIntoView: true,
-        enableBasicAutocompletion: true,
+        autoScrollEditorIntoView: true
     });
 };
 

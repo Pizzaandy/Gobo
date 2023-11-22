@@ -5,6 +5,9 @@ using Xunit.Sdk;
 
 namespace Gobo.Tests;
 
+/// <summary>
+/// General purpose formatting tests to avoid regressions
+/// </summary>
 public class FormattingTests
 {
     private readonly FormatOptions options = FormatOptions.DefaultTestOptions;
@@ -46,7 +49,10 @@ public class FormattingTests
 
         await File.WriteAllTextAsync(actualFilePath, firstPass.Output);
 
-        var expectedOutput = await File.ReadAllTextAsync(expectedFilePath);
+        // Normalize line endings in case they are added manually on windows
+        var expectedOutput = (await File.ReadAllTextAsync(expectedFilePath)).ReplaceLineEndings(
+            "\n"
+        );
 
         var firstDiff = StringDiffer.PrintFirstDifference(expectedOutput, firstPass.Output);
         if (firstDiff != string.Empty)

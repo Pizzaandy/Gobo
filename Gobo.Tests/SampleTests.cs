@@ -5,6 +5,10 @@ using Xunit.Sdk;
 
 namespace Gobo.Tests;
 
+/// <summary>
+/// These tests ensure that the formatter does not throw errors
+/// on large files and does not change its output on a second pass.
+/// </summary>
 public class SampleTests
 {
     private readonly FormatOptions options = FormatOptions.DefaultTestOptions;

@@ -20,7 +20,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
 
         PrintOwnComments = false;
 
-        if (Children.Count == 0 && DanglingComments.Count == 0)
+        if (Children.Count == 0 && !DanglingComments.Any())
         {
             return EmptyArguments;
         }
@@ -68,7 +68,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
     {
         if (
             Children.Count == 0
-            || LeadingComments.Count > 0 // Leading comments will end up inside the argument list
+            || LeadingComments.Any() // The leading comment(s) will end up inside the argument list
             || Children.Any(c => c.Comments.Any(g => g.Placement == CommentPlacement.OwnLine))
         )
         {

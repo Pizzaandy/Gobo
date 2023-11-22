@@ -1,7 +1,7 @@
-﻿using Gobo.Parser;
+﻿using System.Diagnostics;
+using Gobo.Parser;
 using Gobo.Printer.DocPrinter;
 using Gobo.SyntaxNodes;
-using System.Diagnostics;
 
 namespace Gobo;
 
@@ -52,8 +52,6 @@ public static partial class GmlFormatter
 {
     public static FormatResult Format(string code, FormatOptions options)
     {
-        code = code.ReplaceLineEndings();
-
         long parseStart = 0;
         long parseStop = 0;
         long formatStart = 0;
@@ -85,7 +83,7 @@ public static partial class GmlFormatter
             UseTabs = options.UseTabs,
         };
 
-        var result = DocPrinter.Print(docs, printOptions, Environment.NewLine);
+        var result = DocPrinter.Print(docs, printOptions, "\n");
         var output = result.Output;
 
         if (options.ValidateOutput)

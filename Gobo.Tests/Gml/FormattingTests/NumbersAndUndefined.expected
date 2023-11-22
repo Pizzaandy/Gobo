@@ -1,0 +1,28 @@
+x = 0;
+y = 1230;
+z = 0.4560;
+i = 0.789;
+j = 0b010101;
+k = $abcd;
+a = 0xabcd;
+b = #2c8edd;
+c = NaN;
+d = infinity;
+
+foo = 21474836470000000000;
+bar = 0.1234567890123456789024;
+
+var _integer = 100_000_000; // same as 100000000
+var _float = 3_141.59; // same as 3141.59
+var _hexadec = 0xDEAD_BEEF; // same as 0xDEADBEEF
+var _binary = 0b01101000_01101001; // same as 0b0110100001101001
+
+call(undefined, undefined, undefined);
+
+call(undefined, /*comment*/ undefined, undefined);
+
+call(
+    undefined , // surprise! inner comment
+    undefined,
+    undefined
+);

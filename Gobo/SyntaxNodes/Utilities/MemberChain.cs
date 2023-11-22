@@ -54,7 +54,7 @@ internal static class MemberChain
             return Doc.Group(oneLine);
         }
 
-        if (groups.Count > 1 && groups[0].Last().Node.TrailingComments.Count > 0)
+        if (groups.Count > 1 && groups[0].Last().Node.TrailingComments.Any())
         {
             // Indent trailing comment doc at the end of the first group
             var contents = ((Concat)groups[0].Last().Doc).Contents;
@@ -89,7 +89,7 @@ internal static class MemberChain
             if (expression.Parent is IMemberChainable)
             {
                 if (
-                    expression.TrailingComments.Count > 0
+                    expression.TrailingComments.Any()
                     && expression is MemberDotExpression
                     && expression.Parent is CallExpression or MemberIndexExpression
                 )
@@ -298,10 +298,10 @@ internal static class MemberChain
             var lastGroup = groups[1];
 
             if (
-                firstGroup.Last().Node.TrailingComments.Count > 0
+                firstGroup.Last().Node.TrailingComments.Any()
                 || (
                     lastGroup[0].Node is MemberDotExpression member
-                    && member.Property.LeadingComments.Count > 0
+                    && member.Property.LeadingComments.Any()
                 )
             )
             {

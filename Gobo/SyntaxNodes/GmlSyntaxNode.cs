@@ -1,7 +1,7 @@
-﻿using Gobo.Printer.DocTypes;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Gobo.Printer.DocTypes;
 
 namespace Gobo.SyntaxNodes;
 
@@ -27,16 +27,16 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     public bool PrintOwnComments { get; set; } = true;
 
     [JsonIgnore]
-    public List<CommentGroup> LeadingComments =>
-        Comments.Where(g => g.Type == CommentType.Leading).ToList();
+    public IEnumerable<CommentGroup> LeadingComments =>
+        Comments.Where(g => g.Type == CommentType.Leading);
 
     [JsonIgnore]
-    public List<CommentGroup> TrailingComments =>
-        Comments.Where(g => g.Type == CommentType.Trailing).ToList();
+    public IEnumerable<CommentGroup> TrailingComments =>
+        Comments.Where(g => g.Type == CommentType.Trailing);
 
     [JsonIgnore]
-    public List<CommentGroup> DanglingComments =>
-        Comments.Where(g => g.Type == CommentType.Dangling).ToList();
+    public IEnumerable<CommentGroup> DanglingComments =>
+        Comments.Where(g => g.Type == CommentType.Dangling);
 
     public GmlSyntaxNode() { }
 

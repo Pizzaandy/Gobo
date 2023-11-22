@@ -50,7 +50,7 @@ internal sealed class Block : GmlSyntaxNode
     /// </summary>
     public static Doc PrintEmptyBlock(PrintContext ctx, GmlSyntaxNode? danglingCommentSource = null)
     {
-        if (danglingCommentSource is null || danglingCommentSource.DanglingComments.Count == 0)
+        if (danglingCommentSource is null || !danglingCommentSource.DanglingComments.Any())
         {
             return EmptyBlock;
         }

@@ -1,10 +1,6 @@
-html, body, #app {
-    height: 100%;
-}
-
 .side-panel {
     flex: 0 0 200px;
-    height: 100%;
+    overflow: auto;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -74,6 +70,7 @@ html, body, #app {
     position: absolute;
     text-align: center;
     font-weight: bold;
+    color: white;
     inset: calc(20vh + 3.25rem) 0 auto 0.2rem;
 }
 

@@ -4,6 +4,7 @@ using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
+using Gobo.SyntaxNodes.Gml.Literals;
 using Gobo.SyntaxNodes.GmlExtensions;
 using Gobo.SyntaxNodes.PrintHelpers;
 using UnaryExpression = Gobo.SyntaxNodes.Gml.UnaryExpression;
@@ -529,6 +530,18 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         {
             return Visit(context.templateStringLiteral());
         }
+        else if (context.IntegerLiteral() != null)
+        {
+            return new IntegerLiteral(context.ToSpan(), context.GetText());
+        }
+        else if (context.DecimalLiteral() != null)
+        {
+            return new DecimalLiteral(context.ToSpan(), context.GetText());
+        }
+        else if (context.Undefined() != null)
+        {
+            return new UndefinedLiteral(context.ToSpan(), context.GetText());
+        }
         else
         {
             return new Literal(context.ToSpan(), context.GetText());
@@ -645,9 +658,9 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
 
         foreach (var child in context.children)
         {
-            if (child is ITerminalNode && previousChildWasComma)
+            if (child is ITerminalNode terminalNode && previousChildWasComma)
             {
-                parts.Add(UndefinedArgument.Instance);
+                parts.Add(new UndefinedArgument(terminalNode.Symbol.StartIndex));
                 Debug.Assert(parts.Last() is not null);
             }
             else if (child is GameMakerLanguageParser.ExpressionOrFunctionContext)
@@ -660,7 +673,8 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
 
         if (previousChildWasComma)
         {
-            parts.Add(UndefinedArgument.Instance);
+            var lastNode = (ITerminalNode)context.children[^1];
+            parts.Add(new UndefinedArgument(lastNode.Symbol.StartIndex));
         }
 
         return parts;

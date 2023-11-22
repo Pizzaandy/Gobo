@@ -15,7 +15,7 @@ internal sealed class StructExpression : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        if (Children.Count == 0 && DanglingComments.Count == 0)
+        if (Children.Count == 0 && !DanglingComments.Any())
         {
             return EmptyStruct;
         }

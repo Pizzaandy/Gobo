@@ -1,18 +1,20 @@
 ﻿using Gobo.Printer.DocTypes;
+using Gobo.SyntaxNodes.Gml.Literals;
 
 namespace Gobo.SyntaxNodes.Gml;
 
-internal class UndefinedArgument : EmptyNode
+internal class UndefinedArgument : GmlSyntaxNode
 {
-    public static new UndefinedArgument Instance { get; } = new();
+    public UndefinedArgument(int position)
+        : base(new TextSpan(position, position)) { }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return Literal.Undefined;
+        return UndefinedLiteral.Undefined;
     }
 
     public override int GetHashCode()
     {
-        return Literal.Undefined.GetHashCode();
+        return UndefinedLiteral.HashCode;
     }
 }

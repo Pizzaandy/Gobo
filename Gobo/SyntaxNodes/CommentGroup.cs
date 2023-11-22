@@ -49,7 +49,7 @@ internal class CommentGroup
 
     public string? FormatCommandText { get; init; }
 
-    private bool endsWithSingleLineComment = false;
+    private readonly bool endsWithSingleLineComment = false;
 
     public const string FormatCommandPrefix = "fmt-";
 
@@ -118,9 +118,13 @@ internal class CommentGroup
     /// Prints multiple lines of comments together, accounting for whitespace and padding.
     /// Setting <paramref name="type"/> to "Dangling" will ensure no padding is added.
     /// </summary>
-    public static Doc PrintGroups(PrintContext ctx, List<CommentGroup> groups, CommentType type)
+    public static Doc PrintGroups(
+        PrintContext ctx,
+        IEnumerable<CommentGroup> groups,
+        CommentType type
+    )
     {
-        if (groups.Count == 0)
+        if (!groups.Any())
         {
             return Doc.Null;
         }
@@ -196,7 +200,7 @@ internal class CommentGroup
             {
                 continue;
             }
-            else if (character != ' ' || character != '\t')
+            else if (character != ' ' && character != '\t')
             {
                 return text[..i] + " " + text[i..];
             }
