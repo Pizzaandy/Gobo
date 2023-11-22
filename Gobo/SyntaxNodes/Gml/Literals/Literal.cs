@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using Gobo.Printer.DocTypes;
+﻿using Gobo.Printer.DocTypes;
 
 namespace Gobo.SyntaxNodes.Gml.Literals;
 
