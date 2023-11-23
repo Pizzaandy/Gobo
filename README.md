@@ -1,5 +1,7 @@
 ## Gobo: GML Code Formatter
 
+[Try out the formatter here!](https://pizzaandy.github.io/Gobo/)
+
 Gobo is an opinionated formatter for GameMaker Language. It enforces a consistent style by parsing and re-printing your code with its own rules, taking maximum line length into account.
 
 Gobo currently provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier.
@@ -33,7 +35,7 @@ return call();
 ```
 
 ## How does it work?
-Gobo is written in C# and compiles to a self-contained binary using Native AOT in .NET 8. This may be changed in the future!
+Gobo is written in C# and compiles to a self-contained binary using Native AOT in .NET 8. This may change in the future!
 
 Gobo uses [Antlr4](https://www.antlr.org/)-generated code to parse GML and convert it into an abstract syntax tree. There is no officially-documented format for GML's syntax tree, so Gobo uses a format similar to TypeScript's AST. The grammar spec has been designed to only handle valid GML code, barring a few exceptions, to ensure correctness.
 
