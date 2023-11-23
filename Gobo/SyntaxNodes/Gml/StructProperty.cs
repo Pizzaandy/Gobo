@@ -17,25 +17,13 @@ internal sealed class StructProperty : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        Doc name;
-
-        if (Name is StringLiteral stringLiteral && !stringLiteral.Text.Any(char.IsWhiteSpace))
-        {
-            var stringContents = stringLiteral.Text.Trim('"');
-            name = stringLiteral.PrintWithOwnComments(ctx, stringContents);
-        }
-        else
-        {
-            name = Name.Print(ctx);
-        }
-
         if (Initializer.IsEmpty)
         {
-            return name;
+            return Name.Print(ctx);
         }
         else
         {
-            return Doc.Concat(name, ":", " ", Initializer.Print(ctx));
+            return Doc.Concat(Name.Print(ctx), ":", " ", Initializer.Print(ctx));
         }
     }
 }

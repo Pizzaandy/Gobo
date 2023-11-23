@@ -1,14 +1,15 @@
-using Gobo.Printer.DocTypes;
 using System.Text;
+using Gobo.Printer.DocTypes;
 
 namespace Gobo.Printer;
 
 /// <summary>
 /// Used to create a string representation of a Doc
-/// The string representation can be pasted into DocPrinterTests
 /// </summary>
 internal static class DocSerializer
 {
+    private const int IndentSize = 2;
+
     public static string Serialize(Doc doc)
     {
         var result = new StringBuilder();
@@ -20,11 +21,11 @@ internal static class DocSerializer
     {
         void AppendIndent()
         {
-            result.Append(' ', indent * 4);
+            result.Append(' ', indent * IndentSize);
         }
         void AppendNextIndent()
         {
-            result.Append(' ', (indent + 1) * 4);
+            result.Append(' ', (indent + 1) * IndentSize);
         }
 
         if (doc is NullDoc)

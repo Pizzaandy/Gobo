@@ -17,6 +17,12 @@ internal enum CommentPlacement
     Remaining,
 }
 
+internal enum FormatCommandType
+{
+    None,
+    Ignore,
+}
+
 /// <summary>
 /// Represents a sequence of comments with no line breaks between them.
 /// </summary>
@@ -45,13 +51,11 @@ internal class CommentGroup
 
     public GmlSyntaxNode? FollowingNode { get; set; }
 
-    public bool IsFormatCommand { get; init; }
+    public FormatCommandType FormatCommand { get; init; }
 
-    public string? FormatCommandText { get; init; }
+    public bool PrintedAsEndOfLine { get; set; } = false;
 
     private readonly bool endsWithSingleLineComment = false;
-
-    public const string FormatCommandPrefix = "fmt-";
 
     private static readonly string[] newlines = new string[] { "\r\n", "\n" };
 
@@ -72,11 +76,11 @@ internal class CommentGroup
 
                 var trimmedText = token.Text[2..].Trim();
 
-                if (trimmedText.StartsWith(FormatCommandPrefix))
+                FormatCommand = trimmedText switch
                 {
-                    IsFormatCommand = true;
-                    FormatCommandText = trimmedText[FormatCommandPrefix.Length..];
-                }
+                    "fmt-ignore" => FormatCommandType.Ignore,
+                    _ => FormatCommandType.None
+                };
 
                 break;
             }
@@ -106,6 +110,7 @@ internal class CommentGroup
         if (endsWithSingleLineComment || Placement is CommentPlacement.EndOfLine)
         {
             parts.Add(Doc.BreakParent);
+            PrintedAsEndOfLine = true;
             return Doc.EndOfLineComment(parts, Id);
         }
         else
@@ -176,7 +181,8 @@ internal class CommentGroup
 
             if (leadingLineBreakCount == 0)
             {
-                return Doc.Concat(" ", printedGroups);
+                Doc space = groups.First().PrintedAsEndOfLine ? Doc.Null : " ";
+                return Doc.Concat(space, printedGroups);
             }
 
             for (var i = 0; i < Math.Min(leadingLineBreakCount, 2); i++)

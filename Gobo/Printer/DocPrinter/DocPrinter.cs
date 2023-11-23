@@ -1,6 +1,6 @@
+using System.Text;
 using Gobo.Printer.DocTypes;
 using Gobo.Printer.Utilities;
-using System.Text;
 
 namespace Gobo.Printer.DocPrinter;
 
@@ -272,6 +272,7 @@ internal class DocPrinter
             // TODO: Find a way to optimize out some of these checks
             if (!Output.EndsWithNewLineAndWhitespace() && Output.Length > 0)
             {
+                Output.TrimTrailingWhitespace();
                 if (openingDelimiters.Contains(Output[^1]))
                 {
                     // Move end-of-line comments to a new line if next to an opening bracket delimiter
@@ -291,22 +292,16 @@ internal class DocPrinter
                 }
                 else
                 {
-                    Output.TrimTrailingWhitespace();
                     Output.Append(' ');
                 }
             }
 
             for (var i = 0; i < EndOfLineComments.Count; i++)
             {
-                RemainingCommands.Push(EndOfLineComments.Pop());
-            }
-
-            foreach (var comment in EndOfLineComments)
-            {
+                var comment = EndOfLineComments.Pop();
                 RemainingCommands.Push(comment);
             }
 
-            EndOfLineComments.Clear();
             return;
         }
 

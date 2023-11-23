@@ -1,0 +1,26 @@
+var struct = {
+    foo: bar,
+    // leading
+    " baz ": qux, // trailing
+    noone: function() {return {}},
+    nested: {
+        constructor: []
+    }
+}
+
+var array = [
+    item1, item2, item3,
+]
+
+var array = [
+    item1, item2, item3, // should break
+]
+
+var accessors = [
+    data_structure[array],
+    data_structure[@ array],
+    data_structure[| list],
+    data_structure[? map],
+    data_structure[# grid],
+    data_structure[$ "struct"],
+]

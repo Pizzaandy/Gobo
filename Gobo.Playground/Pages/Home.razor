@@ -37,7 +37,7 @@
 @functions
 {
     string _input = string.Empty;
-    FormatOptions _formatOptions = new();
+    FormatOptions _formatOptions = new() { GetDebugInfo = true };
 
     AceEditor inputEditor = null!;
     AceEditor outputEditor = null!;
