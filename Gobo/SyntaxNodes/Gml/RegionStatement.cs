@@ -16,6 +16,6 @@ internal sealed class RegionStatement : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return IsEndRegion ? "#endregion" : Doc.Concat("#region", Name!);
+        return IsEndRegion ? "#endregion" : Doc.Concat("#region", Name ?? "");
     }
 }

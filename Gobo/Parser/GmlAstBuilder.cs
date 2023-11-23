@@ -1190,7 +1190,13 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         }
         else
         {
-            var name = context.RegionCharacters().GetText();
+            string? name = null;
+
+            if (context.RegionCharacters() != null)
+            {
+                name = context.RegionCharacters().GetText();
+            }
+
             return new RegionStatement(context.ToSpan(), name, false);
         }
     }
