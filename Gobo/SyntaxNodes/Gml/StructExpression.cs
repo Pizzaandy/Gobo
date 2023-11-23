@@ -6,6 +6,7 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class StructExpression : GmlSyntaxNode
 {
     public List<GmlSyntaxNode> Properties => Children;
+    public static string EmptyStruct => "{}";
 
     public StructExpression(TextSpan span, List<GmlSyntaxNode> properties)
         : base(span)
@@ -24,6 +25,4 @@ internal sealed class StructExpression : GmlSyntaxNode
             return DelimitedList.PrintInBrackets(ctx, "{", this, "}", ",", true);
         }
     }
-
-    public static string EmptyStruct => "{}";
 }

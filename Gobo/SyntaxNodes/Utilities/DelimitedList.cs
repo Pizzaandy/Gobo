@@ -19,6 +19,15 @@ internal class DelimitedList
 
         var groupId = Guid.NewGuid().ToString();
 
+        if (
+            arguments.Children.Count == 0
+            && leadingContents is null
+            && !arguments.DanglingComments.Any()
+        )
+        {
+            return Doc.Concat(openToken, closeToken);
+        }
+
         leadingContents ??= Doc.Null;
 
         if (arguments.Children.Count > 0)

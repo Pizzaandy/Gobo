@@ -6,6 +6,7 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class ParameterList : GmlSyntaxNode
 {
     public List<GmlSyntaxNode> Parameters => Children;
+    public static Doc EmptyParameters => "()";
 
     public ParameterList(TextSpan span, List<GmlSyntaxNode> parameters)
         : base(span)
