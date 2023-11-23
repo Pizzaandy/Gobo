@@ -9,10 +9,14 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 {
     public string Kind => GetType().Name;
 
+    public int Start => Span.Start;
+    public int End => Span.End;
+
+    [JsonIgnore]
     public TextSpan Span { get; set; }
 
     [JsonIgnore]
-    public List<CommentGroup> Comments { get; set; } = new();
+    public List<CommentGroup>? Comments { get; set; } = new();
 
     [JsonIgnore]
     public GmlSyntaxNode? Parent { get; set; }

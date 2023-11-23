@@ -5,12 +5,22 @@
 
 <div class="d-flex">
     <div class="side-panel p-3 d-flex flex-column" data-bs-theme="dark">
+
         <h5 class="text-light">Gobo Playground</h5>
+
         <label for="printWidth" class="text-light">Print width</label>
         <input type="number"
                class="form-control"
                id="printWidth"
                value="@_formatOptions.Width" @oninput="@OnWidthChanged" />
+
+        <div class="form-check pt-3">
+            <input type="checkbox"
+                   class="form-check-input"
+                   id="showAstCheckbox"
+                   value="@_showAst" @oninput="@OnShowAstChanged" />
+            <label for="showAstCheckbox" class="text-light form-check-label">Show AST</label>
+        </div>
 
         <a class="btn btn-secondary mt-auto" href="https://github.com/Pizzaandy/Gobo" target="_blank">
             <i class="bi-github"></i> GitHub
@@ -25,6 +35,14 @@
                            ValueChanged="@OnInputChanged"
                            Language="game_maker_language"></AceEditor>
             </div>
+            @if (_showAst)
+            {
+                <div class="col-lg">
+                    <AceEditor @ref="astEditor"
+                               Language="json"
+                               IsReadonly="true"></AceEditor>
+                </div>
+            }
             <div class="col-lg">
                 <AceEditor @ref="outputEditor"
                            Language="game_maker_language"
@@ -40,8 +58,10 @@
     FormatOptions _formatOptions = new() { GetDebugInfo = true };
 
     AceEditor inputEditor = null!;
+    AceEditor astEditor = null!;
     AceEditor outputEditor = null!;
 
+    bool _showAst = false;
     bool _error;
 
     const string _initialText = @"x = a and b or c  a=0xFG=1 var var var i := 0
@@ -99,6 +119,12 @@ call()";
 
         await outputEditor.SetLanguage("game_maker_language");
         await outputEditor.SetText(result.Output);
+
+        if (_showAst)
+        {
+            await astEditor.SetText(result.Ast);
+        }
+
     }
 
     async Task OnWidthChanged(ChangeEventArgs args)
@@ -114,6 +140,12 @@ call()";
 
         await outputEditor.SetWidth(_formatOptions.Width);
 
+        await Format();
+    }
+
+    async Task OnShowAstChanged(ChangeEventArgs args)
+    {
+        _showAst = (bool)args.Value;
         await Format();
     }
 }
