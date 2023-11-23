@@ -1,6 +1,4 @@
-﻿using Gobo.Printer.DocTypes;
-
-namespace Gobo.SyntaxNodes.Gml.Literals
+﻿namespace Gobo.SyntaxNodes.Gml.Literals
 {
     internal sealed class StringLiteral : Literal
     {

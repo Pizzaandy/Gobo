@@ -1,6 +1,6 @@
-﻿using DocoptNet;
+﻿using System.Diagnostics;
+using DocoptNet;
 using Gobo;
-using System.Diagnostics;
 
 const string usage =
     @"Usage:
@@ -77,7 +77,7 @@ static async Task<int> Run(IDictionary<string, ArgValue> arguments)
         await processFile(filePath, arguments);
         stopWatch.Stop();
 
-        Console.WriteLine("Done");
+        Console.WriteLine($"Done in {stopWatch.ElapsedMilliseconds} ms");
     }
     else if (Directory.Exists(filePath))
     {
