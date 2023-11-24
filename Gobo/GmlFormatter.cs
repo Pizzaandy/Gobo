@@ -55,6 +55,7 @@ public static partial class GmlFormatter
         long parseStart = 0;
         long parseStop = 0;
         long formatStart = 0;
+        long formatStop = 0;
 
         var getDebugInfo = options.GetDebugInfo;
 
@@ -85,6 +86,11 @@ public static partial class GmlFormatter
 
         var result = DocPrinter.Print(docs, printOptions, "\n");
         var output = result.Output;
+
+        if (getDebugInfo)
+        {
+            formatStop = Stopwatch.GetTimestamp();
+        }
 
         if (options.ValidateOutput)
         {
@@ -155,7 +161,6 @@ public static partial class GmlFormatter
 
         if (getDebugInfo)
         {
-            long formatStop = Stopwatch.GetTimestamp();
             return new FormatResult(output)
             {
                 Ast = ast.ToString(),
