@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Atn;
 using Gobo.SyntaxNodes;
 
 namespace Gobo.Parser;
@@ -29,7 +30,7 @@ internal static class GmlParser
         // 3) Attach comment groups
         if (attachComments)
         {
-            var commentGroups = CreateCommentGroups(tokenStream);
+            var commentGroups = CreateCommentGroups(lexer);
             ast = new CommentMapper(new SourceText(input), commentGroups).AttachComments(ast);
         }
 
@@ -39,16 +40,17 @@ internal static class GmlParser
     /// <summary>
     /// Iterate all tokens and group together comments on the same line
     /// </summary>
-    private static List<CommentGroup> CreateCommentGroups(CommonTokenStream tokenStream)
+    private static List<CommentGroup> CreateCommentGroups(GameMakerLanguageLexer lexer)
     {
-        tokenStream.Fill();
-
+        lexer.Reset();
         var groups = new List<CommentGroup>();
 
         List<IToken>? currentGroup = null;
 
-        foreach (var token in tokenStream.GetTokens())
+        while (!lexer.HitEOF)
         {
+            var token = lexer.NextToken();
+
             bool breakGroup = false;
 
             if (IsWhiteSpace(token))
