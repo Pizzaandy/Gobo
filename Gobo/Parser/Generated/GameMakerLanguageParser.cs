@@ -65,38 +65,42 @@ public partial class GameMakerLanguageParser : Parser {
 		RULE_breakStatement = 10, RULE_exitStatement = 11, RULE_emptyStatement = 12, 
 		RULE_caseBlock = 13, RULE_caseClause = 14, RULE_throwStatement = 15, RULE_tryStatement = 16, 
 		RULE_catchProduction = 17, RULE_finallyProduction = 18, RULE_returnStatement = 19, 
-		RULE_deleteStatement = 20, RULE_assignmentExpression = 21, RULE_variableDeclarationList = 22, 
-		RULE_varModifier = 23, RULE_variableDeclaration = 24, RULE_typeAnnotation = 25, 
-		RULE_globalVarStatement = 26, RULE_lValueStartExpression = 27, RULE_lValueExpression = 28, 
-		RULE_lValueChainOperator = 29, RULE_lValueFinalOperator = 30, RULE_newExpression = 31, 
-		RULE_expressionSequence = 32, RULE_expressionOrFunction = 33, RULE_expression = 34, 
-		RULE_callStatement = 35, RULE_callableExpression = 36, RULE_incDecStatement = 37, 
-		RULE_accessor = 38, RULE_arguments = 39, RULE_argumentList = 40, RULE_assignmentOperator = 41, 
-		RULE_literal = 42, RULE_templateStringLiteral = 43, RULE_templateStringAtom = 44, 
-		RULE_arrayLiteral = 45, RULE_structLiteral = 46, RULE_propertyAssignment = 47, 
-		RULE_propertyIdentifier = 48, RULE_functionDeclaration = 49, RULE_constructorClause = 50, 
-		RULE_parameterList = 51, RULE_parameter = 52, RULE_identifier = 53, RULE_enumeratorDeclaration = 54, 
-		RULE_enumeratorBlock = 55, RULE_enumerator = 56, RULE_macroStatement = 57, 
-		RULE_defineStatement = 58, RULE_regionStatement = 59, RULE_identifierStatement = 60, 
-		RULE_softKeyword = 61, RULE_propertySoftKeyword = 62, RULE_openBlock = 63, 
-		RULE_closeBlock = 64, RULE_eos = 65, RULE_macroToken = 66;
+		RULE_deleteStatement = 20, RULE_assignment = 21, RULE_varModifier = 22, 
+		RULE_variableDeclaration = 23, RULE_expression = 24, RULE_conditionalExpression = 25, 
+		RULE_bitXorExpression = 26, RULE_bitOrExpression = 27, RULE_bitAndExpression = 28, 
+		RULE_nullCoalescingExpression = 29, RULE_xorExpression = 30, RULE_andExpression = 31, 
+		RULE_orExpression = 32, RULE_equalityExpression = 33, RULE_relationalExpression = 34, 
+		RULE_shiftExpression = 35, RULE_additiveExpression = 36, RULE_multiplicativeExpression = 37, 
+		RULE_unaryExpression = 38, RULE_primaryExpression = 39, RULE_primaryExpressionStart = 40, 
+		RULE_memberIndex = 41, RULE_memberDot = 42, RULE_methodInvocation = 43, 
+		RULE_accessor = 44, RULE_arguments = 45, RULE_argumentList = 46, RULE_assignmentOperator = 47, 
+		RULE_literal = 48, RULE_templateStringLiteral = 49, RULE_templateStringAtom = 50, 
+		RULE_arrayLiteral = 51, RULE_structLiteral = 52, RULE_propertyAssignment = 53, 
+		RULE_propertyIdentifier = 54, RULE_functionDeclaration = 55, RULE_constructorClause = 56, 
+		RULE_parameterList = 57, RULE_parameter = 58, RULE_identifier = 59, RULE_enumeratorDeclaration = 60, 
+		RULE_enumeratorBlock = 61, RULE_enumerator = 62, RULE_macroStatement = 63, 
+		RULE_defineStatement = 64, RULE_regionStatement = 65, RULE_identifierStatement = 66, 
+		RULE_softKeyword = 67, RULE_propertySoftKeyword = 68, RULE_openBlock = 69, 
+		RULE_closeBlock = 70, RULE_eos = 71, RULE_macroToken = 72;
 	public static readonly string[] ruleNames = {
 		"program", "statementList", "statementNoSemicolon", "statement", "block", 
 		"ifStatement", "iterationStatement", "withStatement", "switchStatement", 
 		"continueStatement", "breakStatement", "exitStatement", "emptyStatement", 
 		"caseBlock", "caseClause", "throwStatement", "tryStatement", "catchProduction", 
-		"finallyProduction", "returnStatement", "deleteStatement", "assignmentExpression", 
-		"variableDeclarationList", "varModifier", "variableDeclaration", "typeAnnotation", 
-		"globalVarStatement", "lValueStartExpression", "lValueExpression", "lValueChainOperator", 
-		"lValueFinalOperator", "newExpression", "expressionSequence", "expressionOrFunction", 
-		"expression", "callStatement", "callableExpression", "incDecStatement", 
-		"accessor", "arguments", "argumentList", "assignmentOperator", "literal", 
-		"templateStringLiteral", "templateStringAtom", "arrayLiteral", "structLiteral", 
-		"propertyAssignment", "propertyIdentifier", "functionDeclaration", "constructorClause", 
-		"parameterList", "parameter", "identifier", "enumeratorDeclaration", "enumeratorBlock", 
-		"enumerator", "macroStatement", "defineStatement", "regionStatement", 
-		"identifierStatement", "softKeyword", "propertySoftKeyword", "openBlock", 
-		"closeBlock", "eos", "macroToken"
+		"finallyProduction", "returnStatement", "deleteStatement", "assignment", 
+		"varModifier", "variableDeclaration", "expression", "conditionalExpression", 
+		"bitXorExpression", "bitOrExpression", "bitAndExpression", "nullCoalescingExpression", 
+		"xorExpression", "andExpression", "orExpression", "equalityExpression", 
+		"relationalExpression", "shiftExpression", "additiveExpression", "multiplicativeExpression", 
+		"unaryExpression", "primaryExpression", "primaryExpressionStart", "memberIndex", 
+		"memberDot", "methodInvocation", "accessor", "arguments", "argumentList", 
+		"assignmentOperator", "literal", "templateStringLiteral", "templateStringAtom", 
+		"arrayLiteral", "structLiteral", "propertyAssignment", "propertyIdentifier", 
+		"functionDeclaration", "constructorClause", "parameterList", "parameter", 
+		"identifier", "enumeratorDeclaration", "enumeratorBlock", "enumerator", 
+		"macroStatement", "defineStatement", "regionStatement", "identifierStatement", 
+		"softKeyword", "propertySoftKeyword", "openBlock", "closeBlock", "eos", 
+		"macroToken"
 	};
 
 	private static readonly string[] _LiteralNames = {
@@ -195,17 +199,17 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 135;
+			State = 147;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590365688L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0)) {
 				{
-				State = 134;
+				State = 146;
 				statementList();
 				}
 			}
 
-			State = 137;
+			State = 149;
 			Match(Eof);
 			}
 		}
@@ -254,19 +258,31 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 141;
+			State = 153;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
-				State = 141;
+				State = 153;
 				ErrorHandler.Sync(this);
 				switch (TokenStream.LA(1)) {
+				case OpenBracket:
 				case OpenParen:
 				case OpenBrace:
 				case Begin:
 				case PlusPlus:
 				case MinusMinus:
+				case Plus:
+				case Minus:
+				case BitNot:
+				case Not:
+				case BooleanLiteral:
+				case IntegerLiteral:
+				case DecimalLiteral:
+				case BinaryLiteral:
+				case HexIntegerLiteral:
+				case Undefined:
+				case NoOne:
 				case Break:
 				case Exit:
 				case Do:
@@ -293,14 +309,17 @@ public partial class GameMakerLanguageParser : Parser {
 				case Region:
 				case EndRegion:
 				case Identifier:
+				case StringLiteral:
+				case TemplateStringStart:
+				case VerbatimStringLiteral:
 					{
-					State = 139;
+					State = 151;
 					statement();
 					}
 					break;
 				case SemiColon:
 					{
-					State = 140;
+					State = 152;
 					emptyStatement();
 					}
 					break;
@@ -308,10 +327,10 @@ public partial class GameMakerLanguageParser : Parser {
 					throw new NoViableAltException(this);
 				}
 				}
-				State = 143;
+				State = 155;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590365688L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -329,11 +348,14 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public BlockContext block() {
 			return GetRuleContext<BlockContext>(0);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public AssignmentContext assignment() {
+			return GetRuleContext<AssignmentContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public UnaryExpressionContext unaryExpression() {
+			return GetRuleContext<UnaryExpressionContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public IfStatementContext ifStatement() {
 			return GetRuleContext<IfStatementContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public VariableDeclarationListContext variableDeclarationList() {
-			return GetRuleContext<VariableDeclarationListContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public IterationStatementContext iterationStatement() {
 			return GetRuleContext<IterationStatementContext>(0);
@@ -374,18 +396,6 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public EnumeratorDeclarationContext enumeratorDeclaration() {
 			return GetRuleContext<EnumeratorDeclarationContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public GlobalVarStatementContext globalVarStatement() {
-			return GetRuleContext<GlobalVarStatementContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public AssignmentExpressionContext assignmentExpression() {
-			return GetRuleContext<AssignmentExpressionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public IncDecStatementContext incDecStatement() {
-			return GetRuleContext<IncDecStatementContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public CallStatementContext callStatement() {
-			return GetRuleContext<CallStatementContext>(0);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public FunctionDeclarationContext functionDeclaration() {
 			return GetRuleContext<FunctionDeclarationContext>(0);
 		}
@@ -410,144 +420,142 @@ public partial class GameMakerLanguageParser : Parser {
 		StatementNoSemicolonContext _localctx = new StatementNoSemicolonContext(Context, State);
 		EnterRule(_localctx, 4, RULE_statementNoSemicolon);
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 167;
+			State = 176;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,3,Context) ) {
 			case 1:
+				EnterOuterAlt(_localctx, 1);
 				{
-				State = 145;
+				State = 157;
 				block();
 				}
 				break;
 			case 2:
+				EnterOuterAlt(_localctx, 2);
 				{
-				State = 146;
-				ifStatement();
+				State = 158;
+				assignment();
 				}
 				break;
 			case 3:
+				EnterOuterAlt(_localctx, 3);
 				{
-				State = 147;
-				variableDeclarationList();
+				State = 159;
+				unaryExpression();
 				}
 				break;
 			case 4:
+				EnterOuterAlt(_localctx, 4);
 				{
-				State = 148;
-				iterationStatement();
+				State = 160;
+				ifStatement();
 				}
 				break;
 			case 5:
+				EnterOuterAlt(_localctx, 5);
 				{
-				State = 149;
-				continueStatement();
+				State = 161;
+				iterationStatement();
 				}
 				break;
 			case 6:
+				EnterOuterAlt(_localctx, 6);
 				{
-				State = 150;
-				breakStatement();
+				State = 162;
+				continueStatement();
 				}
 				break;
 			case 7:
+				EnterOuterAlt(_localctx, 7);
 				{
-				State = 151;
-				returnStatement();
+				State = 163;
+				breakStatement();
 				}
 				break;
 			case 8:
+				EnterOuterAlt(_localctx, 8);
 				{
-				State = 152;
-				withStatement();
+				State = 164;
+				returnStatement();
 				}
 				break;
 			case 9:
+				EnterOuterAlt(_localctx, 9);
 				{
-				State = 153;
-				switchStatement();
+				State = 165;
+				withStatement();
 				}
 				break;
 			case 10:
+				EnterOuterAlt(_localctx, 10);
 				{
-				State = 154;
-				tryStatement();
+				State = 166;
+				switchStatement();
 				}
 				break;
 			case 11:
+				EnterOuterAlt(_localctx, 11);
 				{
-				State = 155;
-				throwStatement();
+				State = 167;
+				tryStatement();
 				}
 				break;
 			case 12:
+				EnterOuterAlt(_localctx, 12);
 				{
-				State = 156;
-				exitStatement();
+				State = 168;
+				throwStatement();
 				}
 				break;
 			case 13:
+				EnterOuterAlt(_localctx, 13);
 				{
-				State = 157;
-				macroStatement();
+				State = 169;
+				exitStatement();
 				}
 				break;
 			case 14:
+				EnterOuterAlt(_localctx, 14);
 				{
-				State = 158;
-				defineStatement();
+				State = 170;
+				macroStatement();
 				}
 				break;
 			case 15:
+				EnterOuterAlt(_localctx, 15);
 				{
-				State = 159;
-				regionStatement();
+				State = 171;
+				defineStatement();
 				}
 				break;
 			case 16:
+				EnterOuterAlt(_localctx, 16);
 				{
-				State = 160;
-				enumeratorDeclaration();
+				State = 172;
+				regionStatement();
 				}
 				break;
 			case 17:
+				EnterOuterAlt(_localctx, 17);
 				{
-				State = 161;
-				globalVarStatement();
+				State = 173;
+				enumeratorDeclaration();
 				}
 				break;
 			case 18:
+				EnterOuterAlt(_localctx, 18);
 				{
-				State = 162;
-				assignmentExpression();
-				}
-				break;
-			case 19:
-				{
-				State = 163;
-				incDecStatement();
-				}
-				break;
-			case 20:
-				{
-				State = 164;
-				callStatement(0);
-				}
-				break;
-			case 21:
-				{
-				State = 165;
+				State = 174;
 				functionDeclaration();
 				}
 				break;
-			case 22:
+			case 19:
+				EnterOuterAlt(_localctx, 19);
 				{
-				State = 166;
+				State = 175;
 				deleteStatement();
 				}
 				break;
-			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -592,21 +600,21 @@ public partial class GameMakerLanguageParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 169;
+			State = 178;
 			statementNoSemicolon();
-			State = 173;
+			State = 182;
 			ErrorHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(TokenStream,4,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 170;
+					State = 179;
 					eos();
 					}
 					} 
 				}
-				State = 175;
+				State = 184;
 				ErrorHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(TokenStream,4,Context);
 			}
@@ -654,19 +662,19 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 176;
+			State = 185;
 			openBlock();
-			State = 178;
+			State = 187;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
-			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0)) {
+			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590365688L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0)) {
 				{
-				State = 177;
+				State = 186;
 				statementList();
 				}
 			}
 
-			State = 180;
+			State = 189;
 			closeBlock();
 			}
 		}
@@ -715,30 +723,30 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 182;
+			State = 191;
 			Match(If);
-			State = 183;
-			expression(0);
-			State = 185;
+			State = 192;
+			expression();
+			State = 194;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Then) {
 				{
-				State = 184;
+				State = 193;
 				Match(Then);
 				}
 			}
 
-			State = 187;
+			State = 196;
 			statement();
-			State = 190;
+			State = 199;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,7,Context) ) {
 			case 1:
 				{
-				State = 188;
+				State = 197;
 				Match(Else);
-				State = 189;
+				State = 198;
 				statement();
 				}
 				break;
@@ -852,32 +860,32 @@ public partial class GameMakerLanguageParser : Parser {
 		EnterRule(_localctx, 12, RULE_iterationStatement);
 		int _la;
 		try {
-			State = 220;
+			State = 229;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Do:
 				_localctx = new DoStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 192;
+				State = 201;
 				Match(Do);
-				State = 193;
+				State = 202;
 				statement();
-				State = 194;
+				State = 203;
 				Match(Until);
-				State = 195;
-				expression(0);
+				State = 204;
+				expression();
 				}
 				break;
 			case While:
 				_localctx = new WhileStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 197;
+				State = 206;
 				Match(While);
-				State = 198;
-				expression(0);
-				State = 199;
+				State = 207;
+				expression();
+				State = 208;
 				statement();
 				}
 				break;
@@ -885,47 +893,47 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new ForStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 201;
+				State = 210;
 				Match(For);
-				State = 202;
+				State = 211;
 				Match(OpenParen);
-				State = 204;
+				State = 213;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12620800L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590496760L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0)) {
 					{
-					State = 203;
+					State = 212;
 					statementNoSemicolon();
 					}
 				}
 
-				State = 206;
+				State = 215;
 				Match(SemiColon);
-				State = 208;
+				State = 217;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590496760L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250632177727L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590496760L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250640566335L) != 0)) {
 					{
-					State = 207;
-					expression(0);
+					State = 216;
+					expression();
 					}
 				}
 
-				State = 210;
+				State = 219;
 				Match(SemiColon);
-				State = 212;
+				State = 221;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12620800L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590496760L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0)) {
 					{
-					State = 211;
+					State = 220;
 					statement();
 					}
 				}
 
-				State = 214;
+				State = 223;
 				Match(CloseParen);
-				State = 215;
+				State = 224;
 				statement();
 				}
 				break;
@@ -933,11 +941,11 @@ public partial class GameMakerLanguageParser : Parser {
 				_localctx = new RepeatStatementContext(_localctx);
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 216;
+				State = 225;
 				Match(Repeat);
-				State = 217;
-				expression(0);
-				State = 218;
+				State = 226;
+				expression();
+				State = 227;
 				statement();
 				}
 				break;
@@ -984,11 +992,11 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 222;
+			State = 231;
 			Match(With);
-			State = 223;
-			expression(0);
-			State = 224;
+			State = 232;
+			expression();
+			State = 233;
 			statement();
 			}
 		}
@@ -1031,11 +1039,11 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 226;
+			State = 235;
 			Match(Switch);
-			State = 227;
-			expression(0);
-			State = 228;
+			State = 236;
+			expression();
+			State = 237;
 			caseBlock();
 			}
 		}
@@ -1072,7 +1080,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 230;
+			State = 239;
 			Match(Continue);
 			}
 		}
@@ -1109,7 +1117,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 232;
+			State = 241;
 			Match(Break);
 			}
 		}
@@ -1146,7 +1154,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 234;
+			State = 243;
 			Match(Exit);
 			}
 		}
@@ -1183,7 +1191,7 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 236;
+			State = 245;
 			Match(SemiColon);
 			}
 		}
@@ -1232,23 +1240,23 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 238;
+			State = 247;
 			openBlock();
-			State = 242;
+			State = 251;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==Case || _la==Default) {
 				{
 				{
-				State = 239;
+				State = 248;
 				caseClause();
 				}
 				}
-				State = 244;
+				State = 253;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 245;
+			State = 254;
 			closeBlock();
 			}
 		}
@@ -1292,22 +1300,22 @@ public partial class GameMakerLanguageParser : Parser {
 		EnterRule(_localctx, 28, RULE_caseClause);
 		int _la;
 		try {
-			State = 258;
+			State = 267;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Default:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 247;
+				State = 256;
 				Match(Default);
-				State = 248;
+				State = 257;
 				Match(Colon);
-				State = 250;
+				State = 259;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590365688L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0)) {
 					{
-					State = 249;
+					State = 258;
 					statementList();
 					}
 				}
@@ -1317,18 +1325,18 @@ public partial class GameMakerLanguageParser : Parser {
 			case Case:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 252;
+				State = 261;
 				Match(Case);
-				State = 253;
-				expression(0);
-				State = 254;
+				State = 262;
+				expression();
+				State = 263;
 				Match(Colon);
-				State = 256;
+				State = 265;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & 12751872L) != 0) || ((((_la - 70)) & ~0x3f) == 0 && ((1L << (_la - 70)) & 16640343271L) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590365688L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8761563363839L) != 0)) {
 					{
-					State = 255;
+					State = 264;
 					statementList();
 					}
 				}
@@ -1375,10 +1383,10 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 260;
+			State = 269;
 			Match(Throw);
-			State = 261;
-			expression(0);
+			State = 270;
+			expression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1423,23 +1431,23 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 263;
+			State = 272;
 			Match(Try);
-			State = 264;
+			State = 273;
 			statement();
-			State = 270;
+			State = 279;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Catch:
 				{
-				State = 265;
+				State = 274;
 				catchProduction();
-				State = 267;
+				State = 276;
 				ErrorHandler.Sync(this);
 				switch ( Interpreter.AdaptivePredict(TokenStream,16,Context) ) {
 				case 1:
 					{
-					State = 266;
+					State = 275;
 					finallyProduction();
 					}
 					break;
@@ -1448,7 +1456,7 @@ public partial class GameMakerLanguageParser : Parser {
 				break;
 			case Finally:
 				{
-				State = 269;
+				State = 278;
 				finallyProduction();
 				}
 				break;
@@ -1499,31 +1507,31 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 272;
+			State = 281;
 			Match(Catch);
-			State = 278;
+			State = 287;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,19,Context) ) {
 			case 1:
 				{
-				State = 273;
+				State = 282;
 				Match(OpenParen);
-				State = 275;
+				State = 284;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Constructor || _la==Identifier) {
 					{
-					State = 274;
+					State = 283;
 					identifier();
 					}
 				}
 
-				State = 277;
+				State = 286;
 				Match(CloseParen);
 				}
 				break;
 			}
-			State = 280;
+			State = 289;
 			statement();
 			}
 		}
@@ -1563,9 +1571,9 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 282;
+			State = 291;
 			Match(Finally);
-			State = 283;
+			State = 292;
 			statement();
 			}
 		}
@@ -1605,15 +1613,15 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 285;
+			State = 294;
 			Match(Return);
-			State = 287;
+			State = 296;
 			ErrorHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(TokenStream,20,Context) ) {
 			case 1:
 				{
-				State = 286;
-				expression(0);
+				State = 295;
+				expression();
 				}
 				break;
 			}
@@ -1655,10 +1663,10 @@ public partial class GameMakerLanguageParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 289;
+			State = 298;
 			Match(Delete);
-			State = 290;
-			expression(0);
+			State = 299;
+			expression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1672,70 +1680,37 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class AssignmentExpressionContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LValueExpressionContext lValueExpression() {
-			return GetRuleContext<LValueExpressionContext>(0);
+	public partial class AssignmentContext : ParserRuleContext {
+		public AssignmentContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_assignment; } }
+	 
+		public AssignmentContext() { }
+		public virtual void CopyFrom(AssignmentContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class PrimaryAssignmentContext : AssignmentContext {
+		[System.Diagnostics.DebuggerNonUserCode] public PrimaryExpressionContext primaryExpression() {
+			return GetRuleContext<PrimaryExpressionContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public AssignmentOperatorContext assignmentOperator() {
 			return GetRuleContext<AssignmentOperatorContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
-			return GetRuleContext<ExpressionOrFunctionContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypeAnnotationContext typeAnnotation() {
-			return GetRuleContext<TypeAnnotationContext>(0);
-		}
-		public AssignmentExpressionContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_assignmentExpression; } }
+		public PrimaryAssignmentContext(AssignmentContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAssignmentExpression(this);
+			if (typedVisitor != null) return typedVisitor.VisitPrimaryAssignment(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
-
-	[RuleVersion(0)]
-	public AssignmentExpressionContext assignmentExpression() {
-		AssignmentExpressionContext _localctx = new AssignmentExpressionContext(Context, State);
-		EnterRule(_localctx, 42, RULE_assignmentExpression);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 292;
-			lValueExpression();
-			State = 294;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==Colon) {
-				{
-				State = 293;
-				typeAnnotation();
-				}
-			}
-
-			State = 296;
-			assignmentOperator();
-			State = 297;
-			expressionOrFunction();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class VariableDeclarationListContext : ParserRuleContext {
+	public partial class VariableDeclarationListContext : AssignmentContext {
 		[System.Diagnostics.DebuggerNonUserCode] public VarModifierContext varModifier() {
 			return GetRuleContext<VarModifierContext>(0);
 		}
@@ -1749,11 +1724,7 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Comma(int i) {
 			return GetToken(GameMakerLanguageParser.Comma, i);
 		}
-		public VariableDeclarationListContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_variableDeclarationList; } }
+		public VariableDeclarationListContext(AssignmentContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
@@ -1763,33 +1734,72 @@ public partial class GameMakerLanguageParser : Parser {
 	}
 
 	[RuleVersion(0)]
-	public VariableDeclarationListContext variableDeclarationList() {
-		VariableDeclarationListContext _localctx = new VariableDeclarationListContext(Context, State);
-		EnterRule(_localctx, 44, RULE_variableDeclarationList);
+	public AssignmentContext assignment() {
+		AssignmentContext _localctx = new AssignmentContext(Context, State);
+		EnterRule(_localctx, 42, RULE_assignment);
 		int _la;
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 299;
-			varModifier();
-			State = 300;
-			variableDeclaration();
-			State = 305;
+			State = 314;
 			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==Comma) {
-				{
+			switch (TokenStream.LA(1)) {
+			case OpenBracket:
+			case OpenParen:
+			case OpenBrace:
+			case Begin:
+			case BooleanLiteral:
+			case IntegerLiteral:
+			case DecimalLiteral:
+			case BinaryLiteral:
+			case HexIntegerLiteral:
+			case Undefined:
+			case NoOne:
+			case New:
+			case Constructor:
+			case Identifier:
+			case StringLiteral:
+			case TemplateStringStart:
+			case VerbatimStringLiteral:
+				_localctx = new PrimaryAssignmentContext(_localctx);
+				EnterOuterAlt(_localctx, 1);
 				{
 				State = 301;
-				Match(Comma);
+				primaryExpression();
 				State = 302;
+				assignmentOperator();
+				State = 303;
+				expression();
+				}
+				break;
+			case Var:
+			case GlobalVar:
+			case Static:
+				_localctx = new VariableDeclarationListContext(_localctx);
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 305;
+				varModifier();
+				State = 306;
 				variableDeclaration();
-				}
-				}
-				State = 307;
+				State = 311;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
-			}
+				while (_la==Comma) {
+					{
+					{
+					State = 307;
+					Match(Comma);
+					State = 308;
+					variableDeclaration();
+					}
+					}
+					State = 313;
+					ErrorHandler.Sync(this);
+					_la = TokenStream.LA(1);
+				}
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1809,6 +1819,7 @@ public partial class GameMakerLanguageParser : Parser {
 			return GetToken(GameMakerLanguageParser.Var, i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Static() { return GetToken(GameMakerLanguageParser.Static, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GlobalVar() { return GetToken(GameMakerLanguageParser.GlobalVar, 0); }
 		public VarModifierContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
@@ -1825,26 +1836,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public VarModifierContext varModifier() {
 		VarModifierContext _localctx = new VarModifierContext(Context, State);
-		EnterRule(_localctx, 46, RULE_varModifier);
+		EnterRule(_localctx, 44, RULE_varModifier);
 		int _la;
 		try {
-			State = 314;
+			State = 323;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Var:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 309;
+				State = 317;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				do {
 					{
 					{
-					State = 308;
+					State = 316;
 					Match(Var);
 					}
 					}
-					State = 311;
+					State = 319;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 				} while ( _la==Var );
@@ -1853,8 +1864,15 @@ public partial class GameMakerLanguageParser : Parser {
 			case Static:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 313;
+				State = 321;
 				Match(Static);
+				}
+				break;
+			case GlobalVar:
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 322;
+				Match(GlobalVar);
 				}
 				break;
 			default:
@@ -1876,12 +1894,9 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
 			return GetRuleContext<IdentifierContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypeAnnotationContext typeAnnotation() {
-			return GetRuleContext<TypeAnnotationContext>(0);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Assign() { return GetToken(GameMakerLanguageParser.Assign, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
-			return GetRuleContext<ExpressionOrFunctionContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
 		public VariableDeclarationContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -1899,101 +1914,25 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public VariableDeclarationContext variableDeclaration() {
 		VariableDeclarationContext _localctx = new VariableDeclarationContext(Context, State);
-		EnterRule(_localctx, 48, RULE_variableDeclaration);
+		EnterRule(_localctx, 46, RULE_variableDeclaration);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 316;
+			State = 325;
 			identifier();
-			State = 318;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==Colon) {
-				{
-				State = 317;
-				typeAnnotation();
-				}
-			}
-
-			State = 322;
+			State = 328;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Assign) {
 				{
-				State = 320;
-				Match(Assign);
-				State = 321;
-				expressionOrFunction();
-				}
-			}
-
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class TypeAnnotationContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext[] identifier() {
-			return GetRuleContexts<IdentifierContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier(int i) {
-			return GetRuleContext<IdentifierContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] BitOr() { return GetTokens(GameMakerLanguageParser.BitOr); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitOr(int i) {
-			return GetToken(GameMakerLanguageParser.BitOr, i);
-		}
-		public TypeAnnotationContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_typeAnnotation; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitTypeAnnotation(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public TypeAnnotationContext typeAnnotation() {
-		TypeAnnotationContext _localctx = new TypeAnnotationContext(Context, State);
-		EnterRule(_localctx, 50, RULE_typeAnnotation);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 324;
-			Match(Colon);
-			State = 325;
-			identifier();
-			State = 330;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==BitOr) {
-				{
-				{
 				State = 326;
-				Match(BitOr);
+				Match(Assign);
 				State = 327;
-				identifier();
+				expression();
 				}
-				}
-				State = 332;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
 			}
+
 			}
 		}
 		catch (RecognitionException re) {
@@ -2007,132 +1946,68 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class GlobalVarStatementContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GlobalVar() { return GetToken(GameMakerLanguageParser.GlobalVar, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext[] identifier() {
-			return GetRuleContexts<IdentifierContext>();
+	public partial class ExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ConditionalExpressionContext conditionalExpression() {
+			return GetRuleContext<ConditionalExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier(int i) {
-			return GetRuleContext<IdentifierContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public FunctionDeclarationContext functionDeclaration() {
+			return GetRuleContext<FunctionDeclarationContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode SemiColon() { return GetToken(GameMakerLanguageParser.SemiColon, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Comma() { return GetTokens(GameMakerLanguageParser.Comma); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Comma(int i) {
-			return GetToken(GameMakerLanguageParser.Comma, i);
-		}
-		public GlobalVarStatementContext(ParserRuleContext parent, int invokingState)
+		public ExpressionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_globalVarStatement; } }
+		public override int RuleIndex { get { return RULE_expression; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitGlobalVarStatement(this);
+			if (typedVisitor != null) return typedVisitor.VisitExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public GlobalVarStatementContext globalVarStatement() {
-		GlobalVarStatementContext _localctx = new GlobalVarStatementContext(Context, State);
-		EnterRule(_localctx, 52, RULE_globalVarStatement);
-		int _la;
+	public ExpressionContext expression() {
+		ExpressionContext _localctx = new ExpressionContext(Context, State);
+		EnterRule(_localctx, 48, RULE_expression);
 		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 333;
-			Match(GlobalVar);
-			State = 334;
-			identifier();
-			State = 339;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			while (_la==Comma) {
-				{
-				{
-				State = 335;
-				Match(Comma);
-				State = 336;
-				identifier();
-				}
-				}
-				State = 341;
-				ErrorHandler.Sync(this);
-				_la = TokenStream.LA(1);
-			}
-			State = 342;
-			Match(SemiColon);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class LValueStartExpressionContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
-			return GetRuleContext<IdentifierContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(GameMakerLanguageParser.OpenParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
-			return GetRuleContext<ExpressionOrFunctionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(GameMakerLanguageParser.CloseParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public NewExpressionContext newExpression() {
-			return GetRuleContext<NewExpressionContext>(0);
-		}
-		public LValueStartExpressionContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_lValueStartExpression; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLValueStartExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public LValueStartExpressionContext lValueStartExpression() {
-		LValueStartExpressionContext _localctx = new LValueStartExpressionContext(Context, State);
-		EnterRule(_localctx, 54, RULE_lValueStartExpression);
-		try {
-			State = 350;
+			State = 332;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
+			case OpenBracket:
+			case OpenParen:
+			case OpenBrace:
+			case Begin:
+			case PlusPlus:
+			case MinusMinus:
+			case Plus:
+			case Minus:
+			case BitNot:
+			case Not:
+			case BooleanLiteral:
+			case IntegerLiteral:
+			case DecimalLiteral:
+			case BinaryLiteral:
+			case HexIntegerLiteral:
+			case Undefined:
+			case NoOne:
+			case New:
 			case Constructor:
 			case Identifier:
+			case StringLiteral:
+			case TemplateStringStart:
+			case VerbatimStringLiteral:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 344;
-				identifier();
+				State = 330;
+				conditionalExpression();
 				}
 				break;
-			case OpenParen:
+			case Function:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 345;
-				Match(OpenParen);
-				State = 346;
-				expressionOrFunction();
-				State = 347;
-				Match(CloseParen);
-				}
-				break;
-			case New:
-				EnterOuterAlt(_localctx, 3);
-				{
-				State = 349;
-				newExpression();
+				State = 331;
+				functionDeclaration();
 				}
 				break;
 			default:
@@ -2150,65 +2025,1091 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class LValueExpressionContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LValueStartExpressionContext lValueStartExpression() {
-			return GetRuleContext<LValueStartExpressionContext>(0);
+	public partial class ConditionalExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BitXorExpressionContext bitXorExpression() {
+			return GetRuleContext<BitXorExpressionContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public LValueFinalOperatorContext lValueFinalOperator() {
-			return GetRuleContext<LValueFinalOperatorContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode QuestionMark() { return GetToken(GameMakerLanguageParser.QuestionMark, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public LValueChainOperatorContext[] lValueChainOperator() {
-			return GetRuleContexts<LValueChainOperatorContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public LValueChainOperatorContext lValueChainOperator(int i) {
-			return GetRuleContext<LValueChainOperatorContext>(i);
-		}
-		public LValueExpressionContext(ParserRuleContext parent, int invokingState)
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
+		public ConditionalExpressionContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_lValueExpression; } }
+		public override int RuleIndex { get { return RULE_conditionalExpression; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLValueExpression(this);
+			if (typedVisitor != null) return typedVisitor.VisitConditionalExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public LValueExpressionContext lValueExpression() {
-		LValueExpressionContext _localctx = new LValueExpressionContext(Context, State);
-		EnterRule(_localctx, 56, RULE_lValueExpression);
+	public ConditionalExpressionContext conditionalExpression() {
+		ConditionalExpressionContext _localctx = new ConditionalExpressionContext(Context, State);
+		EnterRule(_localctx, 50, RULE_conditionalExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 334;
+			bitXorExpression();
+			State = 340;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==QuestionMark) {
+				{
+				State = 335;
+				Match(QuestionMark);
+				State = 336;
+				expression();
+				State = 337;
+				Match(Colon);
+				State = 338;
+				expression();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class BitXorExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BitOrExpressionContext[] bitOrExpression() {
+			return GetRuleContexts<BitOrExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public BitOrExpressionContext bitOrExpression(int i) {
+			return GetRuleContext<BitOrExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] BitXOr() { return GetTokens(GameMakerLanguageParser.BitXOr); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitXOr(int i) {
+			return GetToken(GameMakerLanguageParser.BitXOr, i);
+		}
+		public BitXorExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_bitXorExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBitXorExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BitXorExpressionContext bitXorExpression() {
+		BitXorExpressionContext _localctx = new BitXorExpressionContext(Context, State);
+		EnterRule(_localctx, 52, RULE_bitXorExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 342;
+			bitOrExpression();
+			State = 347;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==BitXOr) {
+				{
+				{
+				State = 343;
+				Match(BitXOr);
+				State = 344;
+				bitOrExpression();
+				}
+				}
+				State = 349;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class BitOrExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public BitAndExpressionContext[] bitAndExpression() {
+			return GetRuleContexts<BitAndExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public BitAndExpressionContext bitAndExpression(int i) {
+			return GetRuleContext<BitAndExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] BitOr() { return GetTokens(GameMakerLanguageParser.BitOr); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitOr(int i) {
+			return GetToken(GameMakerLanguageParser.BitOr, i);
+		}
+		public BitOrExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_bitOrExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBitOrExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BitOrExpressionContext bitOrExpression() {
+		BitOrExpressionContext _localctx = new BitOrExpressionContext(Context, State);
+		EnterRule(_localctx, 54, RULE_bitOrExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 350;
+			bitAndExpression();
+			State = 355;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==BitOr) {
+				{
+				{
+				State = 351;
+				Match(BitOr);
+				State = 352;
+				bitAndExpression();
+				}
+				}
+				State = 357;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class BitAndExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public NullCoalescingExpressionContext[] nullCoalescingExpression() {
+			return GetRuleContexts<NullCoalescingExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public NullCoalescingExpressionContext nullCoalescingExpression(int i) {
+			return GetRuleContext<NullCoalescingExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] BitAnd() { return GetTokens(GameMakerLanguageParser.BitAnd); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitAnd(int i) {
+			return GetToken(GameMakerLanguageParser.BitAnd, i);
+		}
+		public BitAndExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_bitAndExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBitAndExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public BitAndExpressionContext bitAndExpression() {
+		BitAndExpressionContext _localctx = new BitAndExpressionContext(Context, State);
+		EnterRule(_localctx, 56, RULE_bitAndExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 358;
+			nullCoalescingExpression();
+			State = 363;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==BitAnd) {
+				{
+				{
+				State = 359;
+				Match(BitAnd);
+				State = 360;
+				nullCoalescingExpression();
+				}
+				}
+				State = 365;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class NullCoalescingExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public XorExpressionContext[] xorExpression() {
+			return GetRuleContexts<XorExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public XorExpressionContext xorExpression(int i) {
+			return GetRuleContext<XorExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NullCoalesce() { return GetToken(GameMakerLanguageParser.NullCoalesce, 0); }
+		public NullCoalescingExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_nullCoalescingExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitNullCoalescingExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public NullCoalescingExpressionContext nullCoalescingExpression() {
+		NullCoalescingExpressionContext _localctx = new NullCoalescingExpressionContext(Context, State);
+		EnterRule(_localctx, 58, RULE_nullCoalescingExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 366;
+			xorExpression();
+			State = 369;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			if (_la==NullCoalesce) {
+				{
+				State = 367;
+				Match(NullCoalesce);
+				State = 368;
+				xorExpression();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class XorExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public AndExpressionContext[] andExpression() {
+			return GetRuleContexts<AndExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public AndExpressionContext andExpression(int i) {
+			return GetRuleContext<AndExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Xor() { return GetTokens(GameMakerLanguageParser.Xor); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Xor(int i) {
+			return GetToken(GameMakerLanguageParser.Xor, i);
+		}
+		public XorExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_xorExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitXorExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public XorExpressionContext xorExpression() {
+		XorExpressionContext _localctx = new XorExpressionContext(Context, State);
+		EnterRule(_localctx, 60, RULE_xorExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 371;
+			andExpression();
+			State = 376;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==Xor) {
+				{
+				{
+				State = 372;
+				Match(Xor);
+				State = 373;
+				andExpression();
+				}
+				}
+				State = 378;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class AndExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public OrExpressionContext[] orExpression() {
+			return GetRuleContexts<OrExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public OrExpressionContext orExpression(int i) {
+			return GetRuleContext<OrExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] And() { return GetTokens(GameMakerLanguageParser.And); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode And(int i) {
+			return GetToken(GameMakerLanguageParser.And, i);
+		}
+		public AndExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_andExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAndExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public AndExpressionContext andExpression() {
+		AndExpressionContext _localctx = new AndExpressionContext(Context, State);
+		EnterRule(_localctx, 62, RULE_andExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 379;
+			orExpression();
+			State = 384;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==And) {
+				{
+				{
+				State = 380;
+				Match(And);
+				State = 381;
+				orExpression();
+				}
+				}
+				State = 386;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class OrExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public EqualityExpressionContext[] equalityExpression() {
+			return GetRuleContexts<EqualityExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public EqualityExpressionContext equalityExpression(int i) {
+			return GetRuleContext<EqualityExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Or() { return GetTokens(GameMakerLanguageParser.Or); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Or(int i) {
+			return GetToken(GameMakerLanguageParser.Or, i);
+		}
+		public OrExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_orExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitOrExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public OrExpressionContext orExpression() {
+		OrExpressionContext _localctx = new OrExpressionContext(Context, State);
+		EnterRule(_localctx, 64, RULE_orExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 387;
+			equalityExpression();
+			State = 392;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==Or) {
+				{
+				{
+				State = 388;
+				Match(Or);
+				State = 389;
+				equalityExpression();
+				}
+				}
+				State = 394;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class EqualityExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public RelationalExpressionContext[] relationalExpression() {
+			return GetRuleContexts<RelationalExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public RelationalExpressionContext relationalExpression(int i) {
+			return GetRuleContext<RelationalExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Equals_() { return GetTokens(GameMakerLanguageParser.Equals_); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Equals_(int i) {
+			return GetToken(GameMakerLanguageParser.Equals_, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Assign() { return GetTokens(GameMakerLanguageParser.Assign); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Assign(int i) {
+			return GetToken(GameMakerLanguageParser.Assign, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] NotEquals() { return GetTokens(GameMakerLanguageParser.NotEquals); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NotEquals(int i) {
+			return GetToken(GameMakerLanguageParser.NotEquals, i);
+		}
+		public EqualityExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_equalityExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitEqualityExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public EqualityExpressionContext equalityExpression() {
+		EqualityExpressionContext _localctx = new EqualityExpressionContext(Context, State);
+		EnterRule(_localctx, 66, RULE_equalityExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 395;
+			relationalExpression();
+			State = 400;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 13194140057600L) != 0)) {
+				{
+				{
+				State = 396;
+				_la = TokenStream.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 13194140057600L) != 0)) ) {
+				ErrorHandler.RecoverInline(this);
+				}
+				else {
+					ErrorHandler.ReportMatch(this);
+				    Consume();
+				}
+				State = 397;
+				relationalExpression();
+				}
+				}
+				State = 402;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class RelationalExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ShiftExpressionContext[] shiftExpression() {
+			return GetRuleContexts<ShiftExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ShiftExpressionContext shiftExpression(int i) {
+			return GetRuleContext<ShiftExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LessThan() { return GetTokens(GameMakerLanguageParser.LessThan); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LessThan(int i) {
+			return GetToken(GameMakerLanguageParser.LessThan, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] MoreThan() { return GetTokens(GameMakerLanguageParser.MoreThan); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MoreThan(int i) {
+			return GetToken(GameMakerLanguageParser.MoreThan, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LessThanEquals() { return GetTokens(GameMakerLanguageParser.LessThanEquals); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LessThanEquals(int i) {
+			return GetToken(GameMakerLanguageParser.LessThanEquals, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] GreaterThanEquals() { return GetTokens(GameMakerLanguageParser.GreaterThanEquals); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GreaterThanEquals(int i) {
+			return GetToken(GameMakerLanguageParser.GreaterThanEquals, i);
+		}
+		public RelationalExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_relationalExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitRelationalExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public RelationalExpressionContext relationalExpression() {
+		RelationalExpressionContext _localctx = new RelationalExpressionContext(Context, State);
+		EnterRule(_localctx, 68, RULE_relationalExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 403;
+			shiftExpression();
+			State = 408;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4123168604160L) != 0)) {
+				{
+				{
+				State = 404;
+				_la = TokenStream.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4123168604160L) != 0)) ) {
+				ErrorHandler.RecoverInline(this);
+				}
+				else {
+					ErrorHandler.ReportMatch(this);
+				    Consume();
+				}
+				State = 405;
+				shiftExpression();
+				}
+				}
+				State = 410;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ShiftExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public AdditiveExpressionContext[] additiveExpression() {
+			return GetRuleContexts<AdditiveExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public AdditiveExpressionContext additiveExpression(int i) {
+			return GetRuleContext<AdditiveExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] LeftShiftArithmetic() { return GetTokens(GameMakerLanguageParser.LeftShiftArithmetic); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LeftShiftArithmetic(int i) {
+			return GetToken(GameMakerLanguageParser.LeftShiftArithmetic, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] RightShiftArithmetic() { return GetTokens(GameMakerLanguageParser.RightShiftArithmetic); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RightShiftArithmetic(int i) {
+			return GetToken(GameMakerLanguageParser.RightShiftArithmetic, i);
+		}
+		public ShiftExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_shiftExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitShiftExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ShiftExpressionContext shiftExpression() {
+		ShiftExpressionContext _localctx = new ShiftExpressionContext(Context, State);
+		EnterRule(_localctx, 70, RULE_shiftExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 411;
+			additiveExpression();
+			State = 416;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while (_la==RightShiftArithmetic || _la==LeftShiftArithmetic) {
+				{
+				{
+				State = 412;
+				_la = TokenStream.LA(1);
+				if ( !(_la==RightShiftArithmetic || _la==LeftShiftArithmetic) ) {
+				ErrorHandler.RecoverInline(this);
+				}
+				else {
+					ErrorHandler.ReportMatch(this);
+				    Consume();
+				}
+				State = 413;
+				additiveExpression();
+				}
+				}
+				State = 418;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class AdditiveExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public MultiplicativeExpressionContext[] multiplicativeExpression() {
+			return GetRuleContexts<MultiplicativeExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MultiplicativeExpressionContext multiplicativeExpression(int i) {
+			return GetRuleContext<MultiplicativeExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Plus() { return GetTokens(GameMakerLanguageParser.Plus); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus(int i) {
+			return GetToken(GameMakerLanguageParser.Plus, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Minus() { return GetTokens(GameMakerLanguageParser.Minus); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus(int i) {
+			return GetToken(GameMakerLanguageParser.Minus, i);
+		}
+		public AdditiveExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_additiveExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAdditiveExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public AdditiveExpressionContext additiveExpression() {
+		AdditiveExpressionContext _localctx = new AdditiveExpressionContext(Context, State);
+		EnterRule(_localctx, 72, RULE_additiveExpression);
+		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 352;
-			lValueStartExpression();
-			State = 360;
+			State = 419;
+			multiplicativeExpression();
+			State = 424;
 			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,31,Context) ) {
+			_alt = Interpreter.AdaptivePredict(TokenStream,38,Context);
+			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					State = 420;
+					_la = TokenStream.LA(1);
+					if ( !(_la==Plus || _la==Minus) ) {
+					ErrorHandler.RecoverInline(this);
+					}
+					else {
+						ErrorHandler.ReportMatch(this);
+					    Consume();
+					}
+					State = 421;
+					multiplicativeExpression();
+					}
+					} 
+				}
+				State = 426;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,38,Context);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class MultiplicativeExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public UnaryExpressionContext[] unaryExpression() {
+			return GetRuleContexts<UnaryExpressionContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public UnaryExpressionContext unaryExpression(int i) {
+			return GetRuleContext<UnaryExpressionContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Multiply() { return GetTokens(GameMakerLanguageParser.Multiply); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Multiply(int i) {
+			return GetToken(GameMakerLanguageParser.Multiply, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Divide() { return GetTokens(GameMakerLanguageParser.Divide); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Divide(int i) {
+			return GetToken(GameMakerLanguageParser.Divide, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Modulo() { return GetTokens(GameMakerLanguageParser.Modulo); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Modulo(int i) {
+			return GetToken(GameMakerLanguageParser.Modulo, i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] IntegerDivide() { return GetTokens(GameMakerLanguageParser.IntegerDivide); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IntegerDivide(int i) {
+			return GetToken(GameMakerLanguageParser.IntegerDivide, i);
+		}
+		public MultiplicativeExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_multiplicativeExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitMultiplicativeExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public MultiplicativeExpressionContext multiplicativeExpression() {
+		MultiplicativeExpressionContext _localctx = new MultiplicativeExpressionContext(Context, State);
+		EnterRule(_localctx, 74, RULE_multiplicativeExpression);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 427;
+			unaryExpression();
+			State = 432;
+			ErrorHandler.Sync(this);
+			_la = TokenStream.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) {
+				{
+				{
+				State = 428;
+				_la = TokenStream.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) ) {
+				ErrorHandler.RecoverInline(this);
+				}
+				else {
+					ErrorHandler.ReportMatch(this);
+				    Consume();
+				}
+				State = 429;
+				unaryExpression();
+				}
+				}
+				State = 434;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class UnaryExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public PrimaryExpressionContext primaryExpression() {
+			return GetRuleContext<PrimaryExpressionContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus() { return GetToken(GameMakerLanguageParser.Plus, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus() { return GetToken(GameMakerLanguageParser.Minus, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Not() { return GetToken(GameMakerLanguageParser.Not, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitNot() { return GetToken(GameMakerLanguageParser.BitNot, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PlusPlus() { return GetToken(GameMakerLanguageParser.PlusPlus, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MinusMinus() { return GetToken(GameMakerLanguageParser.MinusMinus, 0); }
+		public UnaryExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_unaryExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitUnaryExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public UnaryExpressionContext unaryExpression() {
+		UnaryExpressionContext _localctx = new UnaryExpressionContext(Context, State);
+		EnterRule(_localctx, 76, RULE_unaryExpression);
+		int _la;
+		try {
+			State = 438;
+			ErrorHandler.Sync(this);
+			switch (TokenStream.LA(1)) {
+			case OpenBracket:
+			case OpenParen:
+			case OpenBrace:
+			case Begin:
+			case BooleanLiteral:
+			case IntegerLiteral:
+			case DecimalLiteral:
+			case BinaryLiteral:
+			case HexIntegerLiteral:
+			case Undefined:
+			case NoOne:
+			case New:
+			case Constructor:
+			case Identifier:
+			case StringLiteral:
+			case TemplateStringStart:
+			case VerbatimStringLiteral:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 435;
+				primaryExpression();
+				}
+				break;
+			case PlusPlus:
+			case MinusMinus:
+			case Plus:
+			case Minus:
+			case BitNot:
+			case Not:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 436;
+				_la = TokenStream.LA(1);
+				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 264241152L) != 0)) ) {
+				ErrorHandler.RecoverInline(this);
+				}
+				else {
+					ErrorHandler.ReportMatch(this);
+				    Consume();
+				}
+				State = 437;
+				primaryExpression();
+				}
+				break;
+			default:
+				throw new NoViableAltException(this);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			ErrorHandler.ReportError(this, re);
+			ErrorHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class PrimaryExpressionContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public PrimaryExpressionStartContext primaryExpressionStart() {
+			return GetRuleContext<PrimaryExpressionStartContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MemberIndexContext[] memberIndex() {
+			return GetRuleContexts<MemberIndexContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MemberIndexContext memberIndex(int i) {
+			return GetRuleContext<MemberIndexContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MemberDotContext[] memberDot() {
+			return GetRuleContexts<MemberDotContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MemberDotContext memberDot(int i) {
+			return GetRuleContext<MemberDotContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MethodInvocationContext[] methodInvocation() {
+			return GetRuleContexts<MethodInvocationContext>();
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public MethodInvocationContext methodInvocation(int i) {
+			return GetRuleContext<MethodInvocationContext>(i);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PlusPlus() { return GetToken(GameMakerLanguageParser.PlusPlus, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MinusMinus() { return GetToken(GameMakerLanguageParser.MinusMinus, 0); }
+		public PrimaryExpressionContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_primaryExpression; } }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitPrimaryExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public PrimaryExpressionContext primaryExpression() {
+		PrimaryExpressionContext _localctx = new PrimaryExpressionContext(Context, State);
+		EnterRule(_localctx, 78, RULE_primaryExpression);
+		int _la;
+		try {
+			int _alt;
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 440;
+			primaryExpressionStart();
+			State = 446;
+			ErrorHandler.Sync(this);
+			_alt = Interpreter.AdaptivePredict(TokenStream,42,Context);
+			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					State = 444;
+					ErrorHandler.Sync(this);
+					switch (TokenStream.LA(1)) {
+					case OpenBracket:
+					case ListAccessor:
+					case MapAccessor:
+					case GridAccessor:
+					case ArrayAccessor:
+					case StructAccessor:
+						{
+						State = 441;
+						memberIndex();
+						}
+						break;
+					case Dot:
+						{
+						State = 442;
+						memberDot();
+						}
+						break;
+					case OpenParen:
+						{
+						State = 443;
+						methodInvocation();
+						}
+						break;
+					default:
+						throw new NoViableAltException(this);
+					}
+					} 
+				}
+				State = 448;
+				ErrorHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(TokenStream,42,Context);
+			}
+			State = 450;
+			ErrorHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(TokenStream,43,Context) ) {
 			case 1:
 				{
-				State = 356;
-				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,30,Context);
-				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
-					if ( _alt==1 ) {
-						{
-						{
-						State = 353;
-						lValueChainOperator();
-						}
-						} 
-					}
-					State = 358;
-					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,30,Context);
+				State = 449;
+				_la = TokenStream.LA(1);
+				if ( !(_la==PlusPlus || _la==MinusMinus) ) {
+				ErrorHandler.RecoverInline(this);
 				}
-				State = 359;
-				lValueFinalOperator();
+				else {
+					ErrorHandler.ReportMatch(this);
+				    Consume();
+				}
 				}
 				break;
 			}
@@ -2225,100 +3126,140 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class LValueChainOperatorContext : ParserRuleContext {
-		public LValueChainOperatorContext(ParserRuleContext parent, int invokingState)
+	public partial class PrimaryExpressionStartContext : ParserRuleContext {
+		public PrimaryExpressionStartContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_lValueChainOperator; } }
+		public override int RuleIndex { get { return RULE_primaryExpressionStart; } }
 	 
-		public LValueChainOperatorContext() { }
-		public virtual void CopyFrom(LValueChainOperatorContext context) {
+		public PrimaryExpressionStartContext() { }
+		public virtual void CopyFrom(PrimaryExpressionStartContext context) {
 			base.CopyFrom(context);
 		}
 	}
-	public partial class MemberDotLValueContext : LValueChainOperatorContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Dot() { return GetToken(GameMakerLanguageParser.Dot, 0); }
+	public partial class ParenthesizedExpressionContext : PrimaryExpressionStartContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(GameMakerLanguageParser.OpenParen, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
+		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(GameMakerLanguageParser.CloseParen, 0); }
+		public ParenthesizedExpressionContext(PrimaryExpressionStartContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode]
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitParenthesizedExpression(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class SimpleNameExpressionContext : PrimaryExpressionStartContext {
 		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
 			return GetRuleContext<IdentifierContext>(0);
 		}
-		public MemberDotLValueContext(LValueChainOperatorContext context) { CopyFrom(context); }
+		public SimpleNameExpressionContext(PrimaryExpressionStartContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMemberDotLValue(this);
+			if (typedVisitor != null) return typedVisitor.VisitSimpleNameExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class CallLValueContext : LValueChainOperatorContext {
+	public partial class NewExpressionContext : PrimaryExpressionStartContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode New() { return GetToken(GameMakerLanguageParser.New, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ArgumentsContext arguments() {
 			return GetRuleContext<ArgumentsContext>(0);
 		}
-		public CallLValueContext(LValueChainOperatorContext context) { CopyFrom(context); }
+		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
+			return GetRuleContext<IdentifierContext>(0);
+		}
+		public NewExpressionContext(PrimaryExpressionStartContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCallLValue(this);
+			if (typedVisitor != null) return typedVisitor.VisitNewExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
-	public partial class MemberIndexLValueContext : LValueChainOperatorContext {
-		[System.Diagnostics.DebuggerNonUserCode] public AccessorContext accessor() {
-			return GetRuleContext<AccessorContext>(0);
+	public partial class LiteralExpressionContext : PrimaryExpressionStartContext {
+		[System.Diagnostics.DebuggerNonUserCode] public LiteralContext literal() {
+			return GetRuleContext<LiteralContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionSequenceContext expressionSequence() {
-			return GetRuleContext<ExpressionSequenceContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseBracket() { return GetToken(GameMakerLanguageParser.CloseBracket, 0); }
-		public MemberIndexLValueContext(LValueChainOperatorContext context) { CopyFrom(context); }
+		public LiteralExpressionContext(PrimaryExpressionStartContext context) { CopyFrom(context); }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMemberIndexLValue(this);
+			if (typedVisitor != null) return typedVisitor.VisitLiteralExpression(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public LValueChainOperatorContext lValueChainOperator() {
-		LValueChainOperatorContext _localctx = new LValueChainOperatorContext(Context, State);
-		EnterRule(_localctx, 58, RULE_lValueChainOperator);
+	public PrimaryExpressionStartContext primaryExpressionStart() {
+		PrimaryExpressionStartContext _localctx = new PrimaryExpressionStartContext(Context, State);
+		EnterRule(_localctx, 80, RULE_primaryExpressionStart);
+		int _la;
 		try {
-			State = 369;
+			State = 463;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case OpenBracket:
-			case ListAccessor:
-			case MapAccessor:
-			case GridAccessor:
-			case ArrayAccessor:
-			case StructAccessor:
-				_localctx = new MemberIndexLValueContext(_localctx);
+			case OpenBrace:
+			case Begin:
+			case BooleanLiteral:
+			case IntegerLiteral:
+			case DecimalLiteral:
+			case BinaryLiteral:
+			case HexIntegerLiteral:
+			case Undefined:
+			case NoOne:
+			case StringLiteral:
+			case TemplateStringStart:
+			case VerbatimStringLiteral:
+				_localctx = new LiteralExpressionContext(_localctx);
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 362;
-				accessor();
-				State = 363;
-				expressionSequence();
-				State = 364;
-				Match(CloseBracket);
+				State = 452;
+				literal();
 				}
 				break;
-			case Dot:
-				_localctx = new MemberDotLValueContext(_localctx);
+			case Constructor:
+			case Identifier:
+				_localctx = new SimpleNameExpressionContext(_localctx);
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 366;
-				Match(Dot);
-				State = 367;
+				State = 453;
 				identifier();
 				}
 				break;
 			case OpenParen:
-				_localctx = new CallLValueContext(_localctx);
+				_localctx = new ParenthesizedExpressionContext(_localctx);
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 368;
+				State = 454;
+				Match(OpenParen);
+				State = 455;
+				expression();
+				State = 456;
+				Match(CloseParen);
+				}
+				break;
+			case New:
+				_localctx = new NewExpressionContext(_localctx);
+				EnterOuterAlt(_localctx, 4);
+				{
+				State = 458;
+				Match(New);
+				State = 460;
+				ErrorHandler.Sync(this);
+				_la = TokenStream.LA(1);
+				if (_la==Constructor || _la==Identifier) {
+					{
+					State = 459;
+					identifier();
+					}
+				}
+
+				State = 462;
 				arguments();
 				}
 				break;
@@ -2337,204 +3278,64 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class LValueFinalOperatorContext : ParserRuleContext {
-		public LValueFinalOperatorContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_lValueFinalOperator; } }
-	 
-		public LValueFinalOperatorContext() { }
-		public virtual void CopyFrom(LValueFinalOperatorContext context) {
-			base.CopyFrom(context);
-		}
-	}
-	public partial class MemberDotLValueFinalContext : LValueFinalOperatorContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Dot() { return GetToken(GameMakerLanguageParser.Dot, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
-			return GetRuleContext<IdentifierContext>(0);
-		}
-		public MemberDotLValueFinalContext(LValueFinalOperatorContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMemberDotLValueFinal(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MemberIndexLValueFinalContext : LValueFinalOperatorContext {
+	public partial class MemberIndexContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public AccessorContext accessor() {
 			return GetRuleContext<AccessorContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionSequenceContext expressionSequence() {
-			return GetRuleContext<ExpressionSequenceContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseBracket() { return GetToken(GameMakerLanguageParser.CloseBracket, 0); }
-		public MemberIndexLValueFinalContext(LValueFinalOperatorContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMemberIndexLValueFinal(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public LValueFinalOperatorContext lValueFinalOperator() {
-		LValueFinalOperatorContext _localctx = new LValueFinalOperatorContext(Context, State);
-		EnterRule(_localctx, 60, RULE_lValueFinalOperator);
-		try {
-			State = 377;
-			ErrorHandler.Sync(this);
-			switch (TokenStream.LA(1)) {
-			case OpenBracket:
-			case ListAccessor:
-			case MapAccessor:
-			case GridAccessor:
-			case ArrayAccessor:
-			case StructAccessor:
-				_localctx = new MemberIndexLValueFinalContext(_localctx);
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 371;
-				accessor();
-				State = 372;
-				expressionSequence();
-				State = 373;
-				Match(CloseBracket);
-				}
-				break;
-			case Dot:
-				_localctx = new MemberDotLValueFinalContext(_localctx);
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 375;
-				Match(Dot);
-				State = 376;
-				identifier();
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class NewExpressionContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode New() { return GetToken(GameMakerLanguageParser.New, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ArgumentsContext arguments() {
-			return GetRuleContext<ArgumentsContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
-			return GetRuleContext<IdentifierContext>(0);
-		}
-		public NewExpressionContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_newExpression; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitNewExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public NewExpressionContext newExpression() {
-		NewExpressionContext _localctx = new NewExpressionContext(Context, State);
-		EnterRule(_localctx, 62, RULE_newExpression);
-		int _la;
-		try {
-			EnterOuterAlt(_localctx, 1);
-			{
-			State = 379;
-			Match(New);
-			State = 381;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==Constructor || _la==Identifier) {
-				{
-				State = 380;
-				identifier();
-				}
-			}
-
-			State = 383;
-			arguments();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class ExpressionSequenceContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
 			return GetRuleContexts<ExpressionContext>();
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
 			return GetRuleContext<ExpressionContext>(i);
 		}
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseBracket() { return GetToken(GameMakerLanguageParser.CloseBracket, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Comma() { return GetTokens(GameMakerLanguageParser.Comma); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Comma(int i) {
 			return GetToken(GameMakerLanguageParser.Comma, i);
 		}
-		public ExpressionSequenceContext(ParserRuleContext parent, int invokingState)
+		public MemberIndexContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_expressionSequence; } }
+		public override int RuleIndex { get { return RULE_memberIndex; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitExpressionSequence(this);
+			if (typedVisitor != null) return typedVisitor.VisitMemberIndex(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public ExpressionSequenceContext expressionSequence() {
-		ExpressionSequenceContext _localctx = new ExpressionSequenceContext(Context, State);
-		EnterRule(_localctx, 64, RULE_expressionSequence);
+	public MemberIndexContext memberIndex() {
+		MemberIndexContext _localctx = new MemberIndexContext(Context, State);
+		EnterRule(_localctx, 82, RULE_memberIndex);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 385;
-			expression(0);
-			State = 390;
+			State = 465;
+			accessor();
+			State = 466;
+			expression();
+			State = 471;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==Comma) {
 				{
 				{
-				State = 386;
+				State = 467;
 				Match(Comma);
-				State = 387;
-				expression(0);
+				State = 468;
+				expression();
 				}
 				}
-				State = 392;
+				State = 473;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
+			State = 474;
+			Match(CloseBracket);
 			}
 		}
 		catch (RecognitionException re) {
@@ -2548,811 +3349,35 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public partial class ExpressionOrFunctionContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
+	public partial class MemberDotContext : ParserRuleContext {
+		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Dot() { return GetToken(GameMakerLanguageParser.Dot, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
+			return GetRuleContext<IdentifierContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public FunctionDeclarationContext functionDeclaration() {
-			return GetRuleContext<FunctionDeclarationContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(GameMakerLanguageParser.OpenParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
-			return GetRuleContext<ExpressionOrFunctionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(GameMakerLanguageParser.CloseParen, 0); }
-		public ExpressionOrFunctionContext(ParserRuleContext parent, int invokingState)
+		public MemberDotContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_expressionOrFunction; } }
+		public override int RuleIndex { get { return RULE_memberDot; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitExpressionOrFunction(this);
+			if (typedVisitor != null) return typedVisitor.VisitMemberDot(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public ExpressionOrFunctionContext expressionOrFunction() {
-		ExpressionOrFunctionContext _localctx = new ExpressionOrFunctionContext(Context, State);
-		EnterRule(_localctx, 66, RULE_expressionOrFunction);
+	public MemberDotContext memberDot() {
+		MemberDotContext _localctx = new MemberDotContext(Context, State);
+		EnterRule(_localctx, 84, RULE_memberDot);
 		try {
-			State = 401;
-			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,37,Context) ) {
-			case 1:
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 395;
-				ErrorHandler.Sync(this);
-				switch (TokenStream.LA(1)) {
-				case OpenBracket:
-				case OpenParen:
-				case OpenBrace:
-				case Begin:
-				case PlusPlus:
-				case MinusMinus:
-				case Plus:
-				case Minus:
-				case BitNot:
-				case Not:
-				case BooleanLiteral:
-				case IntegerLiteral:
-				case DecimalLiteral:
-				case BinaryLiteral:
-				case HexIntegerLiteral:
-				case Undefined:
-				case NoOne:
-				case New:
-				case Constructor:
-				case Identifier:
-				case StringLiteral:
-				case TemplateStringStart:
-				case VerbatimStringLiteral:
-					{
-					State = 393;
-					expression(0);
-					}
-					break;
-				case Function:
-					{
-					State = 394;
-					functionDeclaration();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				}
-				break;
-			case 2:
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 397;
-				Match(OpenParen);
-				State = 398;
-				expressionOrFunction();
-				State = 399;
-				Match(CloseParen);
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class ExpressionContext : ParserRuleContext {
-		public ExpressionContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_expression; } }
-	 
-		public ExpressionContext() { }
-		public virtual void CopyFrom(ExpressionContext context) {
-			base.CopyFrom(context);
-		}
-	}
-	public partial class ParenthesizedExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(GameMakerLanguageParser.OpenParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(GameMakerLanguageParser.CloseParen, 0); }
-		public ParenthesizedExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitParenthesizedExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class AdditiveExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus() { return GetToken(GameMakerLanguageParser.Plus, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus() { return GetToken(GameMakerLanguageParser.Minus, 0); }
-		public AdditiveExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitAdditiveExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class RelationalExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LessThan() { return GetToken(GameMakerLanguageParser.LessThan, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LessThanEquals() { return GetToken(GameMakerLanguageParser.LessThanEquals, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MoreThan() { return GetToken(GameMakerLanguageParser.MoreThan, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode GreaterThanEquals() { return GetToken(GameMakerLanguageParser.GreaterThanEquals, 0); }
-		public RelationalExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitRelationalExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class TernaryExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode QuestionMark() { return GetToken(GameMakerLanguageParser.QuestionMark, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
-		public TernaryExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitTernaryExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class LogicalAndExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode And() { return GetToken(GameMakerLanguageParser.And, 0); }
-		public LogicalAndExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLogicalAndExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class BitNotExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitNot() { return GetToken(GameMakerLanguageParser.BitNot, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
-		}
-		public BitNotExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitNotExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class LiteralExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LiteralContext literal() {
-			return GetRuleContext<LiteralContext>(0);
-		}
-		public LiteralExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLiteralExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class LogicalOrExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Or() { return GetToken(GameMakerLanguageParser.Or, 0); }
-		public LogicalOrExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLogicalOrExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class VariableExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LValueExpressionContext lValueExpression() {
-			return GetRuleContext<LValueExpressionContext>(0);
-		}
-		public VariableExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitVariableExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class NotExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Not() { return GetToken(GameMakerLanguageParser.Not, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
-		}
-		public NotExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitNotExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class InequalityExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NotEquals() { return GetToken(GameMakerLanguageParser.NotEquals, 0); }
-		public InequalityExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitInequalityExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class UnaryMinusExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Minus() { return GetToken(GameMakerLanguageParser.Minus, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
-		}
-		public UnaryMinusExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitUnaryMinusExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class BitAndExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitAnd() { return GetToken(GameMakerLanguageParser.BitAnd, 0); }
-		public BitAndExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitAndExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class LogicalXorExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Xor() { return GetToken(GameMakerLanguageParser.Xor, 0); }
-		public LogicalXorExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitLogicalXorExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class BitOrExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitOr() { return GetToken(GameMakerLanguageParser.BitOr, 0); }
-		public BitOrExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitOrExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class UnaryPlusExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Plus() { return GetToken(GameMakerLanguageParser.Plus, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
-			return GetRuleContext<ExpressionContext>(0);
-		}
-		public UnaryPlusExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitUnaryPlusExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class IncDecExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public IncDecStatementContext incDecStatement() {
-			return GetRuleContext<IncDecStatementContext>(0);
-		}
-		public IncDecExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitIncDecExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class EqualityExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Equals_() { return GetToken(GameMakerLanguageParser.Equals_, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Assign() { return GetToken(GameMakerLanguageParser.Assign, 0); }
-		public EqualityExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitEqualityExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class BitXOrExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode BitXOr() { return GetToken(GameMakerLanguageParser.BitXOr, 0); }
-		public BitXOrExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitXOrExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class CallExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public CallStatementContext callStatement() {
-			return GetRuleContext<CallStatementContext>(0);
-		}
-		public CallExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCallExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class MultiplicativeExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Multiply() { return GetToken(GameMakerLanguageParser.Multiply, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Divide() { return GetToken(GameMakerLanguageParser.Divide, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Modulo() { return GetToken(GameMakerLanguageParser.Modulo, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode IntegerDivide() { return GetToken(GameMakerLanguageParser.IntegerDivide, 0); }
-		public MultiplicativeExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitMultiplicativeExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class CoalesceExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode NullCoalesce() { return GetToken(GameMakerLanguageParser.NullCoalesce, 0); }
-		public CoalesceExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCoalesceExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class BitShiftExpressionContext : ExpressionContext {
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
-			return GetRuleContexts<ExpressionContext>();
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
-			return GetRuleContext<ExpressionContext>(i);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LeftShiftArithmetic() { return GetToken(GameMakerLanguageParser.LeftShiftArithmetic, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode RightShiftArithmetic() { return GetToken(GameMakerLanguageParser.RightShiftArithmetic, 0); }
-		public BitShiftExpressionContext(ExpressionContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitBitShiftExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public ExpressionContext expression() {
-		return expression(0);
-	}
-
-	private ExpressionContext expression(int _p) {
-		ParserRuleContext _parentctx = Context;
-		int _parentState = State;
-		ExpressionContext _localctx = new ExpressionContext(Context, _parentState);
-		ExpressionContext _prevctx = _localctx;
-		int _startState = 68;
-		EnterRecursionRule(_localctx, 68, RULE_expression, _p);
-		int _la;
-		try {
-			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 420;
-			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,38,Context) ) {
-			case 1:
-				{
-				_localctx = new IncDecExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-
-				State = 404;
-				incDecStatement();
-				}
-				break;
-			case 2:
-				{
-				_localctx = new CallExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 405;
-				callStatement(0);
-				}
-				break;
-			case 3:
-				{
-				_localctx = new VariableExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 406;
-				lValueExpression();
-				}
-				break;
-			case 4:
-				{
-				_localctx = new UnaryPlusExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 407;
-				Match(Plus);
-				State = 408;
-				expression(20);
-				}
-				break;
-			case 5:
-				{
-				_localctx = new UnaryMinusExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 409;
-				Match(Minus);
-				State = 410;
-				expression(19);
-				}
-				break;
-			case 6:
-				{
-				_localctx = new BitNotExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 411;
-				Match(BitNot);
-				State = 412;
-				expression(18);
-				}
-				break;
-			case 7:
-				{
-				_localctx = new NotExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 413;
-				Match(Not);
-				State = 414;
-				expression(17);
-				}
-				break;
-			case 8:
-				{
-				_localctx = new LiteralExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 415;
-				literal();
-				}
-				break;
-			case 9:
-				{
-				_localctx = new ParenthesizedExpressionContext(_localctx);
-				Context = _localctx;
-				_prevctx = _localctx;
-				State = 416;
-				Match(OpenParen);
-				State = 417;
-				expression(0);
-				State = 418;
-				Match(CloseParen);
-				}
-				break;
-			}
-			Context.Stop = TokenStream.LT(-1);
-			State = 469;
-			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
-			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( ParseListeners!=null )
-						TriggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-					State = 467;
-					ErrorHandler.Sync(this);
-					switch ( Interpreter.AdaptivePredict(TokenStream,39,Context) ) {
-					case 1:
-						{
-						_localctx = new MultiplicativeExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 422;
-						if (!(Precpred(Context, 16))) throw new FailedPredicateException(this, "Precpred(Context, 16)");
-						State = 423;
-						_la = TokenStream.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4026531840L) != 0)) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
-						State = 424;
-						expression(17);
-						}
-						break;
-					case 2:
-						{
-						_localctx = new AdditiveExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 425;
-						if (!(Precpred(Context, 15))) throw new FailedPredicateException(this, "Precpred(Context, 15)");
-						State = 426;
-						_la = TokenStream.LA(1);
-						if ( !(_la==Plus || _la==Minus) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
-						State = 427;
-						expression(16);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new BitShiftExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 428;
-						if (!(Precpred(Context, 14))) throw new FailedPredicateException(this, "Precpred(Context, 14)");
-						State = 429;
-						_la = TokenStream.LA(1);
-						if ( !(_la==RightShiftArithmetic || _la==LeftShiftArithmetic) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
-						State = 430;
-						expression(15);
-						}
-						break;
-					case 4:
-						{
-						_localctx = new RelationalExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 431;
-						if (!(Precpred(Context, 13))) throw new FailedPredicateException(this, "Precpred(Context, 13)");
-						State = 432;
-						_la = TokenStream.LA(1);
-						if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 4123168604160L) != 0)) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
-						State = 433;
-						expression(14);
-						}
-						break;
-					case 5:
-						{
-						_localctx = new EqualityExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 434;
-						if (!(Precpred(Context, 12))) throw new FailedPredicateException(this, "Precpred(Context, 12)");
-						State = 435;
-						_la = TokenStream.LA(1);
-						if ( !(_la==Assign || _la==Equals_) ) {
-						ErrorHandler.RecoverInline(this);
-						}
-						else {
-							ErrorHandler.ReportMatch(this);
-						    Consume();
-						}
-						State = 436;
-						expression(13);
-						}
-						break;
-					case 6:
-						{
-						_localctx = new InequalityExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 437;
-						if (!(Precpred(Context, 11))) throw new FailedPredicateException(this, "Precpred(Context, 11)");
-						State = 438;
-						Match(NotEquals);
-						State = 439;
-						expression(12);
-						}
-						break;
-					case 7:
-						{
-						_localctx = new LogicalOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 440;
-						if (!(Precpred(Context, 10))) throw new FailedPredicateException(this, "Precpred(Context, 10)");
-						State = 441;
-						Match(Or);
-						State = 442;
-						expression(11);
-						}
-						break;
-					case 8:
-						{
-						_localctx = new LogicalAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 443;
-						if (!(Precpred(Context, 9))) throw new FailedPredicateException(this, "Precpred(Context, 9)");
-						State = 444;
-						Match(And);
-						State = 445;
-						expression(10);
-						}
-						break;
-					case 9:
-						{
-						_localctx = new LogicalXorExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 446;
-						if (!(Precpred(Context, 8))) throw new FailedPredicateException(this, "Precpred(Context, 8)");
-						State = 447;
-						Match(Xor);
-						State = 448;
-						expression(9);
-						}
-						break;
-					case 10:
-						{
-						_localctx = new CoalesceExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 449;
-						if (!(Precpred(Context, 7))) throw new FailedPredicateException(this, "Precpred(Context, 7)");
-						State = 450;
-						Match(NullCoalesce);
-						State = 451;
-						expression(8);
-						}
-						break;
-					case 11:
-						{
-						_localctx = new BitAndExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 452;
-						if (!(Precpred(Context, 6))) throw new FailedPredicateException(this, "Precpred(Context, 6)");
-						State = 453;
-						Match(BitAnd);
-						State = 454;
-						expression(7);
-						}
-						break;
-					case 12:
-						{
-						_localctx = new BitOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 455;
-						if (!(Precpred(Context, 5))) throw new FailedPredicateException(this, "Precpred(Context, 5)");
-						State = 456;
-						Match(BitOr);
-						State = 457;
-						expression(6);
-						}
-						break;
-					case 13:
-						{
-						_localctx = new BitXOrExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 458;
-						if (!(Precpred(Context, 4))) throw new FailedPredicateException(this, "Precpred(Context, 4)");
-						State = 459;
-						Match(BitXOr);
-						State = 460;
-						expression(5);
-						}
-						break;
-					case 14:
-						{
-						_localctx = new TernaryExpressionContext(new ExpressionContext(_parentctx, _parentState));
-						PushNewRecursionContext(_localctx, _startState, RULE_expression);
-						State = 461;
-						if (!(Precpred(Context, 3))) throw new FailedPredicateException(this, "Precpred(Context, 3)");
-						State = 462;
-						Match(QuestionMark);
-						State = 463;
-						expression(0);
-						State = 464;
-						Match(Colon);
-						State = 465;
-						expression(3);
-						}
-						break;
-					}
-					} 
-				}
-				State = 471;
-				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,40,Context);
-			}
+			State = 476;
+			Match(Dot);
+			State = 477;
+			identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -3361,266 +3386,37 @@ public partial class GameMakerLanguageParser : Parser {
 			ErrorHandler.Recover(this, re);
 		}
 		finally {
-			UnrollRecursionContexts(_parentctx);
+			ExitRule();
 		}
 		return _localctx;
 	}
 
-	public partial class CallStatementContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public CallableExpressionContext callableExpression() {
-			return GetRuleContext<CallableExpressionContext>(0);
-		}
+	public partial class MethodInvocationContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ArgumentsContext arguments() {
 			return GetRuleContext<ArgumentsContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public CallStatementContext callStatement() {
-			return GetRuleContext<CallStatementContext>(0);
-		}
-		public CallStatementContext(ParserRuleContext parent, int invokingState)
+		public MethodInvocationContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_callStatement; } }
+		public override int RuleIndex { get { return RULE_methodInvocation; } }
 		[System.Diagnostics.DebuggerNonUserCode]
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCallStatement(this);
+			if (typedVisitor != null) return typedVisitor.VisitMethodInvocation(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public CallStatementContext callStatement() {
-		return callStatement(0);
-	}
-
-	private CallStatementContext callStatement(int _p) {
-		ParserRuleContext _parentctx = Context;
-		int _parentState = State;
-		CallStatementContext _localctx = new CallStatementContext(Context, _parentState);
-		CallStatementContext _prevctx = _localctx;
-		int _startState = 70;
-		EnterRecursionRule(_localctx, 70, RULE_callStatement, _p);
+	public MethodInvocationContext methodInvocation() {
+		MethodInvocationContext _localctx = new MethodInvocationContext(Context, State);
+		EnterRule(_localctx, 86, RULE_methodInvocation);
 		try {
-			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			{
-			State = 473;
-			callableExpression();
-			State = 474;
+			State = 479;
 			arguments();
-			}
-			Context.Stop = TokenStream.LT(-1);
-			State = 480;
-			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,41,Context);
-			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
-				if ( _alt==1 ) {
-					if ( ParseListeners!=null )
-						TriggerExitRuleEvent();
-					_prevctx = _localctx;
-					{
-					{
-					_localctx = new CallStatementContext(_parentctx, _parentState);
-					PushNewRecursionContext(_localctx, _startState, RULE_callStatement);
-					State = 476;
-					if (!(Precpred(Context, 1))) throw new FailedPredicateException(this, "Precpred(Context, 1)");
-					State = 477;
-					arguments();
-					}
-					} 
-				}
-				State = 482;
-				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,41,Context);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			UnrollRecursionContexts(_parentctx);
-		}
-		return _localctx;
-	}
-
-	public partial class CallableExpressionContext : ParserRuleContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LValueExpressionContext lValueExpression() {
-			return GetRuleContext<LValueExpressionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenParen() { return GetToken(GameMakerLanguageParser.OpenParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseParen() { return GetToken(GameMakerLanguageParser.CloseParen, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public FunctionDeclarationContext functionDeclaration() {
-			return GetRuleContext<FunctionDeclarationContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public CallableExpressionContext callableExpression() {
-			return GetRuleContext<CallableExpressionContext>(0);
-		}
-		public CallableExpressionContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_callableExpression; } }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitCallableExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public CallableExpressionContext callableExpression() {
-		CallableExpressionContext _localctx = new CallableExpressionContext(Context, State);
-		EnterRule(_localctx, 72, RULE_callableExpression);
-		try {
-			State = 491;
-			ErrorHandler.Sync(this);
-			switch ( Interpreter.AdaptivePredict(TokenStream,43,Context) ) {
-			case 1:
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 483;
-				lValueExpression();
-				}
-				break;
-			case 2:
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 484;
-				Match(OpenParen);
-				State = 487;
-				ErrorHandler.Sync(this);
-				switch (TokenStream.LA(1)) {
-				case Function:
-					{
-					State = 485;
-					functionDeclaration();
-					}
-					break;
-				case OpenParen:
-				case New:
-				case Constructor:
-				case Identifier:
-					{
-					State = 486;
-					callableExpression();
-					}
-					break;
-				default:
-					throw new NoViableAltException(this);
-				}
-				State = 489;
-				Match(CloseParen);
-				}
-				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			ErrorHandler.ReportError(this, re);
-			ErrorHandler.Recover(this, re);
-		}
-		finally {
-			ExitRule();
-		}
-		return _localctx;
-	}
-
-	public partial class IncDecStatementContext : ParserRuleContext {
-		public IncDecStatementContext(ParserRuleContext parent, int invokingState)
-			: base(parent, invokingState)
-		{
-		}
-		public override int RuleIndex { get { return RULE_incDecStatement; } }
-	 
-		public IncDecStatementContext() { }
-		public virtual void CopyFrom(IncDecStatementContext context) {
-			base.CopyFrom(context);
-		}
-	}
-	public partial class PostIncDecExpressionContext : IncDecStatementContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LValueExpressionContext lValueExpression() {
-			return GetRuleContext<LValueExpressionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PlusPlus() { return GetToken(GameMakerLanguageParser.PlusPlus, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MinusMinus() { return GetToken(GameMakerLanguageParser.MinusMinus, 0); }
-		public PostIncDecExpressionContext(IncDecStatementContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitPostIncDecExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-	public partial class PreIncDecExpressionContext : IncDecStatementContext {
-		[System.Diagnostics.DebuggerNonUserCode] public LValueExpressionContext lValueExpression() {
-			return GetRuleContext<LValueExpressionContext>(0);
-		}
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode PlusPlus() { return GetToken(GameMakerLanguageParser.PlusPlus, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode MinusMinus() { return GetToken(GameMakerLanguageParser.MinusMinus, 0); }
-		public PreIncDecExpressionContext(IncDecStatementContext context) { CopyFrom(context); }
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
-			IGameMakerLanguageParserVisitor<TResult> typedVisitor = visitor as IGameMakerLanguageParserVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitPreIncDecExpression(this);
-			else return visitor.VisitChildren(this);
-		}
-	}
-
-	[RuleVersion(0)]
-	public IncDecStatementContext incDecStatement() {
-		IncDecStatementContext _localctx = new IncDecStatementContext(Context, State);
-		EnterRule(_localctx, 74, RULE_incDecStatement);
-		int _la;
-		try {
-			State = 498;
-			ErrorHandler.Sync(this);
-			switch (TokenStream.LA(1)) {
-			case PlusPlus:
-			case MinusMinus:
-				_localctx = new PreIncDecExpressionContext(_localctx);
-				EnterOuterAlt(_localctx, 1);
-				{
-				State = 493;
-				_la = TokenStream.LA(1);
-				if ( !(_la==PlusPlus || _la==MinusMinus) ) {
-				ErrorHandler.RecoverInline(this);
-				}
-				else {
-					ErrorHandler.ReportMatch(this);
-				    Consume();
-				}
-				State = 494;
-				lValueExpression();
-				}
-				break;
-			case OpenParen:
-			case New:
-			case Constructor:
-			case Identifier:
-				_localctx = new PostIncDecExpressionContext(_localctx);
-				EnterOuterAlt(_localctx, 2);
-				{
-				State = 495;
-				lValueExpression();
-				State = 496;
-				_la = TokenStream.LA(1);
-				if ( !(_la==PlusPlus || _la==MinusMinus) ) {
-				ErrorHandler.RecoverInline(this);
-				}
-				else {
-					ErrorHandler.ReportMatch(this);
-				    Consume();
-				}
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 		}
 		catch (RecognitionException re) {
@@ -3657,12 +3453,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public AccessorContext accessor() {
 		AccessorContext _localctx = new AccessorContext(Context, State);
-		EnterRule(_localctx, 76, RULE_accessor);
+		EnterRule(_localctx, 88, RULE_accessor);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 500;
+			State = 481;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 504L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -3706,15 +3502,15 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ArgumentsContext arguments() {
 		ArgumentsContext _localctx = new ArgumentsContext(Context, State);
-		EnterRule(_localctx, 78, RULE_arguments);
+		EnterRule(_localctx, 90, RULE_arguments);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 502;
+			State = 483;
 			Match(OpenParen);
-			State = 503;
+			State = 484;
 			argumentList();
-			State = 504;
+			State = 485;
 			Match(CloseParen);
 			}
 		}
@@ -3734,11 +3530,11 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Comma(int i) {
 			return GetToken(GameMakerLanguageParser.Comma, i);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext[] expressionOrFunction() {
-			return GetRuleContexts<ExpressionOrFunctionContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction(int i) {
-			return GetRuleContext<ExpressionOrFunctionContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
 		}
 		public ArgumentListContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -3756,79 +3552,79 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ArgumentListContext argumentList() {
 		ArgumentListContext _localctx = new ArgumentListContext(Context, State);
-		EnterRule(_localctx, 80, RULE_argumentList);
+		EnterRule(_localctx, 92, RULE_argumentList);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 509;
+			State = 490;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,45,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,47,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 506;
+					State = 487;
 					Match(Comma);
 					}
 					} 
 				}
-				State = 511;
+				State = 492;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,45,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,47,Context);
 			}
-			State = 513;
+			State = 494;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590496760L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250640566335L) != 0)) {
 				{
-				State = 512;
-				expressionOrFunction();
+				State = 493;
+				expression();
 				}
 			}
 
-			State = 523;
+			State = 504;
 			ErrorHandler.Sync(this);
-			_alt = Interpreter.AdaptivePredict(TokenStream,48,Context);
+			_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 516;
+					State = 497;
 					ErrorHandler.Sync(this);
 					_la = TokenStream.LA(1);
 					do {
 						{
 						{
-						State = 515;
+						State = 496;
 						Match(Comma);
 						}
 						}
-						State = 518;
+						State = 499;
 						ErrorHandler.Sync(this);
 						_la = TokenStream.LA(1);
 					} while ( _la==Comma );
-					State = 520;
-					expressionOrFunction();
+					State = 501;
+					expression();
 					}
 					} 
 				}
-				State = 525;
+				State = 506;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,48,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,50,Context);
 			}
-			State = 529;
+			State = 510;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==Comma) {
 				{
 				{
-				State = 526;
+				State = 507;
 				Match(Comma);
 				}
 				}
-				State = 531;
+				State = 512;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
@@ -3874,12 +3670,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public AssignmentOperatorContext assignmentOperator() {
 		AssignmentOperatorContext _localctx = new AssignmentOperatorContext(Context, State);
-		EnterRule(_localctx, 82, RULE_assignmentOperator);
+		EnterRule(_localctx, 94, RULE_assignmentOperator);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 532;
+			State = 513;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & 1151795639060267008L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -3936,85 +3732,85 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public LiteralContext literal() {
 		LiteralContext _localctx = new LiteralContext(Context, State);
-		EnterRule(_localctx, 84, RULE_literal);
+		EnterRule(_localctx, 96, RULE_literal);
 		try {
-			State = 546;
+			State = 527;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Undefined:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 534;
+				State = 515;
 				Match(Undefined);
 				}
 				break;
 			case NoOne:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 535;
+				State = 516;
 				Match(NoOne);
 				}
 				break;
 			case BooleanLiteral:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 536;
+				State = 517;
 				Match(BooleanLiteral);
 				}
 				break;
 			case StringLiteral:
 				EnterOuterAlt(_localctx, 4);
 				{
-				State = 537;
+				State = 518;
 				Match(StringLiteral);
 				}
 				break;
 			case VerbatimStringLiteral:
 				EnterOuterAlt(_localctx, 5);
 				{
-				State = 538;
+				State = 519;
 				Match(VerbatimStringLiteral);
 				}
 				break;
 			case TemplateStringStart:
 				EnterOuterAlt(_localctx, 6);
 				{
-				State = 539;
+				State = 520;
 				templateStringLiteral();
 				}
 				break;
 			case HexIntegerLiteral:
 				EnterOuterAlt(_localctx, 7);
 				{
-				State = 540;
+				State = 521;
 				Match(HexIntegerLiteral);
 				}
 				break;
 			case BinaryLiteral:
 				EnterOuterAlt(_localctx, 8);
 				{
-				State = 541;
+				State = 522;
 				Match(BinaryLiteral);
 				}
 				break;
 			case DecimalLiteral:
 				EnterOuterAlt(_localctx, 9);
 				{
-				State = 542;
+				State = 523;
 				Match(DecimalLiteral);
 				}
 				break;
 			case IntegerLiteral:
 				EnterOuterAlt(_localctx, 10);
 				{
-				State = 543;
+				State = 524;
 				Match(IntegerLiteral);
 				}
 				break;
 			case OpenBracket:
 				EnterOuterAlt(_localctx, 11);
 				{
-				State = 544;
+				State = 525;
 				arrayLiteral();
 				}
 				break;
@@ -4022,7 +3818,7 @@ public partial class GameMakerLanguageParser : Parser {
 			case Begin:
 				EnterOuterAlt(_localctx, 12);
 				{
-				State = 545;
+				State = 526;
 				structLiteral();
 				}
 				break;
@@ -4066,28 +3862,28 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public TemplateStringLiteralContext templateStringLiteral() {
 		TemplateStringLiteralContext _localctx = new TemplateStringLiteralContext(Context, State);
-		EnterRule(_localctx, 86, RULE_templateStringLiteral);
+		EnterRule(_localctx, 98, RULE_templateStringLiteral);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 548;
+			State = 529;
 			Match(TemplateStringStart);
-			State = 552;
+			State = 533;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			while (_la==TemplateStringStartExpression || _la==TemplateStringText) {
 				{
 				{
-				State = 549;
+				State = 530;
 				templateStringAtom();
 				}
 				}
-				State = 554;
+				State = 535;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			}
-			State = 555;
+			State = 536;
 			Match(TemplateStringEnd);
 			}
 		}
@@ -4125,26 +3921,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public TemplateStringAtomContext templateStringAtom() {
 		TemplateStringAtomContext _localctx = new TemplateStringAtomContext(Context, State);
-		EnterRule(_localctx, 88, RULE_templateStringAtom);
+		EnterRule(_localctx, 100, RULE_templateStringAtom);
 		try {
-			State = 562;
+			State = 543;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case TemplateStringText:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 557;
+				State = 538;
 				Match(TemplateStringText);
 				}
 				break;
 			case TemplateStringStartExpression:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 558;
+				State = 539;
 				Match(TemplateStringStartExpression);
-				State = 559;
-				expression(0);
-				State = 560;
+				State = 540;
+				expression();
+				State = 541;
 				Match(TemplateStringEndExpression);
 				}
 				break;
@@ -4166,11 +3962,11 @@ public partial class GameMakerLanguageParser : Parser {
 	public partial class ArrayLiteralContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode OpenBracket() { return GetToken(GameMakerLanguageParser.OpenBracket, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode CloseBracket() { return GetToken(GameMakerLanguageParser.CloseBracket, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext[] expressionOrFunction() {
-			return GetRuleContexts<ExpressionOrFunctionContext>();
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext[] expression() {
+			return GetRuleContexts<ExpressionContext>();
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction(int i) {
-			return GetRuleContext<ExpressionOrFunctionContext>(i);
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression(int i) {
+			return GetRuleContext<ExpressionContext>(i);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] Comma() { return GetTokens(GameMakerLanguageParser.Comma); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Comma(int i) {
@@ -4192,45 +3988,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ArrayLiteralContext arrayLiteral() {
 		ArrayLiteralContext _localctx = new ArrayLiteralContext(Context, State);
-		EnterRule(_localctx, 90, RULE_arrayLiteral);
+		EnterRule(_localctx, 102, RULE_arrayLiteral);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 564;
+			State = 545;
 			Match(OpenBracket);
-			State = 576;
+			State = 557;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if ((((_la) & ~0x3f) == 0 && ((1L << _la) & -9223372036590496760L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 8250640566335L) != 0)) {
 				{
-				State = 565;
-				expressionOrFunction();
-				State = 570;
+				State = 546;
+				expression();
+				State = 551;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,53,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 566;
+						State = 547;
 						Match(Comma);
-						State = 567;
-						expressionOrFunction();
+						State = 548;
+						expression();
 						}
 						} 
 					}
-					State = 572;
+					State = 553;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,53,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,55,Context);
 				}
-				State = 574;
+				State = 555;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 573;
+					State = 554;
 					Match(Comma);
 					}
 				}
@@ -4238,7 +4034,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 578;
+			State = 559;
 			Match(CloseBracket);
 			}
 		}
@@ -4286,45 +4082,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public StructLiteralContext structLiteral() {
 		StructLiteralContext _localctx = new StructLiteralContext(Context, State);
-		EnterRule(_localctx, 92, RULE_structLiteral);
+		EnterRule(_localctx, 104, RULE_structLiteral);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 580;
+			State = 561;
 			openBlock();
-			State = 592;
+			State = 573;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (((((_la - 69)) & ~0x3f) == 0 && ((1L << (_la - 69)) & 51673825281L) != 0)) {
 				{
-				State = 581;
+				State = 562;
 				propertyAssignment();
-				State = 586;
+				State = 567;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,56,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,58,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 582;
+						State = 563;
 						Match(Comma);
-						State = 583;
+						State = 564;
 						propertyAssignment();
 						}
 						} 
 					}
-					State = 588;
+					State = 569;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,56,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,58,Context);
 				}
-				State = 590;
+				State = 571;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 589;
+					State = 570;
 					Match(Comma);
 					}
 				}
@@ -4332,7 +4128,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 594;
+			State = 575;
 			closeBlock();
 			}
 		}
@@ -4349,8 +4145,8 @@ public partial class GameMakerLanguageParser : Parser {
 
 	public partial class PropertyAssignmentContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Colon() { return GetToken(GameMakerLanguageParser.Colon, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
-			return GetRuleContext<ExpressionOrFunctionContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
 		[System.Diagnostics.DebuggerNonUserCode] public PropertyIdentifierContext propertyIdentifier() {
 			return GetRuleContext<PropertyIdentifierContext>(0);
@@ -4372,34 +4168,34 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public PropertyAssignmentContext propertyAssignment() {
 		PropertyAssignmentContext _localctx = new PropertyAssignmentContext(Context, State);
-		EnterRule(_localctx, 94, RULE_propertyAssignment);
+		EnterRule(_localctx, 106, RULE_propertyAssignment);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 598;
+			State = 579;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case NoOne:
 			case Constructor:
 			case Identifier:
 				{
-				State = 596;
+				State = 577;
 				propertyIdentifier();
 				}
 				break;
 			case StringLiteral:
 				{
-				State = 597;
+				State = 578;
 				Match(StringLiteral);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
 			}
-			State = 600;
+			State = 581;
 			Match(Colon);
-			State = 601;
-			expressionOrFunction();
+			State = 582;
+			expression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -4437,29 +4233,29 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public PropertyIdentifierContext propertyIdentifier() {
 		PropertyIdentifierContext _localctx = new PropertyIdentifierContext(Context, State);
-		EnterRule(_localctx, 96, RULE_propertyIdentifier);
+		EnterRule(_localctx, 108, RULE_propertyIdentifier);
 		try {
-			State = 606;
+			State = 587;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 603;
+				State = 584;
 				Match(Identifier);
 				}
 				break;
 			case Constructor:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 604;
+				State = 585;
 				softKeyword();
 				}
 				break;
 			case NoOne:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 605;
+				State = 586;
 				propertySoftKeyword();
 				}
 				break;
@@ -4506,36 +4302,36 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public FunctionDeclarationContext functionDeclaration() {
 		FunctionDeclarationContext _localctx = new FunctionDeclarationContext(Context, State);
-		EnterRule(_localctx, 98, RULE_functionDeclaration);
+		EnterRule(_localctx, 110, RULE_functionDeclaration);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 608;
+			State = 589;
 			Match(Function);
-			State = 610;
+			State = 591;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Identifier) {
 				{
-				State = 609;
+				State = 590;
 				Match(Identifier);
 				}
 			}
 
-			State = 612;
+			State = 593;
 			parameterList();
-			State = 614;
+			State = 595;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon || _la==Constructor) {
 				{
-				State = 613;
+				State = 594;
 				constructorClause();
 				}
 			}
 
-			State = 616;
+			State = 597;
 			block();
 			}
 		}
@@ -4573,26 +4369,26 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ConstructorClauseContext constructorClause() {
 		ConstructorClauseContext _localctx = new ConstructorClauseContext(Context, State);
-		EnterRule(_localctx, 100, RULE_constructorClause);
+		EnterRule(_localctx, 112, RULE_constructorClause);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 621;
+			State = 602;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Colon) {
 				{
-				State = 618;
+				State = 599;
 				Match(Colon);
-				State = 619;
+				State = 600;
 				Match(Identifier);
-				State = 620;
+				State = 601;
 				arguments();
 				}
 			}
 
-			State = 623;
+			State = 604;
 			Match(Constructor);
 			}
 		}
@@ -4636,45 +4432,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ParameterListContext parameterList() {
 		ParameterListContext _localctx = new ParameterListContext(Context, State);
-		EnterRule(_localctx, 102, RULE_parameterList);
+		EnterRule(_localctx, 114, RULE_parameterList);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 625;
+			State = 606;
 			Match(OpenParen);
-			State = 637;
+			State = 618;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Constructor || _la==Identifier) {
 				{
-				State = 626;
+				State = 607;
 				parameter();
-				State = 631;
+				State = 612;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,64,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,66,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 627;
+						State = 608;
 						Match(Comma);
-						State = 628;
+						State = 609;
 						parameter();
 						}
 						} 
 					}
-					State = 633;
+					State = 614;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,64,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,66,Context);
 				}
-				State = 635;
+				State = 616;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 634;
+					State = 615;
 					Match(Comma);
 					}
 				}
@@ -4682,7 +4478,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 639;
+			State = 620;
 			Match(CloseParen);
 			}
 		}
@@ -4701,12 +4497,9 @@ public partial class GameMakerLanguageParser : Parser {
 		[System.Diagnostics.DebuggerNonUserCode] public IdentifierContext identifier() {
 			return GetRuleContext<IdentifierContext>(0);
 		}
-		[System.Diagnostics.DebuggerNonUserCode] public TypeAnnotationContext typeAnnotation() {
-			return GetRuleContext<TypeAnnotationContext>(0);
-		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode Assign() { return GetToken(GameMakerLanguageParser.Assign, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ExpressionOrFunctionContext expressionOrFunction() {
-			return GetRuleContext<ExpressionOrFunctionContext>(0);
+		[System.Diagnostics.DebuggerNonUserCode] public ExpressionContext expression() {
+			return GetRuleContext<ExpressionContext>(0);
 		}
 		public ParameterContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -4724,32 +4517,22 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public ParameterContext parameter() {
 		ParameterContext _localctx = new ParameterContext(Context, State);
-		EnterRule(_localctx, 104, RULE_parameter);
+		EnterRule(_localctx, 116, RULE_parameter);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 641;
+			State = 622;
 			identifier();
-			State = 643;
-			ErrorHandler.Sync(this);
-			_la = TokenStream.LA(1);
-			if (_la==Colon) {
-				{
-				State = 642;
-				typeAnnotation();
-				}
-			}
-
-			State = 647;
+			State = 625;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Assign) {
 				{
-				State = 645;
+				State = 623;
 				Match(Assign);
-				State = 646;
-				expressionOrFunction();
+				State = 624;
+				expression();
 				}
 			}
 
@@ -4787,22 +4570,22 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public IdentifierContext identifier() {
 		IdentifierContext _localctx = new IdentifierContext(Context, State);
-		EnterRule(_localctx, 106, RULE_identifier);
+		EnterRule(_localctx, 118, RULE_identifier);
 		try {
-			State = 651;
+			State = 629;
 			ErrorHandler.Sync(this);
 			switch (TokenStream.LA(1)) {
 			case Identifier:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 649;
+				State = 627;
 				Match(Identifier);
 				}
 				break;
 			case Constructor:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 650;
+				State = 628;
 				softKeyword();
 				}
 				break;
@@ -4845,15 +4628,15 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EnumeratorDeclarationContext enumeratorDeclaration() {
 		EnumeratorDeclarationContext _localctx = new EnumeratorDeclarationContext(Context, State);
-		EnterRule(_localctx, 108, RULE_enumeratorDeclaration);
+		EnterRule(_localctx, 120, RULE_enumeratorDeclaration);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 653;
+			State = 631;
 			Match(Enum);
-			State = 654;
+			State = 632;
 			identifier();
-			State = 655;
+			State = 633;
 			enumeratorBlock();
 			}
 		}
@@ -4901,45 +4684,45 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EnumeratorBlockContext enumeratorBlock() {
 		EnumeratorBlockContext _localctx = new EnumeratorBlockContext(Context, State);
-		EnterRule(_localctx, 110, RULE_enumeratorBlock);
+		EnterRule(_localctx, 122, RULE_enumeratorBlock);
 		int _la;
 		try {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 657;
+			State = 635;
 			openBlock();
-			State = 669;
+			State = 647;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Constructor || _la==Identifier) {
 				{
-				State = 658;
+				State = 636;
 				enumerator();
-				State = 663;
+				State = 641;
 				ErrorHandler.Sync(this);
-				_alt = Interpreter.AdaptivePredict(TokenStream,70,Context);
+				_alt = Interpreter.AdaptivePredict(TokenStream,71,Context);
 				while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.INVALID_ALT_NUMBER ) {
 					if ( _alt==1 ) {
 						{
 						{
-						State = 659;
+						State = 637;
 						Match(Comma);
-						State = 660;
+						State = 638;
 						enumerator();
 						}
 						} 
 					}
-					State = 665;
+					State = 643;
 					ErrorHandler.Sync(this);
-					_alt = Interpreter.AdaptivePredict(TokenStream,70,Context);
+					_alt = Interpreter.AdaptivePredict(TokenStream,71,Context);
 				}
-				State = 667;
+				State = 645;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 				if (_la==Comma) {
 					{
-					State = 666;
+					State = 644;
 					Match(Comma);
 					}
 				}
@@ -4947,7 +4730,7 @@ public partial class GameMakerLanguageParser : Parser {
 				}
 			}
 
-			State = 671;
+			State = 649;
 			closeBlock();
 			}
 		}
@@ -4986,22 +4769,22 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EnumeratorContext enumerator() {
 		EnumeratorContext _localctx = new EnumeratorContext(Context, State);
-		EnterRule(_localctx, 112, RULE_enumerator);
+		EnterRule(_localctx, 124, RULE_enumerator);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 673;
+			State = 651;
 			identifier();
-			State = 676;
+			State = 654;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==Assign) {
 				{
-				State = 674;
+				State = 652;
 				Match(Assign);
-				State = 675;
-				expression(0);
+				State = 653;
+				expression();
 				}
 			}
 
@@ -5047,30 +4830,30 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public MacroStatementContext macroStatement() {
 		MacroStatementContext _localctx = new MacroStatementContext(Context, State);
-		EnterRule(_localctx, 114, RULE_macroStatement);
+		EnterRule(_localctx, 126, RULE_macroStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 678;
+			State = 656;
 			Match(Macro);
-			State = 679;
+			State = 657;
 			identifier();
-			State = 681;
+			State = 659;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			do {
 				{
 				{
-				State = 680;
+				State = 658;
 				macroToken();
 				}
 				}
-				State = 683;
+				State = 661;
 				ErrorHandler.Sync(this);
 				_la = TokenStream.LA(1);
 			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & -8L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 1978622713790463L) != 0) );
-			State = 685;
+			State = 663;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Eof || _la==LineTerminator) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5113,16 +4896,16 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public DefineStatementContext defineStatement() {
 		DefineStatementContext _localctx = new DefineStatementContext(Context, State);
-		EnterRule(_localctx, 116, RULE_defineStatement);
+		EnterRule(_localctx, 128, RULE_defineStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 687;
+			State = 665;
 			Match(Define);
-			State = 688;
+			State = 666;
 			Match(RegionCharacters);
-			State = 689;
+			State = 667;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Eof || _la==RegionEOL) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5166,12 +4949,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public RegionStatementContext regionStatement() {
 		RegionStatementContext _localctx = new RegionStatementContext(Context, State);
-		EnterRule(_localctx, 118, RULE_regionStatement);
+		EnterRule(_localctx, 130, RULE_regionStatement);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 691;
+			State = 669;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Region || _la==EndRegion) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5180,17 +4963,17 @@ public partial class GameMakerLanguageParser : Parser {
 				ErrorHandler.ReportMatch(this);
 			    Consume();
 			}
-			State = 693;
+			State = 671;
 			ErrorHandler.Sync(this);
 			_la = TokenStream.LA(1);
 			if (_la==RegionCharacters) {
 				{
-				State = 692;
+				State = 670;
 				Match(RegionCharacters);
 				}
 			}
 
-			State = 695;
+			State = 673;
 			_la = TokenStream.LA(1);
 			if ( !(_la==Eof || _la==RegionEOL) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5232,11 +5015,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public IdentifierStatementContext identifierStatement() {
 		IdentifierStatementContext _localctx = new IdentifierStatementContext(Context, State);
-		EnterRule(_localctx, 120, RULE_identifierStatement);
+		EnterRule(_localctx, 132, RULE_identifierStatement);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 697;
+			State = 675;
 			identifier();
 			}
 		}
@@ -5269,11 +5052,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public SoftKeywordContext softKeyword() {
 		SoftKeywordContext _localctx = new SoftKeywordContext(Context, State);
-		EnterRule(_localctx, 122, RULE_softKeyword);
+		EnterRule(_localctx, 134, RULE_softKeyword);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 699;
+			State = 677;
 			Match(Constructor);
 			}
 		}
@@ -5306,11 +5089,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public PropertySoftKeywordContext propertySoftKeyword() {
 		PropertySoftKeywordContext _localctx = new PropertySoftKeywordContext(Context, State);
-		EnterRule(_localctx, 124, RULE_propertySoftKeyword);
+		EnterRule(_localctx, 136, RULE_propertySoftKeyword);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 701;
+			State = 679;
 			Match(NoOne);
 			}
 		}
@@ -5344,12 +5127,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public OpenBlockContext openBlock() {
 		OpenBlockContext _localctx = new OpenBlockContext(Context, State);
-		EnterRule(_localctx, 126, RULE_openBlock);
+		EnterRule(_localctx, 138, RULE_openBlock);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 703;
+			State = 681;
 			_la = TokenStream.LA(1);
 			if ( !(_la==OpenBrace || _la==Begin) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5390,12 +5173,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public CloseBlockContext closeBlock() {
 		CloseBlockContext _localctx = new CloseBlockContext(Context, State);
-		EnterRule(_localctx, 128, RULE_closeBlock);
+		EnterRule(_localctx, 140, RULE_closeBlock);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 705;
+			State = 683;
 			_la = TokenStream.LA(1);
 			if ( !(_la==CloseBrace || _la==End) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5435,11 +5218,11 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public EosContext eos() {
 		EosContext _localctx = new EosContext(Context, State);
-		EnterRule(_localctx, 130, RULE_eos);
+		EnterRule(_localctx, 142, RULE_eos);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 707;
+			State = 685;
 			Match(SemiColon);
 			}
 		}
@@ -5574,12 +5357,12 @@ public partial class GameMakerLanguageParser : Parser {
 	[RuleVersion(0)]
 	public MacroTokenContext macroToken() {
 		MacroTokenContext _localctx = new MacroTokenContext(Context, State);
-		EnterRule(_localctx, 132, RULE_macroToken);
+		EnterRule(_localctx, 144, RULE_macroToken);
 		int _la;
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 709;
+			State = 687;
 			_la = TokenStream.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & -8L) != 0) || ((((_la - 64)) & ~0x3f) == 0 && ((1L << (_la - 64)) & 1978622713790463L) != 0)) ) {
 			ErrorHandler.RecoverInline(this);
@@ -5601,41 +5384,8 @@ public partial class GameMakerLanguageParser : Parser {
 		return _localctx;
 	}
 
-	public override bool Sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
-		switch (ruleIndex) {
-		case 34: return expression_sempred((ExpressionContext)_localctx, predIndex);
-		case 35: return callStatement_sempred((CallStatementContext)_localctx, predIndex);
-		}
-		return true;
-	}
-	private bool expression_sempred(ExpressionContext _localctx, int predIndex) {
-		switch (predIndex) {
-		case 0: return Precpred(Context, 16);
-		case 1: return Precpred(Context, 15);
-		case 2: return Precpred(Context, 14);
-		case 3: return Precpred(Context, 13);
-		case 4: return Precpred(Context, 12);
-		case 5: return Precpred(Context, 11);
-		case 6: return Precpred(Context, 10);
-		case 7: return Precpred(Context, 9);
-		case 8: return Precpred(Context, 8);
-		case 9: return Precpred(Context, 7);
-		case 10: return Precpred(Context, 6);
-		case 11: return Precpred(Context, 5);
-		case 12: return Precpred(Context, 4);
-		case 13: return Precpred(Context, 3);
-		}
-		return true;
-	}
-	private bool callStatement_sempred(CallStatementContext _localctx, int predIndex) {
-		switch (predIndex) {
-		case 14: return Precpred(Context, 1);
-		}
-		return true;
-	}
-
 	private static int[] _serializedATN = {
-		4,1,114,712,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+		4,1,114,690,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
 		7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,14,
 		2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,2,21,7,21,
 		2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,2,27,7,27,2,28,7,28,
@@ -5644,243 +5394,230 @@ public partial class GameMakerLanguageParser : Parser {
 		2,43,7,43,2,44,7,44,2,45,7,45,2,46,7,46,2,47,7,47,2,48,7,48,2,49,7,49,
 		2,50,7,50,2,51,7,51,2,52,7,52,2,53,7,53,2,54,7,54,2,55,7,55,2,56,7,56,
 		2,57,7,57,2,58,7,58,2,59,7,59,2,60,7,60,2,61,7,61,2,62,7,62,2,63,7,63,
-		2,64,7,64,2,65,7,65,2,66,7,66,1,0,3,0,136,8,0,1,0,1,0,1,1,1,1,4,1,142,
-		8,1,11,1,12,1,143,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
-		1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,168,8,2,1,3,1,3,5,3,172,8,3,10,
-		3,12,3,175,9,3,1,4,1,4,3,4,179,8,4,1,4,1,4,1,5,1,5,1,5,3,5,186,8,5,1,5,
-		1,5,1,5,3,5,191,8,5,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,3,
-		6,205,8,6,1,6,1,6,3,6,209,8,6,1,6,1,6,3,6,213,8,6,1,6,1,6,1,6,1,6,1,6,
-		1,6,3,6,221,8,6,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,9,1,9,1,10,1,10,1,11,
-		1,11,1,12,1,12,1,13,1,13,5,13,241,8,13,10,13,12,13,244,9,13,1,13,1,13,
-		1,14,1,14,1,14,3,14,251,8,14,1,14,1,14,1,14,1,14,3,14,257,8,14,3,14,259,
-		8,14,1,15,1,15,1,15,1,16,1,16,1,16,1,16,3,16,268,8,16,1,16,3,16,271,8,
-		16,1,17,1,17,1,17,3,17,276,8,17,1,17,3,17,279,8,17,1,17,1,17,1,18,1,18,
-		1,18,1,19,1,19,3,19,288,8,19,1,20,1,20,1,20,1,21,1,21,3,21,295,8,21,1,
-		21,1,21,1,21,1,22,1,22,1,22,1,22,5,22,304,8,22,10,22,12,22,307,9,22,1,
-		23,4,23,310,8,23,11,23,12,23,311,1,23,3,23,315,8,23,1,24,1,24,3,24,319,
-		8,24,1,24,1,24,3,24,323,8,24,1,25,1,25,1,25,1,25,5,25,329,8,25,10,25,12,
-		25,332,9,25,1,26,1,26,1,26,1,26,5,26,338,8,26,10,26,12,26,341,9,26,1,26,
-		1,26,1,27,1,27,1,27,1,27,1,27,1,27,3,27,351,8,27,1,28,1,28,5,28,355,8,
-		28,10,28,12,28,358,9,28,1,28,3,28,361,8,28,1,29,1,29,1,29,1,29,1,29,1,
-		29,1,29,3,29,370,8,29,1,30,1,30,1,30,1,30,1,30,1,30,3,30,378,8,30,1,31,
-		1,31,3,31,382,8,31,1,31,1,31,1,32,1,32,1,32,5,32,389,8,32,10,32,12,32,
-		392,9,32,1,33,1,33,3,33,396,8,33,1,33,1,33,1,33,1,33,3,33,402,8,33,1,34,
-		1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,
-		1,34,1,34,3,34,421,8,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,
-		34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,
-		34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,1,
-		34,1,34,1,34,1,34,1,34,1,34,1,34,1,34,5,34,468,8,34,10,34,12,34,471,9,
-		34,1,35,1,35,1,35,1,35,1,35,1,35,5,35,479,8,35,10,35,12,35,482,9,35,1,
-		36,1,36,1,36,1,36,3,36,488,8,36,1,36,1,36,3,36,492,8,36,1,37,1,37,1,37,
-		1,37,1,37,3,37,499,8,37,1,38,1,38,1,39,1,39,1,39,1,39,1,40,5,40,508,8,
-		40,10,40,12,40,511,9,40,1,40,3,40,514,8,40,1,40,4,40,517,8,40,11,40,12,
-		40,518,1,40,5,40,522,8,40,10,40,12,40,525,9,40,1,40,5,40,528,8,40,10,40,
-		12,40,531,9,40,1,41,1,41,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,1,42,
-		1,42,1,42,1,42,3,42,547,8,42,1,43,1,43,5,43,551,8,43,10,43,12,43,554,9,
-		43,1,43,1,43,1,44,1,44,1,44,1,44,1,44,3,44,563,8,44,1,45,1,45,1,45,1,45,
-		5,45,569,8,45,10,45,12,45,572,9,45,1,45,3,45,575,8,45,3,45,577,8,45,1,
-		45,1,45,1,46,1,46,1,46,1,46,5,46,585,8,46,10,46,12,46,588,9,46,1,46,3,
-		46,591,8,46,3,46,593,8,46,1,46,1,46,1,47,1,47,3,47,599,8,47,1,47,1,47,
-		1,47,1,48,1,48,1,48,3,48,607,8,48,1,49,1,49,3,49,611,8,49,1,49,1,49,3,
-		49,615,8,49,1,49,1,49,1,50,1,50,1,50,3,50,622,8,50,1,50,1,50,1,51,1,51,
-		1,51,1,51,5,51,630,8,51,10,51,12,51,633,9,51,1,51,3,51,636,8,51,3,51,638,
-		8,51,1,51,1,51,1,52,1,52,3,52,644,8,52,1,52,1,52,3,52,648,8,52,1,53,1,
-		53,3,53,652,8,53,1,54,1,54,1,54,1,54,1,55,1,55,1,55,1,55,5,55,662,8,55,
-		10,55,12,55,665,9,55,1,55,3,55,668,8,55,3,55,670,8,55,1,55,1,55,1,56,1,
-		56,1,56,3,56,677,8,56,1,57,1,57,1,57,4,57,682,8,57,11,57,12,57,683,1,57,
-		1,57,1,58,1,58,1,58,1,58,1,59,1,59,3,59,694,8,59,1,59,1,59,1,60,1,60,1,
-		61,1,61,1,62,1,62,1,63,1,63,1,64,1,64,1,65,1,65,1,66,1,66,1,66,0,2,68,
-		70,67,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,
-		46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,
-		94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,
-		132,0,14,1,0,28,31,1,0,24,25,1,0,36,37,1,0,38,41,2,0,19,19,42,42,1,0,22,
-		23,1,0,3,8,3,0,19,19,35,35,50,59,1,1,108,108,1,1,111,111,1,0,101,102,2,
-		0,12,12,15,15,2,0,14,14,16,16,4,0,3,97,99,99,103,106,112,114,774,0,135,
-		1,0,0,0,2,141,1,0,0,0,4,167,1,0,0,0,6,169,1,0,0,0,8,176,1,0,0,0,10,182,
-		1,0,0,0,12,220,1,0,0,0,14,222,1,0,0,0,16,226,1,0,0,0,18,230,1,0,0,0,20,
-		232,1,0,0,0,22,234,1,0,0,0,24,236,1,0,0,0,26,238,1,0,0,0,28,258,1,0,0,
-		0,30,260,1,0,0,0,32,263,1,0,0,0,34,272,1,0,0,0,36,282,1,0,0,0,38,285,1,
-		0,0,0,40,289,1,0,0,0,42,292,1,0,0,0,44,299,1,0,0,0,46,314,1,0,0,0,48,316,
-		1,0,0,0,50,324,1,0,0,0,52,333,1,0,0,0,54,350,1,0,0,0,56,352,1,0,0,0,58,
-		369,1,0,0,0,60,377,1,0,0,0,62,379,1,0,0,0,64,385,1,0,0,0,66,401,1,0,0,
-		0,68,420,1,0,0,0,70,472,1,0,0,0,72,491,1,0,0,0,74,498,1,0,0,0,76,500,1,
-		0,0,0,78,502,1,0,0,0,80,509,1,0,0,0,82,532,1,0,0,0,84,546,1,0,0,0,86,548,
-		1,0,0,0,88,562,1,0,0,0,90,564,1,0,0,0,92,580,1,0,0,0,94,598,1,0,0,0,96,
-		606,1,0,0,0,98,608,1,0,0,0,100,621,1,0,0,0,102,625,1,0,0,0,104,641,1,0,
-		0,0,106,651,1,0,0,0,108,653,1,0,0,0,110,657,1,0,0,0,112,673,1,0,0,0,114,
-		678,1,0,0,0,116,687,1,0,0,0,118,691,1,0,0,0,120,697,1,0,0,0,122,699,1,
-		0,0,0,124,701,1,0,0,0,126,703,1,0,0,0,128,705,1,0,0,0,130,707,1,0,0,0,
-		132,709,1,0,0,0,134,136,3,2,1,0,135,134,1,0,0,0,135,136,1,0,0,0,136,137,
-		1,0,0,0,137,138,5,0,0,1,138,1,1,0,0,0,139,142,3,6,3,0,140,142,3,24,12,
-		0,141,139,1,0,0,0,141,140,1,0,0,0,142,143,1,0,0,0,143,141,1,0,0,0,143,
-		144,1,0,0,0,144,3,1,0,0,0,145,168,3,8,4,0,146,168,3,10,5,0,147,168,3,44,
-		22,0,148,168,3,12,6,0,149,168,3,18,9,0,150,168,3,20,10,0,151,168,3,38,
-		19,0,152,168,3,14,7,0,153,168,3,16,8,0,154,168,3,32,16,0,155,168,3,30,
-		15,0,156,168,3,22,11,0,157,168,3,114,57,0,158,168,3,116,58,0,159,168,3,
-		118,59,0,160,168,3,108,54,0,161,168,3,52,26,0,162,168,3,42,21,0,163,168,
-		3,74,37,0,164,168,3,70,35,0,165,168,3,98,49,0,166,168,3,40,20,0,167,145,
-		1,0,0,0,167,146,1,0,0,0,167,147,1,0,0,0,167,148,1,0,0,0,167,149,1,0,0,
-		0,167,150,1,0,0,0,167,151,1,0,0,0,167,152,1,0,0,0,167,153,1,0,0,0,167,
-		154,1,0,0,0,167,155,1,0,0,0,167,156,1,0,0,0,167,157,1,0,0,0,167,158,1,
-		0,0,0,167,159,1,0,0,0,167,160,1,0,0,0,167,161,1,0,0,0,167,162,1,0,0,0,
-		167,163,1,0,0,0,167,164,1,0,0,0,167,165,1,0,0,0,167,166,1,0,0,0,168,5,
-		1,0,0,0,169,173,3,4,2,0,170,172,3,130,65,0,171,170,1,0,0,0,172,175,1,0,
-		0,0,173,171,1,0,0,0,173,174,1,0,0,0,174,7,1,0,0,0,175,173,1,0,0,0,176,
-		178,3,126,63,0,177,179,3,2,1,0,178,177,1,0,0,0,178,179,1,0,0,0,179,180,
-		1,0,0,0,180,181,3,128,64,0,181,9,1,0,0,0,182,183,5,90,0,0,183,185,3,68,
-		34,0,184,186,5,91,0,0,185,184,1,0,0,0,185,186,1,0,0,0,186,187,1,0,0,0,
-		187,190,3,6,3,0,188,189,5,74,0,0,189,191,3,6,3,0,190,188,1,0,0,0,190,191,
-		1,0,0,0,191,11,1,0,0,0,192,193,5,72,0,0,193,194,3,6,3,0,194,195,5,85,0,
-		0,195,196,3,68,34,0,196,221,1,0,0,0,197,198,5,84,0,0,198,199,3,68,34,0,
-		199,200,3,6,3,0,200,221,1,0,0,0,201,202,5,82,0,0,202,204,5,10,0,0,203,
-		205,3,4,2,0,204,203,1,0,0,0,204,205,1,0,0,0,205,206,1,0,0,0,206,208,5,
-		17,0,0,207,209,3,68,34,0,208,207,1,0,0,0,208,209,1,0,0,0,209,210,1,0,0,
-		0,210,212,5,17,0,0,211,213,3,6,3,0,212,211,1,0,0,0,212,213,1,0,0,0,213,
-		214,1,0,0,0,214,215,5,11,0,0,215,221,3,6,3,0,216,217,5,86,0,0,217,218,
-		3,68,34,0,218,219,3,6,3,0,219,221,1,0,0,0,220,192,1,0,0,0,220,197,1,0,
-		0,0,220,201,1,0,0,0,220,216,1,0,0,0,221,13,1,0,0,0,222,223,5,88,0,0,223,
-		224,3,68,34,0,224,225,3,6,3,0,225,15,1,0,0,0,226,227,5,83,0,0,227,228,
-		3,68,34,0,228,229,3,26,13,0,229,17,1,0,0,0,230,231,5,81,0,0,231,19,1,0,
-		0,0,232,233,5,70,0,0,233,21,1,0,0,0,234,235,5,71,0,0,235,23,1,0,0,0,236,
-		237,5,17,0,0,237,25,1,0,0,0,238,242,3,126,63,0,239,241,3,28,14,0,240,239,
-		1,0,0,0,241,244,1,0,0,0,242,240,1,0,0,0,242,243,1,0,0,0,243,245,1,0,0,
-		0,244,242,1,0,0,0,245,246,3,128,64,0,246,27,1,0,0,0,247,248,5,89,0,0,248,
-		250,5,20,0,0,249,251,3,2,1,0,250,249,1,0,0,0,250,251,1,0,0,0,251,259,1,
-		0,0,0,252,253,5,73,0,0,253,254,3,68,34,0,254,256,5,20,0,0,255,257,3,2,
-		1,0,256,255,1,0,0,0,256,257,1,0,0,0,257,259,1,0,0,0,258,247,1,0,0,0,258,
-		252,1,0,0,0,259,29,1,0,0,0,260,261,5,92,0,0,261,262,3,68,34,0,262,31,1,
-		0,0,0,263,264,5,94,0,0,264,270,3,6,3,0,265,267,3,34,17,0,266,268,3,36,
-		18,0,267,266,1,0,0,0,267,268,1,0,0,0,268,271,1,0,0,0,269,271,3,36,18,0,
-		270,265,1,0,0,0,270,269,1,0,0,0,271,33,1,0,0,0,272,278,5,78,0,0,273,275,
-		5,10,0,0,274,276,3,106,53,0,275,274,1,0,0,0,275,276,1,0,0,0,276,277,1,
-		0,0,0,277,279,5,11,0,0,278,273,1,0,0,0,278,279,1,0,0,0,279,280,1,0,0,0,
-		280,281,3,6,3,0,281,35,1,0,0,0,282,283,5,79,0,0,283,284,3,6,3,0,284,37,
-		1,0,0,0,285,287,5,80,0,0,286,288,3,68,34,0,287,286,1,0,0,0,287,288,1,0,
-		0,0,288,39,1,0,0,0,289,290,5,93,0,0,290,291,3,68,34,0,291,41,1,0,0,0,292,
-		294,3,56,28,0,293,295,3,50,25,0,294,293,1,0,0,0,294,295,1,0,0,0,295,296,
-		1,0,0,0,296,297,3,82,41,0,297,298,3,66,33,0,298,43,1,0,0,0,299,300,3,46,
-		23,0,300,305,3,48,24,0,301,302,5,18,0,0,302,304,3,48,24,0,303,301,1,0,
-		0,0,304,307,1,0,0,0,305,303,1,0,0,0,305,306,1,0,0,0,306,45,1,0,0,0,307,
-		305,1,0,0,0,308,310,5,76,0,0,309,308,1,0,0,0,310,311,1,0,0,0,311,309,1,
-		0,0,0,311,312,1,0,0,0,312,315,1,0,0,0,313,315,5,97,0,0,314,309,1,0,0,0,
-		314,313,1,0,0,0,315,47,1,0,0,0,316,318,3,106,53,0,317,319,3,50,25,0,318,
-		317,1,0,0,0,318,319,1,0,0,0,319,322,1,0,0,0,320,321,5,19,0,0,321,323,3,
-		66,33,0,322,320,1,0,0,0,322,323,1,0,0,0,323,49,1,0,0,0,324,325,5,20,0,
-		0,325,330,3,106,53,0,326,327,5,46,0,0,327,329,3,106,53,0,328,326,1,0,0,
-		0,329,332,1,0,0,0,330,328,1,0,0,0,330,331,1,0,0,0,331,51,1,0,0,0,332,330,
-		1,0,0,0,333,334,5,77,0,0,334,339,3,106,53,0,335,336,5,18,0,0,336,338,3,
-		106,53,0,337,335,1,0,0,0,338,341,1,0,0,0,339,337,1,0,0,0,339,340,1,0,0,
-		0,340,342,1,0,0,0,341,339,1,0,0,0,342,343,5,17,0,0,343,53,1,0,0,0,344,
-		351,3,106,53,0,345,346,5,10,0,0,346,347,3,66,33,0,347,348,5,11,0,0,348,
-		351,1,0,0,0,349,351,3,62,31,0,350,344,1,0,0,0,350,345,1,0,0,0,350,349,
-		1,0,0,0,351,55,1,0,0,0,352,360,3,54,27,0,353,355,3,58,29,0,354,353,1,0,
-		0,0,355,358,1,0,0,0,356,354,1,0,0,0,356,357,1,0,0,0,357,359,1,0,0,0,358,
-		356,1,0,0,0,359,361,3,60,30,0,360,356,1,0,0,0,360,361,1,0,0,0,361,57,1,
-		0,0,0,362,363,3,76,38,0,363,364,3,64,32,0,364,365,5,9,0,0,365,370,1,0,
-		0,0,366,367,5,21,0,0,367,370,3,106,53,0,368,370,3,78,39,0,369,362,1,0,
-		0,0,369,366,1,0,0,0,369,368,1,0,0,0,370,59,1,0,0,0,371,372,3,76,38,0,372,
-		373,3,64,32,0,373,374,5,9,0,0,374,378,1,0,0,0,375,376,5,21,0,0,376,378,
-		3,106,53,0,377,371,1,0,0,0,377,375,1,0,0,0,378,61,1,0,0,0,379,381,5,75,
-		0,0,380,382,3,106,53,0,381,380,1,0,0,0,381,382,1,0,0,0,382,383,1,0,0,0,
-		383,384,3,78,39,0,384,63,1,0,0,0,385,390,3,68,34,0,386,387,5,18,0,0,387,
-		389,3,68,34,0,388,386,1,0,0,0,389,392,1,0,0,0,390,388,1,0,0,0,390,391,
-		1,0,0,0,391,65,1,0,0,0,392,390,1,0,0,0,393,396,3,68,34,0,394,396,3,98,
-		49,0,395,393,1,0,0,0,395,394,1,0,0,0,396,402,1,0,0,0,397,398,5,10,0,0,
-		398,399,3,66,33,0,399,400,5,11,0,0,400,402,1,0,0,0,401,395,1,0,0,0,401,
-		397,1,0,0,0,402,67,1,0,0,0,403,404,6,34,-1,0,404,421,3,74,37,0,405,421,
-		3,70,35,0,406,421,3,56,28,0,407,408,5,24,0,0,408,421,3,68,34,20,409,410,
-		5,25,0,0,410,421,3,68,34,19,411,412,5,26,0,0,412,421,3,68,34,18,413,414,
-		5,27,0,0,414,421,3,68,34,17,415,421,3,84,42,0,416,417,5,10,0,0,417,418,
-		3,68,34,0,418,419,5,11,0,0,419,421,1,0,0,0,420,403,1,0,0,0,420,405,1,0,
-		0,0,420,406,1,0,0,0,420,407,1,0,0,0,420,409,1,0,0,0,420,411,1,0,0,0,420,
-		413,1,0,0,0,420,415,1,0,0,0,420,416,1,0,0,0,421,469,1,0,0,0,422,423,10,
-		16,0,0,423,424,7,0,0,0,424,468,3,68,34,17,425,426,10,15,0,0,426,427,7,
-		1,0,0,427,468,3,68,34,16,428,429,10,14,0,0,429,430,7,2,0,0,430,468,3,68,
-		34,15,431,432,10,13,0,0,432,433,7,3,0,0,433,468,3,68,34,14,434,435,10,
-		12,0,0,435,436,7,4,0,0,436,468,3,68,34,13,437,438,10,11,0,0,438,439,5,
-		43,0,0,439,468,3,68,34,12,440,441,10,10,0,0,441,442,5,48,0,0,442,468,3,
-		68,34,11,443,444,10,9,0,0,444,445,5,47,0,0,445,468,3,68,34,10,446,447,
-		10,8,0,0,447,448,5,49,0,0,448,468,3,68,34,9,449,450,10,7,0,0,450,451,5,
-		34,0,0,451,468,3,68,34,8,452,453,10,6,0,0,453,454,5,44,0,0,454,468,3,68,
-		34,7,455,456,10,5,0,0,456,457,5,46,0,0,457,468,3,68,34,6,458,459,10,4,
-		0,0,459,460,5,45,0,0,460,468,3,68,34,5,461,462,10,3,0,0,462,463,5,33,0,
-		0,463,464,3,68,34,0,464,465,5,20,0,0,465,466,3,68,34,3,466,468,1,0,0,0,
-		467,422,1,0,0,0,467,425,1,0,0,0,467,428,1,0,0,0,467,431,1,0,0,0,467,434,
-		1,0,0,0,467,437,1,0,0,0,467,440,1,0,0,0,467,443,1,0,0,0,467,446,1,0,0,
-		0,467,449,1,0,0,0,467,452,1,0,0,0,467,455,1,0,0,0,467,458,1,0,0,0,467,
-		461,1,0,0,0,468,471,1,0,0,0,469,467,1,0,0,0,469,470,1,0,0,0,470,69,1,0,
-		0,0,471,469,1,0,0,0,472,473,6,35,-1,0,473,474,3,72,36,0,474,475,3,78,39,
-		0,475,480,1,0,0,0,476,477,10,1,0,0,477,479,3,78,39,0,478,476,1,0,0,0,479,
-		482,1,0,0,0,480,478,1,0,0,0,480,481,1,0,0,0,481,71,1,0,0,0,482,480,1,0,
-		0,0,483,492,3,56,28,0,484,487,5,10,0,0,485,488,3,98,49,0,486,488,3,72,
-		36,0,487,485,1,0,0,0,487,486,1,0,0,0,488,489,1,0,0,0,489,490,5,11,0,0,
-		490,492,1,0,0,0,491,483,1,0,0,0,491,484,1,0,0,0,492,73,1,0,0,0,493,494,
-		7,5,0,0,494,499,3,56,28,0,495,496,3,56,28,0,496,497,7,5,0,0,497,499,1,
-		0,0,0,498,493,1,0,0,0,498,495,1,0,0,0,499,75,1,0,0,0,500,501,7,6,0,0,501,
-		77,1,0,0,0,502,503,5,10,0,0,503,504,3,80,40,0,504,505,5,11,0,0,505,79,
-		1,0,0,0,506,508,5,18,0,0,507,506,1,0,0,0,508,511,1,0,0,0,509,507,1,0,0,
-		0,509,510,1,0,0,0,510,513,1,0,0,0,511,509,1,0,0,0,512,514,3,66,33,0,513,
-		512,1,0,0,0,513,514,1,0,0,0,514,523,1,0,0,0,515,517,5,18,0,0,516,515,1,
-		0,0,0,517,518,1,0,0,0,518,516,1,0,0,0,518,519,1,0,0,0,519,520,1,0,0,0,
-		520,522,3,66,33,0,521,516,1,0,0,0,522,525,1,0,0,0,523,521,1,0,0,0,523,
-		524,1,0,0,0,524,529,1,0,0,0,525,523,1,0,0,0,526,528,5,18,0,0,527,526,1,
-		0,0,0,528,531,1,0,0,0,529,527,1,0,0,0,529,530,1,0,0,0,530,81,1,0,0,0,531,
-		529,1,0,0,0,532,533,7,7,0,0,533,83,1,0,0,0,534,547,5,68,0,0,535,547,5,
-		69,0,0,536,547,5,63,0,0,537,547,5,104,0,0,538,547,5,106,0,0,539,547,3,
-		86,43,0,540,547,5,67,0,0,541,547,5,66,0,0,542,547,5,65,0,0,543,547,5,64,
-		0,0,544,547,3,90,45,0,545,547,3,92,46,0,546,534,1,0,0,0,546,535,1,0,0,
-		0,546,536,1,0,0,0,546,537,1,0,0,0,546,538,1,0,0,0,546,539,1,0,0,0,546,
-		540,1,0,0,0,546,541,1,0,0,0,546,542,1,0,0,0,546,543,1,0,0,0,546,544,1,
-		0,0,0,546,545,1,0,0,0,547,85,1,0,0,0,548,552,5,105,0,0,549,551,3,88,44,
-		0,550,549,1,0,0,0,551,554,1,0,0,0,552,550,1,0,0,0,552,553,1,0,0,0,553,
-		555,1,0,0,0,554,552,1,0,0,0,555,556,5,112,0,0,556,87,1,0,0,0,557,563,5,
-		114,0,0,558,559,5,113,0,0,559,560,3,68,34,0,560,561,5,13,0,0,561,563,1,
-		0,0,0,562,557,1,0,0,0,562,558,1,0,0,0,563,89,1,0,0,0,564,576,5,3,0,0,565,
-		570,3,66,33,0,566,567,5,18,0,0,567,569,3,66,33,0,568,566,1,0,0,0,569,572,
-		1,0,0,0,570,568,1,0,0,0,570,571,1,0,0,0,571,574,1,0,0,0,572,570,1,0,0,
-		0,573,575,5,18,0,0,574,573,1,0,0,0,574,575,1,0,0,0,575,577,1,0,0,0,576,
-		565,1,0,0,0,576,577,1,0,0,0,577,578,1,0,0,0,578,579,5,9,0,0,579,91,1,0,
-		0,0,580,592,3,126,63,0,581,586,3,94,47,0,582,583,5,18,0,0,583,585,3,94,
-		47,0,584,582,1,0,0,0,585,588,1,0,0,0,586,584,1,0,0,0,586,587,1,0,0,0,587,
-		590,1,0,0,0,588,586,1,0,0,0,589,591,5,18,0,0,590,589,1,0,0,0,590,591,1,
-		0,0,0,591,593,1,0,0,0,592,581,1,0,0,0,592,593,1,0,0,0,593,594,1,0,0,0,
-		594,595,3,128,64,0,595,93,1,0,0,0,596,599,3,96,48,0,597,599,5,104,0,0,
-		598,596,1,0,0,0,598,597,1,0,0,0,599,600,1,0,0,0,600,601,5,20,0,0,601,602,
-		3,66,33,0,602,95,1,0,0,0,603,607,5,103,0,0,604,607,3,122,61,0,605,607,
-		3,124,62,0,606,603,1,0,0,0,606,604,1,0,0,0,606,605,1,0,0,0,607,97,1,0,
-		0,0,608,610,5,87,0,0,609,611,5,103,0,0,610,609,1,0,0,0,610,611,1,0,0,0,
-		611,612,1,0,0,0,612,614,3,102,51,0,613,615,3,100,50,0,614,613,1,0,0,0,
-		614,615,1,0,0,0,615,616,1,0,0,0,616,617,3,8,4,0,617,99,1,0,0,0,618,619,
-		5,20,0,0,619,620,5,103,0,0,620,622,3,78,39,0,621,618,1,0,0,0,621,622,1,
-		0,0,0,622,623,1,0,0,0,623,624,5,96,0,0,624,101,1,0,0,0,625,637,5,10,0,
-		0,626,631,3,104,52,0,627,628,5,18,0,0,628,630,3,104,52,0,629,627,1,0,0,
-		0,630,633,1,0,0,0,631,629,1,0,0,0,631,632,1,0,0,0,632,635,1,0,0,0,633,
-		631,1,0,0,0,634,636,5,18,0,0,635,634,1,0,0,0,635,636,1,0,0,0,636,638,1,
-		0,0,0,637,626,1,0,0,0,637,638,1,0,0,0,638,639,1,0,0,0,639,640,5,11,0,0,
-		640,103,1,0,0,0,641,643,3,106,53,0,642,644,3,50,25,0,643,642,1,0,0,0,643,
-		644,1,0,0,0,644,647,1,0,0,0,645,646,5,19,0,0,646,648,3,66,33,0,647,645,
-		1,0,0,0,647,648,1,0,0,0,648,105,1,0,0,0,649,652,5,103,0,0,650,652,3,122,
-		61,0,651,649,1,0,0,0,651,650,1,0,0,0,652,107,1,0,0,0,653,654,5,95,0,0,
-		654,655,3,106,53,0,655,656,3,110,55,0,656,109,1,0,0,0,657,669,3,126,63,
-		0,658,663,3,112,56,0,659,660,5,18,0,0,660,662,3,112,56,0,661,659,1,0,0,
-		0,662,665,1,0,0,0,663,661,1,0,0,0,663,664,1,0,0,0,664,667,1,0,0,0,665,
-		663,1,0,0,0,666,668,5,18,0,0,667,666,1,0,0,0,667,668,1,0,0,0,668,670,1,
-		0,0,0,669,658,1,0,0,0,669,670,1,0,0,0,670,671,1,0,0,0,671,672,3,128,64,
-		0,672,111,1,0,0,0,673,676,3,106,53,0,674,675,5,19,0,0,675,677,3,68,34,
-		0,676,674,1,0,0,0,676,677,1,0,0,0,677,113,1,0,0,0,678,679,5,98,0,0,679,
-		681,3,106,53,0,680,682,3,132,66,0,681,680,1,0,0,0,682,683,1,0,0,0,683,
-		681,1,0,0,0,683,684,1,0,0,0,684,685,1,0,0,0,685,686,7,8,0,0,686,115,1,
-		0,0,0,687,688,5,100,0,0,688,689,5,110,0,0,689,690,7,9,0,0,690,117,1,0,
-		0,0,691,693,7,10,0,0,692,694,5,110,0,0,693,692,1,0,0,0,693,694,1,0,0,0,
-		694,695,1,0,0,0,695,696,7,9,0,0,696,119,1,0,0,0,697,698,3,106,53,0,698,
-		121,1,0,0,0,699,700,5,96,0,0,700,123,1,0,0,0,701,702,5,69,0,0,702,125,
-		1,0,0,0,703,704,7,11,0,0,704,127,1,0,0,0,705,706,7,12,0,0,706,129,1,0,
-		0,0,707,708,5,17,0,0,708,131,1,0,0,0,709,710,7,13,0,0,710,133,1,0,0,0,
-		76,135,141,143,167,173,178,185,190,204,208,212,220,242,250,256,258,267,
-		270,275,278,287,294,305,311,314,318,322,330,339,350,356,360,369,377,381,
-		390,395,401,420,467,469,480,487,491,498,509,513,518,523,529,546,552,562,
-		570,574,576,586,590,592,598,606,610,614,621,631,635,637,643,647,651,663,
-		667,669,676,683,693
+		2,64,7,64,2,65,7,65,2,66,7,66,2,67,7,67,2,68,7,68,2,69,7,69,2,70,7,70,
+		2,71,7,71,2,72,7,72,1,0,3,0,148,8,0,1,0,1,0,1,1,1,1,4,1,154,8,1,11,1,12,
+		1,155,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
+		1,2,1,2,1,2,3,2,177,8,2,1,3,1,3,5,3,181,8,3,10,3,12,3,184,9,3,1,4,1,4,
+		3,4,188,8,4,1,4,1,4,1,5,1,5,1,5,3,5,195,8,5,1,5,1,5,1,5,3,5,200,8,5,1,
+		6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,1,6,3,6,214,8,6,1,6,1,6,3,6,
+		218,8,6,1,6,1,6,3,6,222,8,6,1,6,1,6,1,6,1,6,1,6,1,6,3,6,230,8,6,1,7,1,
+		7,1,7,1,7,1,8,1,8,1,8,1,8,1,9,1,9,1,10,1,10,1,11,1,11,1,12,1,12,1,13,1,
+		13,5,13,250,8,13,10,13,12,13,253,9,13,1,13,1,13,1,14,1,14,1,14,3,14,260,
+		8,14,1,14,1,14,1,14,1,14,3,14,266,8,14,3,14,268,8,14,1,15,1,15,1,15,1,
+		16,1,16,1,16,1,16,3,16,277,8,16,1,16,3,16,280,8,16,1,17,1,17,1,17,3,17,
+		285,8,17,1,17,3,17,288,8,17,1,17,1,17,1,18,1,18,1,18,1,19,1,19,3,19,297,
+		8,19,1,20,1,20,1,20,1,21,1,21,1,21,1,21,1,21,1,21,1,21,1,21,5,21,310,8,
+		21,10,21,12,21,313,9,21,3,21,315,8,21,1,22,4,22,318,8,22,11,22,12,22,319,
+		1,22,1,22,3,22,324,8,22,1,23,1,23,1,23,3,23,329,8,23,1,24,1,24,3,24,333,
+		8,24,1,25,1,25,1,25,1,25,1,25,1,25,3,25,341,8,25,1,26,1,26,1,26,5,26,346,
+		8,26,10,26,12,26,349,9,26,1,27,1,27,1,27,5,27,354,8,27,10,27,12,27,357,
+		9,27,1,28,1,28,1,28,5,28,362,8,28,10,28,12,28,365,9,28,1,29,1,29,1,29,
+		3,29,370,8,29,1,30,1,30,1,30,5,30,375,8,30,10,30,12,30,378,9,30,1,31,1,
+		31,1,31,5,31,383,8,31,10,31,12,31,386,9,31,1,32,1,32,1,32,5,32,391,8,32,
+		10,32,12,32,394,9,32,1,33,1,33,1,33,5,33,399,8,33,10,33,12,33,402,9,33,
+		1,34,1,34,1,34,5,34,407,8,34,10,34,12,34,410,9,34,1,35,1,35,1,35,5,35,
+		415,8,35,10,35,12,35,418,9,35,1,36,1,36,1,36,5,36,423,8,36,10,36,12,36,
+		426,9,36,1,37,1,37,1,37,5,37,431,8,37,10,37,12,37,434,9,37,1,38,1,38,1,
+		38,3,38,439,8,38,1,39,1,39,1,39,1,39,5,39,445,8,39,10,39,12,39,448,9,39,
+		1,39,3,39,451,8,39,1,40,1,40,1,40,1,40,1,40,1,40,1,40,1,40,3,40,461,8,
+		40,1,40,3,40,464,8,40,1,41,1,41,1,41,1,41,5,41,470,8,41,10,41,12,41,473,
+		9,41,1,41,1,41,1,42,1,42,1,42,1,43,1,43,1,44,1,44,1,45,1,45,1,45,1,45,
+		1,46,5,46,489,8,46,10,46,12,46,492,9,46,1,46,3,46,495,8,46,1,46,4,46,498,
+		8,46,11,46,12,46,499,1,46,5,46,503,8,46,10,46,12,46,506,9,46,1,46,5,46,
+		509,8,46,10,46,12,46,512,9,46,1,47,1,47,1,48,1,48,1,48,1,48,1,48,1,48,
+		1,48,1,48,1,48,1,48,1,48,1,48,3,48,528,8,48,1,49,1,49,5,49,532,8,49,10,
+		49,12,49,535,9,49,1,49,1,49,1,50,1,50,1,50,1,50,1,50,3,50,544,8,50,1,51,
+		1,51,1,51,1,51,5,51,550,8,51,10,51,12,51,553,9,51,1,51,3,51,556,8,51,3,
+		51,558,8,51,1,51,1,51,1,52,1,52,1,52,1,52,5,52,566,8,52,10,52,12,52,569,
+		9,52,1,52,3,52,572,8,52,3,52,574,8,52,1,52,1,52,1,53,1,53,3,53,580,8,53,
+		1,53,1,53,1,53,1,54,1,54,1,54,3,54,588,8,54,1,55,1,55,3,55,592,8,55,1,
+		55,1,55,3,55,596,8,55,1,55,1,55,1,56,1,56,1,56,3,56,603,8,56,1,56,1,56,
+		1,57,1,57,1,57,1,57,5,57,611,8,57,10,57,12,57,614,9,57,1,57,3,57,617,8,
+		57,3,57,619,8,57,1,57,1,57,1,58,1,58,1,58,3,58,626,8,58,1,59,1,59,3,59,
+		630,8,59,1,60,1,60,1,60,1,60,1,61,1,61,1,61,1,61,5,61,640,8,61,10,61,12,
+		61,643,9,61,1,61,3,61,646,8,61,3,61,648,8,61,1,61,1,61,1,62,1,62,1,62,
+		3,62,655,8,62,1,63,1,63,1,63,4,63,660,8,63,11,63,12,63,661,1,63,1,63,1,
+		64,1,64,1,64,1,64,1,65,1,65,3,65,672,8,65,1,65,1,65,1,66,1,66,1,67,1,67,
+		1,68,1,68,1,69,1,69,1,70,1,70,1,71,1,71,1,72,1,72,1,72,0,0,73,0,2,4,6,
+		8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,
+		56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,
+		102,104,106,108,110,112,114,116,118,120,122,124,126,128,130,132,134,136,
+		138,140,142,144,0,15,2,0,19,19,42,43,1,0,38,41,1,0,36,37,1,0,24,25,1,0,
+		28,31,1,0,22,27,1,0,22,23,1,0,3,8,3,0,19,19,35,35,50,59,1,1,108,108,1,
+		1,111,111,1,0,101,102,2,0,12,12,15,15,2,0,14,14,16,16,4,0,3,97,99,99,103,
+		106,112,114,727,0,147,1,0,0,0,2,153,1,0,0,0,4,176,1,0,0,0,6,178,1,0,0,
+		0,8,185,1,0,0,0,10,191,1,0,0,0,12,229,1,0,0,0,14,231,1,0,0,0,16,235,1,
+		0,0,0,18,239,1,0,0,0,20,241,1,0,0,0,22,243,1,0,0,0,24,245,1,0,0,0,26,247,
+		1,0,0,0,28,267,1,0,0,0,30,269,1,0,0,0,32,272,1,0,0,0,34,281,1,0,0,0,36,
+		291,1,0,0,0,38,294,1,0,0,0,40,298,1,0,0,0,42,314,1,0,0,0,44,323,1,0,0,
+		0,46,325,1,0,0,0,48,332,1,0,0,0,50,334,1,0,0,0,52,342,1,0,0,0,54,350,1,
+		0,0,0,56,358,1,0,0,0,58,366,1,0,0,0,60,371,1,0,0,0,62,379,1,0,0,0,64,387,
+		1,0,0,0,66,395,1,0,0,0,68,403,1,0,0,0,70,411,1,0,0,0,72,419,1,0,0,0,74,
+		427,1,0,0,0,76,438,1,0,0,0,78,440,1,0,0,0,80,463,1,0,0,0,82,465,1,0,0,
+		0,84,476,1,0,0,0,86,479,1,0,0,0,88,481,1,0,0,0,90,483,1,0,0,0,92,490,1,
+		0,0,0,94,513,1,0,0,0,96,527,1,0,0,0,98,529,1,0,0,0,100,543,1,0,0,0,102,
+		545,1,0,0,0,104,561,1,0,0,0,106,579,1,0,0,0,108,587,1,0,0,0,110,589,1,
+		0,0,0,112,602,1,0,0,0,114,606,1,0,0,0,116,622,1,0,0,0,118,629,1,0,0,0,
+		120,631,1,0,0,0,122,635,1,0,0,0,124,651,1,0,0,0,126,656,1,0,0,0,128,665,
+		1,0,0,0,130,669,1,0,0,0,132,675,1,0,0,0,134,677,1,0,0,0,136,679,1,0,0,
+		0,138,681,1,0,0,0,140,683,1,0,0,0,142,685,1,0,0,0,144,687,1,0,0,0,146,
+		148,3,2,1,0,147,146,1,0,0,0,147,148,1,0,0,0,148,149,1,0,0,0,149,150,5,
+		0,0,1,150,1,1,0,0,0,151,154,3,6,3,0,152,154,3,24,12,0,153,151,1,0,0,0,
+		153,152,1,0,0,0,154,155,1,0,0,0,155,153,1,0,0,0,155,156,1,0,0,0,156,3,
+		1,0,0,0,157,177,3,8,4,0,158,177,3,42,21,0,159,177,3,76,38,0,160,177,3,
+		10,5,0,161,177,3,12,6,0,162,177,3,18,9,0,163,177,3,20,10,0,164,177,3,38,
+		19,0,165,177,3,14,7,0,166,177,3,16,8,0,167,177,3,32,16,0,168,177,3,30,
+		15,0,169,177,3,22,11,0,170,177,3,126,63,0,171,177,3,128,64,0,172,177,3,
+		130,65,0,173,177,3,120,60,0,174,177,3,110,55,0,175,177,3,40,20,0,176,157,
+		1,0,0,0,176,158,1,0,0,0,176,159,1,0,0,0,176,160,1,0,0,0,176,161,1,0,0,
+		0,176,162,1,0,0,0,176,163,1,0,0,0,176,164,1,0,0,0,176,165,1,0,0,0,176,
+		166,1,0,0,0,176,167,1,0,0,0,176,168,1,0,0,0,176,169,1,0,0,0,176,170,1,
+		0,0,0,176,171,1,0,0,0,176,172,1,0,0,0,176,173,1,0,0,0,176,174,1,0,0,0,
+		176,175,1,0,0,0,177,5,1,0,0,0,178,182,3,4,2,0,179,181,3,142,71,0,180,179,
+		1,0,0,0,181,184,1,0,0,0,182,180,1,0,0,0,182,183,1,0,0,0,183,7,1,0,0,0,
+		184,182,1,0,0,0,185,187,3,138,69,0,186,188,3,2,1,0,187,186,1,0,0,0,187,
+		188,1,0,0,0,188,189,1,0,0,0,189,190,3,140,70,0,190,9,1,0,0,0,191,192,5,
+		90,0,0,192,194,3,48,24,0,193,195,5,91,0,0,194,193,1,0,0,0,194,195,1,0,
+		0,0,195,196,1,0,0,0,196,199,3,6,3,0,197,198,5,74,0,0,198,200,3,6,3,0,199,
+		197,1,0,0,0,199,200,1,0,0,0,200,11,1,0,0,0,201,202,5,72,0,0,202,203,3,
+		6,3,0,203,204,5,85,0,0,204,205,3,48,24,0,205,230,1,0,0,0,206,207,5,84,
+		0,0,207,208,3,48,24,0,208,209,3,6,3,0,209,230,1,0,0,0,210,211,5,82,0,0,
+		211,213,5,10,0,0,212,214,3,4,2,0,213,212,1,0,0,0,213,214,1,0,0,0,214,215,
+		1,0,0,0,215,217,5,17,0,0,216,218,3,48,24,0,217,216,1,0,0,0,217,218,1,0,
+		0,0,218,219,1,0,0,0,219,221,5,17,0,0,220,222,3,6,3,0,221,220,1,0,0,0,221,
+		222,1,0,0,0,222,223,1,0,0,0,223,224,5,11,0,0,224,230,3,6,3,0,225,226,5,
+		86,0,0,226,227,3,48,24,0,227,228,3,6,3,0,228,230,1,0,0,0,229,201,1,0,0,
+		0,229,206,1,0,0,0,229,210,1,0,0,0,229,225,1,0,0,0,230,13,1,0,0,0,231,232,
+		5,88,0,0,232,233,3,48,24,0,233,234,3,6,3,0,234,15,1,0,0,0,235,236,5,83,
+		0,0,236,237,3,48,24,0,237,238,3,26,13,0,238,17,1,0,0,0,239,240,5,81,0,
+		0,240,19,1,0,0,0,241,242,5,70,0,0,242,21,1,0,0,0,243,244,5,71,0,0,244,
+		23,1,0,0,0,245,246,5,17,0,0,246,25,1,0,0,0,247,251,3,138,69,0,248,250,
+		3,28,14,0,249,248,1,0,0,0,250,253,1,0,0,0,251,249,1,0,0,0,251,252,1,0,
+		0,0,252,254,1,0,0,0,253,251,1,0,0,0,254,255,3,140,70,0,255,27,1,0,0,0,
+		256,257,5,89,0,0,257,259,5,20,0,0,258,260,3,2,1,0,259,258,1,0,0,0,259,
+		260,1,0,0,0,260,268,1,0,0,0,261,262,5,73,0,0,262,263,3,48,24,0,263,265,
+		5,20,0,0,264,266,3,2,1,0,265,264,1,0,0,0,265,266,1,0,0,0,266,268,1,0,0,
+		0,267,256,1,0,0,0,267,261,1,0,0,0,268,29,1,0,0,0,269,270,5,92,0,0,270,
+		271,3,48,24,0,271,31,1,0,0,0,272,273,5,94,0,0,273,279,3,6,3,0,274,276,
+		3,34,17,0,275,277,3,36,18,0,276,275,1,0,0,0,276,277,1,0,0,0,277,280,1,
+		0,0,0,278,280,3,36,18,0,279,274,1,0,0,0,279,278,1,0,0,0,280,33,1,0,0,0,
+		281,287,5,78,0,0,282,284,5,10,0,0,283,285,3,118,59,0,284,283,1,0,0,0,284,
+		285,1,0,0,0,285,286,1,0,0,0,286,288,5,11,0,0,287,282,1,0,0,0,287,288,1,
+		0,0,0,288,289,1,0,0,0,289,290,3,6,3,0,290,35,1,0,0,0,291,292,5,79,0,0,
+		292,293,3,6,3,0,293,37,1,0,0,0,294,296,5,80,0,0,295,297,3,48,24,0,296,
+		295,1,0,0,0,296,297,1,0,0,0,297,39,1,0,0,0,298,299,5,93,0,0,299,300,3,
+		48,24,0,300,41,1,0,0,0,301,302,3,78,39,0,302,303,3,94,47,0,303,304,3,48,
+		24,0,304,315,1,0,0,0,305,306,3,44,22,0,306,311,3,46,23,0,307,308,5,18,
+		0,0,308,310,3,46,23,0,309,307,1,0,0,0,310,313,1,0,0,0,311,309,1,0,0,0,
+		311,312,1,0,0,0,312,315,1,0,0,0,313,311,1,0,0,0,314,301,1,0,0,0,314,305,
+		1,0,0,0,315,43,1,0,0,0,316,318,5,76,0,0,317,316,1,0,0,0,318,319,1,0,0,
+		0,319,317,1,0,0,0,319,320,1,0,0,0,320,324,1,0,0,0,321,324,5,97,0,0,322,
+		324,5,77,0,0,323,317,1,0,0,0,323,321,1,0,0,0,323,322,1,0,0,0,324,45,1,
+		0,0,0,325,328,3,118,59,0,326,327,5,19,0,0,327,329,3,48,24,0,328,326,1,
+		0,0,0,328,329,1,0,0,0,329,47,1,0,0,0,330,333,3,50,25,0,331,333,3,110,55,
+		0,332,330,1,0,0,0,332,331,1,0,0,0,333,49,1,0,0,0,334,340,3,52,26,0,335,
+		336,5,33,0,0,336,337,3,48,24,0,337,338,5,20,0,0,338,339,3,48,24,0,339,
+		341,1,0,0,0,340,335,1,0,0,0,340,341,1,0,0,0,341,51,1,0,0,0,342,347,3,54,
+		27,0,343,344,5,45,0,0,344,346,3,54,27,0,345,343,1,0,0,0,346,349,1,0,0,
+		0,347,345,1,0,0,0,347,348,1,0,0,0,348,53,1,0,0,0,349,347,1,0,0,0,350,355,
+		3,56,28,0,351,352,5,46,0,0,352,354,3,56,28,0,353,351,1,0,0,0,354,357,1,
+		0,0,0,355,353,1,0,0,0,355,356,1,0,0,0,356,55,1,0,0,0,357,355,1,0,0,0,358,
+		363,3,58,29,0,359,360,5,44,0,0,360,362,3,58,29,0,361,359,1,0,0,0,362,365,
+		1,0,0,0,363,361,1,0,0,0,363,364,1,0,0,0,364,57,1,0,0,0,365,363,1,0,0,0,
+		366,369,3,60,30,0,367,368,5,34,0,0,368,370,3,60,30,0,369,367,1,0,0,0,369,
+		370,1,0,0,0,370,59,1,0,0,0,371,376,3,62,31,0,372,373,5,49,0,0,373,375,
+		3,62,31,0,374,372,1,0,0,0,375,378,1,0,0,0,376,374,1,0,0,0,376,377,1,0,
+		0,0,377,61,1,0,0,0,378,376,1,0,0,0,379,384,3,64,32,0,380,381,5,47,0,0,
+		381,383,3,64,32,0,382,380,1,0,0,0,383,386,1,0,0,0,384,382,1,0,0,0,384,
+		385,1,0,0,0,385,63,1,0,0,0,386,384,1,0,0,0,387,392,3,66,33,0,388,389,5,
+		48,0,0,389,391,3,66,33,0,390,388,1,0,0,0,391,394,1,0,0,0,392,390,1,0,0,
+		0,392,393,1,0,0,0,393,65,1,0,0,0,394,392,1,0,0,0,395,400,3,68,34,0,396,
+		397,7,0,0,0,397,399,3,68,34,0,398,396,1,0,0,0,399,402,1,0,0,0,400,398,
+		1,0,0,0,400,401,1,0,0,0,401,67,1,0,0,0,402,400,1,0,0,0,403,408,3,70,35,
+		0,404,405,7,1,0,0,405,407,3,70,35,0,406,404,1,0,0,0,407,410,1,0,0,0,408,
+		406,1,0,0,0,408,409,1,0,0,0,409,69,1,0,0,0,410,408,1,0,0,0,411,416,3,72,
+		36,0,412,413,7,2,0,0,413,415,3,72,36,0,414,412,1,0,0,0,415,418,1,0,0,0,
+		416,414,1,0,0,0,416,417,1,0,0,0,417,71,1,0,0,0,418,416,1,0,0,0,419,424,
+		3,74,37,0,420,421,7,3,0,0,421,423,3,74,37,0,422,420,1,0,0,0,423,426,1,
+		0,0,0,424,422,1,0,0,0,424,425,1,0,0,0,425,73,1,0,0,0,426,424,1,0,0,0,427,
+		432,3,76,38,0,428,429,7,4,0,0,429,431,3,76,38,0,430,428,1,0,0,0,431,434,
+		1,0,0,0,432,430,1,0,0,0,432,433,1,0,0,0,433,75,1,0,0,0,434,432,1,0,0,0,
+		435,439,3,78,39,0,436,437,7,5,0,0,437,439,3,78,39,0,438,435,1,0,0,0,438,
+		436,1,0,0,0,439,77,1,0,0,0,440,446,3,80,40,0,441,445,3,82,41,0,442,445,
+		3,84,42,0,443,445,3,86,43,0,444,441,1,0,0,0,444,442,1,0,0,0,444,443,1,
+		0,0,0,445,448,1,0,0,0,446,444,1,0,0,0,446,447,1,0,0,0,447,450,1,0,0,0,
+		448,446,1,0,0,0,449,451,7,6,0,0,450,449,1,0,0,0,450,451,1,0,0,0,451,79,
+		1,0,0,0,452,464,3,96,48,0,453,464,3,118,59,0,454,455,5,10,0,0,455,456,
+		3,48,24,0,456,457,5,11,0,0,457,464,1,0,0,0,458,460,5,75,0,0,459,461,3,
+		118,59,0,460,459,1,0,0,0,460,461,1,0,0,0,461,462,1,0,0,0,462,464,3,90,
+		45,0,463,452,1,0,0,0,463,453,1,0,0,0,463,454,1,0,0,0,463,458,1,0,0,0,464,
+		81,1,0,0,0,465,466,3,88,44,0,466,471,3,48,24,0,467,468,5,18,0,0,468,470,
+		3,48,24,0,469,467,1,0,0,0,470,473,1,0,0,0,471,469,1,0,0,0,471,472,1,0,
+		0,0,472,474,1,0,0,0,473,471,1,0,0,0,474,475,5,9,0,0,475,83,1,0,0,0,476,
+		477,5,21,0,0,477,478,3,118,59,0,478,85,1,0,0,0,479,480,3,90,45,0,480,87,
+		1,0,0,0,481,482,7,7,0,0,482,89,1,0,0,0,483,484,5,10,0,0,484,485,3,92,46,
+		0,485,486,5,11,0,0,486,91,1,0,0,0,487,489,5,18,0,0,488,487,1,0,0,0,489,
+		492,1,0,0,0,490,488,1,0,0,0,490,491,1,0,0,0,491,494,1,0,0,0,492,490,1,
+		0,0,0,493,495,3,48,24,0,494,493,1,0,0,0,494,495,1,0,0,0,495,504,1,0,0,
+		0,496,498,5,18,0,0,497,496,1,0,0,0,498,499,1,0,0,0,499,497,1,0,0,0,499,
+		500,1,0,0,0,500,501,1,0,0,0,501,503,3,48,24,0,502,497,1,0,0,0,503,506,
+		1,0,0,0,504,502,1,0,0,0,504,505,1,0,0,0,505,510,1,0,0,0,506,504,1,0,0,
+		0,507,509,5,18,0,0,508,507,1,0,0,0,509,512,1,0,0,0,510,508,1,0,0,0,510,
+		511,1,0,0,0,511,93,1,0,0,0,512,510,1,0,0,0,513,514,7,8,0,0,514,95,1,0,
+		0,0,515,528,5,68,0,0,516,528,5,69,0,0,517,528,5,63,0,0,518,528,5,104,0,
+		0,519,528,5,106,0,0,520,528,3,98,49,0,521,528,5,67,0,0,522,528,5,66,0,
+		0,523,528,5,65,0,0,524,528,5,64,0,0,525,528,3,102,51,0,526,528,3,104,52,
+		0,527,515,1,0,0,0,527,516,1,0,0,0,527,517,1,0,0,0,527,518,1,0,0,0,527,
+		519,1,0,0,0,527,520,1,0,0,0,527,521,1,0,0,0,527,522,1,0,0,0,527,523,1,
+		0,0,0,527,524,1,0,0,0,527,525,1,0,0,0,527,526,1,0,0,0,528,97,1,0,0,0,529,
+		533,5,105,0,0,530,532,3,100,50,0,531,530,1,0,0,0,532,535,1,0,0,0,533,531,
+		1,0,0,0,533,534,1,0,0,0,534,536,1,0,0,0,535,533,1,0,0,0,536,537,5,112,
+		0,0,537,99,1,0,0,0,538,544,5,114,0,0,539,540,5,113,0,0,540,541,3,48,24,
+		0,541,542,5,13,0,0,542,544,1,0,0,0,543,538,1,0,0,0,543,539,1,0,0,0,544,
+		101,1,0,0,0,545,557,5,3,0,0,546,551,3,48,24,0,547,548,5,18,0,0,548,550,
+		3,48,24,0,549,547,1,0,0,0,550,553,1,0,0,0,551,549,1,0,0,0,551,552,1,0,
+		0,0,552,555,1,0,0,0,553,551,1,0,0,0,554,556,5,18,0,0,555,554,1,0,0,0,555,
+		556,1,0,0,0,556,558,1,0,0,0,557,546,1,0,0,0,557,558,1,0,0,0,558,559,1,
+		0,0,0,559,560,5,9,0,0,560,103,1,0,0,0,561,573,3,138,69,0,562,567,3,106,
+		53,0,563,564,5,18,0,0,564,566,3,106,53,0,565,563,1,0,0,0,566,569,1,0,0,
+		0,567,565,1,0,0,0,567,568,1,0,0,0,568,571,1,0,0,0,569,567,1,0,0,0,570,
+		572,5,18,0,0,571,570,1,0,0,0,571,572,1,0,0,0,572,574,1,0,0,0,573,562,1,
+		0,0,0,573,574,1,0,0,0,574,575,1,0,0,0,575,576,3,140,70,0,576,105,1,0,0,
+		0,577,580,3,108,54,0,578,580,5,104,0,0,579,577,1,0,0,0,579,578,1,0,0,0,
+		580,581,1,0,0,0,581,582,5,20,0,0,582,583,3,48,24,0,583,107,1,0,0,0,584,
+		588,5,103,0,0,585,588,3,134,67,0,586,588,3,136,68,0,587,584,1,0,0,0,587,
+		585,1,0,0,0,587,586,1,0,0,0,588,109,1,0,0,0,589,591,5,87,0,0,590,592,5,
+		103,0,0,591,590,1,0,0,0,591,592,1,0,0,0,592,593,1,0,0,0,593,595,3,114,
+		57,0,594,596,3,112,56,0,595,594,1,0,0,0,595,596,1,0,0,0,596,597,1,0,0,
+		0,597,598,3,8,4,0,598,111,1,0,0,0,599,600,5,20,0,0,600,601,5,103,0,0,601,
+		603,3,90,45,0,602,599,1,0,0,0,602,603,1,0,0,0,603,604,1,0,0,0,604,605,
+		5,96,0,0,605,113,1,0,0,0,606,618,5,10,0,0,607,612,3,116,58,0,608,609,5,
+		18,0,0,609,611,3,116,58,0,610,608,1,0,0,0,611,614,1,0,0,0,612,610,1,0,
+		0,0,612,613,1,0,0,0,613,616,1,0,0,0,614,612,1,0,0,0,615,617,5,18,0,0,616,
+		615,1,0,0,0,616,617,1,0,0,0,617,619,1,0,0,0,618,607,1,0,0,0,618,619,1,
+		0,0,0,619,620,1,0,0,0,620,621,5,11,0,0,621,115,1,0,0,0,622,625,3,118,59,
+		0,623,624,5,19,0,0,624,626,3,48,24,0,625,623,1,0,0,0,625,626,1,0,0,0,626,
+		117,1,0,0,0,627,630,5,103,0,0,628,630,3,134,67,0,629,627,1,0,0,0,629,628,
+		1,0,0,0,630,119,1,0,0,0,631,632,5,95,0,0,632,633,3,118,59,0,633,634,3,
+		122,61,0,634,121,1,0,0,0,635,647,3,138,69,0,636,641,3,124,62,0,637,638,
+		5,18,0,0,638,640,3,124,62,0,639,637,1,0,0,0,640,643,1,0,0,0,641,639,1,
+		0,0,0,641,642,1,0,0,0,642,645,1,0,0,0,643,641,1,0,0,0,644,646,5,18,0,0,
+		645,644,1,0,0,0,645,646,1,0,0,0,646,648,1,0,0,0,647,636,1,0,0,0,647,648,
+		1,0,0,0,648,649,1,0,0,0,649,650,3,140,70,0,650,123,1,0,0,0,651,654,3,118,
+		59,0,652,653,5,19,0,0,653,655,3,48,24,0,654,652,1,0,0,0,654,655,1,0,0,
+		0,655,125,1,0,0,0,656,657,5,98,0,0,657,659,3,118,59,0,658,660,3,144,72,
+		0,659,658,1,0,0,0,660,661,1,0,0,0,661,659,1,0,0,0,661,662,1,0,0,0,662,
+		663,1,0,0,0,663,664,7,9,0,0,664,127,1,0,0,0,665,666,5,100,0,0,666,667,
+		5,110,0,0,667,668,7,10,0,0,668,129,1,0,0,0,669,671,7,11,0,0,670,672,5,
+		110,0,0,671,670,1,0,0,0,671,672,1,0,0,0,672,673,1,0,0,0,673,674,7,10,0,
+		0,674,131,1,0,0,0,675,676,3,118,59,0,676,133,1,0,0,0,677,678,5,96,0,0,
+		678,135,1,0,0,0,679,680,5,69,0,0,680,137,1,0,0,0,681,682,7,12,0,0,682,
+		139,1,0,0,0,683,684,7,13,0,0,684,141,1,0,0,0,685,686,5,17,0,0,686,143,
+		1,0,0,0,687,688,7,14,0,0,688,145,1,0,0,0,77,147,153,155,176,182,187,194,
+		199,213,217,221,229,251,259,265,267,276,279,284,287,296,311,314,319,323,
+		328,332,340,347,355,363,369,376,384,392,400,408,416,424,432,438,444,446,
+		450,460,463,471,490,494,499,504,510,527,533,543,551,555,557,567,571,573,
+		579,587,591,595,602,612,616,618,625,629,641,645,647,654,661,671
 	};
 
 	public static readonly ATN _ATN =

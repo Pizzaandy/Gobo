@@ -83,17 +83,13 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         {
             return Visit(context.ifStatement());
         }
-        else if (context.variableDeclarationList() != null)
+        else if (context.assignment() != null)
         {
-            return Visit(context.variableDeclarationList());
+            return Visit(context.assignment());
         }
-        else if (context.assignmentExpression() != null)
+        else if (context.unaryExpression() != null)
         {
-            return Visit(context.assignmentExpression());
-        }
-        else if (context.callStatement() != null)
-        {
-            return Visit(context.callStatement());
+            return Visit(context.unaryExpression());
         }
         else if (context.iterationStatement() != null)
         {
@@ -110,10 +106,6 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         else if (context.enumeratorDeclaration() != null)
         {
             return Visit(context.enumeratorDeclaration());
-        }
-        else if (context.incDecStatement() != null)
-        {
-            return Visit(context.incDecStatement());
         }
         else if (context.withStatement() != null)
         {
@@ -142,10 +134,6 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         else if (context.tryStatement() != null)
         {
             return Visit(context.tryStatement());
-        }
-        else if (context.globalVarStatement() != null)
-        {
-            return Visit(context.globalVarStatement());
         }
         else if (context.macroStatement() != null)
         {
@@ -345,12 +333,12 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         return new DeleteStatement(context.ToSpan(), expression);
     }
 
-    public override GmlSyntaxNode VisitAssignmentExpression(
-        [NotNull] GameMakerLanguageParser.AssignmentExpressionContext context
+    public override GmlSyntaxNode VisitPrimaryAssignment(
+        [NotNull] GameMakerLanguageParser.PrimaryAssignmentContext context
     )
     {
-        var left = Visit(context.lValueExpression());
-        var right = Visit(context.expressionOrFunction());
+        var left = Visit(context.primaryExpression());
+        var right = Visit(context.expression());
         GmlSyntaxNode type = GmlSyntaxNode.Empty;
 
         var @operator = context.assignmentOperator().GetText();
@@ -359,10 +347,6 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
             @operator = "=";
         }
 
-        if (context.typeAnnotation() != null)
-        {
-            type = Visit(context.typeAnnotation());
-        }
         return new AssignmentExpression(context.ToSpan(), @operator, left, right, type);
     }
 
@@ -391,30 +375,12 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
         GmlSyntaxNode type = GmlSyntaxNode.Empty;
 
-        if (context.expressionOrFunction() != null)
+        if (context.expression() != null)
         {
-            initializer = Visit(context.expressionOrFunction());
-        }
-        if (context.typeAnnotation() != null)
-        {
-            type = Visit(context.typeAnnotation());
+            initializer = Visit(context.expression());
         }
 
         return new VariableDeclarator(context.ToSpan(), id, type, initializer);
-    }
-
-    public override GmlSyntaxNode VisitTypeAnnotation(
-        [NotNull] GameMakerLanguageParser.TypeAnnotationContext context
-    )
-    {
-        var types = new List<string>();
-
-        foreach (var type in context.identifier())
-        {
-            types.Add(type.GetText());
-        }
-
-        return new TypeAnnotation(context.ToSpan(), types);
     }
 
     public override GmlSyntaxNode VisitFunctionDeclaration(
@@ -476,13 +442,9 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         GmlSyntaxNode type = GmlSyntaxNode.Empty;
         GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
 
-        if (context.expressionOrFunction() != null)
+        if (context.expression() != null)
         {
-            initializer = Visit(context.expressionOrFunction());
-        }
-        if (context.typeAnnotation() != null)
-        {
-            type = Visit(context.typeAnnotation());
+            initializer = Visit(context.expression());
         }
 
         return new Parameter(context.ToSpan(), name, type, initializer);
@@ -552,6 +514,37 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         }
     }
 
+    public override GmlSyntaxNode VisitPrimaryExpression(
+        [NotNull] GameMakerLanguageParser.PrimaryExpressionContext context
+    )
+    {
+        GmlSyntaxNode @object = Visit(context.primaryExpressionStart());
+
+        var startIndex = context.Start.StartIndex;
+
+        if (context.children.Count > 1)
+        {
+            foreach (var child in context.children.Skip(1))
+            {
+                if (child is ITerminalNode token)
+                {
+                    return new UnaryExpression(
+                        context.ToSpan(),
+                        token.GetText(),
+                        @object,
+                        isPrefix: false
+                    );
+                }
+                var node = Visit(child);
+                (node as IMemberChainable)!.SetObject(@object);
+                node.Span = new(startIndex, node.Span.End);
+                @object = node;
+            }
+        }
+
+        return @object;
+    }
+
     public override GmlSyntaxNode VisitLiteralExpression(
         [NotNull] GameMakerLanguageParser.LiteralExpressionContext context
     )
@@ -559,84 +552,28 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         return Visit(context.literal());
     }
 
-    public override GmlSyntaxNode VisitExpressionOrFunction(
-        [NotNull] GameMakerLanguageParser.ExpressionOrFunctionContext context
+    public override GmlSyntaxNode VisitSimpleNameExpression(
+        [NotNull] GameMakerLanguageParser.SimpleNameExpressionContext context
     )
     {
-        GmlSyntaxNode contents;
-        if (context.expression() != null)
-        {
-            contents = Visit(context.expression());
-        }
-        else if (context.functionDeclaration() != null)
-        {
-            contents = Visit(context.functionDeclaration());
-        }
-        else if (context.expressionOrFunction() != null)
-        {
-            contents = new ParenthesizedExpression(
-                context.ToSpan(),
-                Visit(context.expressionOrFunction())
-            );
-        }
-        else
-        {
-            return GmlSyntaxNode.Empty;
-        }
-
-        return contents;
+        return Visit(context.identifier());
     }
 
-    public override GmlSyntaxNode VisitLValueStartExpression(
-        [NotNull] GameMakerLanguageParser.LValueStartExpressionContext context
+    public override GmlSyntaxNode VisitParenthesizedExpression(
+        [NotNull] GameMakerLanguageParser.ParenthesizedExpressionContext context
     )
     {
-        if (context.identifier() != null)
-        {
-            return Visit(context.identifier());
-        }
-        else if (context.expressionOrFunction() != null)
-        {
-            return new ParenthesizedExpression(
-                context.ToSpan(),
-                Visit(context.expressionOrFunction())
-            );
-        }
-        else
-        {
-            return Visit(context.newExpression());
-        }
+        var content = Visit(context.expression());
+        return new ParenthesizedExpression(context.ToSpan(), content);
     }
 
-    public override GmlSyntaxNode VisitLValueExpression(
-        [NotNull] GameMakerLanguageParser.LValueExpressionContext context
+    public override GmlSyntaxNode VisitNewExpression(
+        [NotNull] GameMakerLanguageParser.NewExpressionContext context
     )
     {
-        GmlSyntaxNode @object = Visit(context.lValueStartExpression());
-
-        var startIndex = context.Start.StartIndex;
-
-        if (context.lValueChainOperator()?.Length > 0)
-        {
-            var ops = context.lValueChainOperator();
-            foreach (var op in ops)
-            {
-                var node = Visit(op);
-                (node as IMemberChainable)!.SetObject(@object);
-                node.Span = new(startIndex, node.Span.End);
-                @object = node;
-            }
-        }
-
-        if (context.lValueFinalOperator() != null)
-        {
-            var node = Visit(context.lValueFinalOperator());
-            (node as IMemberChainable)!.SetObject(@object);
-            node.Span = new(startIndex, node.Span.End);
-            @object = node;
-        }
-
-        return @object;
+        var name = context.identifier() is null ? GmlSyntaxNode.Empty : Visit(context.identifier());
+        var arguments = Visit(context.arguments());
+        return new NewExpression(context.ToSpan(), name, arguments);
     }
 
     public override GmlSyntaxNode VisitArguments(
@@ -658,24 +595,24 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
             return parts;
         }
 
-        bool previousChildWasComma = true;
+        bool previousChildWasPunctuation = true;
 
         foreach (var child in context.children)
         {
-            if (child is ITerminalNode terminalNode && previousChildWasComma)
+            if (child is ITerminalNode terminalNode && previousChildWasPunctuation)
             {
                 parts.Add(new UndefinedArgument(terminalNode.Symbol.StartIndex));
                 Debug.Assert(parts.Last() is not null);
             }
-            else if (child is GameMakerLanguageParser.ExpressionOrFunctionContext)
+            else if (child is GameMakerLanguageParser.ExpressionContext)
             {
                 parts.Add(Visit(child));
             }
 
-            previousChildWasComma = child is ITerminalNode;
+            previousChildWasPunctuation = child is ITerminalNode;
         }
 
-        if (previousChildWasComma)
+        if (previousChildWasPunctuation)
         {
             var lastNode = (ITerminalNode)context.children[^1];
             parts.Add(new UndefinedArgument(lastNode.Symbol.StartIndex));
@@ -684,31 +621,30 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         return parts;
     }
 
-    public override GmlSyntaxNode VisitCallExpression(
-        [NotNull] GameMakerLanguageParser.CallExpressionContext context
+    public override GmlSyntaxNode VisitMemberDot(
+        [NotNull] GameMakerLanguageParser.MemberDotContext context
     )
     {
-        return Visit(context.callStatement());
+        var property = Visit(context.identifier());
+        return new MemberDotExpression(context.ToSpan(), GmlSyntaxNode.Empty, property);
     }
 
-    public override GmlSyntaxNode VisitCallStatement(
-        [NotNull] GameMakerLanguageParser.CallStatementContext context
+    public override GmlSyntaxNode VisitMemberIndex(
+        [NotNull] GameMakerLanguageParser.MemberIndexContext context
     )
     {
-        GmlSyntaxNode @object = GmlSyntaxNode.Empty;
-        if (context.callableExpression() != null)
-        {
-            @object = Visit(context.callableExpression());
-        }
-        if (context.callStatement() != null)
-        {
-            @object = Visit(context.callStatement());
-        }
-        return new CallExpression(context.ToSpan(), @object, Visit(context.arguments()));
+        var properties = context.expression().Select(Visit);
+        var accessor = context.accessor().GetText();
+        return new MemberIndexExpression(
+            context.ToSpan(),
+            GmlSyntaxNode.Empty,
+            properties.ToList(),
+            accessor
+        );
     }
 
-    public override GmlSyntaxNode VisitCallLValue(
-        [NotNull] GameMakerLanguageParser.CallLValueContext context
+    public override GmlSyntaxNode VisitMethodInvocation(
+        [NotNull] GameMakerLanguageParser.MethodInvocationContext context
     )
     {
         return new CallExpression(
@@ -718,105 +654,13 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         );
     }
 
-    public override GmlSyntaxNode VisitCallableExpression(
-        [NotNull] GameMakerLanguageParser.CallableExpressionContext context
-    )
-    {
-        if (context.lValueExpression() != null)
-        {
-            return Visit(context.lValueExpression());
-        }
-        if (context.functionDeclaration() != null)
-        {
-            return Visit(context.functionDeclaration());
-        }
-        if (context.callableExpression() != null)
-        {
-            return Visit(context.callableExpression());
-        }
-        return GmlSyntaxNode.Empty;
-    }
-
-    public override GmlSyntaxNode VisitNewExpression(
-        [NotNull] GameMakerLanguageParser.NewExpressionContext context
-    )
-    {
-        var name = context.identifier() is null ? GmlSyntaxNode.Empty : Visit(context.identifier());
-        var arguments = Visit(context.arguments());
-        return new NewExpression(context.ToSpan(), name, arguments);
-    }
-
-    public override GmlSyntaxNode VisitMemberDotLValue(
-        [NotNull] GameMakerLanguageParser.MemberDotLValueContext context
-    )
-    {
-        var property = Visit(context.identifier());
-        return new MemberDotExpression(context.ToSpan(), GmlSyntaxNode.Empty, property);
-    }
-
-    public override GmlSyntaxNode VisitMemberDotLValueFinal(
-        [NotNull] GameMakerLanguageParser.MemberDotLValueFinalContext context
-    )
-    {
-        var property = Visit(context.identifier());
-        return new MemberDotExpression(context.ToSpan(), GmlSyntaxNode.Empty, property);
-    }
-
-    public override GmlSyntaxNode VisitMemberIndexLValue(
-        [NotNull] GameMakerLanguageParser.MemberIndexLValueContext context
-    )
-    {
-        var properties = Visit(context.expressionSequence());
-        var accessor = context.accessor().GetText();
-        return new MemberIndexExpression(
-            context.ToSpan(),
-            GmlSyntaxNode.Empty,
-            properties.Children,
-            accessor
-        );
-    }
-
-    public override GmlSyntaxNode VisitMemberIndexLValueFinal(
-        [NotNull] GameMakerLanguageParser.MemberIndexLValueFinalContext context
-    )
-    {
-        var properties = Visit(context.expressionSequence());
-        var accessor = context.accessor().GetText();
-        return new MemberIndexExpression(
-            context.ToSpan(),
-            GmlSyntaxNode.Empty,
-            properties.Children,
-            accessor
-        );
-    }
-
-    public override GmlSyntaxNode VisitExpressionSequence(
-        [NotNull] GameMakerLanguageParser.ExpressionSequenceContext context
-    )
-    {
-        var parts = new List<GmlSyntaxNode>();
-        foreach (var expression in context.expression())
-        {
-            parts.Add(Visit(expression));
-        }
-        return parts;
-    }
-
-    public override GmlSyntaxNode VisitParenthesizedExpression(
-        [NotNull] GameMakerLanguageParser.ParenthesizedExpressionContext context
-    )
-    {
-        var content = Visit(context.expression());
-        return new ParenthesizedExpression(context.ToSpan(), content);
-    }
-
     public override GmlSyntaxNode VisitArrayLiteral(
         [NotNull] GameMakerLanguageParser.ArrayLiteralContext context
     )
     {
         var elementNodes = new List<GmlSyntaxNode>();
 
-        foreach (var element in context.expressionOrFunction())
+        foreach (var element in context.expression())
         {
             elementNodes.Add(Visit(element));
         }
@@ -857,7 +701,7 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
             );
         }
 
-        var expression = Visit(context.expressionOrFunction());
+        var expression = Visit(context.expression());
         return new StructProperty(context.ToSpan(), name, expression);
     }
 
@@ -908,248 +752,117 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         [NotNull] GameMakerLanguageParser.MultiplicativeExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
     public override GmlSyntaxNode VisitAdditiveExpression(
         [NotNull] GameMakerLanguageParser.AdditiveExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitCoalesceExpression(
-        [NotNull] GameMakerLanguageParser.CoalesceExpressionContext context
+    public override GmlSyntaxNode VisitNullCoalescingExpression(
+        [NotNull] GameMakerLanguageParser.NullCoalescingExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitBitShiftExpression(
-        [NotNull] GameMakerLanguageParser.BitShiftExpressionContext context
+    public override GmlSyntaxNode VisitShiftExpression(
+        [NotNull] GameMakerLanguageParser.ShiftExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitLogicalOrExpression(
-        [NotNull] GameMakerLanguageParser.LogicalOrExpressionContext context
+    public override GmlSyntaxNode VisitOrExpression(
+        [NotNull] GameMakerLanguageParser.OrExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitLogicalAndExpression(
-        [NotNull] GameMakerLanguageParser.LogicalAndExpressionContext context
+    public override GmlSyntaxNode VisitAndExpression(
+        [NotNull] GameMakerLanguageParser.AndExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitLogicalXorExpression(
-        [NotNull] GameMakerLanguageParser.LogicalXorExpressionContext context
+    public override GmlSyntaxNode VisitXorExpression(
+        [NotNull] GameMakerLanguageParser.XorExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
     public override GmlSyntaxNode VisitEqualityExpression(
         [NotNull] GameMakerLanguageParser.EqualityExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
-    }
-
-    public override GmlSyntaxNode VisitInequalityExpression(
-        [NotNull] GameMakerLanguageParser.InequalityExpressionContext context
-    )
-    {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
     public override GmlSyntaxNode VisitRelationalExpression(
         [NotNull] GameMakerLanguageParser.RelationalExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
     public override GmlSyntaxNode VisitBitAndExpression(
         [NotNull] GameMakerLanguageParser.BitAndExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
     public override GmlSyntaxNode VisitBitOrExpression(
         [NotNull] GameMakerLanguageParser.BitOrExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitBitXOrExpression(
-        [NotNull] GameMakerLanguageParser.BitXOrExpressionContext context
+    public override GmlSyntaxNode VisitBitXorExpression(
+        [NotNull] GameMakerLanguageParser.BitXorExpressionContext context
     )
     {
-        var expressions = context.GetRuleContexts<GameMakerLanguageParser.ExpressionContext>();
-        var @operator = context.children[1].GetText();
-        return new BinaryExpression(
-            context.ToSpan(),
-            @operator,
-            Visit(expressions[0]),
-            Visit(expressions[1])
-        );
+        return HandleBinaryExpression(context);
     }
 
-    public override GmlSyntaxNode VisitUnaryMinusExpression(
-        [NotNull] GameMakerLanguageParser.UnaryMinusExpressionContext context
+    public override GmlSyntaxNode VisitUnaryExpression(
+        [NotNull] GameMakerLanguageParser.UnaryExpressionContext context
     )
     {
-        var expression = context.expression();
-        return new UnaryExpression(context.ToSpan(), "-", Visit(expression), true);
+        if (context.children.Count > 1)
+        {
+            return new UnaryExpression(
+                context.ToSpan(),
+                context.children[0].GetText(),
+                Visit(context.primaryExpression()),
+                true
+            );
+        }
+        else
+        {
+            return Visit(context.primaryExpression());
+        }
     }
 
-    public override GmlSyntaxNode VisitUnaryPlusExpression(
-        [NotNull] GameMakerLanguageParser.UnaryPlusExpressionContext context
+    public override GmlSyntaxNode VisitConditionalExpression(
+        [NotNull] GameMakerLanguageParser.ConditionalExpressionContext context
     )
     {
-        var expression = context.expression();
-        return new UnaryExpression(context.ToSpan(), "+", Visit(expression), true);
-    }
+        if (context.expression().Length == 0)
+        {
+            return Visit(context.bitXorExpression());
+        }
 
-    public override GmlSyntaxNode VisitNotExpression(
-        [NotNull] GameMakerLanguageParser.NotExpressionContext context
-    )
-    {
-        var expression = context.expression();
-        return new UnaryExpression(context.ToSpan(), "!", Visit(expression), true);
-    }
-
-    public override GmlSyntaxNode VisitBitNotExpression(
-        [NotNull] GameMakerLanguageParser.BitNotExpressionContext context
-    )
-    {
-        var expression = context.expression();
-        return new UnaryExpression(context.ToSpan(), "~", Visit(expression), true);
-    }
-
-    public override GmlSyntaxNode VisitIncDecExpression(
-        [NotNull] GameMakerLanguageParser.IncDecExpressionContext context
-    )
-    {
-        return Visit(context.incDecStatement());
-    }
-
-    public override GmlSyntaxNode VisitPreIncDecExpression(
-        [NotNull] GameMakerLanguageParser.PreIncDecExpressionContext context
-    )
-    {
-        var expression = context.lValueExpression();
-        var @operator = context.children[0].GetText();
-        return new IncDecStatement(context.ToSpan(), @operator, Visit(expression), true);
-    }
-
-    public override GmlSyntaxNode VisitPostIncDecExpression(
-        [NotNull] GameMakerLanguageParser.PostIncDecExpressionContext context
-    )
-    {
-        var expression = context.lValueExpression();
-        var @operator = context.children[1].GetText();
-        return new IncDecStatement(context.ToSpan(), @operator, Visit(expression), false);
-    }
-
-    public override GmlSyntaxNode VisitTernaryExpression(
-        [NotNull] GameMakerLanguageParser.TernaryExpressionContext context
-    )
-    {
-        var test = context.expression()[0];
-        var whenTrue = context.expression()[1];
-        var whenFalse = context.expression()[2];
+        var test = context.bitXorExpression();
+        var whenTrue = context.expression()[0];
+        var whenFalse = context.expression()[1];
         return new ConditionalExpression(
             context.ToSpan(),
             Visit(test),
@@ -1250,15 +963,49 @@ internal sealed class GmlAstBuilder : GameMakerLanguageParserBaseVisitor<GmlSynt
         return new FinallyProduction(context.ToSpan(), Visit(context.statement()));
     }
 
-    public override GmlSyntaxNode VisitGlobalVarStatement(
-        [NotNull] GameMakerLanguageParser.GlobalVarStatementContext context
+    private GmlSyntaxNode HandleBinaryExpression(
+        ParserRuleContext context,
+        bool rightAssociative = false
     )
     {
-        var declarations = new List<GmlSyntaxNode>();
-        foreach (var declaration in context.identifier())
+        if (context.children.Count == 1)
         {
-            declarations.Add(Visit(declaration));
+            return Visit(context.children[0]);
         }
-        return new GlobalVariableStatement(context.ToSpan(), declarations);
+
+        var children = context.children.ToList();
+        var count = children.Count;
+
+        if (rightAssociative)
+        {
+            children.Reverse();
+        }
+
+        var first = (ParserRuleContext)children[0];
+        var @operator = children[1].GetText();
+        var second = (ParserRuleContext)children[2];
+
+        var currentExpression = new BinaryExpression(
+            new TextSpan(first.Start.StartIndex, second.Stop.StopIndex),
+            @operator,
+            Visit(first),
+            Visit(second)
+        );
+
+        for (var i = 4; i < count; i += 2)
+        {
+            var child = (ParserRuleContext)children[i];
+            currentExpression = new BinaryExpression(
+                new TextSpan(
+                    Math.Min(currentExpression.Start, child.Start.StartIndex),
+                    Math.Max(currentExpression.End, child.Stop.StopIndex)
+                ),
+                @operator,
+                currentExpression,
+                Visit(child)
+            );
+        }
+
+        return currentExpression;
     }
 }

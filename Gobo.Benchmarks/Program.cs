@@ -7,7 +7,6 @@ using Gobo.Tests;
 
 namespace CSharpier.Benchmarks;
 
-[EtwProfiler]
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.NativeAot80)]
 public class Benchmarks

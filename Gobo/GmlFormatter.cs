@@ -147,15 +147,14 @@ public static partial class GmlFormatter
 
             if (initialHash != resultHash)
             {
-                Console.WriteLine("Original AST:");
-                Console.WriteLine(ast);
-                Console.WriteLine("Formatted AST:");
-                Console.WriteLine(updatedParseResult.Ast);
-                var diff = StringDiffer.PrintFirstDifference(
-                    ast.ToString(),
-                    updatedParseResult.Ast.ToString()
+                ISyntaxNode<GmlSyntaxNode>.TryFindDifference(
+                    parseResult.Ast,
+                    updatedParseResult.Ast,
+                    out var difference
                 );
-                throw new Exception($"Formatting transformed the AST:\n{diff}");
+                throw new Exception(
+                    $"Formatting transformed the AST:\nExpected:\n{difference.Item1}\n\nActual:\n{difference.Item2}"
+                );
             }
         }
 

@@ -11,9 +11,10 @@ statementList
     ;
 
 statementNoSemicolon
-    : (block
+    : block
+    | assignment
+    | unaryExpression
     | ifStatement
-    | variableDeclarationList
     | iterationStatement
     | continueStatement
     | breakStatement
@@ -27,13 +28,8 @@ statementNoSemicolon
     | defineStatement
     | regionStatement
     | enumeratorDeclaration
-    | globalVarStatement
-    | assignmentExpression
-    | incDecStatement
-    | callStatement
     | functionDeclaration
     | deleteStatement
-    )
     ;
 
 statement 
@@ -116,111 +112,112 @@ deleteStatement
     : Delete expression
     ;
 
-assignmentExpression
-    : lValueExpression typeAnnotation? assignmentOperator expressionOrFunction
-    ;
-
-variableDeclarationList
-    : varModifier variableDeclaration (',' variableDeclaration)*
+assignment
+    : primaryExpression assignmentOperator expression # PrimaryAssignment
+    | varModifier variableDeclaration (',' variableDeclaration)* # VariableDeclarationList
     ;
 
 varModifier
     : Var+
     | Static
+    | GlobalVar
     ;
 
 variableDeclaration
-    : identifier typeAnnotation? (Assign expressionOrFunction)?
-    ;
-
-typeAnnotation
-    : ':' identifier ('|' identifier)*
-    ;
-
-globalVarStatement
-    : GlobalVar identifier (',' identifier)* SemiColon
-    ;
-
-lValueStartExpression
-    : identifier
-    | '(' expressionOrFunction ')'
-    | newExpression
-    ;
-
-lValueExpression
-    : lValueStartExpression (lValueChainOperator* lValueFinalOperator)?
-    ;
-
-lValueChainOperator
-    : accessor expressionSequence ']' # MemberIndexLValue
-    | '.' identifier # MemberDotLValue
-    | arguments # CallLValue
-    ;
-
-lValueFinalOperator
-    : accessor expressionSequence ']' # MemberIndexLValueFinal
-    | '.' identifier # MemberDotLValueFinal
-    ;
-
-newExpression
-    : New identifier? arguments
-    ;
-
-expressionSequence
-    : expression (',' expression)*
-    ;
-
-expressionOrFunction
-    : (expression | functionDeclaration)
-    | '(' expressionOrFunction ')'
+    : identifier (Assign expression)?
     ;
 
 expression
-    : incDecStatement # IncDecExpression
-    | callStatement # CallExpression
-    | lValueExpression # VariableExpression
+    : conditionalExpression
+    | functionDeclaration
+    // future arrow function syntax goes here
+    ;
 
-    | <assoc=right> '+' expression # UnaryPlusExpression
-    | <assoc=right> '-' expression # UnaryMinusExpression
-    
-    | <assoc=right> '~' expression # BitNotExpression
-    | <assoc=right> Not expression # NotExpression
-    
-    // Binary operator precedence is purposely incorrect because it looks prettier that way :)
-    | expression ('*' | '/' | Modulo | IntegerDivide) expression # MultiplicativeExpression
-    | expression ('+' | '-') expression # AdditiveExpression
-    | expression ('<<' | '>>') expression # BitShiftExpression
-    | expression ('<' | '<=' | '>' | '>=') expression # RelationalExpression
-    | expression ('==' | Assign) expression # EqualityExpression
-    | expression NotEquals expression # InequalityExpression
+conditionalExpression
+    : bitXorExpression ('?' expression ':' expression)?
+    ;
 
-    | expression Or expression # LogicalOrExpression
-    | expression And expression # LogicalAndExpression
-    | expression Xor expression # LogicalXorExpression
-    | expression '??' expression # CoalesceExpression
-    
-    | expression '&' expression # BitAndExpression
-    | expression '|' expression # BitOrExpression
-    | expression '^' expression # BitXOrExpression
+bitXorExpression
+    : bitOrExpression ('^' bitOrExpression)*
+    ;
 
-    | <assoc=right> expression '?' expression ':' expression # TernaryExpression
-    | literal # LiteralExpression
+bitOrExpression
+    : bitAndExpression ('|' bitAndExpression)*
+    ;
+
+bitAndExpression
+    : nullCoalescingExpression ('&' nullCoalescingExpression)*
+    ;
+
+nullCoalescingExpression
+    : xorExpression ('??' xorExpression)?
+    ;
+
+xorExpression
+    : andExpression (Xor andExpression)*
+    ;
+
+andExpression
+    : orExpression (And orExpression)*
+    ;
+
+orExpression
+    : equalityExpression (Or equalityExpression)*
+    ;
+
+equalityExpression
+    : relationalExpression (('==' | Assign | NotEquals) relationalExpression)*
+    ;
+
+relationalExpression
+    : shiftExpression (('<' | '>' | '<=' | '>=') shiftExpression)*
+    ;
+
+shiftExpression
+    : additiveExpression (('<<' | '>>') additiveExpression)*
+    ;
+
+additiveExpression
+    : multiplicativeExpression (('+' | '-') multiplicativeExpression)*
+    ;
+
+multiplicativeExpression
+    : unaryExpression (('*' | '/' | Modulo | IntegerDivide) unaryExpression)*
+    ;
+
+unaryExpression
+    : primaryExpression
+    | (
+        '+' 
+        | '-' 
+        | Not 
+        | '~' 
+        | '++' 
+        | '--'
+    ) primaryExpression
+    ;
+
+primaryExpression 
+	: primaryExpressionStart (memberIndex | memberDot | methodInvocation)* ('++' | '--')?
+    ;
+
+primaryExpressionStart
+    : literal # LiteralExpression
+    | identifier # SimpleNameExpression
     | '(' expression ')' # ParenthesizedExpression
+    | New identifier? arguments # NewExpression
     ;
 
-callStatement
-    : callableExpression arguments
-    | callStatement arguments
+memberIndex
+    : accessor expression (',' expression)* ']'
     ;
 
-callableExpression
-    : lValueExpression
-    | '(' (functionDeclaration | callableExpression) ')'
+memberDot
+    : '.' identifier
     ;
 
-incDecStatement
-    : ('++' | '--') lValueExpression # PreIncDecExpression
-    | lValueExpression ('++' | '--') # PostIncDecExpression
+methodInvocation
+    : arguments
     ;
 
 accessor
@@ -237,7 +234,7 @@ arguments
     ;
 
 argumentList
-    : ','* expressionOrFunction? (','+ expressionOrFunction)* ','*
+    : ','* expression? (','+ expression)* ','*
     ;
 
 assignmentOperator
@@ -280,7 +277,7 @@ templateStringAtom
     ;
 
 arrayLiteral
-    : '[' (expressionOrFunction (',' expressionOrFunction)* ','? )? ']'
+    : '[' (expression (',' expression)* ','? )? ']'
     ;
 
 structLiteral
@@ -288,7 +285,7 @@ structLiteral
     ;
 
 propertyAssignment
-    : (propertyIdentifier | StringLiteral) ':' expressionOrFunction
+    : (propertyIdentifier | StringLiteral) ':' expression
     ;
 
 propertyIdentifier
@@ -307,9 +304,8 @@ parameterList
     : '(' (parameter (',' parameter)* ','?)? ')'
     ;
 
-// TODO: fix this name? lol
 parameter
-    : identifier typeAnnotation? (Assign expressionOrFunction)?
+    : identifier (Assign expression)?
     ;
 
 identifier
