@@ -64,7 +64,10 @@ public static partial class GmlFormatter
             parseStart = Stopwatch.GetTimestamp();
         }
 
-        var parseResult = GmlParser.Parse(code);
+        var parseResult = new GmlParser(code).Parse();
+
+        var sourceText = new SourceText(code);
+        new CommentMapper(sourceText, parseResult.CommentGroups).AttachComments(parseResult.Ast);
 
         if (getDebugInfo)
         {
@@ -75,7 +78,7 @@ public static partial class GmlFormatter
         GmlSyntaxNode ast = parseResult.Ast;
 
         var initialHash = options.ValidateOutput ? ast.GetHashCode() : -1;
-        var docs = ast.Print(new PrintContext(options, new SourceText(code)));
+        var docs = ast.Print(new PrintContext(options, sourceText));
 
         var printOptions = new Printer.DocPrinterOptions()
         {
@@ -134,7 +137,7 @@ public static partial class GmlFormatter
 
             try
             {
-                updatedParseResult = GmlParser.Parse(output);
+                updatedParseResult = new GmlParser(output).Parse();
             }
             catch (GmlSyntaxErrorException ex)
             {

@@ -3,20 +3,11 @@ lexer grammar GameMakerLanguageLexer;
 channels { ERROR }
 
 @lexer::members {
-    bool ignoreNewline = true;
-    int lastTokenType = -4;
     int templateDepth = 0;
-    public override IToken NextToken() {
-        var next = base.NextToken();
-        if (next.Channel == Lexer.DefaultTokenChannel) {
-            lastTokenType = next.Type;
-        }
-        return next;
-    }
 }
 
-MultiLineComment:               '/*' .*? '*/'             -> channel(HIDDEN);
-SingleLineComment:              '//' ~[\r\n]* -> channel(HIDDEN);
+MultiLineComment: '/*' .*? '*/';
+SingleLineComment: '//' ~[\r\n]*;
 
 OpenBracket: '[';
 ListAccessor: '[|'; 
@@ -55,13 +46,13 @@ NullCoalescingAssign:           '??=';
 RightShiftArithmetic:           '>>';
 LeftShiftArithmetic:            '<<';
 LessThan:                       '<';
-MoreThan:                       '>';
+GreaterThan:                    '>';
 LessThanEquals:                 '<=';
 GreaterThanEquals:              '>=';
 Equals_:                        '==';
 NotEquals:                      '!=' | '<>';
 BitAnd:                         '&';
-BitXOr:                         '^';
+BitXor:                         '^';
 BitOr:                          '|';
 And:                            '&&' | 'and';
 Or:                             '||' | 'or';
@@ -125,7 +116,7 @@ Enum:                           'enum';
 Constructor:                    'constructor';
 Static:                         'static';
 
-Macro: '#macro' {ignoreNewline = false;};
+Macro: '#macro';
 EscapedNewLine: '\\';
 
 Define: '#define' -> pushMode(REGION_NAME);
@@ -154,20 +145,11 @@ VerbatimStringLiteral
 /// Misc
 
 WhiteSpaces
-    : [\t\u000B\u000C\u0020\u00A0]+ -> channel(HIDDEN)
+    : [\t\u000B\u000C\u0020\u00A0]+
     ;
 
 LineTerminator
-    : ('\r' '\n'? | '\n') {
-        if (ignoreNewline) {
-            Channel = Lexer.Hidden;
-        }
-        if (lastTokenType == GameMakerLanguageLexer.EscapedNewLine) {
-            Channel = Lexer.Hidden;
-        } else {
-            ignoreNewline = true;
-        }
-    }
+    : ('\r' '\n'? | '\n')
     ;
 
 UnexpectedCharacter
