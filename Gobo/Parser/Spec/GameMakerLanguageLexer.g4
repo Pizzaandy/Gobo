@@ -19,11 +19,9 @@ CloseBracket: ']';
 
 OpenParen:                      '(';
 CloseParen:                     ')';
-OpenBrace:                      '{';
+OpenBrace:                      '{' | 'begin';
+CloseBrace:                     '}' | 'end';
 TemplateStringEndExpression:    '}' {templateDepth > 0}? -> popMode;
-CloseBrace:                     '}';
-Begin:                          'begin';
-End:                            'end';
 SemiColon:                      ';';
 Comma:                          ',';
 Assign:                         '=' | ':=';

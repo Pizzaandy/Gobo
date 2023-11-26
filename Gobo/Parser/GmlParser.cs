@@ -330,7 +330,12 @@ internal class GmlParser
                 )
             )
             {
-                AddError($"expected an assignment, got {token.Text}");
+                if (left is Identifier)
+                {
+                    result = left;
+                    return true;
+                }
+                AddError($"expected an assignment");
             }
 
             var assignmentOperator = accepted.Text;
@@ -357,21 +362,23 @@ internal class GmlParser
     {
         var start = token;
 
-        if (!Accept(Lexer.Identifier))
+        if (!Identifier(out var identifier))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
-
-        var id = new Identifier(GetSpan(accepted), accepted.Text);
-
         GmlSyntaxNode expression = GmlSyntaxNode.Empty;
         if (Accept(Lexer.Assign))
         {
             Expect(Expression(out expression));
         }
 
-        result = new VariableDeclarator(GetSpan(start, token), id, GmlSyntaxNode.Empty, expression);
+        result = new VariableDeclarator(
+            GetSpan(start, token),
+            identifier,
+            GmlSyntaxNode.Empty,
+            expression
+        );
         return true;
     }
 
@@ -449,12 +456,8 @@ internal class GmlParser
             }
             else if (Accept(Lexer.Dot))
             {
-                Expect(Lexer.Identifier);
-                @object = new MemberDotExpression(
-                    GetSpan(start, token),
-                    @object,
-                    new Identifier(GetSpan(accepted), accepted.Text)
-                );
+                Expect(Identifier(out var identifier));
+                @object = new MemberDotExpression(GetSpan(start, token), @object, identifier);
             }
             else if (Arguments(out var arguments))
             {
@@ -478,16 +481,16 @@ internal class GmlParser
         {
             result = literal;
         }
-        else if (Accept(Lexer.Identifier))
+        else if (Identifier(out var identifier))
         {
-            result = new Identifier(GetSpan(accepted), accepted.Text);
+            result = identifier;
         }
         else if (Accept(Lexer.New))
         {
             GmlSyntaxNode id = GmlSyntaxNode.Empty;
-            if (Accept(Lexer.Identifier))
+            if (Identifier(out var constructorName))
             {
-                id = new Identifier(GetSpan(accepted), accepted.Text);
+                id = constructorName;
             }
             Expect(Arguments(out var arguments));
             result = new NewExpression(GetSpan(start, token), id, arguments);
@@ -735,6 +738,26 @@ internal class GmlParser
 
         result = new ArgumentList(GetSpan(start, token), arguments);
         return true;
+    }
+
+    private bool Identifier(out GmlSyntaxNode result)
+    {
+        result = GmlSyntaxNode.Empty;
+
+        if (Accept(Lexer.Identifier))
+        {
+            result = new Identifier(GetSpan(accepted), accepted.Text);
+            return true;
+        }
+        else if (Accept(Lexer.Constructor))
+        {
+            result = new Identifier(GetSpan(accepted), accepted.Text);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private bool Literal(out GmlSyntaxNode result)
