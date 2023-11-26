@@ -22,24 +22,24 @@ internal interface ISyntaxNode<T>
         }
 
         // Compare hash codes of terminal nodes
-        if (a.Children.Count == 0 && b.Children.Count == 0)
+        if (a.GetHashCode() != b.GetHashCode())
         {
-            if (a.GetHashCode() != b.GetHashCode())
+            if (a.Children.Count == 0 && b.Children.Count == 0)
             {
                 return true;
             }
-        }
 
-        foreach (var (first, second) in a.Children.Zip(b.Children))
-        {
-            if (TryFindDifference(first, second, out difference))
+            foreach (var (first, second) in a.Children.Zip(b.Children))
             {
-                if (first is null && second is null)
+                if (TryFindDifference(first, second, out difference))
                 {
-                    continue;
+                    if (first is null && second is null)
+                    {
+                        continue;
+                    }
+                    difference = (first, second);
+                    return true;
                 }
-                difference = (first, second);
-                return true;
             }
         }
 

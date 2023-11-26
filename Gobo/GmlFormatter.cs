@@ -152,6 +152,7 @@ public static partial class GmlFormatter
                     updatedParseResult.Ast,
                     out var difference
                 );
+
                 throw new Exception(
                     $"Formatting transformed the AST:\nExpected:\n{difference.Item1}\n\nActual:\n{difference.Item2}"
                 );
