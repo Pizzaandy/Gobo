@@ -8,6 +8,7 @@ namespace Gobo.SyntaxNodes;
 [JsonSourceGenerationOptions(
     WriteIndented = true,
     GenerationMode = JsonSourceGenerationMode.Serialization,
+    UseStringEnumConverter = true,
     MaxDepth = 256
 )]
 [JsonSerializable(typeof(GmlSyntaxNode))]

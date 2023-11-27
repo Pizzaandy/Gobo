@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime;
+﻿using System.Text.Json.Serialization;
+using Antlr4.Runtime;
 using Gobo.Printer.DocTypes;
 
 namespace Gobo.SyntaxNodes;
@@ -30,29 +31,37 @@ internal class CommentGroup
 {
     public string Text => string.Concat(Tokens.Select(t => t.Text));
 
+    [JsonIgnore]
     public string Id { get; init; }
 
     /// <summary>
     /// Whether this comment group was ignored during formatting.
     /// </summary>
+    [JsonIgnore]
     public bool PrintedRaw = false;
 
     public CommentType Type { get; set; }
 
     public CommentPlacement Placement { get; set; }
 
+    [JsonIgnore]
     public List<IToken> Tokens { get; init; }
 
     public TextSpan Span { get; set; }
 
+    [JsonIgnore]
     public GmlSyntaxNode? EnclosingNode { get; set; }
 
+    [JsonIgnore]
     public GmlSyntaxNode? PrecedingNode { get; set; }
 
+    [JsonIgnore]
     public GmlSyntaxNode? FollowingNode { get; set; }
 
+    [JsonIgnore]
     public FormatCommandType FormatCommand { get; init; }
 
+    [JsonIgnore]
     public bool PrintedAsEndOfLine { get; set; } = false;
 
     private readonly bool endsWithSingleLineComment = false;
@@ -222,7 +231,7 @@ internal class CommentGroup
     public static Doc PrintMultiLineComment(string text)
     {
         var lines = text.Split(newlines, StringSplitOptions.None).Select(line => (Doc)line);
-        return Doc.Join(Doc.HardLine, lines);
+        return Doc.Join(Doc.LiteralLine, lines);
     }
 
     public override string ToString()

@@ -26,7 +26,7 @@ internal class SourceText
 
     public int GetLineBreaksToLeft(TextSpan span)
     {
-        var start = span.Start;
+        var start = span.Start - 1;
 
         if (start <= 0)
         {
@@ -35,7 +35,7 @@ internal class SourceText
 
         var lineBreakCount = 0;
 
-        for (var index = start - 1; index >= 0; index--)
+        for (var index = start; index >= 0; index--)
         {
             var character = Text[index];
             if (character == '\n')

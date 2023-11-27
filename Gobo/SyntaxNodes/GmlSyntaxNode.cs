@@ -15,7 +15,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     [JsonIgnore]
     public TextSpan Span { get; set; }
 
-    [JsonIgnore]
     public List<CommentGroup>? Comments { get; set; } = new();
 
     [JsonIgnore]

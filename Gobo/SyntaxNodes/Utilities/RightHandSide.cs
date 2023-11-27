@@ -57,11 +57,6 @@ internal class RightHandSide
     {
         return rightNode switch
         {
-            BinaryExpression
-            or ConditionalExpression { Test: BinaryExpression or ParenthesizedExpression }
-            or Literal
-            or TemplateLiteral
-                => Layout.BreakAfterOperator,
             _ => Layout.Fluid
         };
     }
