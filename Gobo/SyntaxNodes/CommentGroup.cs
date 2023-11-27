@@ -215,7 +215,7 @@ internal class CommentGroup
             {
                 continue;
             }
-            else if (character != ' ' && character != '\t')
+            else if (char.IsLetter(character) || character == '@')
             {
                 return text[..i] + " " + text[i..];
             }

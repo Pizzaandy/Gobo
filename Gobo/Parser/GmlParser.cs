@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Antlr4.Runtime;
+﻿using Antlr4.Runtime;
 using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
@@ -147,20 +146,22 @@ internal class GmlParser
 
     private void ProcessToken(IToken tok)
     {
-        if (tok.Type == Lexer.WhiteSpaces)
+        switch (tok.Type)
         {
-            if (currentCommentGroup.Count > 0)
-            {
+            case Lexer.WhiteSpaces:
+                if (currentCommentGroup.Count > 0)
+                {
+                    currentCommentGroup.Add(tok);
+                }
+                break;
+            case Lexer.LineTerminator:
+            case Lexer.Eof:
+                AcceptCommentGroup();
+                break;
+            case Lexer.SingleLineComment:
+            case Lexer.MultiLineComment:
                 currentCommentGroup.Add(tok);
-            }
-        }
-        else if (tok.Type == Lexer.LineTerminator || tok.Type == Lexer.Eof)
-        {
-            AcceptCommentGroup();
-        }
-        else if (tok.Type == Lexer.SingleLineComment || tok.Type == Lexer.MultiLineComment)
-        {
-            currentCommentGroup.Add(tok);
+                break;
         }
     }
 

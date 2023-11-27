@@ -15,7 +15,7 @@ public class Benchmarks
     );
 
     [Benchmark]
-    public void Default_CodeFormatter()
+    public void DefaultFormat()
     {
         GmlFormatter.Format(largeCode, FormatOptions.Default);
     }
