@@ -142,9 +142,9 @@ internal class GmlParser
         return false;
     }
 
-    private static TextSpan GetSpan(IToken firstToken, IToken lastTokenExclusive)
+    private static TextSpan GetSpan(IToken firstToken, IToken lastToken)
     {
-        return new TextSpan(firstToken.StartIndex, lastTokenExclusive.StartIndex);
+        return new TextSpan(firstToken.StartIndex, lastToken.StartIndex + 1);
     }
 
     private static TextSpan GetSpan(IToken token)
