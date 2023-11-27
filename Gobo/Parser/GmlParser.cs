@@ -107,13 +107,6 @@ internal class GmlParser
         return false;
     }
 
-    private bool AcceptAsStart(int type, out int startIndex)
-    {
-        var result = Accept(type);
-        startIndex = token.StartIndex;
-        return result;
-    }
-
     private void Expect(int type, bool skipWhitespace = true)
     {
         if (!Accept(type, skipWhitespace))
@@ -443,11 +436,12 @@ internal class GmlParser
                 )
             )
             {
-                if (left is Identifier)
-                {
-                    result = left;
-                    return true;
-                }
+                // uncomment to support identifiers as statements
+                //if (left is Identifier)
+                //{
+                //    result = left;
+                //    return true;
+                //}
                 AddError($"unexpected expression", start);
             }
 
@@ -1461,6 +1455,44 @@ internal class GmlParser
         else if (Accept(Lexer.StringLiteral))
         {
             result = new StringLiteral(GetSpan(accepted), accepted.Text);
+        }
+        else if (Accept(Lexer.TemplateStringStart))
+        {
+            var start = token;
+            var atoms = new List<GmlSyntaxNode>();
+
+            while (!HitEOF)
+            {
+                if (Accept(Lexer.TemplateStringEnd))
+                {
+                    break;
+                }
+                else if (Accept(Lexer.TemplateStringStartExpression))
+                {
+                    var expressionStart = token;
+                    Expression(out var expression);
+                    Expect(Lexer.TemplateStringEndExpression);
+                    atoms.Add(
+                        new TemplateExpression(GetSpan(expressionStart, accepted), expression)
+                    );
+                }
+                else if (Accept(Lexer.TemplateStringText))
+                {
+                    atoms.Add(new TemplateText(GetSpan(accepted), accepted.Text));
+                }
+                else
+                {
+                    result = GmlSyntaxNode.Empty;
+                    return false;
+                }
+            }
+
+            if (accepted.Type != Lexer.TemplateStringEnd)
+            {
+                ThrowExpected("\"", accepted);
+            }
+
+            result = new TemplateLiteral(GetSpan(start, accepted), atoms);
         }
         else if (
             AcceptAny(
