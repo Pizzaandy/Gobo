@@ -15,14 +15,14 @@ internal sealed class FunctionDeclaration : GmlSyntaxNode
         GmlSyntaxNode id,
         GmlSyntaxNode parameters,
         GmlSyntaxNode body,
-        GmlSyntaxNode parent
+        GmlSyntaxNode constructorClause
     )
         : base(span)
     {
         Id = AsChild(id);
         Parameters = AsChild(parameters);
         Body = AsChild(body);
-        ConstructorParent = AsChild(parent);
+        ConstructorParent = AsChild(constructorClause);
     }
 
     public override Doc PrintNode(PrintContext ctx)

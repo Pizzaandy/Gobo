@@ -64,7 +64,10 @@ public static partial class GmlFormatter
             parseStart = Stopwatch.GetTimestamp();
         }
 
-        var parseResult = GmlParser.Parse(code);
+        var parseResult = new GmlParser(code).Parse();
+
+        var sourceText = new SourceText(code);
+        new CommentMapper(sourceText, parseResult.CommentGroups).AttachComments(parseResult.Ast);
 
         if (getDebugInfo)
         {
@@ -75,7 +78,7 @@ public static partial class GmlFormatter
         GmlSyntaxNode ast = parseResult.Ast;
 
         var initialHash = options.ValidateOutput ? ast.GetHashCode() : -1;
-        var docs = ast.Print(new PrintContext(options, new SourceText(code)));
+        var docs = ast.Print(new PrintContext(options, sourceText));
 
         var printOptions = new Printer.DocPrinterOptions()
         {
@@ -134,7 +137,7 @@ public static partial class GmlFormatter
 
             try
             {
-                updatedParseResult = GmlParser.Parse(output);
+                updatedParseResult = new GmlParser(output).Parse();
             }
             catch (GmlSyntaxErrorException ex)
             {
@@ -147,15 +150,15 @@ public static partial class GmlFormatter
 
             if (initialHash != resultHash)
             {
-                Console.WriteLine("Original AST:");
-                Console.WriteLine(ast);
-                Console.WriteLine("Formatted AST:");
-                Console.WriteLine(updatedParseResult.Ast);
-                var diff = StringDiffer.PrintFirstDifference(
-                    ast.ToString(),
-                    updatedParseResult.Ast.ToString()
+                ISyntaxNode<GmlSyntaxNode>.TryFindDifference(
+                    parseResult.Ast,
+                    updatedParseResult.Ast,
+                    out var difference
                 );
-                throw new Exception($"Formatting transformed the AST:\n{diff}");
+
+                throw new Exception(
+                    $"Formatting transformed the AST:\nExpected:\n{difference.Item1}\n\nActual:\n{difference.Item2}"
+                );
             }
         }
 

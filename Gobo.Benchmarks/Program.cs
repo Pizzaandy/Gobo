@@ -1,5 +1,4 @@
 ﻿using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnostics.Windows.Configs;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Running;
 using Gobo;
@@ -7,7 +6,6 @@ using Gobo.Tests;
 
 namespace CSharpier.Benchmarks;
 
-[EtwProfiler]
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.NativeAot80)]
 public class Benchmarks

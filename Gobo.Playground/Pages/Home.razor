@@ -55,7 +55,7 @@
 @functions
 {
     string _input = string.Empty;
-    FormatOptions _formatOptions = new() { GetDebugInfo = true };
+    FormatOptions _formatOptions = new() { GetDebugInfo = true, ValidateOutput = true };
 
     AceEditor inputEditor = null!;
     AceEditor astEditor = null!;
@@ -97,11 +97,11 @@ call()";
         FormatResult result;
         _error = false;
 
-        if (_input.Length > 10_000)
+        if (_input.Length > 100_000)
         {
             _error = true;
             await outputEditor.SetLanguage("text");
-            await outputEditor.SetText("⚠️ Code length cannot exceed 10,000 characters.");
+            await outputEditor.SetText("⚠️ Code length cannot exceed 100,000 characters.");
             return;
         }
 

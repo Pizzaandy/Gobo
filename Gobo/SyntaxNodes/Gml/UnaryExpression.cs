@@ -12,6 +12,10 @@ internal sealed class UnaryExpression : GmlSyntaxNode
         : base(span)
     {
         Operator = @operator;
+        if (Operator == "not")
+        {
+            Operator = "!";
+        }
         Argument = AsChild(argument);
         IsPrefix = isPrefix;
     }

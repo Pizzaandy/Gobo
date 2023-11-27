@@ -132,6 +132,7 @@ internal static class Statement
                 or IncDecStatement
                 or ThrowStatement
                 or GlobalVariableStatement
-                or DeleteStatement;
+                or DeleteStatement
+                or UnaryExpression;
     }
 }
