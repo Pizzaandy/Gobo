@@ -5,13 +5,10 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <IsAotCompatible>true</IsAotCompatible>
-    <JsonSerializerIsReflectionEnabledByDefault>false</JsonSerializerIsReflectionEnabledByDefault>
-    <AssemblyName>gobolib</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <ProjectReference Include="..\Gobo\Gobo.csproj" />
   </ItemGroup>
 
 </Project>

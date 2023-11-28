@@ -31,10 +31,7 @@ internal readonly struct GmlSyntaxError
 
 internal class GmlParser
 {
-    public IToken CurrentToken
-    {
-        get => token;
-    }
+    public IToken CurrentToken => token;
 
     public List<CommentGroup> CommentGroups { get; private set; } = new();
 
@@ -76,14 +73,6 @@ internal class GmlParser
         LineNumber = token.Line;
         ColumnNumber = token.Column;
         ProcessToken(token);
-    }
-
-    private static bool IsHiddenToken(IToken tok)
-    {
-        return tok.Type == Lexer.WhiteSpaces
-            || tok.Type == Lexer.LineTerminator
-            || tok.Type == Lexer.SingleLineComment
-            || tok.Type == Lexer.MultiLineComment;
     }
 
     private bool Accept(int type, bool skipWhitespace = true)
@@ -142,6 +131,14 @@ internal class GmlParser
     private static TextSpan GetSpan(IToken token)
     {
         return new TextSpan(token.StartIndex, token.StopIndex + 1);
+    }
+
+    private static bool IsHiddenToken(IToken tok)
+    {
+        return tok.Type == Lexer.WhiteSpaces
+            || tok.Type == Lexer.LineTerminator
+            || tok.Type == Lexer.SingleLineComment
+            || tok.Type == Lexer.MultiLineComment;
     }
 
     private void ProcessToken(IToken tok)
