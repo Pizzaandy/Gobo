@@ -113,6 +113,8 @@ internal enum TokenKind
     Define,
     Region,
     EndRegion,
+    RegionName,
+    UnknownDirective,
     EscapedNewLine,
     TemplateStringStart,
     TemplateStringEnd,
@@ -120,7 +122,7 @@ internal enum TokenKind
     TemplateExpressionEnd,
     TemplateText,
     LineBreak,
-    WhiteSpace,
+    Whitespace,
     Eof,
-    UnexpectedCharacter,
+    Unexpected,
 }

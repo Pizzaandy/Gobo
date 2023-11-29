@@ -1,12 +1,7 @@
 ﻿using Gobo.Parser;
 
 var input = $$"""
-   
-// comment /*  */
-/
-// /* */
-
-
+$"{foo bar $"another {one}" }" = <> #define sefwefweg w4eg 3984u59384534
 """;
 
 var lexer = new GmlLexer(new StringReader(input));
@@ -14,5 +9,5 @@ var lexer = new GmlLexer(new StringReader(input));
 while (!lexer.HitEof)
 {
     var token = lexer.NextToken();
-    Console.WriteLine($"{token.Kind.ToString()}: `{token.Text}`");
+    Console.WriteLine($"{token.Kind}: `{token.Text}`");
 }
