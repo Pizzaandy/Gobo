@@ -36,7 +36,7 @@ internal class GmlParser
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
     public List<GmlSyntaxError> Errors { get; private set; } = new();
-    public bool Strict { get; set; } = false;
+    public bool Strict { get; set; } = true;
 
     private Token token;
     private Token accepted;
@@ -73,7 +73,6 @@ internal class GmlParser
 
     private void SetLexerMode(GmlLexer.LexerMode mode)
     {
-        Console.WriteLine($"\nSET LEXER MODE TO: {mode.ToString()}");
         lexer.Mode = mode;
     }
 
@@ -157,7 +156,7 @@ internal class GmlParser
 
     private static TextSpan GetSpan(Token firstToken, Token lastToken)
     {
-        return new TextSpan(firstToken.StartIndex, lastToken.StartIndex + 1);
+        return new TextSpan(firstToken.StartIndex, lastToken.EndIndex);
     }
 
     private static TextSpan GetSpan(Token token)
@@ -175,7 +174,6 @@ internal class GmlParser
 
     private void ProcessToken(Token tok)
     {
-        Console.WriteLine($"{token.Kind.ToString()}: '{token.Text}'");
         switch (tok.Kind)
         {
             case TokenKind.Whitespace:
@@ -238,7 +236,7 @@ internal class GmlParser
     private void ThrowUnexpected(Token token)
     {
         var symbolText = token.Text == "<EOF>" ? "end of file" : $"'{token.Text}'";
-        var offendingSymbolMessage = $"unexpected {symbolText}";
+        var offendingSymbolMessage = $"unexpected {symbolText} [{token.Kind.ToString()}]";
         AddError(offendingSymbolMessage);
     }
 
@@ -467,13 +465,10 @@ internal class GmlParser
                 )
             )
             {
-                // uncomment to support identifiers as statements
-                //if (left is Identifier)
-                //{
-                //    result = left;
-                //    return true;
-                //}
-                AddError($"unexpected expression");
+                if (Strict)
+                {
+                    AddError($"unexpected expression");
+                }
             }
 
             var assignmentOperator = accepted.Text;
@@ -773,7 +768,7 @@ internal class GmlParser
             name = accepted.Text;
         }
 
-        result = new DefineStatement(GetSpan(start, accepted), name);
+        result = new DefineStatement(new TextSpan(start.StartIndex, accepted.EndIndex), name);
         return true;
     }
 
@@ -1474,24 +1469,31 @@ internal class GmlParser
         }
         else if (Accept(TokenKind.TemplateStart))
         {
+            // TODO: Simplify
             var fullSpan = GetSpan(accepted);
             var textSpan = new TextSpan(fullSpan.Start + 2, fullSpan.End - 1);
             var text = new TemplateText(textSpan, accepted.Text[2..^1]);
             var atoms = new List<GmlSyntaxNode>() { text };
 
+            var expressionStart = accepted.EndIndex - 1;
+
             while (!HitEOF)
             {
-                var expressionStart = token;
-                if (Expression(out var expression))
-                {
-                    atoms.Add(
-                        new TemplateExpression(GetSpan(expressionStart, accepted), expression)
-                    );
-                }
+                var expressionExists = Expression(out var expression);
 
                 lexer.Mode = GmlLexer.LexerMode.TemplateString;
 
                 Expect(TokenKind.CloseBrace);
+
+                if (expressionExists)
+                {
+                    atoms.Add(
+                        new TemplateExpression(
+                            new TextSpan(expressionStart, accepted.EndIndex),
+                            expression
+                        )
+                    );
+                }
 
                 lexer.Mode = GmlLexer.LexerMode.Default;
 
@@ -1501,6 +1503,7 @@ internal class GmlParser
                     textSpan = new TextSpan(fullSpan.Start, fullSpan.End - 1);
                     text = new TemplateText(textSpan, accepted.Text[0..^1]);
                     atoms.Add(text);
+                    expressionStart = accepted.EndIndex;
                     continue;
                 }
                 else if (Accept(TokenKind.TemplateEnd))
@@ -1520,7 +1523,10 @@ internal class GmlParser
                         atoms.RemoveAt(atoms.Count - 1);
                     }
 
-                    result = new TemplateLiteral(GetSpan(start, accepted), atoms);
+                    result = new TemplateLiteral(
+                        new TextSpan(start.StartIndex, accepted.EndIndex),
+                        atoms
+                    );
                     return true;
                 }
                 else

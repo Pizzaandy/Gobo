@@ -21,14 +21,12 @@ internal class GmlLexer
     private readonly int tabWidth;
     private int character;
     private readonly List<char> currentToken = new();
-    private Token lastToken;
 
     private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
-    private static readonly char[] illegalTemplateStringChars = { '\r', '\n', '\\' };
 
     public GmlLexer(TextReader reader, int tabWidth = 4)
     {
-        this.reader = new BufferedTextReader(reader, bufferSize: 2);
+        this.reader = new BufferedTextReader(reader, bufferSize: 3);
         this.tabWidth = tabWidth;
         index = 0;
     }
@@ -141,6 +139,14 @@ internal class GmlLexer
             case ',':
                 return Token(TokenKind.Comma);
             case '.':
+                if (IsDigit(Peek()))
+                {
+                    while (IsDigit(Peek()) && !HitEof)
+                    {
+                        Advance();
+                    }
+                    return Token(TokenKind.DecimalLiteral);
+                }
                 return Token(TokenKind.Dot);
             case '\\':
                 return Token(TokenKind.Backslash);
@@ -302,7 +308,12 @@ internal class GmlLexer
                     Advance();
                 }
                 var kind = MatchDirectiveOrHexLiteral();
-                if (kind is TokenKind.Define or TokenKind.Region or TokenKind.EndRegion)
+
+                if (
+                    kind is TokenKind.Define or TokenKind.Region or TokenKind.EndRegion
+                    && Peek() != '\r'
+                    && Peek() != '\n'
+                )
                 {
                     Mode = LexerMode.RegionName;
                 }
@@ -417,7 +428,7 @@ internal class GmlLexer
                 }
                 if (IsAlpha(character))
                 {
-                    while (IsAlpha(Peek()))
+                    while (IsAlpha(Peek()) || IsDigit(Peek()))
                     {
                         Advance();
                     }
@@ -438,6 +449,7 @@ internal class GmlLexer
             "xor" => TokenKind.Xor,
             "not" => TokenKind.Not,
             "mod" => TokenKind.Modulo,
+            "div" => TokenKind.IntegerDivide,
             "begin" => TokenKind.OpenBrace,
             "end" => TokenKind.CloseBrace,
             "true" => TokenKind.BooleanLiteral,
@@ -511,7 +523,6 @@ internal class GmlLexer
             if (character == '\\')
             {
                 Advance();
-                Advance();
             }
         }
     }
@@ -528,7 +539,7 @@ internal class GmlLexer
 
     private static bool IsHexDigit(int c)
     {
-        return IsDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f');
+        return IsDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || c == '_';
     }
 
     private static bool IsBinaryDigit(int c)
@@ -582,8 +593,9 @@ internal class GmlLexer
             return;
         }
 
-        currentToken.Add((char)character);
         index++;
+
+        currentToken.Add((char)character);
 
         switch (character)
         {
@@ -612,7 +624,7 @@ internal class GmlLexer
             EndIndex = index,
         };
 
-        lastToken = token;
+        Console.WriteLine($"{kind.ToString()}: '{token.Text}'");
 
         currentToken.Clear();
 
