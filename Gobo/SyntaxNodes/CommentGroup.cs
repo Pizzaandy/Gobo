@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using Antlr4.Runtime;
+﻿using Gobo.Parser;
 using Gobo.Printer.DocTypes;
+using System.Text.Json.Serialization;
 
 namespace Gobo.SyntaxNodes;
 
@@ -45,7 +45,7 @@ internal class CommentGroup
     public CommentPlacement Placement { get; set; }
 
     [JsonIgnore]
-    public List<IToken> Tokens { get; init; }
+    public List<Token> Tokens { get; init; }
 
     public TextSpan Span { get; set; }
 
@@ -68,7 +68,7 @@ internal class CommentGroup
 
     private static readonly string[] newlines = new string[] { "\r\n", "\n" };
 
-    public CommentGroup(List<IToken> tokens, TextSpan span)
+    public CommentGroup(List<Token> tokens, TextSpan span)
     {
         Tokens = tokens;
         Span = span;
@@ -79,7 +79,7 @@ internal class CommentGroup
         {
             var token = tokens[i];
 
-            if (token.Type == GameMakerLanguageLexer.SingleLineComment)
+            if (token.Kind == TokenKind.SingleLineComment)
             {
                 endsWithSingleLineComment = true;
 
@@ -102,14 +102,14 @@ internal class CommentGroup
 
         foreach (var token in Tokens)
         {
-            if (token.Type == GameMakerLanguageLexer.SingleLineComment)
+            if (token.Kind is TokenKind.SingleLineComment)
             {
                 parts.Add(PrintSingleLineComment(token.Text));
             }
-            else if (token.Type == GameMakerLanguageLexer.MultiLineComment)
+            else if (token.Kind == TokenKind.MultiLineComment)
             {
                 parts.Add(PrintMultiLineComment(token.Text));
-                if (token != Tokens.Last())
+                if (token.Kind != Tokens.Last().Kind)
                 {
                     parts.Add(" ");
                 }

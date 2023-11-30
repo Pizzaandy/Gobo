@@ -11,6 +11,8 @@ internal class GmlLexer
 
     public bool HitEof { get; private set; } = false;
 
+    public LexerMode Mode { get; set; } = LexerMode.Default;
+
     private BufferedTextReader reader;
     private int lineNumber;
     private int columnNumber;
@@ -19,8 +21,7 @@ internal class GmlLexer
     private readonly int tabWidth;
     private int character;
     private readonly List<char> currentToken = new();
-    private LexerMode mode = LexerMode.Default;
-    private int templateDepth = 0;
+    private Token lastToken;
 
     private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
     private static readonly char[] illegalTemplateStringChars = { '\r', '\n', '\\' };
@@ -37,48 +38,34 @@ internal class GmlLexer
         startIndex = index;
         Advance();
 
-        if (mode is LexerMode.RegionName)
+        if (Mode is LexerMode.RegionName)
         {
             while (Peek() != '\r' && Peek() != '\n' && !HitEof)
             {
                 Advance();
             }
-            mode = LexerMode.Default;
+            Mode = LexerMode.Default;
             return Token(TokenKind.RegionName);
         }
 
-        if (mode is LexerMode.TemplateString)
+        if (Mode is LexerMode.TemplateString)
         {
             if (character == '"')
             {
-                mode = LexerMode.Default;
-                return Token(TokenKind.TemplateStringEnd);
+                return Token(TokenKind.TemplateEnd);
             }
 
-            if (character == '{')
+            while (IsTemplateStringCharacter(Peek()) && !HitEof)
             {
-                templateDepth++;
-                mode = LexerMode.Default;
-                return Token(TokenKind.TemplateExpressionStart);
-            }
-
-            while (!HitEof)
-            {
-                if (Peek() == '{')
-                {
-                    return Token(TokenKind.TemplateText);
-                }
-                if (Peek() == '"')
-                {
-                    return Token(TokenKind.TemplateText);
-                }
-                if (MatchAny(illegalTemplateStringChars))
-                {
-                    mode = LexerMode.Default;
-                    break;
-                }
-
                 Advance();
+            }
+            if (Match('{'))
+            {
+                return Token(TokenKind.TemplateMiddle);
+            }
+            if (Match('"'))
+            {
+                return Token(TokenKind.TemplateEnd);
             }
 
             return UnexpectedToken();
@@ -148,21 +135,21 @@ internal class GmlLexer
             case '{':
                 return Token(TokenKind.OpenBrace);
             case '}':
-                if (templateDepth > 0)
-                {
-                    templateDepth--;
-                    mode = LexerMode.TemplateString;
-                    return Token(TokenKind.TemplateExpressionEnd);
-                }
                 return Token(TokenKind.CloseBrace);
             case ';':
                 return Token(TokenKind.SemiColon);
             case ',':
                 return Token(TokenKind.Comma);
-            case '=':
-                return Token(TokenKind.Assign);
             case '.':
                 return Token(TokenKind.Dot);
+            case '\\':
+                return Token(TokenKind.Backslash);
+            case '=':
+                if (Match('='))
+                {
+                    return Token(TokenKind.Equals);
+                }
+                return Token(TokenKind.Assign);
             case ':':
                 if (Match('='))
                 {
@@ -317,7 +304,7 @@ internal class GmlLexer
                 var kind = MatchDirectiveOrHexLiteral();
                 if (kind is TokenKind.Define or TokenKind.Region or TokenKind.EndRegion)
                 {
-                    mode = LexerMode.RegionName;
+                    Mode = LexerMode.RegionName;
                 }
 
                 return Token(kind);
@@ -350,8 +337,20 @@ internal class GmlLexer
             case '$':
                 if (Match('"'))
                 {
-                    mode = LexerMode.TemplateString;
-                    return Token(TokenKind.TemplateStringStart);
+                    while (IsTemplateStringCharacter(Peek()) && !HitEof)
+                    {
+                        Advance();
+                    }
+                    if (Match('{'))
+                    {
+                        return Token(TokenKind.TemplateStart);
+                    }
+                    if (Match('"'))
+                    {
+                        return Token(TokenKind.SimpleTemplateString);
+                    }
+
+                    return UnexpectedToken();
                 }
                 else if (IsHexDigit(Peek()))
                 {
@@ -537,6 +536,11 @@ internal class GmlLexer
         return c == '0' || c == '1';
     }
 
+    private static bool IsTemplateStringCharacter(int c)
+    {
+        return c != '"' && c != '{' && c != '\r' && c != '\n';
+    }
+
     private bool Match(int expected)
     {
         var next = Peek();
@@ -607,6 +611,8 @@ internal class GmlLexer
             StartIndex = startIndex,
             EndIndex = index,
         };
+
+        lastToken = token;
 
         currentToken.Clear();
 

@@ -1,13 +1,10 @@
 ﻿using Gobo.Parser;
 
-var input = $$"""
-$"{foo bar $"another {one}" }" = <> #define sefwefweg w4eg 3984u59384534
+var input = $$$"""
+x = $"{{ a : $"{{ wtf : ":3" }}" }}"
 """;
 
-var lexer = new GmlLexer(new StringReader(input));
+var parser = new GmlParser(input);
 
-while (!lexer.HitEof)
-{
-    var token = lexer.NextToken();
-    Console.WriteLine($"{token.Kind}: `{token.Text}`");
-}
+var ast = parser.Parse().Ast;
+Console.WriteLine(ast);

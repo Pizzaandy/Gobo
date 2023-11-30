@@ -1,8 +1,6 @@
-﻿using Antlr4.Runtime;
-using Gobo.SyntaxNodes;
+﻿using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
-using Lexer = GameMakerLanguageLexer;
 
 namespace Gobo.Parser;
 
@@ -31,7 +29,7 @@ internal readonly struct GmlSyntaxError
 
 internal class GmlParser
 {
-    public IToken CurrentToken => token;
+    public Token CurrentToken => token;
 
     public List<CommentGroup> CommentGroups { get; private set; } = new();
 
@@ -40,18 +38,24 @@ internal class GmlParser
     public List<GmlSyntaxError> Errors { get; private set; } = new();
     public bool Strict { get; set; } = false;
 
-    private IToken token;
-    private IToken accepted;
-    private readonly Lexer lexer;
-    private List<IToken> currentCommentGroup = new();
-    private bool HitEOF => token.Type == Lexer.Eof;
+    private Token token;
+    private Token accepted;
+    private readonly GmlLexer lexer;
+    private List<Token> currentCommentGroup = new();
+    private bool HitEOF => token.Kind == TokenKind.Eof;
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
     public GmlParser(string code)
     {
-        ICharStream stream = CharStreams.fromString(code);
-        lexer = new Lexer(stream);
+        lexer = new GmlLexer(new StringReader(code));
+        token = lexer.NextToken();
+        ProcessToken(token);
+    }
+
+    public GmlParser(TextReader reader)
+    {
+        lexer = new GmlLexer(reader);
         token = lexer.NextToken();
         ProcessToken(token);
     }
@@ -67,6 +71,12 @@ internal class GmlParser
         };
     }
 
+    private void SetLexerMode(GmlLexer.LexerMode mode)
+    {
+        Console.WriteLine($"\nSET LEXER MODE TO: {mode.ToString()}");
+        lexer.Mode = mode;
+    }
+
     private void NextToken()
     {
         token = lexer.NextToken();
@@ -75,7 +85,7 @@ internal class GmlParser
         ProcessToken(token);
     }
 
-    private bool Accept(int type, bool skipWhitespace = true)
+    private bool Accept(TokenKind kind, bool skipWhitespace = true)
     {
         if (skipWhitespace)
         {
@@ -85,7 +95,7 @@ internal class GmlParser
             }
         }
 
-        if (token.Type == type)
+        if (token.Kind == kind)
         {
             accepted = token;
             NextToken();
@@ -95,9 +105,31 @@ internal class GmlParser
         return false;
     }
 
-    private void Expect(int type, bool skipWhitespace = true)
+    /// <summary>
+    /// Same as Accept, but does not call NextToken
+    /// </summary>
+    private bool Consume(TokenKind kind, bool skipWhitespace = true)
     {
-        if (!Accept(type, skipWhitespace))
+        if (skipWhitespace)
+        {
+            while (!HitEOF && IsHiddenToken(token))
+            {
+                NextToken();
+            }
+        }
+
+        if (token.Kind == kind)
+        {
+            accepted = token;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void Expect(TokenKind kind, bool skipWhitespace = true)
+    {
+        if (!Accept(kind, skipWhitespace))
         {
             AddDefaultSyntaxError();
         }
@@ -111,7 +143,7 @@ internal class GmlParser
         }
     }
 
-    private bool AcceptAny(params int[] types)
+    private bool AcceptAny(params TokenKind[] types)
     {
         foreach (var type in types)
         {
@@ -123,40 +155,41 @@ internal class GmlParser
         return false;
     }
 
-    private static TextSpan GetSpan(IToken firstToken, IToken lastToken)
+    private static TextSpan GetSpan(Token firstToken, Token lastToken)
     {
         return new TextSpan(firstToken.StartIndex, lastToken.StartIndex + 1);
     }
 
-    private static TextSpan GetSpan(IToken token)
+    private static TextSpan GetSpan(Token token)
     {
-        return new TextSpan(token.StartIndex, token.StopIndex + 1);
+        return new TextSpan(token.StartIndex, token.EndIndex);
     }
 
-    private static bool IsHiddenToken(IToken tok)
+    private static bool IsHiddenToken(Token tok)
     {
-        return tok.Type == Lexer.WhiteSpaces
-            || tok.Type == Lexer.LineTerminator
-            || tok.Type == Lexer.SingleLineComment
-            || tok.Type == Lexer.MultiLineComment;
+        return tok.Kind == TokenKind.Whitespace
+            || tok.Kind == TokenKind.LineBreak
+            || tok.Kind == TokenKind.SingleLineComment
+            || tok.Kind == TokenKind.MultiLineComment;
     }
 
-    private void ProcessToken(IToken tok)
+    private void ProcessToken(Token tok)
     {
-        switch (tok.Type)
+        Console.WriteLine($"{token.Kind.ToString()}: '{token.Text}'");
+        switch (tok.Kind)
         {
-            case Lexer.WhiteSpaces:
+            case TokenKind.Whitespace:
                 if (currentCommentGroup.Count > 0)
                 {
                     currentCommentGroup.Add(tok);
                 }
                 break;
-            case Lexer.LineTerminator:
-            case Lexer.Eof:
+            case TokenKind.LineBreak:
+            case TokenKind.Eof:
                 AcceptCommentGroup();
                 break;
-            case Lexer.SingleLineComment:
-            case Lexer.MultiLineComment:
+            case TokenKind.SingleLineComment:
+            case TokenKind.MultiLineComment:
                 currentCommentGroup.Add(tok);
                 break;
         }
@@ -173,7 +206,8 @@ internal class GmlParser
         {
             var group = currentCommentGroup.AsEnumerable();
             while (
-                group.Last().Type == Lexer.WhiteSpaces || group.Last().Type == Lexer.LineTerminator
+                group.Last().Kind == TokenKind.Whitespace
+                || group.Last().Kind == TokenKind.LineBreak
             )
             {
                 group = group.SkipLast(1);
@@ -186,7 +220,7 @@ internal class GmlParser
                 new(currentCommentGroup),
                 new TextSpan(
                     currentCommentGroup.First().StartIndex,
-                    currentCommentGroup.Last().StopIndex + 1
+                    currentCommentGroup.Last().EndIndex
                 )
             )
         );
@@ -194,22 +228,21 @@ internal class GmlParser
         currentCommentGroup.Clear();
     }
 
-    private void AddError(string message, IToken? token = null)
+    private void AddError(string message)
     {
-        token ??= this.token;
         var positionMessage = $"Syntax error at line {token.Line}, column {token.Column}:\n";
         Errors.Add(new GmlSyntaxError(positionMessage + message));
         throw new GmlSyntaxErrorException(Errors.Last().Message);
     }
 
-    private void ThrowUnexpected(IToken token)
+    private void ThrowUnexpected(Token token)
     {
         var symbolText = token.Text == "<EOF>" ? "end of file" : $"'{token.Text}'";
         var offendingSymbolMessage = $"unexpected {symbolText}";
         AddError(offendingSymbolMessage);
     }
 
-    private void ThrowExpected(string symbol, IToken location)
+    private void ThrowExpected(string symbol)
     {
         var offendingSymbolMessage = $"expected '{symbol}'";
         AddError(offendingSymbolMessage);
@@ -235,7 +268,7 @@ internal class GmlParser
 
         while (!HitEOF)
         {
-            if (Accept(Lexer.SemiColon))
+            if (Accept(TokenKind.SemiColon))
             {
                 continue;
             }
@@ -285,7 +318,7 @@ internal class GmlParser
             {
                 while (!HitEOF)
                 {
-                    if (!Accept(Lexer.SemiColon))
+                    if (!Accept(TokenKind.SemiColon))
                     {
                         break;
                     }
@@ -304,7 +337,7 @@ internal class GmlParser
     private bool Block(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.OpenBrace))
+        if (!Accept(TokenKind.OpenBrace))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -312,7 +345,7 @@ internal class GmlParser
 
         var statements = AcceptStatementList();
 
-        Expect(Lexer.CloseBrace);
+        Expect(TokenKind.CloseBrace);
 
         result = new Block(GetSpan(start, accepted), statements);
         return true;
@@ -321,7 +354,7 @@ internal class GmlParser
     private bool FunctionDeclaration(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Function))
+        if (!Accept(TokenKind.Function))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -332,16 +365,16 @@ internal class GmlParser
 
         GmlSyntaxNode constructorClause = GmlSyntaxNode.Empty;
 
-        if (Accept(Lexer.Colon))
+        if (Accept(TokenKind.Colon))
         {
             GmlSyntaxNode parentName = GmlSyntaxNode.Empty;
             GmlSyntaxNode parentArgs = GmlSyntaxNode.Empty;
             // Parent name cannot be 'constructor'
-            Expect(Lexer.Identifier);
+            Expect(TokenKind.Identifier);
             parentName = new Identifier(GetSpan(accepted), accepted.Text);
 
             Expect(ArgumentList(out parentArgs));
-            Expect(Lexer.Constructor);
+            Expect(TokenKind.Constructor);
 
             constructorClause = new ConstructorClause(
                 GetSpan(start, accepted),
@@ -349,7 +382,7 @@ internal class GmlParser
                 parentArgs
             );
         }
-        else if (Accept(Lexer.Constructor))
+        else if (Accept(TokenKind.Constructor))
         {
             constructorClause = new ConstructorClause(
                 GetSpan(start, accepted),
@@ -375,12 +408,12 @@ internal class GmlParser
         var start = token;
         result = GmlSyntaxNode.Empty;
 
-        if (AcceptAny(Lexer.Var, Lexer.Static, Lexer.GlobalVar))
+        if (AcceptAny(TokenKind.Var, TokenKind.Static, TokenKind.GlobalVar))
         {
             // Variable declaration list
             var modifier = accepted.Text;
 
-            while (Accept(Lexer.Var))
+            while (Accept(TokenKind.Var))
             {
                 continue;
             }
@@ -395,7 +428,7 @@ internal class GmlParser
 
             while (!HitEOF)
             {
-                if (Accept(Lexer.Comma))
+                if (Accept(TokenKind.Comma))
                 {
                     Expect(VariableDeclarator(out var variableDeclarator));
                     declarations.Add(variableDeclarator);
@@ -420,17 +453,17 @@ internal class GmlParser
             // assignment
             if (
                 !AcceptAny(
-                    Lexer.Assign,
-                    Lexer.MultiplyAssign,
-                    Lexer.DivideAssign,
-                    Lexer.PlusAssign,
-                    Lexer.MinusAssign,
-                    Lexer.ModulusAssign,
-                    Lexer.LeftShiftArithmeticAssign,
-                    Lexer.RightShiftArithmeticAssign,
-                    Lexer.BitAndAssign,
-                    Lexer.BitXorAssign,
-                    Lexer.BitOrAssign
+                    TokenKind.Assign,
+                    TokenKind.MultiplyAssign,
+                    TokenKind.DivideAssign,
+                    TokenKind.PlusAssign,
+                    TokenKind.MinusAssign,
+                    TokenKind.ModulusAssign,
+                    TokenKind.LeftShiftArithmeticAssign,
+                    TokenKind.RightShiftArithmeticAssign,
+                    TokenKind.BitAndAssign,
+                    TokenKind.BitXorAssign,
+                    TokenKind.BitOrAssign
                 )
             )
             {
@@ -440,7 +473,7 @@ internal class GmlParser
                 //    result = left;
                 //    return true;
                 //}
-                AddError($"unexpected expression", start);
+                AddError($"unexpected expression");
             }
 
             var assignmentOperator = accepted.Text;
@@ -466,18 +499,18 @@ internal class GmlParser
     private bool IfStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.If))
+        if (!Accept(TokenKind.If))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
         Expect(Expression(out var condition));
-        Accept(Lexer.Then);
+        Accept(TokenKind.Then);
         Expect(Statement(out var statement));
 
         GmlSyntaxNode alternate = GmlSyntaxNode.Empty;
-        if (Accept(Lexer.Else))
+        if (Accept(TokenKind.Else))
         {
             Expect(Statement(out alternate));
         }
@@ -489,14 +522,14 @@ internal class GmlParser
     private bool DoStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Do))
+        if (!Accept(TokenKind.Do))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
         Expect(Statement(out var body));
-        Expect(Lexer.Until);
+        Expect(TokenKind.Until);
         Expect(Expression(out var test));
 
         result = new DoStatement(GetSpan(start, accepted), body, test);
@@ -506,7 +539,7 @@ internal class GmlParser
     private bool WhileStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.While))
+        if (!Accept(TokenKind.While))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -522,7 +555,7 @@ internal class GmlParser
     private bool RepeatStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Repeat))
+        if (!Accept(TokenKind.Repeat))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -538,7 +571,7 @@ internal class GmlParser
     private bool WithStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.With))
+        if (!Accept(TokenKind.With))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -554,19 +587,19 @@ internal class GmlParser
     private bool ForStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.For))
+        if (!Accept(TokenKind.For))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        Expect(Lexer.OpenParen);
+        Expect(TokenKind.OpenParen);
         Statement(out var init, acceptSemicolons: false);
-        Expect(Lexer.SemiColon);
+        Expect(TokenKind.SemiColon);
         Expression(out var test);
-        Expect(Lexer.SemiColon);
+        Expect(TokenKind.SemiColon);
         Statement(out var update, acceptSemicolons: true);
-        Expect(Lexer.CloseParen);
+        Expect(TokenKind.CloseParen);
         Expect(Statement(out var body));
 
         result = new ForStatement(GetSpan(start, accepted), init, test, update, body);
@@ -576,7 +609,7 @@ internal class GmlParser
     private bool SwitchStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Switch))
+        if (!Accept(TokenKind.Switch))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -585,7 +618,7 @@ internal class GmlParser
         Expect(Expression(out var condition));
 
         var blockStart = token;
-        Expect(Lexer.OpenBrace);
+        Expect(TokenKind.OpenBrace);
 
         var cases = new List<GmlSyntaxNode>();
         while (!HitEOF)
@@ -600,7 +633,7 @@ internal class GmlParser
             }
         }
 
-        Expect(Lexer.CloseBrace);
+        Expect(TokenKind.CloseBrace);
 
         var caseBlock = new SwitchBlock(GetSpan(blockStart, token), cases);
         result = new SwitchStatement(GetSpan(start, accepted), condition, caseBlock);
@@ -610,16 +643,16 @@ internal class GmlParser
     private bool SwitchCase(out GmlSyntaxNode result)
     {
         var start = token;
-        if (Accept(Lexer.Case))
+        if (Accept(TokenKind.Case))
         {
             Expect(Expression(out var test));
-            Expect(Lexer.Colon);
+            Expect(TokenKind.Colon);
             var statements = AcceptStatementList();
             result = new SwitchCase(GetSpan(start, accepted), test, statements);
         }
-        else if (Accept(Lexer.Default))
+        else if (Accept(TokenKind.Default))
         {
-            Expect(Lexer.Colon);
+            Expect(TokenKind.Colon);
             var statements = AcceptStatementList();
             result = new SwitchCase(GetSpan(start, accepted), GmlSyntaxNode.Empty, statements);
         }
@@ -634,7 +667,7 @@ internal class GmlParser
 
     private bool ContinueStatement(out GmlSyntaxNode result)
     {
-        if (!Accept(Lexer.Continue))
+        if (!Accept(TokenKind.Continue))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -645,7 +678,7 @@ internal class GmlParser
 
     private bool BreakStatement(out GmlSyntaxNode result)
     {
-        if (!Accept(Lexer.Break))
+        if (!Accept(TokenKind.Break))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -656,7 +689,7 @@ internal class GmlParser
 
     private bool ExitStatement(out GmlSyntaxNode result)
     {
-        if (!Accept(Lexer.Exit))
+        if (!Accept(TokenKind.Exit))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -668,7 +701,7 @@ internal class GmlParser
     private bool ReturnStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Return))
+        if (!Accept(TokenKind.Return))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -681,7 +714,7 @@ internal class GmlParser
     private bool ThrowStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Throw))
+        if (!Accept(TokenKind.Throw))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -694,7 +727,7 @@ internal class GmlParser
     private bool DeleteStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Delete))
+        if (!Accept(TokenKind.Delete))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -708,33 +741,18 @@ internal class GmlParser
     {
         var start = token;
         result = GmlSyntaxNode.Empty;
-        if (!AcceptAny(Lexer.Region, Lexer.EndRegion))
+        if (!AcceptAny(TokenKind.Region, TokenKind.EndRegion))
         {
             return false;
         }
 
-        bool isEndRegion = accepted.Type == Lexer.EndRegion;
-        string? name = null;
+        bool isEndRegion = accepted.Kind == TokenKind.EndRegion;
 
-        var tokens = new List<string>();
-
-        while (!HitEOF)
+        string name = string.Empty;
+        if (Accept(TokenKind.RegionName))
         {
-            if (Accept(Lexer.RegionCharacters))
-            {
-                tokens.Add(accepted.Text);
-            }
-            else if (Accept(Lexer.RegionEOL))
-            {
-                break;
-            }
-            else
-            {
-                AddDefaultSyntaxError();
-            }
+            name = accepted.Text;
         }
-
-        name = tokens.Count > 0 ? string.Join("", tokens).TrimEnd() : null;
 
         result = new RegionStatement(GetSpan(start, accepted), name, isEndRegion);
         return true;
@@ -743,27 +761,18 @@ internal class GmlParser
     private bool DefineStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Define))
+        if (!Accept(TokenKind.Define))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        var tokens = new List<string>();
-
-        while (!HitEOF)
+        string name = string.Empty;
+        if (Accept(TokenKind.RegionName))
         {
-            if (AcceptAny(Lexer.RegionCharacters, Lexer.RegionEOL))
-            {
-                tokens.Add(accepted.Text);
-            }
-            else
-            {
-                break;
-            }
+            name = accepted.Text;
         }
 
-        var name = string.Join("", tokens).TrimEnd();
         result = new DefineStatement(GetSpan(start, accepted), name);
         return true;
     }
@@ -771,25 +780,25 @@ internal class GmlParser
     private bool MacroStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Macro))
+        if (!Accept(TokenKind.Macro))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        Expect(Lexer.Identifier);
+        Expect(TokenKind.Identifier);
         var name = accepted.Text;
 
         var tokens = new List<string>();
         bool ignoreNextLineBreak = false;
 
-        Accept(Lexer.WhiteSpaces);
+        Accept(TokenKind.Whitespace);
 
         while (!HitEOF)
         {
             string tokenText;
 
-            if (Accept(Lexer.LineTerminator, skipWhitespace: false))
+            if (Accept(TokenKind.LineBreak, skipWhitespace: false))
             {
                 if (ignoreNextLineBreak)
                 {
@@ -801,12 +810,12 @@ internal class GmlParser
                     break;
                 }
             }
-            else if (Accept(Lexer.EscapedNewLine, skipWhitespace: false))
+            else if (Accept(TokenKind.Backslash, skipWhitespace: false))
             {
                 tokenText = @"\";
                 ignoreNextLineBreak = true;
             }
-            else if (Accept(Lexer.WhiteSpaces, skipWhitespace: false))
+            else if (Accept(TokenKind.Whitespace, skipWhitespace: false))
             {
                 tokenText = accepted.Text;
             }
@@ -819,7 +828,7 @@ internal class GmlParser
 
             tokens.Add(tokenText);
 
-            if (token.Type == Lexer.Eof)
+            if (token.Kind == TokenKind.Eof)
             {
                 break;
             }
@@ -836,7 +845,7 @@ internal class GmlParser
     private bool TryStatement(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Try))
+        if (!Accept(TokenKind.Try))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -847,19 +856,19 @@ internal class GmlParser
 
         Expect(Statement(out var tryBody));
 
-        if (Accept(Lexer.Catch))
+        if (Accept(TokenKind.Catch))
         {
             GmlSyntaxNode identifier = GmlSyntaxNode.Empty;
-            if (Accept(Lexer.OpenParen))
+            if (Accept(TokenKind.OpenParen))
             {
                 Expect(Identifier(out identifier));
-                Expect(Lexer.CloseParen);
+                Expect(TokenKind.CloseParen);
             }
             Expect(Statement(out var body));
             catchProduction = new CatchProduction(GetSpan(start, accepted), identifier, body);
         }
 
-        if (Accept(Lexer.Finally))
+        if (Accept(TokenKind.Finally))
         {
             Expect(Statement(out var finallyBody));
             finallyProduction = new FinallyProduction(GetSpan(start, accepted), finallyBody);
@@ -877,7 +886,7 @@ internal class GmlParser
     private bool EnumeratorDeclaration(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.Enum))
+        if (!Accept(TokenKind.Enum))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -886,9 +895,9 @@ internal class GmlParser
         Expect(Identifier(out var name));
 
         var startBlock = token;
-        Expect(Lexer.OpenBrace);
+        Expect(TokenKind.OpenBrace);
 
-        if (Accept(Lexer.CloseBrace))
+        if (Accept(TokenKind.CloseBrace))
         {
             result = new EnumDeclaration(
                 GetSpan(start, accepted),
@@ -905,7 +914,7 @@ internal class GmlParser
         {
             if (expectDelimiter)
             {
-                Expect(Lexer.Comma);
+                Expect(TokenKind.Comma);
             }
             else
             {
@@ -914,15 +923,15 @@ internal class GmlParser
             }
             expectDelimiter = !expectDelimiter;
 
-            if (Accept(Lexer.CloseBrace))
+            if (Accept(TokenKind.CloseBrace))
             {
                 break;
             }
         }
 
-        if (accepted.Type != Lexer.CloseBrace)
+        if (accepted.Kind != TokenKind.CloseBrace)
         {
-            ThrowExpected("}", accepted);
+            ThrowExpected("}");
         }
 
         var enumBlock = new EnumBlock(GetSpan(startBlock, token), enumMembers);
@@ -940,7 +949,7 @@ internal class GmlParser
         }
 
         GmlSyntaxNode expression = GmlSyntaxNode.Empty;
-        if (Accept(Lexer.Assign))
+        if (Accept(TokenKind.Assign))
         {
             Expect(Expression(out expression));
         }
@@ -959,7 +968,7 @@ internal class GmlParser
             return false;
         }
         GmlSyntaxNode expression = GmlSyntaxNode.Empty;
-        if (Accept(Lexer.Assign))
+        if (Accept(TokenKind.Assign))
         {
             Expect(Expression(out expression));
         }
@@ -991,8 +1000,8 @@ internal class GmlParser
         while (!HitEOF)
         {
             if (
-                Accept(Lexer.PlusPlus, skipWhitespace: false)
-                || Accept(Lexer.MinusMinus, skipWhitespace: false)
+                Accept(TokenKind.PlusPlus, skipWhitespace: false)
+                || Accept(TokenKind.MinusMinus, skipWhitespace: false)
             )
             {
                 var @operator = accepted.Text;
@@ -1006,13 +1015,13 @@ internal class GmlParser
             }
             else if (
                 AcceptAny(
-                    Lexer.OpenBracket,
-                    Lexer.ArrayAccessor,
-                    Lexer.ListAccessor,
-                    Lexer.MapAccessor,
-                    Lexer.GridAccessor,
-                    Lexer.ArrayAccessor,
-                    Lexer.StructAccessor
+                    TokenKind.OpenBracket,
+                    TokenKind.ArrayAccessor,
+                    TokenKind.ListAccessor,
+                    TokenKind.MapAccessor,
+                    TokenKind.GridAccessor,
+                    TokenKind.ArrayAccessor,
+                    TokenKind.StructAccessor
                 )
             )
             {
@@ -1023,12 +1032,12 @@ internal class GmlParser
 
                 while (!HitEOF)
                 {
-                    if (Accept(Lexer.Comma))
+                    if (Accept(TokenKind.Comma))
                     {
                         Expect(Expression(out var expression));
                         expressions.Add(expression);
                     }
-                    else if (Accept(Lexer.CloseBracket))
+                    else if (Accept(TokenKind.CloseBracket))
                     {
                         break;
                     }
@@ -1045,7 +1054,7 @@ internal class GmlParser
                     accessor
                 );
             }
-            else if (Accept(Lexer.Dot))
+            else if (Accept(TokenKind.Dot))
             {
                 Expect(Identifier(out var identifier));
                 @object = new MemberDotExpression(GetSpan(start, accepted), @object, identifier);
@@ -1076,7 +1085,7 @@ internal class GmlParser
         {
             result = identifier;
         }
-        else if (Accept(Lexer.New))
+        else if (Accept(TokenKind.New))
         {
             GmlSyntaxNode id = GmlSyntaxNode.Empty;
             if (Identifier(out var constructorName))
@@ -1086,10 +1095,10 @@ internal class GmlParser
             Expect(ArgumentList(out var arguments));
             result = new NewExpression(GetSpan(start, accepted), id, arguments);
         }
-        else if (Accept(Lexer.OpenParen))
+        else if (Accept(TokenKind.OpenParen))
         {
             Expect(Expression(out var expression));
-            Expect(Lexer.CloseParen);
+            Expect(TokenKind.CloseParen);
             result = new ParenthesizedExpression(GetSpan(start, accepted), expression);
         }
         else
@@ -1119,10 +1128,10 @@ internal class GmlParser
             return false;
         }
 
-        if (Accept(Lexer.QuestionMark))
+        if (Accept(TokenKind.QuestionMark))
         {
             Expect(Expression(out var whenTrue));
-            Expect(Lexer.Colon);
+            Expect(TokenKind.Colon);
             Expect(Expression(out var whenFalse));
 
             result = new ConditionalExpression(
@@ -1140,7 +1149,7 @@ internal class GmlParser
     private bool HandleBinaryExpression(
         BinaryExpressionRule nextRule,
         out GmlSyntaxNode result,
-        params int[] tokenTypes
+        params TokenKind[] tokenTypes
     )
     {
         var start = token;
@@ -1162,37 +1171,37 @@ internal class GmlParser
 
     private bool BitXorExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(BitOrExpression, out result, Lexer.BitXor);
+        return HandleBinaryExpression(BitOrExpression, out result, TokenKind.BitXor);
     }
 
     private bool BitOrExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(BitAndExpression, out result, Lexer.BitOr);
+        return HandleBinaryExpression(BitAndExpression, out result, TokenKind.BitOr);
     }
 
     private bool BitAndExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(NullCoalescingExpression, out result, Lexer.BitAnd);
+        return HandleBinaryExpression(NullCoalescingExpression, out result, TokenKind.BitAnd);
     }
 
     private bool NullCoalescingExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(XorExpression, out result, Lexer.NullCoalesce);
+        return HandleBinaryExpression(XorExpression, out result, TokenKind.NullCoalesce);
     }
 
     private bool XorExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(AndExpression, out result, Lexer.Xor);
+        return HandleBinaryExpression(AndExpression, out result, TokenKind.Xor);
     }
 
     private bool AndExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(OrExpression, out result, Lexer.And);
+        return HandleBinaryExpression(OrExpression, out result, TokenKind.And);
     }
 
     private bool OrExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(EqualityExpression, out result, Lexer.Or);
+        return HandleBinaryExpression(EqualityExpression, out result, TokenKind.Or);
     }
 
     private bool EqualityExpression(out GmlSyntaxNode result)
@@ -1200,9 +1209,9 @@ internal class GmlParser
         return HandleBinaryExpression(
             RelationalExpression,
             out result,
-            Lexer.Equals_,
-            Lexer.Assign,
-            Lexer.NotEquals
+            TokenKind.Equals,
+            TokenKind.Assign,
+            TokenKind.NotEquals
         );
     }
 
@@ -1211,10 +1220,10 @@ internal class GmlParser
         return HandleBinaryExpression(
             ShiftExpression,
             out result,
-            Lexer.LessThan,
-            Lexer.GreaterThan,
-            Lexer.LessThanEquals,
-            Lexer.GreaterThanEquals
+            TokenKind.LessThan,
+            TokenKind.GreaterThan,
+            TokenKind.LessThanEquals,
+            TokenKind.GreaterThanEquals
         );
     }
 
@@ -1223,8 +1232,8 @@ internal class GmlParser
         return HandleBinaryExpression(
             AdditiveExpression,
             out result,
-            Lexer.LeftShiftArithmetic,
-            Lexer.RightShiftArithmetic
+            TokenKind.LeftShiftArithmetic,
+            TokenKind.RightShiftArithmetic
         );
     }
 
@@ -1233,8 +1242,8 @@ internal class GmlParser
         return HandleBinaryExpression(
             MultiplicativeExpression,
             out result,
-            Lexer.Plus,
-            Lexer.Minus
+            TokenKind.Plus,
+            TokenKind.Minus
         );
     }
 
@@ -1243,10 +1252,10 @@ internal class GmlParser
         return HandleBinaryExpression(
             UnaryExpression,
             out result,
-            Lexer.Multiply,
-            Lexer.Divide,
-            Lexer.Modulo,
-            Lexer.IntegerDivide
+            TokenKind.Multiply,
+            TokenKind.Divide,
+            TokenKind.Modulo,
+            TokenKind.IntegerDivide
         );
     }
 
@@ -1256,19 +1265,19 @@ internal class GmlParser
 
         if (
             AcceptAny(
-                Lexer.Plus,
-                Lexer.Minus,
-                Lexer.Not,
-                Lexer.BitNot,
-                Lexer.PlusPlus,
-                Lexer.MinusMinus
+                TokenKind.Plus,
+                TokenKind.Minus,
+                TokenKind.Not,
+                TokenKind.BitNot,
+                TokenKind.PlusPlus,
+                TokenKind.MinusMinus
             )
         )
         {
             // Increment/decrement operators must be adjacent to their operands
             if (
-                (accepted.Type == Lexer.PlusPlus || accepted.Type == Lexer.MinusMinus)
-                && (token.Type == Lexer.WhiteSpaces || token.Type == Lexer.LineTerminator)
+                (accepted.Kind == TokenKind.PlusPlus || accepted.Kind == TokenKind.MinusMinus)
+                && (token.Kind == TokenKind.Whitespace || token.Kind == TokenKind.LineBreak)
             )
             {
                 ThrowUnexpected(accepted);
@@ -1293,13 +1302,13 @@ internal class GmlParser
     private bool ParameterList(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.OpenParen))
+        if (!Accept(TokenKind.OpenParen))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        if (Accept(Lexer.CloseParen))
+        if (Accept(TokenKind.CloseParen))
         {
             result = new ParameterList(GetSpan(start, accepted), new());
             return true;
@@ -1310,12 +1319,12 @@ internal class GmlParser
 
         while (!HitEOF)
         {
-            if (Accept(Lexer.Comma))
+            if (Accept(TokenKind.Comma))
             {
                 Expect(Parameter(out var parameter));
                 parameters.Add(parameter);
             }
-            else if (Accept(Lexer.CloseParen))
+            else if (Accept(TokenKind.CloseParen))
             {
                 break;
             }
@@ -1342,7 +1351,7 @@ internal class GmlParser
 
         GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
 
-        if (Accept(Lexer.Assign))
+        if (Accept(TokenKind.Assign))
         {
             Expect(Expression(out initializer));
         }
@@ -1359,13 +1368,13 @@ internal class GmlParser
     private bool ArgumentList(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.OpenParen))
+        if (!Accept(TokenKind.OpenParen))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        if (Accept(Lexer.CloseParen))
+        if (Accept(TokenKind.CloseParen))
         {
             result = new ArgumentList(GetSpan(start, accepted), new());
             return true;
@@ -1388,7 +1397,7 @@ internal class GmlParser
                 arguments.Add(expression);
             }
 
-            if (Accept(Lexer.Comma))
+            if (Accept(TokenKind.Comma))
             {
                 if (previousChildWasPunctuator)
                 {
@@ -1396,7 +1405,7 @@ internal class GmlParser
                 }
                 previousChildWasPunctuator = true;
             }
-            else if (Accept(Lexer.CloseParen))
+            else if (Accept(TokenKind.CloseParen))
             {
                 if (previousChildWasPunctuator && arguments.Count > 0)
                 {
@@ -1420,12 +1429,12 @@ internal class GmlParser
     {
         result = GmlSyntaxNode.Empty;
 
-        if (Accept(Lexer.Identifier))
+        if (Accept(TokenKind.Identifier))
         {
             result = new Identifier(GetSpan(accepted), accepted.Text);
             return true;
         }
-        else if (Accept(Lexer.Constructor))
+        else if (Accept(TokenKind.Constructor))
         {
             result = new Identifier(GetSpan(accepted), accepted.Text);
             return true;
@@ -1438,67 +1447,99 @@ internal class GmlParser
 
     private bool Literal(out GmlSyntaxNode result)
     {
-        if (Accept(Lexer.Undefined))
+        var start = token;
+        if (Accept(TokenKind.Undefined))
         {
             result = new UndefinedLiteral(GetSpan(accepted), accepted.Text);
         }
-        else if (Accept(Lexer.IntegerLiteral))
+        else if (Accept(TokenKind.IntegerLiteral))
         {
             result = new IntegerLiteral(GetSpan(accepted), accepted.Text);
         }
-        else if (Accept(Lexer.DecimalLiteral))
+        else if (Accept(TokenKind.DecimalLiteral))
         {
             result = new DecimalLiteral(GetSpan(accepted), accepted.Text);
         }
-        else if (Accept(Lexer.StringLiteral))
+        else if (Accept(TokenKind.StringLiteral))
         {
             result = new StringLiteral(GetSpan(accepted), accepted.Text);
         }
-        else if (Accept(Lexer.TemplateStringStart))
+        else if (Accept(TokenKind.SimpleTemplateString))
         {
-            var start = token;
-            var atoms = new List<GmlSyntaxNode>();
+            var fullSpan = GetSpan(accepted);
+            var textSpan = new TextSpan(fullSpan.Start + 2, fullSpan.End - 1);
+
+            var text = new TemplateText(textSpan, accepted.Text[2..^1]);
+            result = new TemplateLiteral(GetSpan(accepted), new List<GmlSyntaxNode>() { text });
+        }
+        else if (Accept(TokenKind.TemplateStart))
+        {
+            var fullSpan = GetSpan(accepted);
+            var textSpan = new TextSpan(fullSpan.Start + 2, fullSpan.End - 1);
+            var text = new TemplateText(textSpan, accepted.Text[2..^1]);
+            var atoms = new List<GmlSyntaxNode>() { text };
 
             while (!HitEOF)
             {
-                if (Accept(Lexer.TemplateStringEnd))
+                var expressionStart = token;
+                if (Expression(out var expression))
                 {
-                    break;
-                }
-                else if (Accept(Lexer.TemplateStringStartExpression))
-                {
-                    var expressionStart = token;
-                    Expression(out var expression);
-                    Expect(Lexer.TemplateStringEndExpression);
                     atoms.Add(
                         new TemplateExpression(GetSpan(expressionStart, accepted), expression)
                     );
                 }
-                else if (Accept(Lexer.TemplateStringText))
+
+                lexer.Mode = GmlLexer.LexerMode.TemplateString;
+
+                Expect(TokenKind.CloseBrace);
+
+                lexer.Mode = GmlLexer.LexerMode.Default;
+
+                if (Accept(TokenKind.TemplateMiddle))
                 {
-                    atoms.Add(new TemplateText(GetSpan(accepted), accepted.Text));
+                    fullSpan = GetSpan(accepted);
+                    textSpan = new TextSpan(fullSpan.Start, fullSpan.End - 1);
+                    text = new TemplateText(textSpan, accepted.Text[0..^1]);
+                    atoms.Add(text);
+                    continue;
+                }
+                else if (Accept(TokenKind.TemplateEnd))
+                {
+                    fullSpan = GetSpan(accepted);
+                    textSpan = new TextSpan(fullSpan.Start, fullSpan.End - 1);
+                    text = new TemplateText(textSpan, accepted.Text[0..^1]);
+                    atoms.Add(text);
+
+                    if (atoms[0] is TemplateText && atoms[0].Span.Length == 0)
+                    {
+                        atoms.RemoveAt(0);
+                    }
+
+                    if (atoms.Count > 0 && atoms[^1] is TemplateText && atoms[^1].Span.Length == 0)
+                    {
+                        atoms.RemoveAt(atoms.Count - 1);
+                    }
+
+                    result = new TemplateLiteral(GetSpan(start, accepted), atoms);
+                    return true;
                 }
                 else
                 {
-                    result = GmlSyntaxNode.Empty;
-                    return false;
+                    ThrowUnexpected(token);
                 }
             }
 
-            if (accepted.Type != Lexer.TemplateStringEnd)
-            {
-                ThrowExpected("\"", accepted);
-            }
-
-            result = new TemplateLiteral(GetSpan(start, accepted), atoms);
+            AddDefaultSyntaxError();
+            result = GmlSyntaxNode.Empty;
+            return false;
         }
         else if (
             AcceptAny(
-                Lexer.NoOne,
-                Lexer.BooleanLiteral,
-                Lexer.VerbatimStringLiteral,
-                Lexer.HexIntegerLiteral,
-                Lexer.BinaryLiteral
+                TokenKind.Noone,
+                TokenKind.BooleanLiteral,
+                TokenKind.VerbatimStringLiteral,
+                TokenKind.HexIntegerLiteral,
+                TokenKind.BinaryLiteral
             )
         )
         {
@@ -1524,13 +1565,13 @@ internal class GmlParser
     private bool ArrayLiteral(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.OpenBracket))
+        if (!Accept(TokenKind.OpenBracket))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        if (Accept(Lexer.CloseBracket))
+        if (Accept(TokenKind.CloseBracket))
         {
             result = new ArrayExpression(GetSpan(start, accepted), new());
             return true;
@@ -1543,7 +1584,7 @@ internal class GmlParser
         {
             if (expectDelimiter)
             {
-                Expect(Lexer.Comma);
+                Expect(TokenKind.Comma);
             }
             else
             {
@@ -1552,15 +1593,15 @@ internal class GmlParser
             }
             expectDelimiter = !expectDelimiter;
 
-            if (Accept(Lexer.CloseBracket))
+            if (Accept(TokenKind.CloseBracket))
             {
                 break;
             }
         }
 
-        if (accepted.Type != Lexer.CloseBracket)
+        if (accepted.Kind != TokenKind.CloseBracket)
         {
-            ThrowExpected("]", accepted);
+            ThrowExpected("]");
         }
 
         result = new ArrayExpression(GetSpan(start, accepted), elements);
@@ -1570,13 +1611,13 @@ internal class GmlParser
     private bool StructLiteral(out GmlSyntaxNode result)
     {
         var start = token;
-        if (!Accept(Lexer.OpenBrace))
+        if (!Accept(TokenKind.OpenBrace))
         {
             result = GmlSyntaxNode.Empty;
             return false;
         }
 
-        if (Accept(Lexer.CloseBrace))
+        if (Accept(TokenKind.CloseBrace))
         {
             result = new StructExpression(GetSpan(start, accepted), new());
             return true;
@@ -1589,7 +1630,7 @@ internal class GmlParser
         {
             if (expectDelimiter)
             {
-                Expect(Lexer.Comma);
+                Expect(TokenKind.Comma);
             }
             else
             {
@@ -1598,15 +1639,15 @@ internal class GmlParser
             }
             expectDelimiter = !expectDelimiter;
 
-            if (Accept(Lexer.CloseBrace))
+            if (Accept(TokenKind.CloseBrace))
             {
                 break;
             }
         }
 
-        if (accepted.Type != Lexer.CloseBrace)
+        if (accepted.Kind != TokenKind.CloseBrace)
         {
-            ThrowExpected("}", accepted);
+            ThrowExpected("}");
         }
 
         result = new StructExpression(GetSpan(start, accepted), properties);
@@ -1618,11 +1659,11 @@ internal class GmlParser
         var start = token;
         GmlSyntaxNode name = GmlSyntaxNode.Empty;
 
-        if (AcceptAny(Lexer.Identifier, Lexer.Constructor, Lexer.NoOne))
+        if (AcceptAny(TokenKind.Identifier, TokenKind.Constructor, TokenKind.Noone))
         {
             name = new Identifier(GetSpan(accepted), accepted.Text);
         }
-        else if (Accept(Lexer.StringLiteral))
+        else if (Accept(TokenKind.StringLiteral))
         {
             name = new StringLiteral(GetSpan(accepted), accepted.Text);
         }
@@ -1632,7 +1673,7 @@ internal class GmlParser
             return false;
         }
 
-        Expect(Lexer.Colon);
+        Expect(TokenKind.Colon);
         Expect(Expression(out var initializer));
 
         result = new StructProperty(GetSpan(start, accepted), name, initializer);
