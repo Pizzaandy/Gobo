@@ -529,15 +529,19 @@ internal class GmlLexer
     {
         while (!HitEof)
         {
-            if (Peek() == '"' && character != '\\')
+            if (Peek() == '\\')
+            {
+                Advance();
+                Advance();
+                continue;
+            }
+
+            if (Peek() == '"')
             {
                 break;
             }
+
             Advance();
-            if (character == '\\')
-            {
-                Advance();
-            }
         }
     }
 
