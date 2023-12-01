@@ -27,6 +27,9 @@
     public string? Language { get; set; } = null;
 
     [Parameter]
+    public int TabSize { get; set; } = 4;
+
+    [Parameter]
     public bool IsReadonly { get; set; } = false;
 
     public string Id { get; set; } = "aceeditor_" + Guid.NewGuid().ToString("N");
@@ -49,7 +52,7 @@
     public async Task SetLanguage(string? language)
     {
         Language = language;
-        await JS.InvokeVoidAsync("editorRender", Id, Language, Theme, IsReadonly);
+        await JS.InvokeVoidAsync("editorRender", Id, Language, Theme, IsReadonly, TabSize);
     }
 
     public async Task SetWidth(int width)
@@ -59,7 +62,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await JS.InvokeVoidAsync("editorRender", Id, Language, Theme, IsReadonly);
+        await JS.InvokeVoidAsync("editorRender", Id, Language, Theme, IsReadonly, TabSize);
     }
 
     protected async Task TriggerAceInstance()
