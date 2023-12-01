@@ -1,13 +1,13 @@
-﻿window.editorRender = function(element, mode, theme, readOnly) {
+﻿window.editorRender = function(element, mode, theme, readOnly, tabSize) {
     var editor = ace.edit(element);
     var defineMode = "ace/mode/" + mode;
     editor.setTheme("ace/theme/" + theme);
 
     editor.setReadOnly(readOnly);
     editor.session.setMode(defineMode);
+    editor.session.setTabSize(tabSize);
     editor.renderer.setScrollMargin(10, 10);
-   
-    // enable autocompletion and snippets
+
     editor.setOptions({
         autoScrollEditorIntoView: true
     });
