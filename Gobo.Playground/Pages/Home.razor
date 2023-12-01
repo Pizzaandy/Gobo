@@ -29,7 +29,7 @@
 
     <div id="panels" class="flex-grow-1 vh-100">
         <div class="row h-100 g-0">
-            <div class="col-lg">
+            <div class="col-xl">
                 <AceEditor @ref="inputEditor"
                            Value="@_input"
                            ValueChanged="@OnInputChanged"
@@ -37,13 +37,14 @@
             </div>
             @if (_showAst)
             {
-                <div class="col-lg">
+                <div class="col-xl">
                     <AceEditor @ref="astEditor"
                                Language="json"
+                               TabSize="2"
                                IsReadonly="true"></AceEditor>
                 </div>
             }
-            <div class="col-lg">
+            <div class="col-xl">
                 <AceEditor @ref="outputEditor"
                            Language="game_maker_language"
                            IsReadonly="true"></AceEditor>
@@ -124,7 +125,6 @@ call()";
         {
             await astEditor.SetText(result.Ast);
         }
-
     }
 
     async Task OnWidthChanged(ChangeEventArgs args)

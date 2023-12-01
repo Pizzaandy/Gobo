@@ -38,9 +38,10 @@ internal class GmlParser
     public List<GmlSyntaxError> Errors { get; private set; } = new();
     public bool Strict { get; set; } = true;
 
+    private readonly GmlLexer lexer;
     private Token token;
     private Token accepted;
-    private readonly GmlLexer lexer;
+
     private List<Token> currentCommentGroup = new();
     private bool HitEOF => token.Kind == TokenKind.Eof;
 
@@ -71,11 +72,6 @@ internal class GmlParser
         };
     }
 
-    private void SetLexerMode(GmlLexer.LexerMode mode)
-    {
-        lexer.Mode = mode;
-    }
-
     private void NextToken()
     {
         token = lexer.NextToken();
@@ -98,28 +94,6 @@ internal class GmlParser
         {
             accepted = token;
             NextToken();
-            return true;
-        }
-
-        return false;
-    }
-
-    /// <summary>
-    /// Same as Accept, but does not call NextToken
-    /// </summary>
-    private bool Consume(TokenKind kind, bool skipWhitespace = true)
-    {
-        if (skipWhitespace)
-        {
-            while (!HitEOF && IsHiddenToken(token))
-            {
-                NextToken();
-            }
-        }
-
-        if (token.Kind == kind)
-        {
-            accepted = token;
             return true;
         }
 
@@ -235,8 +209,8 @@ internal class GmlParser
 
     private void ThrowUnexpected(Token token)
     {
-        var symbolText = token.Text == "<EOF>" ? "end of file" : $"'{token.Text}'";
-        var offendingSymbolMessage = $"unexpected {symbolText} [{token.Kind.ToString()}]";
+        var symbolText = token.Kind is TokenKind.Eof ? "end of file" : $"'{token.Text}'";
+        var offendingSymbolMessage = $"unexpected {symbolText}";
         AddError(offendingSymbolMessage);
     }
 
@@ -256,6 +230,11 @@ internal class GmlParser
         var start = token;
 
         var statements = AcceptStatementList();
+
+        if (!HitEOF)
+        {
+            AddDefaultSyntaxError();
+        }
 
         node = new Document(GetSpan(start, accepted), statements);
     }
@@ -807,7 +786,7 @@ internal class GmlParser
             }
             else if (Accept(TokenKind.Backslash, skipWhitespace: false))
             {
-                tokenText = @"\";
+                tokenText = "\\";
                 ignoreNextLineBreak = true;
             }
             else if (Accept(TokenKind.Whitespace, skipWhitespace: false))
@@ -1459,6 +1438,10 @@ internal class GmlParser
         {
             result = new StringLiteral(GetSpan(accepted), accepted.Text);
         }
+        else if (Accept(TokenKind.VerbatimStringLiteral))
+        {
+            result = new VerbatimStringLiteral(GetSpan(accepted), accepted.Text);
+        }
         else if (Accept(TokenKind.SimpleTemplateString))
         {
             var fullSpan = GetSpan(accepted);
@@ -1479,21 +1462,18 @@ internal class GmlParser
 
             while (!HitEOF)
             {
-                var expressionExists = Expression(out var expression);
+                Expression(out var expression);
 
                 lexer.Mode = GmlLexer.LexerMode.TemplateString;
 
                 Expect(TokenKind.CloseBrace);
 
-                if (expressionExists)
-                {
-                    atoms.Add(
-                        new TemplateExpression(
-                            new TextSpan(expressionStart, accepted.EndIndex),
-                            expression
-                        )
-                    );
-                }
+                atoms.Add(
+                    new TemplateExpression(
+                        new TextSpan(expressionStart, accepted.EndIndex),
+                        expression
+                    )
+                );
 
                 lexer.Mode = GmlLexer.LexerMode.Default;
 
@@ -1513,6 +1493,7 @@ internal class GmlParser
                     text = new TemplateText(textSpan, accepted.Text[0..^1]);
                     atoms.Add(text);
 
+                    // trim empty text at ends
                     if (atoms[0] is TemplateText && atoms[0].Span.Length == 0)
                     {
                         atoms.RemoveAt(0);

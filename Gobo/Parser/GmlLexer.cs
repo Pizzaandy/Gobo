@@ -10,7 +10,7 @@ internal class GmlLexer
     }
 
     public bool HitEof { get; private set; } = false;
-
+    public TextReader Reader { get; private set; }
     public LexerMode Mode { get; set; } = LexerMode.Default;
 
     private BufferedTextReader reader;
@@ -26,6 +26,7 @@ internal class GmlLexer
 
     public GmlLexer(TextReader reader, int tabWidth = 4)
     {
+        Reader = reader;
         this.reader = new BufferedTextReader(reader, bufferSize: 3);
         this.tabWidth = tabWidth;
         index = 0;
@@ -52,6 +53,10 @@ internal class GmlLexer
             {
                 return Token(TokenKind.TemplateEnd);
             }
+            if (character == '{')
+            {
+                return Token(TokenKind.TemplateMiddle);
+            }
 
             while (IsTemplateStringCharacter(Peek()) && !HitEof)
             {
@@ -66,7 +71,7 @@ internal class GmlLexer
                 return Token(TokenKind.TemplateEnd);
             }
 
-            return UnexpectedToken();
+            return UnexpectedToken("Invalid template literal");
         }
 
         switch (character)
@@ -330,21 +335,26 @@ internal class GmlLexer
 
                 while (!HitEof)
                 {
-                    while (Peek() != quote)
+                    if (Peek() == quote)
                     {
-                        Advance();
+                        if (Peek(2) == quote)
+                        {
+                            Advance();
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
-                    if (!Match(quote))
-                    {
-                        return UnexpectedToken();
-                    }
-                    if (!Match(quote))
-                    {
-                        return Token(TokenKind.VerbatimStringLiteral);
-                    }
+                    Advance();
                 }
 
-                return UnexpectedToken();
+                if (Match(quote))
+                {
+                    return Token(TokenKind.VerbatimStringLiteral);
+                }
+
+                return UnexpectedToken("Unterminated string literal");
             case '$':
                 if (Match('"'))
                 {
@@ -378,7 +388,7 @@ internal class GmlLexer
                 MatchStringCharacters();
                 if (!Match('"'))
                 {
-                    return UnexpectedToken();
+                    return UnexpectedToken("Unterminated string literal");
                 }
                 return Token(TokenKind.StringLiteral);
             default:
@@ -517,8 +527,12 @@ internal class GmlLexer
 
     private void MatchStringCharacters()
     {
-        while (Peek() != '"' && !HitEof)
+        while (!HitEof)
         {
+            if (Peek() == '"' && character != '\\')
+            {
+                break;
+            }
             Advance();
             if (character == '\\')
             {
@@ -612,7 +626,7 @@ internal class GmlLexer
         }
     }
 
-    private Token Token(TokenKind kind)
+    private Token Token(TokenKind kind, string? error = null)
     {
         var token = new Token
         {
@@ -622,17 +636,16 @@ internal class GmlLexer
             Text = string.Join("", currentToken),
             StartIndex = startIndex,
             EndIndex = index,
+            ErrorMessage = error
         };
-
-        Console.WriteLine($"{kind.ToString()}: '{token.Text}'");
 
         currentToken.Clear();
 
         return token;
     }
 
-    private Token UnexpectedToken()
+    private Token UnexpectedToken(string? error = null)
     {
-        return Token(TokenKind.Unexpected);
+        return Token(TokenKind.Unexpected, error);
     }
 }

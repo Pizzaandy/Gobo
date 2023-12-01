@@ -1,7 +1,6 @@
-﻿using System.Text.Json;
+﻿using Gobo.Printer.DocTypes;
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using Gobo.Printer.DocTypes;
 
 namespace Gobo.SyntaxNodes;
 
@@ -15,7 +14,7 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     [JsonIgnore]
     public TextSpan Span { get; set; }
 
-    public List<CommentGroup>? Comments { get; set; } = new();
+    public List<CommentGroup> Comments { get; set; } = new();
 
     [JsonIgnore]
     public GmlSyntaxNode? Parent { get; set; }
@@ -97,7 +96,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     }
 
     // TODO: Move comment logic?
-
     public virtual Doc PrintLeadingComments(
         PrintContext ctx,
         CommentType asType = CommentType.Leading
@@ -148,8 +146,8 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
             this,
             SyntaxNodeSerializerContext.Default.GmlSyntaxNode
         );
-
-        return Regex.Unescape(result);
+        return result;
+        //return Regex.Unescape(result);
     }
 
     public override int GetHashCode()

@@ -1,7 +1,7 @@
-﻿using System.Text.Json.Serialization;
-using Gobo.SyntaxNodes.Gml;
+﻿using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
 using Gobo.SyntaxNodes.GmlExtensions;
+using System.Text.Json.Serialization;
 
 namespace Gobo.SyntaxNodes;
 
@@ -74,6 +74,7 @@ internal partial class SyntaxNodeSerializerContext : JsonSerializerContext { }
 [JsonDerivedType(typeof(DecimalLiteral))]
 [JsonDerivedType(typeof(UndefinedLiteral))]
 [JsonDerivedType(typeof(StringLiteral))]
+[JsonDerivedType(typeof(VerbatimStringLiteral))]
 // Syntax extensions
 [JsonDerivedType(typeof(TypeAnnotation))]
 internal abstract partial class GmlSyntaxNode { }

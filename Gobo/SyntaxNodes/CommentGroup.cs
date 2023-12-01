@@ -31,6 +31,9 @@ internal class CommentGroup
 {
     public string Text => string.Concat(Tokens.Select(t => t.Text));
 
+    public int Start => Span.Start;
+    public int End => Span.End;
+
     [JsonIgnore]
     public string Id { get; init; }
 
@@ -47,6 +50,7 @@ internal class CommentGroup
     [JsonIgnore]
     public List<Token> Tokens { get; init; }
 
+    [JsonIgnore]
     public TextSpan Span { get; set; }
 
     [JsonIgnore]

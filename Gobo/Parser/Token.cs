@@ -1,6 +1,6 @@
 ﻿namespace Gobo.Parser;
 
-internal struct Token
+internal readonly struct Token
 {
     public string Text { get; init; }
     public TokenKind Kind { get; init; }
@@ -8,6 +8,7 @@ internal struct Token
     public int Column { get; init; }
     public int StartIndex { get; init; }
     public int EndIndex { get; init; }
+    public string? ErrorMessage { get; init; }
 }
 
 internal enum TokenKind
