@@ -4,9 +4,9 @@
 
 Gobo is an opinionated formatter for GameMaker Language. It enforces a consistent style by parsing and re-printing your code with its own rules, taking maximum line length into account.
 
-Gobo currently provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of prettier.
+Gobo currently provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of Prettier.
 
-Gobo is currently only available as a native CLI tool, but it will eventually be available as an IDE plugin.
+Gobo is currently only available as a native CLI tool, but it will eventually be available as an IDE plugin (hopefully!).
 
 ### Input
 
@@ -35,10 +35,10 @@ return call();
 ```
 
 ## How does it work?
-Gobo is written in C# and compiles to a self-contained binary using Native AOT in .NET 8. This may change in the future!
+Gobo is written in C# and compiles to a self-contained binary using Native AOT in .NET 8.
 
-Gobo uses [Antlr4](https://www.antlr.org/)-generated code to parse GML and convert it into an abstract syntax tree. There is no officially-documented format for GML's syntax tree, so Gobo uses a format similar to TypeScript's AST. The grammar spec has been designed to only handle valid GML code, barring a few exceptions, to ensure correctness.
+Gobo uses a custom GML parser to read your code and ensure that formatted code is equivalent to the original. The parser is context-free and accepts a superset of valid GML. The goal is to eventually add error recovery and a "strict" mode that only accepts compilable GML. There is no officially-documented format for GML's syntax tree, so Gobo uses a format similar to JavaScript parsers. 
 
-Gobo uses a modified implementation of Prettier's printing algorithm to make decisions about wrapping lines and printing comments. The implementation of the "Doc" printing algorithm is taken from [CSharpier](https://github.com/belav/csharpier).
+Gobo converts your code into an intermediate "Doc" format to make decisions about wrapping lines and printing comments. The doc printing algorith is taken from [CSharpier](https://github.com/belav/csharpier), which is itself adapted from Prettier.
 
 
