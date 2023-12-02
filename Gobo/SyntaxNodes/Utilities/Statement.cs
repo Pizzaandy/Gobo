@@ -100,12 +100,9 @@ internal static class Statement
         var isMethod =
             node is VariableDeclarationList variableDeclarationList
             && variableDeclarationList.Modifier == "static"
-            && variableDeclarationList
-                .Declarations
-                .Any(c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration)
-            && variableDeclarationList.Parent?.Parent is Block block
-            && block.Parent is FunctionDeclaration potentialConstructor
-            && potentialConstructor.IsConstructor;
+            && variableDeclarationList.Declarations.Any(
+                c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration
+            );
 
         return isTopLevelFunction || isMethod;
     }
