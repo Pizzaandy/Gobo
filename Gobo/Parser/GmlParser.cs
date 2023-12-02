@@ -1003,10 +1003,7 @@ internal class GmlParser
 
         while (!HitEOF)
         {
-            if (
-                Accept(TokenKind.PlusPlus, skipWhitespace: false)
-                || Accept(TokenKind.MinusMinus, skipWhitespace: false)
-            )
+            if (Accept(TokenKind.PlusPlus) || Accept(TokenKind.MinusMinus))
             {
                 var @operator = accepted.Text;
                 @object = new UnaryExpression(
@@ -1252,15 +1249,6 @@ internal class GmlParser
 
         if (AcceptAny(prefixOperators))
         {
-            // Increment/decrement operators must be adjacent to their operands
-            if (
-                (accepted.Kind == TokenKind.PlusPlus || accepted.Kind == TokenKind.MinusMinus)
-                && (token.Kind == TokenKind.Whitespace || token.Kind == TokenKind.LineBreak)
-            )
-            {
-                ThrowUnexpected(accepted);
-            }
-
             var @operator = accepted.Text;
             Expect(PrimaryExpression(out var primaryExpression));
             result = new UnaryExpression(
