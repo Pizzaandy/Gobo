@@ -44,7 +44,7 @@ internal class GmlParser
     private List<Token> currentTriviaGroup = new();
     private bool HitEOF => token.Kind == TokenKind.Eof;
 
-    private static readonly TokenKind[] postfixOperators =
+    private static readonly TokenKind[] assignmentOperators =
     {
         TokenKind.Assign,
         TokenKind.MultiplyAssign,
@@ -56,7 +56,8 @@ internal class GmlParser
         TokenKind.RightShiftArithmeticAssign,
         TokenKind.BitAndAssign,
         TokenKind.BitXorAssign,
-        TokenKind.BitOrAssign
+        TokenKind.BitOrAssign,
+        TokenKind.NullCoalescingAssign
     };
 
     private static readonly TokenKind[] prefixOperators =
@@ -471,7 +472,7 @@ internal class GmlParser
             }
 
             // assignment
-            if (!AcceptAny(postfixOperators))
+            if (!AcceptAny(assignmentOperators))
             {
                 if (Strict)
                 {
@@ -1366,7 +1367,7 @@ internal class GmlParser
             {
                 if (!previousChildWasPunctuator)
                 {
-                    AddError("Expected ','");
+                    ThrowExpected(",");
                     result = GmlSyntaxNode.Empty;
                     return false;
                 }

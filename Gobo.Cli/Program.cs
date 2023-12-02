@@ -125,7 +125,8 @@ static async Task FormatFile(string filePath, IDictionary<string, ArgValue> argu
     }
     catch (Exception e)
     {
-        Console.WriteLine(e.Message);
+        var message = $"[Error] {filePath}\n";
+        Console.Error.WriteLine(message + e.Message);
         return;
     }
 
@@ -153,7 +154,8 @@ static async Task CheckFile(string filePath, IDictionary<string, ArgValue> argum
     }
     catch (Exception e)
     {
-        Console.Error.WriteLine(e.Message);
+        var message = $"[Error] {filePath}\n";
+        Console.Error.WriteLine(message + e.Message);
         return;
     }
 
