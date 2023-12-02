@@ -1,6 +1,6 @@
-﻿using DocoptNet;
+﻿using System.Diagnostics;
+using DocoptNet;
 using Gobo;
-using System.Diagnostics;
 
 const string usage =
     @"Usage:
@@ -18,7 +18,7 @@ Options:
 
 return await Docopt
     .CreateParser(usage)
-    .WithVersion("Gobo 0.2")
+    .WithVersion("Gobo 0.1")
     .Parse(args)
     .Match(
         Run,
@@ -110,7 +110,7 @@ static async Task<int> Run(IDictionary<string, ArgValue> arguments)
 
 static async Task FormatFile(string filePath, IDictionary<string, ArgValue> arguments)
 {
-    var input = new SourceFile(filePath);
+    var input = await File.ReadAllTextAsync(filePath);
     FormatResult result;
 
     var options = new FormatOptions
@@ -142,7 +142,7 @@ static async Task FormatFile(string filePath, IDictionary<string, ArgValue> argu
 
 static async Task CheckFile(string filePath, IDictionary<string, ArgValue> arguments)
 {
-    var input = new SourceFile(filePath);
+    var input = await File.ReadAllTextAsync(filePath);
     bool success;
 
     var options = new FormatOptions { GetDebugInfo = false };

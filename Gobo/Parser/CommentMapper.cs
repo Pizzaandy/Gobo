@@ -6,18 +6,12 @@ internal class CommentMapper
 {
     public SourceText SourceText { get; set; }
 
-    public List<CommentGroup> CommentGroups { get; set; } = new();
+    public List<CommentGroup> CommentGroups { get; set; }
 
-    public CommentMapper(SourceText sourceText, List<Token[]> triviaGroups)
+    public CommentMapper(SourceText sourceText, List<CommentGroup> commentGroups)
     {
         SourceText = sourceText;
-        foreach (var triviaGroup in triviaGroups)
-        {
-            if (triviaGroup.Any(IsComment))
-            {
-                CommentGroups.AddRange(CreateCommentGroups(triviaGroup));
-            }
-        }
+        CommentGroups = commentGroups;
     }
 
     public GmlSyntaxNode AttachComments(GmlSyntaxNode ast)
@@ -109,69 +103,16 @@ internal class CommentMapper
         return ast;
     }
 
-    private static List<CommentGroup> CreateCommentGroups(Token[] triviaTokens)
-    {
-        var result = new List<CommentGroup>();
-        var currentGroup = new List<Token>();
-        int lineBreakCount = 0;
-        CommentGroup? lastGroup = null;
-
-        void AcceptCommentGroup()
-        {
-            if (currentGroup.Count == 0)
-            {
-                return;
-            }
-
-            if (lastGroup is not null)
-            {
-                lastGroup.TrailingLineBreaks = lineBreakCount;
-            }
-
-            var newGroup = new CommentGroup(currentGroup.ToArray());
-            newGroup.LeadingLineBreaks = lineBreakCount;
-            result.Add(newGroup);
-
-            currentGroup.Clear();
-            lastGroup = newGroup;
-            lineBreakCount = 0;
-        }
-
-        foreach (var token in triviaTokens)
-        {
-            if (token.Kind is TokenKind.LineBreak)
-            {
-                AcceptCommentGroup();
-                lineBreakCount++;
-            }
-            else if (token.Kind is TokenKind.SingleLineComment or TokenKind.MultiLineComment)
-            {
-                currentGroup.Add(token);
-            }
-        }
-
-        AcceptCommentGroup();
-        if (lastGroup is not null)
-        {
-            lastGroup.TrailingLineBreaks = lineBreakCount;
-        }
-
-        return result;
-    }
-
     /// <summary>
     /// Determine whether a remaining comment group should be attached to the preceding or following node.
     /// </summary>
-    private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup commentGroup)
+    private bool RemainingCommentIsLeading(GmlSyntaxNode followingNode, CommentGroup comment)
     {
         // Check if all tokens between the comment and followingNode are whitespace or parentheses
 
-        var charsBetween = SourceText.ReadSpan(
-            commentGroup.CommentTokens[^1].EndIndex,
-            followingNode.Span.Start
-        );
+        var whitespaceBetween = SourceText.GetSpan(comment.Span.End, followingNode.Span.Start);
 
-        foreach (var character in charsBetween)
+        foreach (var character in whitespaceBetween)
         {
             if (char.IsWhiteSpace(character) || character == '(')
             {
@@ -274,20 +215,25 @@ internal class CommentMapper
         return !(node is EmptyNode or NodeList);
     }
 
-    private static bool IsOwnLineComment(CommentGroup commentGroup)
+    private bool IsOwnLineComment(CommentGroup comment)
     {
-        bool firstInLine = commentGroup.LeadingLineBreaks > 0 || commentGroup.Span.Start == 0;
+        bool firstInLine =
+            SourceText.GetLineBreaksToLeft(comment.Span) > 0 || comment.Span.Start == 0;
 
-        bool lastInLine = commentGroup.TrailingLineBreaks > 0;
+        bool lastInLine =
+            SourceText.GetLineBreaksToRight(comment.Span) > 0
+            || comment.Span.End == SourceText.Length;
 
         return firstInLine && lastInLine;
     }
 
-    private static bool IsEndOfLineComment(CommentGroup commentGroup)
+    private bool IsEndOfLineComment(CommentGroup comment)
     {
-        bool noLeadingLineBreaks = commentGroup.LeadingLineBreaks == 0;
+        bool noLeadingLineBreaks = SourceText.GetLineBreaksToLeft(comment.Span) == 0;
 
-        bool lastInLine = commentGroup.TrailingLineBreaks > 0;
+        bool lastInLine =
+            SourceText.GetLineBreaksToRight(comment.Span) > 0
+            || comment.Span.End == SourceText.Length;
 
         return noLeadingLineBreaks && lastInLine;
     }
@@ -300,11 +246,6 @@ internal class CommentMapper
     {
         comment.Type = type;
         node.Comments.Add(comment);
-    }
-
-    private static bool IsComment(Token token)
-    {
-        return token.Kind is TokenKind.SingleLineComment or TokenKind.MultiLineComment;
     }
 }
 

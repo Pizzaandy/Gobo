@@ -29,7 +29,7 @@ public class SampleTests
     {
         var filePath = test.FilePath;
 
-        var input = new SourceFile(filePath);
+        var input = await File.ReadAllTextAsync(filePath);
 
         var firstPass = GmlFormatter.Format(input, options);
 
@@ -39,7 +39,7 @@ public class SampleTests
 
         var secondPass = GmlFormatter.Format(firstPass.Output, options);
 
-        var secondDiff = DiffChecker.PrintFirstDifference(firstPass.Output, secondPass.Output);
+        var secondDiff = StringDiffer.PrintFirstDifference(firstPass.Output, secondPass.Output);
         if (secondDiff != string.Empty)
         {
             throw new XunitException($"Second pass:\n{secondDiff}");

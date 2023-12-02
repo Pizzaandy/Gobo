@@ -29,7 +29,7 @@ internal enum FormatCommandType
 /// </summary>
 internal class CommentGroup
 {
-    public string Text => string.Concat(CommentTokens.Select(t => t.Text));
+    public string Text => string.Concat(Tokens.Select(t => t.Text));
 
     public int Start => Span.Start;
     public int End => Span.End;
@@ -37,18 +37,18 @@ internal class CommentGroup
     [JsonIgnore]
     public string Id { get; init; }
 
+    /// <summary>
+    /// Whether this comment group was ignored during formatting.
+    /// </summary>
+    [JsonIgnore]
+    public bool PrintedRaw = false;
+
     public CommentType Type { get; set; }
 
     public CommentPlacement Placement { get; set; }
 
     [JsonIgnore]
-    public Token[] CommentTokens { get; init; }
-
-    [JsonIgnore]
-    public int LeadingLineBreaks { get; set; }
-
-    [JsonIgnore]
-    public int TrailingLineBreaks { get; set; }
+    public List<Token> Tokens { get; init; }
 
     [JsonIgnore]
     public TextSpan Span { get; set; }
@@ -62,12 +62,6 @@ internal class CommentGroup
     [JsonIgnore]
     public GmlSyntaxNode? FollowingNode { get; set; }
 
-    /// <summary>
-    /// Whether this comment group was ignored during formatting.
-    /// </summary>
-    [JsonIgnore]
-    public bool PrintedRaw = false;
-
     [JsonIgnore]
     public FormatCommandType FormatCommand { get; init; }
 
@@ -78,16 +72,18 @@ internal class CommentGroup
 
     private static readonly string[] newlines = new string[] { "\r\n", "\n" };
 
-    public CommentGroup(Token[] commentTokens)
+    public CommentGroup(List<Token> tokens, TextSpan span)
     {
-        CommentTokens = commentTokens;
-        Span = new TextSpan(commentTokens[0].StartIndex, commentTokens[^1].EndIndex);
+        Tokens = tokens;
+        Span = span;
+
         Id = Guid.NewGuid().ToString();
 
-        for (var i = commentTokens.Length - 1; i >= 0; i--)
+        for (var i = tokens.Count - 1; i >= 0; i--)
         {
-            var token = commentTokens[i];
-            if (token.Kind is TokenKind.SingleLineComment)
+            var token = tokens[i];
+
+            if (token.Kind == TokenKind.SingleLineComment)
             {
                 endsWithSingleLineComment = true;
 
@@ -108,7 +104,7 @@ internal class CommentGroup
     {
         var parts = new List<Doc>();
 
-        foreach (var token in CommentTokens)
+        foreach (var token in Tokens)
         {
             if (token.Kind is TokenKind.SingleLineComment)
             {
@@ -117,7 +113,7 @@ internal class CommentGroup
             else if (token.Kind == TokenKind.MultiLineComment)
             {
                 parts.Add(PrintMultiLineComment(token.Text));
-                if (token.Kind != CommentTokens[^1].Kind)
+                if (token.Kind != Tokens.Last().Kind)
                 {
                     parts.Add(" ");
                 }
@@ -156,7 +152,9 @@ internal class CommentGroup
         // Add line breaks between comment groups
         foreach (var group in groups.Skip(1))
         {
-            for (var i = 0; i < Math.Min(group.LeadingLineBreaks, 2); i++)
+            int lineBreaksBetween = ctx.SourceText.GetLineBreaksToLeft(group.Span);
+
+            for (var i = 0; i < Math.Min(lineBreaksBetween, 2); i++)
             {
                 groupDocs.Add(Doc.HardLine);
             }
@@ -176,7 +174,7 @@ internal class CommentGroup
         // Add leading or trailing line breaks depending on type
         if (type == CommentType.Leading)
         {
-            int trailingLineBreakCount = groups.Last().TrailingLineBreaks;
+            int trailingLineBreakCount = ctx.SourceText.GetLineBreaksToRight(groups.Last().Span);
 
             if (trailingLineBreakCount == 0)
             {
@@ -192,12 +190,11 @@ internal class CommentGroup
         }
         else
         {
-            var first = groups.First();
-            int leadingLineBreakCount = first.LeadingLineBreaks;
+            int leadingLineBreakCount = ctx.SourceText.GetLineBreaksToLeft(groups.First().Span);
 
             if (leadingLineBreakCount == 0)
             {
-                Doc space = first.PrintedAsEndOfLine ? Doc.Null : " ";
+                Doc space = groups.First().PrintedAsEndOfLine ? Doc.Null : " ";
                 return Doc.Concat(space, printedGroups);
             }
 
@@ -214,6 +211,24 @@ internal class CommentGroup
 
     public static Doc PrintSingleLineComment(string text)
     {
+        for (var i = 0; i < Math.Min(4, text.Length); i++)
+        {
+            var character = text[i];
+
+            if (character == '/')
+            {
+                continue;
+            }
+            else if (char.IsLetter(character) || character == '@')
+            {
+                return text[..i] + " " + text[i..];
+            }
+            else
+            {
+                break;
+            }
+        }
+
         return text;
     }
 
@@ -227,7 +242,7 @@ internal class CommentGroup
     {
         return string.Join(
             '\n',
-            $"Text: {string.Concat(CommentTokens.Select(t => t.Text))}",
+            $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
             $"Type: {Type}",
             $"Placement: {Placement}",
             $"Range: {Span}",

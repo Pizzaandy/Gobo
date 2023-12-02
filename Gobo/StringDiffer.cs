@@ -2,12 +2,42 @@
 
 namespace Gobo;
 
-public static class DiffChecker
+public static class StringDiffer
 {
-    public static string PrintFirstDifference(TextReader expected, TextReader actual)
+    /// <summary>
+    /// Given two strings that are different, this will print the first different line it encounters
+    /// along with a single line before and after that different line.
+    /// </summary>
+    public static string PrintFirstDifference(string expected, string actual)
     {
-        using var expectedReader = expected;
-        using var actualReader = actual;
+        if (expected == actual)
+        {
+            return string.Empty;
+        }
+
+        var x = 1;
+        while (x <= expected.Length && x <= actual.Length)
+        {
+            var endOfExpected = expected[^x];
+            var endOfActual = actual[^x];
+            var expectedIsNewLine = endOfExpected is '\r' or '\n';
+            var actualIsNewLine = endOfActual is '\r' or '\n';
+            if (expectedIsNewLine && actualIsNewLine)
+            {
+                x++;
+                continue;
+            }
+
+            if (!expectedIsNewLine && !actualIsNewLine)
+            {
+                break;
+            }
+
+            return "The file did not end with a single newline.";
+        }
+
+        using var expectedReader = new StringReader(expected);
+        using var actualReader = new StringReader(actual);
 
         var expectedLine = expectedReader.ReadLine();
         var actualLine = actualReader.ReadLine();
@@ -15,7 +45,6 @@ public static class DiffChecker
         string? previousExpectedLine = null;
         string? previousActualLine = null;
         var stringBuilder = new StringBuilder();
-
         while (expectedLine != null || actualLine != null)
         {
             if (expectedLine == actualLine)
@@ -59,12 +88,7 @@ public static class DiffChecker
             return stringBuilder.ToString();
         }
 
-        return string.Empty;
-    }
-
-    public static string PrintFirstDifference(string actual, string expected)
-    {
-        return PrintFirstDifference(new StringReader(expected), new StringReader(actual));
+        return "The file contained different line endings than formatting it would result in.";
     }
 
     private static string? MakeWhiteSpaceVisible(string? value)
