@@ -996,7 +996,7 @@ internal class GmlParser
     #endregion
 
     #region Expressions
-    private bool PrimaryExpression(out GmlSyntaxNode result)
+    private bool PrimaryExpression(out GmlSyntaxNode result, bool acceptUnaryOperators = true)
     {
         var start = token;
 
@@ -1010,7 +1010,9 @@ internal class GmlParser
 
         while (!HitEOF)
         {
-            if (Accept(TokenKind.PlusPlus) || Accept(TokenKind.MinusMinus))
+            if (
+                acceptUnaryOperators && (Accept(TokenKind.PlusPlus) || Accept(TokenKind.MinusMinus))
+            )
             {
                 var @operator = accepted.Text;
                 @object = new UnaryExpression(
@@ -1253,11 +1255,10 @@ internal class GmlParser
     private bool UnaryExpression(out GmlSyntaxNode result)
     {
         var start = token;
-
         if (AcceptAny(prefixOperators))
         {
             var @operator = accepted.Text;
-            Expect(PrimaryExpression(out var primaryExpression));
+            Expect(PrimaryExpression(out var primaryExpression, acceptUnaryOperators: false));
             result = new UnaryExpression(
                 GetSpan(start, accepted),
                 @operator,
