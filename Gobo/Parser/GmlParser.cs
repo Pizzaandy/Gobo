@@ -8,7 +8,7 @@ internal struct GmlParseResult
 {
     public GmlSyntaxNode Ast;
     public List<GmlSyntaxError> Errors;
-    public List<CommentGroup> CommentGroups;
+    public List<Token[]> TriviaGroups;
 }
 
 internal class GmlSyntaxErrorException : Exception
@@ -31,32 +31,32 @@ internal class GmlParser
 {
     public Token CurrentToken => token;
 
-    public List<CommentGroup> CommentGroups { get; private set; } = new();
-
+    public List<Token[]> TriviaGroups { get; private set; } = new();
+    public List<GmlSyntaxError> Errors { get; private set; } = new();
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
-    public List<GmlSyntaxError> Errors { get; private set; } = new();
     public bool Strict { get; set; } = true;
 
     private readonly GmlLexer lexer;
     private Token token;
     private Token accepted;
 
-    private List<Token> currentCommentGroup = new();
+    private List<Token> currentTriviaGroup = new();
     private bool HitEOF => token.Kind == TokenKind.Eof;
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
-    public GmlParser(string code)
+    public GmlParser(SourceText sourceText)
     {
-        lexer = new GmlLexer(new StringReader(code));
+        lexer = new GmlLexer(sourceText.GetReader());
         token = lexer.NextToken();
         ProcessToken(token);
     }
 
-    public GmlParser(TextReader reader)
+    public GmlParser(string code)
     {
-        lexer = new GmlLexer(reader);
+        var sourceText = new SourceString(code);
+        lexer = new GmlLexer(sourceText.GetReader());
         token = lexer.NextToken();
         ProcessToken(token);
     }
@@ -67,7 +67,7 @@ internal class GmlParser
         return new GmlParseResult()
         {
             Ast = ast,
-            CommentGroups = CommentGroups,
+            TriviaGroups = TriviaGroups,
             Errors = Errors
         };
     }
@@ -108,11 +108,18 @@ internal class GmlParser
         }
     }
 
-    private void Expect(bool returnValue)
+    private void Expect(bool returnValue, string? errorMessage = null)
     {
         if (!returnValue)
         {
-            AddDefaultSyntaxError();
+            if (errorMessage is not null)
+            {
+                AddError(errorMessage);
+            }
+            else
+            {
+                AddDefaultSyntaxError();
+            }
         }
     }
 
@@ -150,54 +157,30 @@ internal class GmlParser
     {
         switch (tok.Kind)
         {
-            case TokenKind.Whitespace:
-                if (currentCommentGroup.Count > 0)
-                {
-                    currentCommentGroup.Add(tok);
-                }
-                break;
             case TokenKind.LineBreak:
-            case TokenKind.Eof:
-                AcceptCommentGroup();
-                break;
+            case TokenKind.Whitespace:
             case TokenKind.SingleLineComment:
             case TokenKind.MultiLineComment:
-                currentCommentGroup.Add(tok);
+                currentTriviaGroup.Add(tok);
+                break;
+            case TokenKind.Eof:
+                currentTriviaGroup.Add(tok);
+                AcceptTriviaGroup();
+                break;
+            default:
+                AcceptTriviaGroup();
                 break;
         }
     }
 
-    private void AcceptCommentGroup()
+    private void AcceptTriviaGroup()
     {
-        if (currentCommentGroup.Count == 0)
+        if (currentTriviaGroup.Count == 0)
         {
             return;
         }
-
-        if (currentCommentGroup.Count > 1)
-        {
-            var group = currentCommentGroup.AsEnumerable();
-            while (
-                group.Last().Kind == TokenKind.Whitespace
-                || group.Last().Kind == TokenKind.LineBreak
-            )
-            {
-                group = group.SkipLast(1);
-            }
-            currentCommentGroup = group.ToList();
-        }
-
-        CommentGroups.Add(
-            new CommentGroup(
-                new(currentCommentGroup),
-                new TextSpan(
-                    currentCommentGroup.First().StartIndex,
-                    currentCommentGroup.Last().EndIndex
-                )
-            )
-        );
-
-        currentCommentGroup.Clear();
+        TriviaGroups.Add(currentTriviaGroup.ToArray());
+        currentTriviaGroup.Clear();
     }
 
     private void AddError(string message)
@@ -1644,7 +1627,8 @@ internal class GmlParser
     private bool PropertyAssignment(out GmlSyntaxNode result)
     {
         var start = token;
-        GmlSyntaxNode name = GmlSyntaxNode.Empty;
+        GmlSyntaxNode name;
+        GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
 
         if (AcceptAny(TokenKind.Identifier, TokenKind.Constructor, TokenKind.Noone))
         {
@@ -1660,8 +1644,10 @@ internal class GmlParser
             return false;
         }
 
-        Expect(TokenKind.Colon);
-        Expect(Expression(out var initializer));
+        if (Accept(TokenKind.Colon))
+        {
+            Expect(Expression(out initializer));
+        }
 
         result = new StructProperty(GetSpan(start, accepted), name, initializer);
 

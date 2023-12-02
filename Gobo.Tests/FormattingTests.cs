@@ -49,12 +49,12 @@ public class FormattingTests
 
         await File.WriteAllTextAsync(actualFilePath, firstPass.Output);
 
-        // Normalize line endings in case they are added manually on windows
+        // Normalize line endings in expected files in case they are added manually on windows
         var expectedOutput = (await File.ReadAllTextAsync(expectedFilePath)).ReplaceLineEndings(
             "\n"
         );
 
-        var firstDiff = StringDiffer.PrintFirstDifference(expectedOutput, firstPass.Output);
+        var firstDiff = DiffChecker.PrintFirstDifference(expectedOutput, firstPass.Output);
         if (firstDiff != string.Empty)
         {
             throw new XunitException($"Formatting error on first pass:\n{firstDiff}");
@@ -62,7 +62,7 @@ public class FormattingTests
 
         var secondPass = GmlFormatter.Format(firstPass.Output, options);
 
-        var secondDiff = StringDiffer.PrintFirstDifference(expectedOutput, secondPass.Output);
+        var secondDiff = DiffChecker.PrintFirstDifference(expectedOutput, secondPass.Output);
         if (secondDiff != string.Empty)
         {
             throw new XunitException($"Formatting error on second pass:\n{secondDiff}");

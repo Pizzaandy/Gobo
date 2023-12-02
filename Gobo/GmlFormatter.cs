@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using Gobo.Parser;
+﻿using Gobo.Parser;
 using Gobo.Printer.DocPrinter;
 using Gobo.SyntaxNodes;
+using System.Diagnostics;
 
 namespace Gobo;
 
@@ -52,6 +52,11 @@ public static partial class GmlFormatter
 {
     public static FormatResult Format(string code, FormatOptions options)
     {
+        return Format(new SourceString(code), options);
+    }
+
+    public static FormatResult Format(SourceText sourceText, FormatOptions options)
+    {
         long parseStart = 0;
         long parseStop = 0;
         long formatStart = 0;
@@ -64,10 +69,9 @@ public static partial class GmlFormatter
             parseStart = Stopwatch.GetTimestamp();
         }
 
-        var parseResult = new GmlParser(code).Parse();
+        var parseResult = new GmlParser(sourceText).Parse();
 
-        var sourceText = new SourceText(code);
-        new CommentMapper(sourceText, parseResult.CommentGroups).AttachComments(parseResult.Ast);
+        new CommentMapper(sourceText, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
 
         if (getDebugInfo)
         {
@@ -78,7 +82,8 @@ public static partial class GmlFormatter
         GmlSyntaxNode ast = parseResult.Ast;
 
         var initialHash = options.ValidateOutput ? ast.GetHashCode() : -1;
-        var docs = ast.Print(new PrintContext(options, sourceText));
+        var context = new PrintContext(options, sourceText, parseResult.TriviaGroups);
+        var docs = ast.Print(context);
 
         var printOptions = new Printer.DocPrinterOptions()
         {
@@ -179,15 +184,21 @@ public static partial class GmlFormatter
         }
     }
 
-    public static bool Check(string code, FormatOptions options)
+    public static bool Check(SourceText sourceText, FormatOptions options)
     {
-        var result = Format(code, options);
-        return result.Output == code;
+        var formatResult = Format(sourceText, options);
+
+        var diff = DiffChecker.PrintFirstDifference(
+            new StringReader(formatResult.Output),
+            sourceText.GetReader()
+        );
+
+        return diff == string.Empty;
     }
 
     public static async Task FormatFileAsync(string filePath, FormatOptions options)
     {
-        string input = await File.ReadAllTextAsync(filePath);
+        var input = new SourceFile(filePath);
         string formatted;
 
         try

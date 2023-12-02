@@ -1,4 +1,5 @@
-﻿using Gobo.Printer.DocTypes;
+﻿using Gobo.Parser;
+using Gobo.Printer.DocTypes;
 using Gobo.SyntaxNodes.Gml;
 
 namespace Gobo.SyntaxNodes.PrintHelpers;
@@ -65,11 +66,11 @@ internal static class Statement
         var parts = new List<Doc>();
         bool nextStatementNeedsLineBreak = false;
 
-        foreach (var child in statements)
+        for (var i = 0; i < statements.Count; i++)
         {
-            var shouldAddLineBreakFromSource =
-                HasLeadingLineBreak(ctx, child) && child != statements.First();
+            var child = statements[i];
 
+            var shouldAddLineBreakFromSource = HasLeadingLineBreak(ctx, child);
             var isTopLevelFunctionOrMethod = IsTopLevelFunctionOrMethod(child);
 
             var shouldAddLineBreak =
@@ -78,7 +79,7 @@ internal static class Statement
                     || isTopLevelFunctionOrMethod
                     || nextStatementNeedsLineBreak
                 )
-                && child != statements.First();
+                && i != 0;
 
             parts.Add(
                 shouldAddLineBreak
@@ -96,25 +97,41 @@ internal static class Statement
     {
         var isTopLevelFunction = node is FunctionDeclaration && node.Parent is Document;
 
-        // Check for a static method declaration (i.e. static foo = function(){}) in a constructor
+        // Check for a static function declaration (i.e. static foo = function(){})
         var isMethod =
             node is VariableDeclarationList variableDeclarationList
             && variableDeclarationList.Modifier == "static"
-            && variableDeclarationList
-                .Declarations
-                .Any(c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration)
-            && variableDeclarationList.Parent?.Parent is Block block
-            && block.Parent is FunctionDeclaration potentialConstructor
-            && potentialConstructor.IsConstructor;
+            && variableDeclarationList.Declarations.Any(
+                c => c is VariableDeclarator decl && decl.Initializer is FunctionDeclaration
+            );
 
         return isTopLevelFunction || isMethod;
     }
 
     public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
     {
-        var startSpan = node.LeadingComments.Any() ? node.LeadingComments.First().Span : node.Span;
+        int leadingLineBreaks = 0;
 
-        var leadingLineBreaks = ctx.SourceText.GetLineBreaksToLeft(startSpan);
+        if (node.LeadingComments.Any())
+        {
+            leadingLineBreaks = node.LeadingComments.First().LeadingLineBreaks;
+        }
+        else
+        {
+            var leadingTrivia = ctx.GetLeadingTrivia(node.Span);
+
+            foreach (var token in leadingTrivia.Reverse())
+            {
+                if (token.Kind is TokenKind.SingleLineComment or TokenKind.MultiLineComment)
+                {
+                    break;
+                }
+                if (token.Kind is TokenKind.LineBreak)
+                {
+                    leadingLineBreaks++;
+                }
+            }
+        }
 
         return leadingLineBreaks >= 2;
     }

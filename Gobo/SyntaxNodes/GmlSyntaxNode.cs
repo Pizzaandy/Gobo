@@ -1,6 +1,7 @@
 ﻿using Gobo.Printer.DocTypes;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 
 namespace Gobo.SyntaxNodes;
 
@@ -53,8 +54,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
     public Doc Print(PrintContext ctx)
     {
-        ctx.Stack.Push(this);
-
         Doc printed;
 
         var formatCommandComment = LeadingComments.LastOrDefault(
@@ -79,15 +78,13 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
             printed = PrintWithOwnComments(ctx, printed);
         }
 
-        ctx.Stack.Pop();
-
         return printed;
     }
 
     public Doc PrintRaw(PrintContext ctx)
     {
         Children.ForEach(child => child.MarkCommentsAsPrinted());
-        return ctx.SourceText.GetSpan(Span);
+        return ctx.SourceText.ReadSpan(Span);
     }
 
     public List<Doc> PrintChildren(PrintContext ctx)
@@ -146,8 +143,7 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
             this,
             SyntaxNodeSerializerContext.Default.GmlSyntaxNode
         );
-        return result;
-        //return Regex.Unescape(result);
+        return Regex.Unescape(result);
     }
 
     public override int GetHashCode()

@@ -1,80 +1,36 @@
 ﻿namespace Gobo;
 
-internal class SourceText
+public abstract class SourceText
 {
-    public readonly string Text;
-
     public readonly string? FilePath;
 
-    public int Length => Text.Length;
+    public abstract TextReader GetReader();
 
-    public SourceText(string text, string? filePath = null)
+    public string ReadAllText()
     {
-        Text = text;
-        FilePath = filePath;
+        var reader = GetReader();
+        return reader.ReadToEnd();
     }
 
-    public string GetSpan(TextSpan span)
+    public string ReadSpan(TextSpan span)
     {
-        return Text.Substring(span.Start, span.Length);
+        int index = 0;
+        var reader = GetReader();
+
+        while (index < span.Start)
+        {
+            reader.Read();
+            index++;
+        }
+
+        var buffer = new char[span.Length];
+        reader.ReadBlock(buffer, 0, span.Length);
+
+        return new string(buffer);
     }
 
-    public string GetSpan(int start, int end)
+    public string ReadSpan(int start, int end)
     {
-        return Text[start..end];
-    }
-
-    public int GetLineBreaksToLeft(TextSpan span)
-    {
-        var start = span.Start - 1;
-
-        if (start <= 0)
-        {
-            return 0;
-        }
-
-        var lineBreakCount = 0;
-
-        for (var index = start; index >= 0; index--)
-        {
-            var character = Text[index];
-            if (character == '\n')
-            {
-                lineBreakCount++;
-            }
-            else if (!char.IsWhiteSpace(character))
-            {
-                break;
-            }
-        }
-
-        return lineBreakCount;
-    }
-
-    public int GetLineBreaksToRight(TextSpan span)
-    {
-        var end = span.End;
-
-        if (end >= Text.Length - 1)
-        {
-            return 0;
-        }
-
-        var lineBreakCount = 0;
-
-        for (var index = end; index < Text.Length; index++)
-        {
-            var character = Text[index];
-            if (character == '\n')
-            {
-                lineBreakCount++;
-            }
-            else if (!char.IsWhiteSpace(character))
-            {
-                break;
-            }
-        }
-
-        return lineBreakCount;
+        return ReadSpan(new TextSpan(start, end));
     }
 }
