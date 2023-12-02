@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using DocoptNet;
+﻿using DocoptNet;
 using Gobo;
+using System.Diagnostics;
 
 const string usage =
     @"Usage:
@@ -18,7 +18,7 @@ Options:
 
 return await Docopt
     .CreateParser(usage)
-    .WithVersion("Gobo 0.1")
+    .WithVersion("Gobo 0.2")
     .Parse(args)
     .Match(
         Run,

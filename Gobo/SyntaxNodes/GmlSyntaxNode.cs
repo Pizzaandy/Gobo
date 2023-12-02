@@ -57,24 +57,33 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
         Doc printed;
 
-        var formatCommandComment = LeadingComments.LastOrDefault(
-            c => c.FormatCommand is not FormatCommandType.None
-        );
+        var hasComments = Comments.Count > 0;
 
-        if (formatCommandComment is not null)
+        if (hasComments)
         {
-            printed = formatCommandComment.FormatCommand switch
+            var formatCommandComment = LeadingComments.LastOrDefault(
+                c => c.FormatCommand is not FormatCommandType.None
+            );
+
+            if (formatCommandComment is not null)
             {
-                FormatCommandType.Ignore => PrintRaw(ctx),
-                _ => PrintNode(ctx)
-            };
+                printed = formatCommandComment.FormatCommand switch
+                {
+                    FormatCommandType.Ignore => PrintRaw(ctx),
+                    _ => PrintNode(ctx)
+                };
+            }
+            else
+            {
+                printed = PrintNode(ctx);
+            }
         }
         else
         {
             printed = PrintNode(ctx);
         }
 
-        if (PrintOwnComments && Comments.Count > 0)
+        if (hasComments && PrintOwnComments)
         {
             printed = PrintWithOwnComments(ctx, printed);
         }
