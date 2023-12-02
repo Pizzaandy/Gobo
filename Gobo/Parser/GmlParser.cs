@@ -140,9 +140,9 @@ internal class GmlParser
         ProcessToken(token);
     }
 
-    private bool Accept(TokenKind kind, bool skipWhitespace = true)
+    private bool Accept(TokenKind kind, bool skipHiddenTokens = true)
     {
-        if (skipWhitespace)
+        if (skipHiddenTokens)
         {
             while (!HitEOF && IsHiddenToken(token))
             {
@@ -802,7 +802,7 @@ internal class GmlParser
         {
             string tokenText;
 
-            if (Accept(TokenKind.LineBreak, skipWhitespace: false))
+            if (Accept(TokenKind.LineBreak, skipHiddenTokens: false))
             {
                 if (ignoreNextLineBreak)
                 {
@@ -814,12 +814,19 @@ internal class GmlParser
                     break;
                 }
             }
-            else if (Accept(TokenKind.Backslash, skipWhitespace: false))
+            else if (Accept(TokenKind.Backslash, skipHiddenTokens: false))
             {
                 tokenText = "\\";
                 ignoreNextLineBreak = true;
             }
-            else if (Accept(TokenKind.Whitespace, skipWhitespace: false))
+            else if (Accept(TokenKind.Whitespace, skipHiddenTokens: false))
+            {
+                tokenText = accepted.Text;
+            }
+            else if (
+                Accept(TokenKind.SingleLineComment, skipHiddenTokens: false)
+                || Accept(TokenKind.MultiLineComment, skipHiddenTokens: false)
+            )
             {
                 tokenText = accepted.Text;
             }

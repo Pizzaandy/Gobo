@@ -16,9 +16,12 @@ internal sealed class MacroDeclaration : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        // Macro identifiers can't have leading comments
-        var printed = Doc.Concat("#macro", " ", Id, " ", Body.TrimEnd());
+        foreach (var commentGroup in DanglingComments)
+        {
+            commentGroup.PrintedRaw = true;
+        }
 
-        return Doc.Concat(Doc.HardLineIfNoPreviousLine, printed);
+        var text = ctx.SourceText.ReadSpan(Span);
+        return text.TrimEnd();
     }
 }
