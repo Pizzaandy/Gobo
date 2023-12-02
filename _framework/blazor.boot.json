@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Gobo.Playground",
   "resources": {
-    "hash": "sha256-xK6X1WidEEQLbPdryz1i0z2y86uzTeIY2ARdawmISMU=",
+    "hash": "sha256-xKM+LH2JhTxiCY0pFxeEkKskuC00cKMu+8wmwSZFLqk=",
     "jsModuleNative": {
       "dotnet.native.8.0.0.anr06xvywq.js": "sha256-ZJE6/aml55k94EoTVmSD89l+cNsp/LGmGbrW68cfueo="
     },
@@ -9,11 +9,11 @@
       "dotnet.runtime.8.0.0.yv1mnms20m.js": "sha256-WdSX3HQvnBYF0KJLZoOyHvTzMHetaob6PV0Kn2K+QXw="
     },
     "wasmNative": {
-      "dotnet.native.wasm": "sha256-ORYGVpBRD20iCv9X0fJXeMI0LCm3MfFrt0VBMqFrnvc="
+      "dotnet.native.wasm": "sha256-fZhdsTUOP2A9+Dv9Q7zGNhKs4MqFYvf9r9tRo5SQ6iU="
     },
     "assembly": {
-      "Gobo.Playground.wasm": "sha256-4yM/tUFS/p896AP7MP+weggFuOlSWd/P+nLUWuMJ9Ms=",
-      "gobolib.wasm": "sha256-PjwmlpZOiO0GhChjrfqxidcZqjNKIu5almFk6kCYuec=",
+      "Gobo.Playground.wasm": "sha256-gafP4XK7LMGPyl8uaVTZqm26TTJD3qUJgbNc1yqGGSc=",
+      "gobolib.wasm": "sha256-EFhzRn3UJYlCUIi5yHQHeY7Nge/M9GnVOfEkMg2VP8o=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-qIqf1fBIn2juIKaRyuT99WnyvK8W5VHiptPtP9LhOcE=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-RNAqR0ff+baVaIhI+uEcLo9eT+pxGnBEvkCzqD+3roM=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-Ws5szf6fWPAXna+XyWsAhavx+WDFcA/91DQ7iPRPCMs=",
