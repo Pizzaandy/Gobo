@@ -8,7 +8,7 @@ internal struct GmlParseResult
 {
     public GmlSyntaxNode Ast;
     public List<GmlSyntaxError> Errors;
-    public List<CommentGroup> CommentGroups;
+    public List<Token[]> TriviaGroups;
 }
 
 internal class GmlSyntaxErrorException : Exception
@@ -31,32 +31,91 @@ internal class GmlParser
 {
     public Token CurrentToken => token;
 
-    public List<CommentGroup> CommentGroups { get; private set; } = new();
-
+    public List<Token[]> TriviaGroups { get; private set; } = new();
+    public List<GmlSyntaxError> Errors { get; private set; } = new();
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
-    public List<GmlSyntaxError> Errors { get; private set; } = new();
     public bool Strict { get; set; } = true;
 
     private readonly GmlLexer lexer;
     private Token token;
     private Token accepted;
 
-    private List<Token> currentCommentGroup = new();
+    private List<Token> currentTriviaGroup = new();
     private bool HitEOF => token.Kind == TokenKind.Eof;
+
+    private static readonly TokenKind[] postfixOperators =
+    {
+        TokenKind.Assign,
+        TokenKind.MultiplyAssign,
+        TokenKind.DivideAssign,
+        TokenKind.PlusAssign,
+        TokenKind.MinusAssign,
+        TokenKind.ModulusAssign,
+        TokenKind.LeftShiftArithmeticAssign,
+        TokenKind.RightShiftArithmeticAssign,
+        TokenKind.BitAndAssign,
+        TokenKind.BitXorAssign,
+        TokenKind.BitOrAssign
+    };
+
+    private static readonly TokenKind[] prefixOperators =
+    {
+        TokenKind.Plus,
+        TokenKind.Minus,
+        TokenKind.Not,
+        TokenKind.BitNot,
+        TokenKind.PlusPlus,
+        TokenKind.MinusMinus
+    };
+
+    private static readonly TokenKind[] accessors =
+    {
+        TokenKind.OpenBracket,
+        TokenKind.ArrayAccessor,
+        TokenKind.ListAccessor,
+        TokenKind.MapAccessor,
+        TokenKind.GridAccessor,
+        TokenKind.ArrayAccessor,
+        TokenKind.StructAccessor
+    };
+
+    private static readonly TokenKind[] equalityOperators =
+    {
+        TokenKind.Equals,
+        TokenKind.Assign,
+        TokenKind.NotEquals
+    };
+
+    private static readonly TokenKind[] relationalOperators =
+    {
+        TokenKind.LessThan,
+        TokenKind.GreaterThan,
+        TokenKind.LessThanEquals,
+        TokenKind.GreaterThanEquals
+    };
+
+    private static readonly TokenKind[] shiftOperators =
+    {
+        TokenKind.LeftShiftArithmetic,
+        TokenKind.RightShiftArithmetic
+    };
+
+    private static readonly TokenKind[] multiplicativeOperators =
+    {
+        TokenKind.Multiply,
+        TokenKind.Divide,
+        TokenKind.Modulo,
+        TokenKind.IntegerDivide
+    };
+
+    private static readonly TokenKind[] additiveOperators = { TokenKind.Plus, TokenKind.Minus };
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
     public GmlParser(string code)
     {
-        lexer = new GmlLexer(new StringReader(code));
-        token = lexer.NextToken();
-        ProcessToken(token);
-    }
-
-    public GmlParser(TextReader reader)
-    {
-        lexer = new GmlLexer(reader);
+        lexer = new GmlLexer(code);
         token = lexer.NextToken();
         ProcessToken(token);
     }
@@ -67,7 +126,7 @@ internal class GmlParser
         return new GmlParseResult()
         {
             Ast = ast,
-            CommentGroups = CommentGroups,
+            TriviaGroups = TriviaGroups,
             Errors = Errors
         };
     }
@@ -108,15 +167,22 @@ internal class GmlParser
         }
     }
 
-    private void Expect(bool returnValue)
+    private void Expect(bool returnValue, string? errorMessage = null)
     {
         if (!returnValue)
         {
-            AddDefaultSyntaxError();
+            if (errorMessage is not null)
+            {
+                AddError(errorMessage);
+            }
+            else
+            {
+                AddDefaultSyntaxError();
+            }
         }
     }
 
-    private bool AcceptAny(params TokenKind[] types)
+    private bool AcceptAny(TokenKind[] types)
     {
         foreach (var type in types)
         {
@@ -140,64 +206,41 @@ internal class GmlParser
 
     private static bool IsHiddenToken(Token tok)
     {
-        return tok.Kind == TokenKind.Whitespace
-            || tok.Kind == TokenKind.LineBreak
-            || tok.Kind == TokenKind.SingleLineComment
-            || tok.Kind == TokenKind.MultiLineComment;
+        return tok.Kind
+            is TokenKind.Whitespace
+                or TokenKind.LineBreak
+                or TokenKind.SingleLineComment
+                or TokenKind.MultiLineComment;
     }
 
     private void ProcessToken(Token tok)
     {
         switch (tok.Kind)
         {
-            case TokenKind.Whitespace:
-                if (currentCommentGroup.Count > 0)
-                {
-                    currentCommentGroup.Add(tok);
-                }
-                break;
             case TokenKind.LineBreak:
-            case TokenKind.Eof:
-                AcceptCommentGroup();
-                break;
+            case TokenKind.Whitespace:
             case TokenKind.SingleLineComment:
             case TokenKind.MultiLineComment:
-                currentCommentGroup.Add(tok);
+                currentTriviaGroup.Add(tok);
+                break;
+            case TokenKind.Eof:
+                currentTriviaGroup.Add(tok);
+                AcceptTriviaGroup();
+                break;
+            default:
+                AcceptTriviaGroup();
                 break;
         }
     }
 
-    private void AcceptCommentGroup()
+    private void AcceptTriviaGroup()
     {
-        if (currentCommentGroup.Count == 0)
+        if (currentTriviaGroup.Count == 0)
         {
             return;
         }
-
-        if (currentCommentGroup.Count > 1)
-        {
-            var group = currentCommentGroup.AsEnumerable();
-            while (
-                group.Last().Kind == TokenKind.Whitespace
-                || group.Last().Kind == TokenKind.LineBreak
-            )
-            {
-                group = group.SkipLast(1);
-            }
-            currentCommentGroup = group.ToList();
-        }
-
-        CommentGroups.Add(
-            new CommentGroup(
-                new(currentCommentGroup),
-                new TextSpan(
-                    currentCommentGroup.First().StartIndex,
-                    currentCommentGroup.Last().EndIndex
-                )
-            )
-        );
-
-        currentCommentGroup.Clear();
+        TriviaGroups.Add(currentTriviaGroup.ToArray());
+        currentTriviaGroup.Clear();
     }
 
     private void AddError(string message)
@@ -269,7 +312,6 @@ internal class GmlParser
     {
         if (
             Block(out result)
-            || AssignmentOrExpressionStatement(out result)
             || IfStatement(out result)
             || FunctionDeclaration(out result)
             || DoStatement(out result)
@@ -289,6 +331,7 @@ internal class GmlParser
             || DeleteStatement(out result)
             || EnumeratorDeclaration(out result)
             || MacroStatement(out result)
+            || AssignmentOrExpressionStatement(out result)
         )
         {
             if (acceptSemicolons)
@@ -385,7 +428,7 @@ internal class GmlParser
         var start = token;
         result = GmlSyntaxNode.Empty;
 
-        if (AcceptAny(TokenKind.Var, TokenKind.Static, TokenKind.GlobalVar))
+        if (Accept(TokenKind.Var) || Accept(TokenKind.Static) || Accept(TokenKind.GlobalVar))
         {
             // Variable declaration list
             var modifier = accepted.Text;
@@ -428,21 +471,7 @@ internal class GmlParser
             }
 
             // assignment
-            if (
-                !AcceptAny(
-                    TokenKind.Assign,
-                    TokenKind.MultiplyAssign,
-                    TokenKind.DivideAssign,
-                    TokenKind.PlusAssign,
-                    TokenKind.MinusAssign,
-                    TokenKind.ModulusAssign,
-                    TokenKind.LeftShiftArithmeticAssign,
-                    TokenKind.RightShiftArithmeticAssign,
-                    TokenKind.BitAndAssign,
-                    TokenKind.BitXorAssign,
-                    TokenKind.BitOrAssign
-                )
-            )
+            if (!AcceptAny(postfixOperators))
             {
                 if (Strict)
                 {
@@ -715,7 +744,7 @@ internal class GmlParser
     {
         var start = token;
         result = GmlSyntaxNode.Empty;
-        if (!AcceptAny(TokenKind.Region, TokenKind.EndRegion))
+        if (!(Accept(TokenKind.Region) || Accept(TokenKind.EndRegion)))
         {
             return false;
         }
@@ -987,17 +1016,7 @@ internal class GmlParser
                 );
                 break;
             }
-            else if (
-                AcceptAny(
-                    TokenKind.OpenBracket,
-                    TokenKind.ArrayAccessor,
-                    TokenKind.ListAccessor,
-                    TokenKind.MapAccessor,
-                    TokenKind.GridAccessor,
-                    TokenKind.ArrayAccessor,
-                    TokenKind.StructAccessor
-                )
-            )
+            else if (AcceptAny(accessors))
             {
                 var accessor = accepted.Text;
                 var expressions = new List<GmlSyntaxNode>();
@@ -1123,7 +1142,30 @@ internal class GmlParser
     private bool HandleBinaryExpression(
         BinaryExpressionRule nextRule,
         out GmlSyntaxNode result,
-        params TokenKind[] tokenTypes
+        TokenKind tokenType
+    )
+    {
+        var start = token;
+
+        if (!nextRule(out result))
+        {
+            return false;
+        }
+
+        while (Accept(tokenType))
+        {
+            var @operator = accepted.Text;
+            Expect(nextRule(out var right));
+            result = new BinaryExpression(GetSpan(start, accepted), @operator, result, right);
+        }
+
+        return true;
+    }
+
+    private bool HandleBinaryExpression(
+        BinaryExpressionRule nextRule,
+        out GmlSyntaxNode result,
+        TokenKind[] tokenTypes
     )
     {
         var start = token;
@@ -1180,73 +1222,34 @@ internal class GmlParser
 
     private bool EqualityExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(
-            RelationalExpression,
-            out result,
-            TokenKind.Equals,
-            TokenKind.Assign,
-            TokenKind.NotEquals
-        );
+        return HandleBinaryExpression(RelationalExpression, out result, equalityOperators);
     }
 
     private bool RelationalExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(
-            ShiftExpression,
-            out result,
-            TokenKind.LessThan,
-            TokenKind.GreaterThan,
-            TokenKind.LessThanEquals,
-            TokenKind.GreaterThanEquals
-        );
+        return HandleBinaryExpression(ShiftExpression, out result, relationalOperators);
     }
 
     private bool ShiftExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(
-            AdditiveExpression,
-            out result,
-            TokenKind.LeftShiftArithmetic,
-            TokenKind.RightShiftArithmetic
-        );
+        return HandleBinaryExpression(AdditiveExpression, out result, shiftOperators);
     }
 
     private bool AdditiveExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(
-            MultiplicativeExpression,
-            out result,
-            TokenKind.Plus,
-            TokenKind.Minus
-        );
+        return HandleBinaryExpression(MultiplicativeExpression, out result, additiveOperators);
     }
 
     private bool MultiplicativeExpression(out GmlSyntaxNode result)
     {
-        return HandleBinaryExpression(
-            UnaryExpression,
-            out result,
-            TokenKind.Multiply,
-            TokenKind.Divide,
-            TokenKind.Modulo,
-            TokenKind.IntegerDivide
-        );
+        return HandleBinaryExpression(UnaryExpression, out result, multiplicativeOperators);
     }
 
     private bool UnaryExpression(out GmlSyntaxNode result)
     {
         var start = token;
 
-        if (
-            AcceptAny(
-                TokenKind.Plus,
-                TokenKind.Minus,
-                TokenKind.Not,
-                TokenKind.BitNot,
-                TokenKind.PlusPlus,
-                TokenKind.MinusMinus
-            )
-        )
+        if (AcceptAny(prefixOperators))
         {
             // Increment/decrement operators must be adjacent to their operands
             if (
@@ -1452,7 +1455,6 @@ internal class GmlParser
         }
         else if (Accept(TokenKind.TemplateStart))
         {
-            // TODO: Simplify
             var fullSpan = GetSpan(accepted);
             var textSpan = new TextSpan(fullSpan.Start + 2, fullSpan.End - 1);
             var text = new TemplateText(textSpan, accepted.Text[2..^1]);
@@ -1462,6 +1464,9 @@ internal class GmlParser
 
             while (!HitEOF)
             {
+                // The lexer is one step ahead of the parser, resulting in this
+                // somewhat confusing order of operations...
+
                 Expression(out var expression);
 
                 lexer.Mode = GmlLexer.LexerMode.TemplateString;
@@ -1521,13 +1526,11 @@ internal class GmlParser
             return false;
         }
         else if (
-            AcceptAny(
-                TokenKind.Noone,
-                TokenKind.BooleanLiteral,
-                TokenKind.VerbatimStringLiteral,
-                TokenKind.HexIntegerLiteral,
-                TokenKind.BinaryLiteral
-            )
+            Accept(TokenKind.Noone)
+            || Accept(TokenKind.BooleanLiteral)
+            || Accept(TokenKind.VerbatimStringLiteral)
+            || Accept(TokenKind.HexIntegerLiteral)
+            || Accept(TokenKind.BinaryLiteral)
         )
         {
             result = new Literal(GetSpan(accepted), accepted.Text);
@@ -1644,9 +1647,12 @@ internal class GmlParser
     private bool PropertyAssignment(out GmlSyntaxNode result)
     {
         var start = token;
-        GmlSyntaxNode name = GmlSyntaxNode.Empty;
+        GmlSyntaxNode name;
+        GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
 
-        if (AcceptAny(TokenKind.Identifier, TokenKind.Constructor, TokenKind.Noone))
+        if (
+            Accept(TokenKind.Identifier) || Accept(TokenKind.Constructor) || Accept(TokenKind.Noone)
+        )
         {
             name = new Identifier(GetSpan(accepted), accepted.Text);
         }
@@ -1660,8 +1666,10 @@ internal class GmlParser
             return false;
         }
 
-        Expect(TokenKind.Colon);
-        Expect(Expression(out var initializer));
+        if (Accept(TokenKind.Colon))
+        {
+            Expect(Expression(out initializer));
+        }
 
         result = new StructProperty(GetSpan(start, accepted), name, initializer);
 

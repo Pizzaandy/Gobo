@@ -6,12 +6,22 @@ internal class CommentMapper
 {
     public SourceText SourceText { get; set; }
 
-    public List<CommentGroup> CommentGroups { get; set; }
+    public List<CommentGroup> CommentGroups { get; set; } = new();
 
-    public CommentMapper(SourceText sourceText, List<CommentGroup> commentGroups)
+    public CommentMapper(SourceText sourceText, List<Token[]> triviaGroups)
     {
         SourceText = sourceText;
-        CommentGroups = commentGroups;
+        foreach (var triviaGroup in triviaGroups)
+        {
+            if (
+                triviaGroup.Any(
+                    t => t.Kind is TokenKind.SingleLineComment or TokenKind.MultiLineComment
+                )
+            )
+            {
+                CommentGroups.AddRange(CreateCommentGroups(triviaGroup));
+            }
+        }
     }
 
     public GmlSyntaxNode AttachComments(GmlSyntaxNode ast)
@@ -103,6 +113,46 @@ internal class CommentMapper
         return ast;
     }
 
+    private static List<CommentGroup> CreateCommentGroups(Token[] triviaTokens)
+    {
+        var result = new List<CommentGroup>();
+        var currentGroup = new List<Token>();
+        int lineBreakCount = 0;
+        CommentGroup? lastGroup = null;
+
+        void AcceptCommentGroup()
+        {
+            if (currentGroup.Count == 0)
+            {
+                return;
+            }
+
+            var newGroup = new CommentGroup(currentGroup.ToArray());
+            result.Add(newGroup);
+
+            currentGroup.Clear();
+            lastGroup = newGroup;
+            lineBreakCount = 0;
+        }
+
+        foreach (var token in triviaTokens)
+        {
+            if (token.Kind is TokenKind.LineBreak)
+            {
+                AcceptCommentGroup();
+                lineBreakCount++;
+            }
+            else if (token.Kind is TokenKind.SingleLineComment or TokenKind.MultiLineComment)
+            {
+                currentGroup.Add(token);
+            }
+        }
+
+        AcceptCommentGroup();
+
+        return result;
+    }
+
     /// <summary>
     /// Determine whether a remaining comment group should be attached to the preceding or following node.
     /// </summary>
@@ -110,7 +160,7 @@ internal class CommentMapper
     {
         // Check if all tokens between the comment and followingNode are whitespace or parentheses
 
-        var whitespaceBetween = SourceText.GetSpan(comment.Span.End, followingNode.Span.Start);
+        var whitespaceBetween = SourceText.ReadSpan(comment.Span.End, followingNode.Span.Start);
 
         foreach (var character in whitespaceBetween)
         {

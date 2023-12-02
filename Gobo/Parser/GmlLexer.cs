@@ -1,4 +1,6 @@
-﻿namespace Gobo.Parser;
+﻿using System.Runtime.CompilerServices;
+
+namespace Gobo.Parser;
 
 internal class GmlLexer
 {
@@ -10,10 +12,9 @@ internal class GmlLexer
     }
 
     public bool HitEof { get; private set; } = false;
-    public TextReader Reader { get; private set; }
     public LexerMode Mode { get; set; } = LexerMode.Default;
 
-    private BufferedTextReader reader;
+    private readonly string text;
     private int lineNumber;
     private int columnNumber;
     private int startIndex;
@@ -24,10 +25,9 @@ internal class GmlLexer
 
     private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
 
-    public GmlLexer(TextReader reader, int tabWidth = 4)
+    public GmlLexer(string text, int tabWidth = 4)
     {
-        Reader = reader;
-        this.reader = new BufferedTextReader(reader, bufferSize: 3);
+        this.text = text;
         this.tabWidth = tabWidth;
         index = 0;
     }
@@ -596,21 +596,27 @@ internal class GmlLexer
         return false;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int Peek(int amount = 1)
     {
-        return reader.LookAhead(amount);
+        var targetIndex = index + amount - 1;
+        if (targetIndex >= text.Length)
+        {
+            return -1;
+        }
+        return text[targetIndex];
     }
 
     private void Advance()
     {
-        character = reader.Read();
-
-        if (character == -1)
+        if (index >= text.Length)
         {
             HitEof = true;
+            character = -1;
             return;
         }
 
+        character = text[index];
         index++;
 
         currentToken.Add((char)character);

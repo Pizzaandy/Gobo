@@ -29,7 +29,7 @@ internal enum FormatCommandType
 /// </summary>
 internal class CommentGroup
 {
-    public string Text => string.Concat(Tokens.Select(t => t.Text));
+    public string Text => string.Concat(CommentTokens.Select(t => t.Text));
 
     public int Start => Span.Start;
     public int End => Span.End;
@@ -37,18 +37,12 @@ internal class CommentGroup
     [JsonIgnore]
     public string Id { get; init; }
 
-    /// <summary>
-    /// Whether this comment group was ignored during formatting.
-    /// </summary>
-    [JsonIgnore]
-    public bool PrintedRaw = false;
-
     public CommentType Type { get; set; }
 
     public CommentPlacement Placement { get; set; }
 
     [JsonIgnore]
-    public List<Token> Tokens { get; init; }
+    public Token[] CommentTokens { get; init; }
 
     [JsonIgnore]
     public TextSpan Span { get; set; }
@@ -62,6 +56,12 @@ internal class CommentGroup
     [JsonIgnore]
     public GmlSyntaxNode? FollowingNode { get; set; }
 
+    /// <summary>
+    /// Whether this comment group was ignored during formatting.
+    /// </summary>
+    [JsonIgnore]
+    public bool PrintedRaw = false;
+
     [JsonIgnore]
     public FormatCommandType FormatCommand { get; init; }
 
@@ -72,18 +72,16 @@ internal class CommentGroup
 
     private static readonly string[] newlines = new string[] { "\r\n", "\n" };
 
-    public CommentGroup(List<Token> tokens, TextSpan span)
+    public CommentGroup(Token[] commentTokens)
     {
-        Tokens = tokens;
-        Span = span;
-
+        CommentTokens = commentTokens;
+        Span = new TextSpan(commentTokens[0].StartIndex, commentTokens[^1].EndIndex);
         Id = Guid.NewGuid().ToString();
 
-        for (var i = tokens.Count - 1; i >= 0; i--)
+        for (var i = commentTokens.Length - 1; i >= 0; i--)
         {
-            var token = tokens[i];
-
-            if (token.Kind == TokenKind.SingleLineComment)
+            var token = commentTokens[i];
+            if (token.Kind is TokenKind.SingleLineComment)
             {
                 endsWithSingleLineComment = true;
 
@@ -104,7 +102,7 @@ internal class CommentGroup
     {
         var parts = new List<Doc>();
 
-        foreach (var token in Tokens)
+        foreach (var token in CommentTokens)
         {
             if (token.Kind is TokenKind.SingleLineComment)
             {
@@ -113,7 +111,7 @@ internal class CommentGroup
             else if (token.Kind == TokenKind.MultiLineComment)
             {
                 parts.Add(PrintMultiLineComment(token.Text));
-                if (token.Kind != Tokens.Last().Kind)
+                if (token.Kind != CommentTokens[^1].Kind)
                 {
                     parts.Add(" ");
                 }
@@ -190,11 +188,12 @@ internal class CommentGroup
         }
         else
         {
+            var first = groups.First();
             int leadingLineBreakCount = ctx.SourceText.GetLineBreaksToLeft(groups.First().Span);
 
             if (leadingLineBreakCount == 0)
             {
-                Doc space = groups.First().PrintedAsEndOfLine ? Doc.Null : " ";
+                Doc space = first.PrintedAsEndOfLine ? Doc.Null : " ";
                 return Doc.Concat(space, printedGroups);
             }
 
@@ -211,24 +210,6 @@ internal class CommentGroup
 
     public static Doc PrintSingleLineComment(string text)
     {
-        for (var i = 0; i < Math.Min(4, text.Length); i++)
-        {
-            var character = text[i];
-
-            if (character == '/')
-            {
-                continue;
-            }
-            else if (char.IsLetter(character) || character == '@')
-            {
-                return text[..i] + " " + text[i..];
-            }
-            else
-            {
-                break;
-            }
-        }
-
         return text;
     }
 
@@ -242,7 +223,7 @@ internal class CommentGroup
     {
         return string.Join(
             '\n',
-            $"Text: {string.Concat(Tokens.Select(t => t.Text))}",
+            $"Text: {string.Concat(CommentTokens.Select(t => t.Text))}",
             $"Type: {Type}",
             $"Placement: {Placement}",
             $"Range: {Span}",

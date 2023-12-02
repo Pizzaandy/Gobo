@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
-using Gobo.Parser;
+﻿using Gobo.Parser;
 using Gobo.Printer.DocPrinter;
 using Gobo.SyntaxNodes;
+using System.Diagnostics;
 
 namespace Gobo;
 
@@ -67,7 +67,7 @@ public static partial class GmlFormatter
         var parseResult = new GmlParser(code).Parse();
 
         var sourceText = new SourceText(code);
-        new CommentMapper(sourceText, parseResult.CommentGroups).AttachComments(parseResult.Ast);
+        new CommentMapper(sourceText, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
 
         if (getDebugInfo)
         {

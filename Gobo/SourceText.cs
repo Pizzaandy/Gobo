@@ -14,12 +14,12 @@ internal class SourceText
         FilePath = filePath;
     }
 
-    public string GetSpan(TextSpan span)
+    public string ReadSpan(TextSpan span)
     {
         return Text.Substring(span.Start, span.Length);
     }
 
-    public string GetSpan(int start, int end)
+    public string ReadSpan(int start, int end)
     {
         return Text[start..end];
     }
