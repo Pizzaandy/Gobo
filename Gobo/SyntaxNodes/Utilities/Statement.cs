@@ -130,6 +130,7 @@ internal static class Statement
                 or ThrowStatement
                 or GlobalVariableStatement
                 or DeleteStatement
-                or UnaryExpression;
+                or UnaryExpression
+                or Identifier;
     }
 }
