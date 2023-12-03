@@ -1,0 +1,11 @@
+#macro foo bar
+#macro identifier !@&$()$^__()*#%$ #define #macro #region #endregion
+#region
+#region foo
+#endregion foo
+
+// leading
+#macro HAS_LINE_CONTINUATION  ++_glyph_count; \//a comment
+                               _glyph_prev_prev = _glyph_prev; \//another comment
+                               _glyph_prev = _glyph_write;
+                               // trailing

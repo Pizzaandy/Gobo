@@ -35,7 +35,7 @@ internal class GmlParser
     public List<GmlSyntaxError> Errors { get; private set; } = new();
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
-    public bool Strict { get; set; } = true;
+    public bool Strict { get; set; } = false;
 
     private readonly GmlLexer lexer;
     private Token token;
@@ -476,8 +476,10 @@ internal class GmlParser
             {
                 if (Strict)
                 {
-                    AddError($"unexpected expression");
+                    AddDefaultSyntaxError();
                 }
+                result = left;
+                return true;
             }
 
             var assignmentOperator = accepted.Text;
@@ -630,6 +632,10 @@ internal class GmlParser
             if (SwitchCase(out var switchCase))
             {
                 cases.Add(switchCase);
+            }
+            else if (RegionStatement(out var regionStatement))
+            {
+                cases.Add(regionStatement);
             }
             else
             {
@@ -923,20 +929,37 @@ internal class GmlParser
 
         while (!HitEOF)
         {
-            if (expectDelimiter)
-            {
-                Expect(TokenKind.Comma);
-            }
-            else
-            {
-                Expect(EnumMember(out var enumMember));
-                enumMembers.Add(enumMember);
-            }
-            expectDelimiter = !expectDelimiter;
-
             if (Accept(TokenKind.CloseBrace))
             {
                 break;
+            }
+
+            if (expectDelimiter)
+            {
+                if (RegionStatement(out var regionStatement))
+                {
+                    enumMembers.Add(regionStatement);
+                    continue;
+                }
+                Expect(TokenKind.Comma);
+                expectDelimiter = false;
+            }
+            else
+            {
+                if (RegionStatement(out var regionStatement))
+                {
+                    enumMembers.Add(regionStatement);
+                    continue;
+                }
+                else if (EnumMember(out var enumMember))
+                {
+                    enumMembers.Add(enumMember);
+                    expectDelimiter = true;
+                }
+                else
+                {
+                    AddDefaultSyntaxError();
+                }
             }
         }
 

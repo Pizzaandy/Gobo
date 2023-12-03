@@ -57,6 +57,8 @@ internal class RightHandSide
     {
         return rightNode switch
         {
+            Literal => Layout.BasicConcatWithSpace,
+            BinaryExpression => Layout.BreakAfterOperator,
             _ => Layout.Fluid
         };
     }

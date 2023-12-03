@@ -1,0 +1,191 @@
+
+var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
+
+var someLongVariableName =
+    "a long string with just concatenation"
+    + "will break this way"
+    + "because of reasons such as the fact it is too long";
+
+var someLongVariableName =
+    "a really loooooooooooooooong string"
+    + someMethodCall("with long args")
+    + "really long string";
+
+var samePrecedenceAligns =
+    one_________________________________
+    + two_______________________________
+    - three_____________________________
+    + four______________________________;
+
+var coalesceIsSpecial =
+    someValue_________________________
+    ?? someOtherValue_______________________
+    ?? someOtherValue_______________________;
+
+coalesceIsSpecial ??=
+    someValue_________________________
+    ?? someOtherValue_______________________
+    ?? someOtherValue_______________________;
+
+CallSomeLongMethodWithStringConcatenationThatShouldNotBreak(
+    csharpDirectory + ".generated.cs",
+    output.ToString()
+);
+
+var commentsDontBreakBinary =
+    // shouldn't break next line
+    true || false;
+
+var commentsDontBreakBinary =
+    // shouldn't break next line
+    // shouldn't break next line
+    true || false;
+
+var conditionalIndentation = someBoolean
+    ? someLongValue____________________________________
+        + someLongValue____________________________________
+    : someLongValue____________________________________
+        + someLongValue____________________________________;
+
+var someValue =
+    value1__________________ == value2_________________
+    != (value3_______________________ == value4___________________);
+
+if (
+    one == two
+    || someValue_______________
+        == thisWillIndent_______________________________________________________________
+) { }
+
+while (
+    one == two
+    || someValue_______________
+        == thisWillIndent_______________________________________________________________
+) { }
+
+switch (
+    one == two
+    || someValue_______________
+        == thisWillIndent_______________________________________________________________
+) { }
+
+do
+{
+    CallSomething();
+} until (
+    one == two
+    || someValue_______________
+        == thisWillIndent_______________________________________________________________
+);
+
+CallMethod(
+    "shouldIndentToMakeItClearWhereParametersAre"
+        + "someLongString_________________________________",
+    "SecondParameter"
+);
+
+var someVariable =
+    CallMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    )
+    && CallMethod() == someValue;
+
+var someValue =
+    someLongThing___________________________.someLongThing_____________ ?? someOtherThing;
+
+if (
+    one - two == three
+    || one + two == three
+    || one * two == three
+    || one / two == three
+    || one % two == three
+    || one != three
+    || one < two
+    || one > two
+    || one <= two
+    || one >= two
+    || one - two > three
+    || someLongThing - someOtherLongThing__________________________________
+        > anotherLongThing
+) { }
+
+if (
+    CallSomeMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    ) == 0
+) { }
+
+if (
+    someValue
+    && CallSomeMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    ) == 0
+) { }
+
+if (
+    CallSomeMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    ) == 0
+    && someValue
+) { }
+
+if (
+    CallMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    )
+    && CallMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    )
+) { }
+
+if (
+    CallMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    ) || CallMethod(shortValue, "shortValue")
+) { }
+
+if (
+    CallMethod(
+        someParameter_____________________________________,
+        someParameter_____________________________________
+    )
+    || CallMethod(shortValue, "shortValue")
+    || CallMethod(shortValue1, "shortValue1")
+) { }
+
+if (
+    CallSomeMethod(someParameter)
+    == someLongerValue_______________________________________________________________
+) { }
+
+return someValue != someOtherValue
+    && someLongValue_____________________ == someOtherLongValue_____________________;
+
+var someValue =
+    CallSomething(
+        someLongValue__________________________________________,
+        someLongValue__________________________________________
+    ) == someOtherValue;
+
+var coalesce =
+    CallSomething(
+        someLongValue__________________________________________,
+        someLongValue__________________________________________
+    ) ?? someOtherValue;
+
+UglyButConsistentWithPrettier(
+    someValue
+        == someLongThing__________________________________________________________________
+        || someOtherValue
+            == someOtherLongThing________________________________________________,
+    secondParameter
+);
+
+var x = one >> two;

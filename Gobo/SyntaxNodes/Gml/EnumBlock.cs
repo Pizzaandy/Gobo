@@ -1,5 +1,4 @@
 ﻿using Gobo.Printer.DocTypes;
-using Gobo.SyntaxNodes.PrintHelpers;
 
 namespace Gobo.SyntaxNodes.Gml;
 
@@ -15,14 +14,33 @@ internal sealed class EnumBlock : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return DelimitedList.PrintInBrackets(
-            ctx,
-            "{",
-            this,
-            "}",
-            ",",
-            allowTrailingSeparator: true,
-            forceBreak: true
-        );
+        if (Children.Count == 0)
+        {
+            return Block.EmptyBlock;
+        }
+
+        var parts = new List<Doc>();
+
+        for (var i = 0; i < Children.Count; i++)
+        {
+            var member = Children[i];
+
+            if (member is EnumMember)
+            {
+                parts.Add(member.Print(ctx));
+                parts.Add(",");
+            }
+            if (member is RegionStatement)
+            {
+                parts.Add(member.Print(ctx));
+            }
+
+            if (i != Children.Count - 1)
+            {
+                parts.Add(Doc.HardLine);
+            }
+        }
+
+        return Doc.Concat("{", Doc.Indent(Doc.HardLine, Doc.Concat(parts)), Doc.HardLine, "}");
     }
 }

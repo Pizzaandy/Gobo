@@ -75,7 +75,9 @@ internal sealed class BinaryExpression : GmlSyntaxNode
             && ShouldFlatten(binaryExpression.Operator, leftBinary.Operator)
         )
         {
+            parts.Add(leftBinary.PrintLeadingComments(ctx));
             parts.AddRange(PrintBinaryExpression(leftBinary, ctx));
+            parts.Add(leftBinary.PrintTrailingComments(ctx));
         }
         else
         {

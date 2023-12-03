@@ -22,6 +22,6 @@ internal sealed class MacroDeclaration : GmlSyntaxNode
         }
 
         var text = ctx.SourceText.ReadSpan(Span);
-        return text.TrimEnd();
+        return text.ReplaceLineEndings("\n").TrimEnd();
     }
 }

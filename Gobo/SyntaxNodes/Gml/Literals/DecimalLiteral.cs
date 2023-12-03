@@ -13,7 +13,12 @@ namespace Gobo.SyntaxNodes.Gml.Literals
 
             if (trimmed[0] == '.')
             {
-                return "0" + trimmed;
+                trimmed = "0" + trimmed;
+            }
+
+            if (trimmed.EndsWith('.'))
+            {
+                trimmed += "0";
             }
 
             return trimmed;

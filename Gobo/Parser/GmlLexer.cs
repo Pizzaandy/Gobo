@@ -421,9 +421,8 @@ internal class GmlLexer
                         Advance();
                     }
 
-                    if (Peek(1) == '.' && IsDigit(Peek(2)))
+                    if (Peek() == '.')
                     {
-                        Advance();
                         Advance();
                         // Underscores are only allowed before the '.'
                         while (IsDigit(Peek()) && !HitEof)

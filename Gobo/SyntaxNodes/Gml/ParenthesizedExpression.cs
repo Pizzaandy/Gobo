@@ -15,7 +15,7 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
     public override Doc PrintNode(PrintContext ctx)
     {
         // Remove redundant parentheses
-        if (Parent is ParenthesizedExpression or AssignmentExpression or VariableDeclarator)
+        if (Parent is ParenthesizedExpression)
         {
             return Expression.Print(ctx);
         }
