@@ -1087,13 +1087,8 @@ internal class GmlParser
         }
         else if (Accept(TokenKind.New))
         {
-            GmlSyntaxNode id = GmlSyntaxNode.Empty;
-            if (Identifier(out var constructorName))
-            {
-                id = constructorName;
-            }
-            Expect(ArgumentList(out var arguments));
-            result = new NewExpression(GetSpan(start, accepted), id, arguments);
+            Expect(PrimaryExpression(out var newable, acceptUnaryOperators: false));
+            result = new NewExpression(GetSpan(start, accepted), newable);
         }
         else if (Accept(TokenKind.OpenParen))
         {

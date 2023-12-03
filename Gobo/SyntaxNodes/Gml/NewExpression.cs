@@ -1,27 +1,19 @@
 ﻿using Gobo.Printer.DocTypes;
-using Gobo.SyntaxNodes.PrintHelpers;
 
 namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class NewExpression : GmlSyntaxNode
 {
-    public GmlSyntaxNode Name { get; set; }
-    public GmlSyntaxNode Arguments { get; set; }
+    public GmlSyntaxNode Argument { get; set; }
 
-    public NewExpression(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode arguments)
+    public NewExpression(TextSpan span, GmlSyntaxNode argument)
         : base(span)
     {
-        Name = AsChild(name);
-        Arguments = AsChild(arguments);
+        Argument = AsChild(argument);
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return Doc.Concat(
-            "new",
-            Name.IsEmpty ? Doc.Null : " ",
-            Name.Print(ctx),
-            DelimitedList.PrintInBrackets(ctx, "(", Arguments, ")", ",")
-        );
+        return Doc.Concat("new", Argument is ArgumentList ? Doc.Null : " ", Argument.Print(ctx));
     }
 }

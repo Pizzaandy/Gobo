@@ -30,6 +30,7 @@ internal class GmlLexer
         this.text = text;
         this.tabWidth = tabWidth;
         index = 0;
+        lineNumber = 1;
     }
 
     public Token NextToken()
