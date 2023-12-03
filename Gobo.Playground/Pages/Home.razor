@@ -78,6 +78,8 @@ call()";
         if (firstRender)
         {
             await inputEditor.SetText(_initialText);
+            await inputEditor.SetWidth(_formatOptions.Width);
+            await outputEditor.SetWidth(_formatOptions.Width);
             await Format();
         }
     }
