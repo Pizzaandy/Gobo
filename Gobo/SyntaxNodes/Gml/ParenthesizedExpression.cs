@@ -1,5 +1,4 @@
 ﻿using Gobo.Printer.DocTypes;
-using Gobo.SyntaxNodes.Gml.Literals;
 
 namespace Gobo.SyntaxNodes.Gml;
 
@@ -23,7 +22,8 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
                 or RepeatStatement
                 or TryStatement
                 or CatchProduction
-                or SwitchStatement;
+                or SwitchStatement
+                or ConditionalExpression;
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -47,7 +47,7 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
         }
 
         // Remove parens from simple expressions like: (123)
-        if (Expression is Literal)
+        if (!(Expression is BinaryExpression or FunctionDeclaration or ConditionalExpression))
         {
             return Expression.Print(ctx);
         }
