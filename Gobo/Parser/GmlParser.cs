@@ -7,7 +7,6 @@ namespace Gobo.Parser;
 internal struct GmlParseResult
 {
     public GmlSyntaxNode Ast;
-    public List<GmlSyntaxError> Errors;
     public List<Token[]> TriviaGroups;
 }
 
@@ -32,7 +31,6 @@ internal class GmlParser
     public Token CurrentToken => token;
 
     public List<Token[]> TriviaGroups { get; private set; } = new();
-    public List<GmlSyntaxError> Errors { get; private set; } = new();
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
     public bool Strict { get; set; } = false;
@@ -124,12 +122,7 @@ internal class GmlParser
     public GmlParseResult Parse()
     {
         Document(out var ast);
-        return new GmlParseResult()
-        {
-            Ast = ast,
-            TriviaGroups = TriviaGroups,
-            Errors = Errors
-        };
+        return new GmlParseResult() { Ast = ast, TriviaGroups = TriviaGroups };
     }
 
     private void NextToken()
@@ -164,7 +157,7 @@ internal class GmlParser
     {
         if (!Accept(kind, skipWhitespace))
         {
-            AddDefaultSyntaxError();
+            ThrowExpected(kind);
         }
     }
 
@@ -174,13 +167,42 @@ internal class GmlParser
         {
             if (errorMessage is not null)
             {
-                AddError(errorMessage);
+                var symbolText = token.Kind is TokenKind.Eof ? "end of file" : $"'{token.Text}'";
+                var message = $"unexpected {symbolText} {errorMessage}";
+                ThrowParseError(message);
             }
             else
             {
-                AddDefaultSyntaxError();
+                ThrowDefaultSyntaxError();
             }
         }
+    }
+
+    private void ThrowParseError(string message)
+    {
+        var finalMessage = $"Syntax error at line {token.Line}, column {token.Column}:\n{message}";
+        throw new GmlSyntaxErrorException(finalMessage);
+    }
+
+    private void ThrowUnexpected(Token token)
+    {
+        var symbolText = token.Kind is TokenKind.Eof ? "end of file" : $"'{token.Text}'";
+        var offendingSymbolMessage = $"unexpected {symbolText}";
+        ThrowParseError(offendingSymbolMessage);
+    }
+
+    private void ThrowExpected(TokenKind kind)
+    {
+        var symbolText = token.Kind is TokenKind.Eof ? "end of file" : $"'{token.Text}'";
+        var verb = token.Kind is TokenKind.Eof ? "reached" : "got";
+        var offendingSymbolMessage =
+            $"{verb} {symbolText}, expected {Token.GetSyntaxErrorSymbol(kind)}";
+        ThrowParseError(offendingSymbolMessage);
+    }
+
+    private void ThrowDefaultSyntaxError()
+    {
+        ThrowUnexpected(CurrentToken);
     }
 
     private bool AcceptAny(TokenKind[] types)
@@ -244,31 +266,6 @@ internal class GmlParser
         currentTriviaGroup.Clear();
     }
 
-    private void AddError(string message)
-    {
-        var positionMessage = $"Syntax error at line {token.Line}, column {token.Column}:\n";
-        Errors.Add(new GmlSyntaxError(positionMessage + message));
-        throw new GmlSyntaxErrorException(Errors.Last().Message);
-    }
-
-    private void ThrowUnexpected(Token token)
-    {
-        var symbolText = token.Kind is TokenKind.Eof ? "end of file" : $"'{token.Text}'";
-        var offendingSymbolMessage = $"unexpected {symbolText}";
-        AddError(offendingSymbolMessage);
-    }
-
-    private void ThrowExpected(string symbol)
-    {
-        var offendingSymbolMessage = $"expected '{symbol}'";
-        AddError(offendingSymbolMessage);
-    }
-
-    private void AddDefaultSyntaxError()
-    {
-        ThrowUnexpected(CurrentToken);
-    }
-
     private void Document(out GmlSyntaxNode node)
     {
         var start = token;
@@ -277,7 +274,7 @@ internal class GmlParser
 
         if (!HitEOF)
         {
-            AddDefaultSyntaxError();
+            ThrowDefaultSyntaxError();
         }
 
         node = new Document(GetSpan(start, accepted), statements);
@@ -441,7 +438,7 @@ internal class GmlParser
 
             if (!VariableDeclarator(out var firstDeclaration))
             {
-                AddDefaultSyntaxError();
+                ThrowDefaultSyntaxError();
                 return false;
             }
 
@@ -476,7 +473,7 @@ internal class GmlParser
             {
                 if (Strict)
                 {
-                    AddDefaultSyntaxError();
+                    ThrowDefaultSyntaxError();
                 }
                 result = left;
                 return true;
@@ -958,14 +955,14 @@ internal class GmlParser
                 }
                 else
                 {
-                    AddDefaultSyntaxError();
+                    ThrowDefaultSyntaxError();
                 }
             }
         }
 
         if (accepted.Kind != TokenKind.CloseBrace)
         {
-            ThrowExpected("}");
+            ThrowExpected(TokenKind.CloseBrace);
         }
 
         var enumBlock = new EnumBlock(GetSpan(startBlock, token), enumMembers);
@@ -1066,7 +1063,7 @@ internal class GmlParser
                     }
                     else
                     {
-                        AddDefaultSyntaxError();
+                        ThrowDefaultSyntaxError();
                     }
                 }
 
@@ -1322,7 +1319,7 @@ internal class GmlParser
             }
             else
             {
-                AddDefaultSyntaxError();
+                ThrowDefaultSyntaxError();
                 result = GmlSyntaxNode.Empty;
                 return false;
             }
@@ -1374,6 +1371,7 @@ internal class GmlParser
 
         var arguments = new List<GmlSyntaxNode>();
         bool previousChildWasPunctuator = true;
+        bool endedOnClosingDelimiter = false;
 
         while (!HitEOF)
         {
@@ -1381,7 +1379,7 @@ internal class GmlParser
             {
                 if (!previousChildWasPunctuator)
                 {
-                    ThrowExpected(",");
+                    ThrowExpected(TokenKind.Comma);
                     result = GmlSyntaxNode.Empty;
                     return false;
                 }
@@ -1403,14 +1401,20 @@ internal class GmlParser
                 {
                     arguments.Add(new UndefinedArgument(token.StartIndex - 1));
                 }
+                endedOnClosingDelimiter = true;
                 break;
             }
             else
             {
-                AddDefaultSyntaxError();
+                ThrowDefaultSyntaxError();
                 result = GmlSyntaxNode.Empty;
                 return false;
             }
+        }
+
+        if (!endedOnClosingDelimiter)
+        {
+            ThrowExpected(TokenKind.CloseParen);
         }
 
         result = new ArgumentList(GetSpan(start, accepted), arguments);
@@ -1532,11 +1536,11 @@ internal class GmlParser
                 }
                 else
                 {
-                    ThrowUnexpected(token);
+                    ThrowDefaultSyntaxError();
                 }
             }
 
-            AddDefaultSyntaxError();
+            ThrowDefaultSyntaxError();
             result = GmlSyntaxNode.Empty;
             return false;
         }
@@ -1585,6 +1589,8 @@ internal class GmlParser
         var elements = new List<GmlSyntaxNode>();
 
         bool expectDelimiter = false;
+        bool endedOnClosingDelimiter = false;
+
         while (!HitEOF)
         {
             if (expectDelimiter)
@@ -1600,13 +1606,14 @@ internal class GmlParser
 
             if (Accept(TokenKind.CloseBracket))
             {
+                endedOnClosingDelimiter = true;
                 break;
             }
         }
 
-        if (accepted.Kind != TokenKind.CloseBracket)
+        if (!endedOnClosingDelimiter)
         {
-            ThrowExpected("]");
+            ThrowExpected(TokenKind.CloseBrace);
         }
 
         result = new ArrayExpression(GetSpan(start, accepted), elements);
@@ -1630,6 +1637,7 @@ internal class GmlParser
 
         var properties = new List<GmlSyntaxNode>();
 
+        bool endedOnClosingDelimiter = false;
         bool expectDelimiter = false;
         while (!HitEOF)
         {
@@ -1646,13 +1654,14 @@ internal class GmlParser
 
             if (Accept(TokenKind.CloseBrace))
             {
+                endedOnClosingDelimiter = true;
                 break;
             }
         }
 
-        if (accepted.Kind != TokenKind.CloseBrace)
+        if (!endedOnClosingDelimiter)
         {
-            ThrowExpected("}");
+            ThrowExpected(TokenKind.CloseBrace);
         }
 
         result = new StructExpression(GetSpan(start, accepted), properties);

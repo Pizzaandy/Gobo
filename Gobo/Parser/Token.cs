@@ -9,6 +9,25 @@ internal readonly struct Token
     public int StartIndex { get; init; }
     public int EndIndex { get; init; }
     public string? ErrorMessage { get; init; }
+
+    public static string GetSyntaxErrorSymbol(TokenKind kind)
+    {
+        return kind switch
+        {
+            TokenKind.OpenBrace => "'{'",
+            TokenKind.CloseBrace => "'}'",
+            TokenKind.CloseBracket => "']'",
+            TokenKind.OpenParen => "'('",
+            TokenKind.CloseParen => "')'",
+            TokenKind.Comma => "','",
+            TokenKind.Identifier => "an identifier",
+            TokenKind.Constructor => "'constructor'",
+            TokenKind.Until => "'until'",
+            TokenKind.SemiColon => "';'",
+            TokenKind.Colon => "':'",
+            _ => "unknown token"
+        };
+    }
 }
 
 internal enum TokenKind
