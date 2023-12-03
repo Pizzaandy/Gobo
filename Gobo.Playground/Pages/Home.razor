@@ -140,6 +140,7 @@ call()";
 
         _formatOptions.Width = Math.Max(number, 0);
 
+        await inputEditor.SetWidth(_formatOptions.Width);
         await outputEditor.SetWidth(_formatOptions.Width);
 
         await Format();
