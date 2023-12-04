@@ -9,7 +9,7 @@ namespace Gobo.SyntaxNodes.Gml.Literals
         public VerbatimStringLiteral(TextSpan span, string text)
             : base(span, text)
         {
-            Text = text[2..^1];
+            Text = text[2..^1].ReplaceLineEndings("\n");
             QuoteCharacter = text[1];
         }
 

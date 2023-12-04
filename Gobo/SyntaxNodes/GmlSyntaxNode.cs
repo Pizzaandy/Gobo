@@ -96,7 +96,7 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     public Doc PrintRaw(PrintContext ctx)
     {
         Children.ForEach(child => child.MarkCommentsAsPrinted());
-        return ctx.SourceText.ReadSpan(Span);
+        return ctx.SourceText.ReadSpan(Span).ReplaceLineEndings("\n");
     }
 
     public List<Doc> PrintChildren(PrintContext ctx)

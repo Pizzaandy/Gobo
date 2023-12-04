@@ -11,7 +11,7 @@ internal sealed class MacroDeclaration : GmlSyntaxNode
         : base(span)
     {
         Id = id;
-        Body = body;
+        Body = body.ReplaceLineEndings("\n");
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -21,7 +21,11 @@ internal sealed class MacroDeclaration : GmlSyntaxNode
             commentGroup.PrintedRaw = true;
         }
 
-        var text = ctx.SourceText.ReadSpan(Span);
-        return text.ReplaceLineEndings("\n").TrimEnd();
+        return Doc.Concat("#macro", " ", Id, " ", Body.TrimEnd());
+    }
+
+    public override int GetHashCode()
+    {
+        return (Id + Body).GetHashCode();
     }
 }
