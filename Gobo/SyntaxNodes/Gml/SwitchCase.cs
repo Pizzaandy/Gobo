@@ -17,7 +17,7 @@ internal sealed class SwitchCase : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        var caseText = Test.IsEmpty ? "default" : $"{"case"} ";
+        var caseText = Test.IsEmpty ? "default" : "case" + " ";
 
         Doc printedStatements = Doc.Null;
 

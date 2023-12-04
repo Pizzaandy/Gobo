@@ -649,19 +649,20 @@ internal class GmlParser
 
     private bool SwitchCase(out GmlSyntaxNode result)
     {
-        var start = token;
         if (Accept(TokenKind.Case))
         {
+            var startToken = accepted;
             Expect(Expression(out var test));
             Expect(TokenKind.Colon);
             var statements = AcceptStatementList();
-            result = new SwitchCase(GetSpan(start, accepted), test, statements);
+            result = new SwitchCase(GetSpan(startToken, accepted), test, statements);
         }
         else if (Accept(TokenKind.Default))
         {
+            var startToken = accepted;
             Expect(TokenKind.Colon);
             var statements = AcceptStatementList();
-            result = new SwitchCase(GetSpan(start, accepted), GmlSyntaxNode.Empty, statements);
+            result = new SwitchCase(GetSpan(startToken, accepted), GmlSyntaxNode.Empty, statements);
         }
         else
         {

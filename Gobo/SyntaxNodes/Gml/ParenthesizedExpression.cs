@@ -72,6 +72,6 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
 
     private static bool ShouldNotBreak(GmlSyntaxNode node)
     {
-        return node is FunctionDeclaration or StructExpression;
+        return node is FunctionDeclaration or StructExpression or ConditionalExpression;
     }
 }
