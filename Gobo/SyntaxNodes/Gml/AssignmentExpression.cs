@@ -19,6 +19,10 @@ internal sealed class AssignmentExpression : GmlSyntaxNode
     )
         : base(span)
     {
+        if (@operator == ":=")
+        {
+            @operator = "=";
+        }
         Operator = @operator;
         Left = AsChild(left);
         Right = AsChild(right);

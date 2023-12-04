@@ -24,6 +24,7 @@ internal sealed class BinaryExpression : GmlSyntaxNode
             "<>" => "!=",
             "mod" => "%",
             "=" => "==",
+            ":=" => "==",
             _ => @operator
         };
 
