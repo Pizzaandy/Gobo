@@ -1,6 +1,6 @@
-using System.Text;
 using Gobo.Printer.DocTypes;
 using Gobo.Printer.Utilities;
+using System.Text;
 
 namespace Gobo.Printer.DocPrinter;
 

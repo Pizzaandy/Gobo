@@ -28,22 +28,35 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
+        // Always unwrap redundant parens
+        if (Parent is ParenthesizedExpression)
+        {
+            return Expression.Print(ctx);
+        }
+
         // Never unwrap parens for control flow arguments
         if (IsControlFlowArgument())
         {
             return PrintInParens(ctx, Expression);
         }
 
-        if (
-            Parent is ParenthesizedExpression
-            || !(Expression is BinaryExpression or FunctionDeclaration or ConditionalExpression)
-        )
+        // Fully unwrap parens when not syntactically meaningful
+        var trueExpression = Expression;
+        while (trueExpression is ParenthesizedExpression parenthesizedExpression)
+        {
+            trueExpression = parenthesizedExpression.Expression;
+        }
+
+        if (!(trueExpression is BinaryExpression or FunctionDeclaration or ConditionalExpression))
         {
             return Expression.Print(ctx);
         }
 
         // Remove parens from awkward unary expressions like: (!(...))
-        if (Expression is UnaryExpression { Argument: ParenthesizedExpression })
+        if (
+            Parent is not BinaryExpression
+            && trueExpression is UnaryExpression { Argument: ParenthesizedExpression }
+        )
         {
             return Expression.Print(ctx);
         }

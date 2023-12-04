@@ -145,7 +145,8 @@ internal class CommentGroup
             return Doc.Null;
         }
 
-        var groupDocs = new List<Doc>() { groups.First().Print(ctx) };
+        var firstGroup = groups.First();
+        var groupDocs = new List<Doc>() { firstGroup.Print(ctx) };
 
         // Add line breaks between comment groups
         foreach (var group in groups.Skip(1))
@@ -188,12 +189,11 @@ internal class CommentGroup
         }
         else
         {
-            var first = groups.First();
-            int leadingLineBreakCount = ctx.SourceText.GetLineBreaksToLeft(groups.First().Span);
+            int leadingLineBreakCount = ctx.SourceText.GetLineBreaksToLeft(firstGroup.Span);
 
             if (leadingLineBreakCount == 0)
             {
-                Doc space = first.PrintedAsEndOfLine ? Doc.Null : " ";
+                Doc space = firstGroup.PrintedAsEndOfLine ? Doc.Null : " ";
                 return Doc.Concat(space, printedGroups);
             }
 
