@@ -1,12 +1,12 @@
-## Gobo: GML Code Formatter
+## Gobo: GML Formatter
 
-[Try out the formatter here!](https://pizzaandy.github.io/Gobo/)
+[Try the formatter here!](https://pizzaandy.github.io/Gobo/)
 
 Gobo is an opinionated formatter for GameMaker Language. It enforces a consistent style by parsing and re-printing your code with its own rules, taking maximum line length into account.
 
-Gobo currently provides a few basic options that affect formatting and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of Prettier.
+By using Gobo, you agree to relinquish control over the nitty-gritty details of formatting. In return, Gobo gives you speed, determinism, and smaller git diffs. End style debates with your team and save mental energy for what's important!
 
-Gobo is currently only available as a CLI tool, but it will eventually be available as an IDE plugin (hopefully!).
+Gobo currently provides one style option (line width) and has no plans to add more. It follows the [Option Philosophy](https://prettier.io/docs/en/option-philosophy.html) of Prettier.
 
 ### Input
 
