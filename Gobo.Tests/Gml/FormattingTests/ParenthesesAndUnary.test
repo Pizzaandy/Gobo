@@ -1,0 +1,13 @@
+foo++
+bar.baz--
+--foo
+--bar
+x = !(!(!(a)))
+y = (((--(+a))++))
+z = (((--(+a))++))()
+
+// '!' should be outside
+cond = (not(condition || bar && (baz)))
+
+// '!' should be inside
+if (not(condition || bar && (+(baz)))) {}

@@ -1,0 +1,13 @@
+foo++;
+bar.baz--;
+--foo;
+--bar;
+x = !(!(!a));
+y = (--(+a))++;
+z = ((--(+a))++)();
+
+// '!' should be outside
+cond = !(condition || bar && baz);
+
+// '!' should be inside
+if (!(condition || bar && +baz)) {}

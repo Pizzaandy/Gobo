@@ -47,15 +47,23 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
             trueExpression = parenthesizedExpression.Expression;
         }
 
-        if (!(trueExpression is BinaryExpression or FunctionDeclaration or ConditionalExpression))
+        if (
+            !(
+                trueExpression
+                is BinaryExpression
+                    or FunctionDeclaration
+                    or ConditionalExpression
+                    or UnaryExpression
+            )
+        )
         {
             return Expression.Print(ctx);
         }
 
         // Remove parens from awkward unary expressions like: (!(...))
         if (
-            Parent is not BinaryExpression
-            && trueExpression is UnaryExpression { Argument: ParenthesizedExpression }
+            trueExpression is UnaryExpression { Argument: ParenthesizedExpression }
+            && !(Parent is UnaryExpression or CallExpression)
         )
         {
             return Expression.Print(ctx);
