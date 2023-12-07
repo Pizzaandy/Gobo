@@ -8,21 +8,40 @@
 
         <h5 class="text-light">Gobo Playground</h5>
 
-        <label for="printWidth" class="text-light">Print width</label>
+        <label for="printWidth" class="text-light pt-3">Print Width</label>
         <input type="number"
-               class="form-control"
+               class="form-control form-control-sm"
                id="printWidth"
                value="@_formatOptions.Width" @oninput="@OnWidthChanged" />
 
-        <div class="form-check pt-3">
+        <div class="form-check pt-2">
             <input type="checkbox"
                    class="form-check-input"
-                   id="showAstCheckbox"
-                   value="@_showAst" @oninput="@OnShowAstChanged" />
-            <label for="showAstCheckbox" class="text-light form-check-label">Show AST</label>
+                   id="useTabs"
+                   value="@_formatOptions.UseTabs" @oninput="@OnUseTabsChange" />
+            <label for="useTabs" class="text-light form-check-label">Use Tabs</label>
         </div>
 
-        <a class="btn btn-secondary mt-auto" href="https://github.com/Pizzaandy/Gobo" target="_blank">
+        @if (!_formatOptions.UseTabs)
+        {
+            <div class="pb-2 pt-1">
+                <label for="tabWidth" class="text-light">Tab Width</label>
+                <input type="number"
+                       class="form-control form-control-sm"
+                       id="tabWidth"
+                       value="@_formatOptions.TabWidth" @oninput="@OnTabWidthChange" />
+            </div>
+        }
+
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   id="showAst"
+                   value="@_showAst" @oninput="@OnShowAstChanged" />
+            <label for="showAst" class="text-light form-check-label">Show AST</label>
+        </div>
+
+        <a class="btn btn-outline-light mt-auto" href="https://github.com/Pizzaandy/Gobo" target="_blank">
             <i class="bi-github"></i> GitHub
         </a>
     </div>
@@ -131,18 +150,31 @@ call()";
 
     async Task OnWidthChanged(ChangeEventArgs args)
     {
-        var value = args?.Value?.ToString();
-
-        if (!int.TryParse(value, out var number))
+        if (!int.TryParse(args?.Value?.ToString(), out var number))
         {
             return;
         }
-
         _formatOptions.Width = Math.Max(number, 0);
 
         await inputEditor.SetWidth(_formatOptions.Width);
         await outputEditor.SetWidth(_formatOptions.Width);
 
+        await Format();
+    }
+
+    async Task OnTabWidthChange(ChangeEventArgs args)
+    {
+        if (!int.TryParse(args?.Value?.ToString(), out var number))
+        {
+            return;
+        }
+        _formatOptions.TabWidth = Math.Max(number, 0);
+        await Format();
+    }
+
+    async Task OnUseTabsChange(ChangeEventArgs args)
+    {
+        _formatOptions.UseTabs = (bool)args.Value;
         await Format();
     }
 

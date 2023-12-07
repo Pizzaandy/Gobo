@@ -1,5 +1,6 @@
 ﻿using DocoptNet;
 using Gobo;
+using Gobo.Cli;
 using System.Diagnostics;
 
 const string usage =
@@ -59,7 +60,11 @@ static async Task<int> Run(IDictionary<string, ArgValue> arguments)
     }
 
     var check = arguments["--check"].IsTrue;
-    Func<string, IDictionary<string, ArgValue>, Task> processFile = check ? CheckFile : FormatFile;
+    Func<string, FormatOptions, IDictionary<string, ArgValue>, Task> processFile = check
+        ? CheckFile
+        : FormatFile;
+
+    FormatOptions options = ConfigFileHandler.FindConfigOrDefault(filePath);
 
     const string GmlExtension = ".gml";
 
@@ -74,7 +79,7 @@ static async Task<int> Run(IDictionary<string, ArgValue> arguments)
         Console.WriteLine(check ? "Checking" : "Formatting" + $" {Path.GetFileName(filePath)}...");
 
         var stopWatch = Stopwatch.StartNew();
-        await processFile(filePath, arguments);
+        await processFile(filePath, options, arguments);
         stopWatch.Stop();
 
         Console.WriteLine($"Done in {stopWatch.ElapsedMilliseconds} ms");
@@ -95,7 +100,7 @@ static async Task<int> Run(IDictionary<string, ArgValue> arguments)
         Console.WriteLine(check ? "Checking" : "Formatting" + " files...");
         var stopWatch = Stopwatch.StartNew();
 
-        await Task.WhenAll(files.Select(file => processFile(file.FullName, arguments)));
+        await Task.WhenAll(files.Select(file => processFile(file.FullName, options, arguments)));
 
         stopWatch.Stop();
 
@@ -108,16 +113,16 @@ static async Task<int> Run(IDictionary<string, ArgValue> arguments)
     return 0;
 }
 
-static async Task FormatFile(string filePath, IDictionary<string, ArgValue> arguments)
+static async Task FormatFile(
+    string filePath,
+    FormatOptions options,
+    IDictionary<string, ArgValue> arguments
+)
 {
     var input = await File.ReadAllTextAsync(filePath);
     FormatResult result;
 
-    var options = new FormatOptions
-    {
-        ValidateOutput = arguments["--fast"].IsFalse,
-        GetDebugInfo = false
-    };
+    options.ValidateOutput = arguments["--fast"].IsFalse;
 
     try
     {
@@ -141,12 +146,14 @@ static async Task FormatFile(string filePath, IDictionary<string, ArgValue> argu
     }
 }
 
-static async Task CheckFile(string filePath, IDictionary<string, ArgValue> arguments)
+static async Task CheckFile(
+    string filePath,
+    FormatOptions options,
+    IDictionary<string, ArgValue> arguments
+)
 {
     var input = await File.ReadAllTextAsync(filePath);
     bool success;
-
-    var options = new FormatOptions { GetDebugInfo = false };
 
     try
     {
