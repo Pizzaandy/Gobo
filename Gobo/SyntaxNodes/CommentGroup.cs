@@ -210,6 +210,26 @@ internal class CommentGroup
 
     public static Doc PrintSingleLineComment(string text)
     {
+        var span = text.AsSpan();
+
+        for (var i = 0; i < Math.Min(4, span.Length); i++)
+        {
+            var character = span[i];
+
+            if (character == '/')
+            {
+                continue;
+            }
+            else if (ShouldAddSpaceBefore(character))
+            {
+                return text[..i] + " " + text[i..];
+            }
+            else
+            {
+                break;
+            }
+        }
+
         return text;
     }
 
@@ -232,5 +252,10 @@ internal class CommentGroup
             $"Following: {FollowingNode?.Kind}",
             $"Id: {Id}\n"
         );
+    }
+
+    private static bool ShouldAddSpaceBefore(int c)
+    {
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '@';
     }
 }
