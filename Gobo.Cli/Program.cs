@@ -19,7 +19,7 @@ Options:
 
 return await Docopt
     .CreateParser(usage)
-    .WithVersion("Gobo 0.2")
+    .WithVersion("Gobo 0.3.0")
     .Parse(args)
     .Match(
         Run,
