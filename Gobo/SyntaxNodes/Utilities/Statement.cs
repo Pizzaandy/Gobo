@@ -116,30 +116,7 @@ internal static class Statement
     {
         var startSpan = node.LeadingComments.Any() ? node.LeadingComments.First().Span : node.Span;
 
-        var start = startSpan.Start - 1;
-        if (start <= 0)
-        {
-            return false;
-        }
-
-        var lineBreakCount = 0;
-
-        for (var index = start; index >= 0; index--)
-        {
-            var character = ctx.SourceText.Text[index];
-            if (character == '\n')
-            {
-                lineBreakCount++;
-            }
-            else if (character == ';')
-            {
-                continue;
-            }
-            else if (!char.IsWhiteSpace(character))
-            {
-                break;
-            }
-        }
+        var lineBreakCount = ctx.SourceText.GetLineBreaksToLeft(startSpan);
 
         return lineBreakCount >= 2;
     }
