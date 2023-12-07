@@ -106,11 +106,11 @@ internal class CommentGroup
         {
             if (token.Kind is TokenKind.SingleLineComment)
             {
-                parts.Add(PrintSingleLineComment(token.Text));
+                parts.Add(PrintSingleLineComment(ctx, token.Text));
             }
             else if (token.Kind == TokenKind.MultiLineComment)
             {
-                parts.Add(PrintMultiLineComment(token.Text));
+                parts.Add(PrintMultiLineComment(ctx, token.Text));
                 if (token.Kind != CommentTokens[^1].Kind)
                 {
                     parts.Add(" ");
@@ -208,8 +208,13 @@ internal class CommentGroup
         return Doc.Concat(parts);
     }
 
-    public static Doc PrintSingleLineComment(string text)
+    public static Doc PrintSingleLineComment(PrintContext ctx, string text)
     {
+        if (!ctx.Options.FormatComments)
+        {
+            return text;
+        }
+
         var span = text.AsSpan();
 
         for (var i = 0; i < Math.Min(4, span.Length); i++)
@@ -222,7 +227,7 @@ internal class CommentGroup
             }
             else if (ShouldAddSpaceBefore(character))
             {
-                return text[..i] + " " + text[i..];
+                return $"{span[..i]} {span[i..]}";
             }
             else
             {
@@ -233,7 +238,7 @@ internal class CommentGroup
         return text;
     }
 
-    public static Doc PrintMultiLineComment(string text)
+    public static Doc PrintMultiLineComment(PrintContext ctx, string text)
     {
         var lines = text.Split(newlines, StringSplitOptions.None).Select(line => (Doc)line);
         return Doc.Join(Doc.LiteralLine, lines);
@@ -254,8 +259,13 @@ internal class CommentGroup
         );
     }
 
+    /// <summary>
+    /// Check whether a character is:
+    /// a) Not whitespace
+    /// b) Not commonly used to indicate a doc comment.
+    /// </summary>
     private static bool ShouldAddSpaceBefore(int c)
     {
-        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '@';
+        return c != ' ' && c != '\t' && c != '!';
     }
 }

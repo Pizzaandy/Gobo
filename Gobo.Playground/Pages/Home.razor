@@ -28,10 +28,17 @@
                 <label for="tabWidth" class="text-light">Tab Width</label>
                 <input type="number"
                        class="form-control form-control-sm"
-                       id="tabWidth"
                        value="@_formatOptions.TabWidth" @oninput="@OnTabWidthChange" />
             </div>
         }
+
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   id="formatComments"
+                   value="@_formatOptions.FormatComments" @oninput="@OnFormatCommentsChange" />
+            <label for="formatComments" class="text-light form-check-label">Format Comments</label>
+        </div>
 
         <div class="form-check">
             <input type="checkbox"
@@ -84,7 +91,8 @@
     bool _showAst = false;
     bool _error;
 
-    const string _initialText = @"x = a and b or c  a=0xFG=1 var var var i := 0
+    const string _initialText = @"//format this please!
+x = a and b or c  a=0xFG=1 var var var i := 0
 do begin
 ;;;;show_debug_message(i)
 ;;;;++constructor
@@ -175,6 +183,12 @@ call()";
     async Task OnUseTabsChange(ChangeEventArgs args)
     {
         _formatOptions.UseTabs = (bool)args.Value;
+        await Format();
+    }
+
+    async Task OnFormatCommentsChange(ChangeEventArgs args)
+    {
+        _formatOptions.FormatComments = (bool)args.Value;
         await Format();
     }
 
