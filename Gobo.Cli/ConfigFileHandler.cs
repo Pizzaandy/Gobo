@@ -33,9 +33,23 @@ public static class ConfigFileHandler
         if (TryFindConfigFile(filePath, out var configPath))
         {
             var json = File.ReadAllText(configPath);
+            FormatOptions result;
 
-            return JsonSerializer.Deserialize(json, FormatOptionsSerializer.Default.FormatOptions)
-                ?? FormatOptions.Default;
+            try
+            {
+                result =
+                    JsonSerializer.Deserialize(json, FormatOptionsSerializer.Default.FormatOptions)
+                    ?? FormatOptions.Default;
+            }
+            catch (JsonException)
+            {
+                Console.Error.WriteLine(
+                    $"[Error] {filePath}\nOptions file could not be parsed. Falling back to default settings."
+                );
+                return FormatOptions.Default;
+            }
+
+            return result;
         }
         else
         {
