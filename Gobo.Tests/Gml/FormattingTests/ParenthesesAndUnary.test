@@ -1,7 +1,13 @@
 foo++
-bar.baz--
---foo
---bar
+bar
+--
+foo
+
+++bar
+
+baz
+--qux
+
 x = !(!(!(a)))
 y = (((--(+a))++))
 z = (((--(+a))++))()

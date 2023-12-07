@@ -153,9 +153,9 @@ internal class GmlParser
         return false;
     }
 
-    private void Expect(TokenKind kind, bool skipWhitespace = true)
+    private void Expect(TokenKind kind, bool skipHiddenTokens = true)
     {
-        if (!Accept(kind, skipWhitespace))
+        if (!Accept(kind, skipHiddenTokens))
         {
             ThrowExpected(kind);
         }
@@ -1032,7 +1032,21 @@ internal class GmlParser
         while (!HitEOF)
         {
             if (
-                acceptUnaryOperators && (Accept(TokenKind.PlusPlus) || Accept(TokenKind.MinusMinus))
+                token.Kind
+                is TokenKind.Whitespace
+                    or TokenKind.SingleLineComment
+                    or TokenKind.MultiLineComment
+            )
+            {
+                NextToken();
+            }
+
+            if (
+                acceptUnaryOperators
+                && (
+                    Accept(TokenKind.PlusPlus, skipHiddenTokens: false)
+                    || Accept(TokenKind.MinusMinus, skipHiddenTokens: false)
+                )
             )
             {
                 var @operator = accepted.Text;

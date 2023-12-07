@@ -65,10 +65,11 @@ internal static class Statement
         var parts = new List<Doc>();
         bool nextStatementNeedsLineBreak = false;
 
-        foreach (var child in statements)
+        for (var i = 0; i < statements.Count; i++)
         {
-            var shouldAddLineBreakFromSource =
-                HasLeadingLineBreak(ctx, child) && child != statements.First();
+            var child = statements[i];
+
+            var shouldAddLineBreakFromSource = i != 0 && HasLeadingEmptyLine(ctx, child);
 
             var isTopLevelFunctionOrMethod = IsTopLevelFunctionOrMethod(child);
 
@@ -107,13 +108,40 @@ internal static class Statement
         return isTopLevelFunction || isMethod;
     }
 
-    public static bool HasLeadingLineBreak(PrintContext ctx, GmlSyntaxNode node)
+    /// <summary>
+    /// Count the number of line breaks preceding the statement.
+    /// Ignore semicolons.
+    /// </summary>
+    public static bool HasLeadingEmptyLine(PrintContext ctx, GmlSyntaxNode node)
     {
         var startSpan = node.LeadingComments.Any() ? node.LeadingComments.First().Span : node.Span;
 
-        var leadingLineBreaks = ctx.SourceText.GetLineBreaksToLeft(startSpan);
+        var start = startSpan.Start - 1;
+        if (start <= 0)
+        {
+            return false;
+        }
 
-        return leadingLineBreaks >= 2;
+        var lineBreakCount = 0;
+
+        for (var index = start; index >= 0; index--)
+        {
+            var character = ctx.SourceText.Text[index];
+            if (character == '\n')
+            {
+                lineBreakCount++;
+            }
+            else if (character == ';')
+            {
+                continue;
+            }
+            else if (!char.IsWhiteSpace(character))
+            {
+                break;
+            }
+        }
+
+        return lineBreakCount >= 2;
     }
 
     private static bool NeedsSemicolon(GmlSyntaxNode node)

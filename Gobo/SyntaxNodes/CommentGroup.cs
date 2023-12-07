@@ -215,11 +215,9 @@ internal class CommentGroup
             return text;
         }
 
-        var span = text.AsSpan();
-
-        for (var i = 0; i < Math.Min(4, span.Length); i++)
+        for (var i = 0; i < Math.Min(4, text.Length); i++)
         {
-            var character = span[i];
+            var character = text[i];
 
             if (character == '/')
             {
@@ -227,7 +225,7 @@ internal class CommentGroup
             }
             else if (ShouldAddSpaceBefore(character))
             {
-                return $"{span[..i]} {span[i..]}";
+                return $"{text[..i]} {text[i..]}";
             }
             else
             {
