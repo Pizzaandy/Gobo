@@ -5,116 +5,116 @@ self.do_something().do_something().do_something();
 longer_identifier.do_something().do_something().do_something();
 
 self.method(
-    some_parameter__________________________________,
-    some_parameter__________________________________
+	some_parameter__________________________________,
+	some_parameter__________________________________
 );
 
 self.some_method(
-    some_other_method(parameter__________________________________________________)
+	some_other_method(parameter__________________________________________________)
 );
 
 var super_long_name____________________________________ =
-    other_name.call_method________________();
+	other_name.call_method________________();
 
 var super_long_name_______________ = other_name____________
-    .call_some_method______________()
-    .call_some_method______________();
+	.call_some_method______________()
+	.call_some_method______________();
 
 var super_long_name_______________ = other_name____________ // c1
-    .get_some_property______________
-    // c2
-    .call_some_method______________()
-    /* comment */
-    .get_some_property______________; // c3
+	.get_some_property______________
+	// c2
+	.call_some_method______________()
+	/* comment */
+	.get_some_property______________; // c3
 
 var some_value = this().should().be().one().line();
 
 return some_condition
-    ? call_method(
-        some_long_parameter____________________________,
-        some_long_parameter____________________________
-    )
-    : something.call_method(
-        some_long_parameter____________________________,
-        some_long_parameter____________________________
-    );
+	? call_method(
+		some_long_parameter____________________________,
+		some_long_parameter____________________________
+	)
+	: something.call_method(
+		some_long_parameter____________________________,
+		some_long_parameter____________________________
+	);
 
 return some_value
-    .call_method(
-        some_long_parameter____________________________,
-        some_long_parameter____________________________
-    )
-    .xyz;
+	.call_method(
+		some_long_parameter____________________________,
+		some_long_parameter____________________________
+	)
+	.xyz;
 
 var some_variable = some_object
-    .property
-    .call_method(
-        something.some_property == some_other_value___________________________________
-    );
+	.property
+	.call_method(
+		something.some_property == some_other_value___________________________________
+	);
 
 // This should not indent
 call_method(
-    first_parameter____________________________,
-    second_parameter___________________________
+	first_parameter____________________________,
+	second_parameter___________________________
 ).call_method(
-    first_parameter____________________________,
-    second_parameter___________________________
+	first_parameter____________________________,
+	second_parameter___________________________
 );
 
 call_method() // trailing comment
-    .call_method(); // <- This should indent
+	.call_method(); // <- This should indent
 
 call_method()
-    // leading comment
-    .call_method(); // <- This should indent
+	// leading comment
+	.call_method(); // <- This should indent
 
 // Last two calls should indent
 call_method(
-    first_parameter____________________________,
-    second_parameter___________________________
+	first_parameter____________________________,
+	second_parameter___________________________
 )
-    .call_method(
-        first_parameter____________________________,
-        second_parameter___________________________
-    )
-    .call_method(
-        first_parameter____________________________,
-        second_parameter___________________________
-    );
+	.call_method(
+		first_parameter____________________________,
+		second_parameter___________________________
+	)
+	.call_method(
+		first_parameter____________________________,
+		second_parameter___________________________
+	);
 
 return some_condition(
-    some_long_parameter____________________________,
-    some_long_parameter____________________________
+	some_long_parameter____________________________,
+	some_long_parameter____________________________
 )
-    /* this comment should indent */
-    // so should this
-    .call_method(
-        some_long_parameter____________________________,
-        some_long_parameter____________________________
-    );
+	/* this comment should indent */
+	// so should this
+	.call_method(
+		some_long_parameter____________________________,
+		some_long_parameter____________________________
+	);
 
 someThing_______________________
-    .Property
-    .CallMethod__________________()
-    .CallMethod__________________();
+	.Property
+	.CallMethod__________________()
+	.CallMethod__________________();
 
 // shoutouts to meseta
 CLIENTS
-    .items
-    .reduce_user_items(_player_id, _items_check, "player_death", this.session_id)
-    .chain_callback(method({this: this, player_id: _player_id}, function() {
-        this.parent_components.send_action_to_player(player_id, "notify_ring_of_life");
-    }))
-    .on_error(method({this: this, player_id: _player_id}, function(_err) {
-        // reduce will fail if player doesn't have item
-        LOGGER
-            // reduce will fail if player doesn't have item
-            .info("Wiping bag for player:", {player_id: player_id});
-        CLIENTS.items.delete_all_items_in_equipped_bag(player_id);
-        // Quest flag death flag
-        CLIENTS
-            .quests
-            // Quest flag death flag
-            .set_quest_flag(player_id, "player_has_died_dc");
-        this.parent_components.send_action_to_player(player_id, "notify_bag_wipe");
-    }));
+	.items
+	.reduce_user_items(_player_id, _items_check, "player_death", this.session_id)
+	.chain_callback(method({this: this, player_id: _player_id}, function() {
+		this.parent_components.send_action_to_player(player_id, "notify_ring_of_life");
+	}))
+	.on_error(method({this: this, player_id: _player_id}, function(_err) {
+		// reduce will fail if player doesn't have item
+		LOGGER
+			// reduce will fail if player doesn't have item
+			.info("Wiping bag for player:", {player_id: player_id});
+		CLIENTS.items.delete_all_items_in_equipped_bag(player_id);
+		// Quest flag death flag
+		CLIENTS
+			.quests
+			// Quest flag death flag
+			.set_quest_flag(player_id, "player_has_died_dc");
+		this.parent_components.send_action_to_player(player_id, "notify_bag_wipe");
+	}));

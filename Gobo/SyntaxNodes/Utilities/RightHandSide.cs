@@ -55,7 +55,13 @@ internal class RightHandSide
 
     private static Layout DetermineLayout(GmlSyntaxNode leftNode, GmlSyntaxNode rightNode)
     {
-        return rightNode switch
+        var trueExpression = rightNode;
+        while (trueExpression is ParenthesizedExpression parenthesized)
+        {
+            trueExpression = parenthesized.Expression;
+        }
+
+        return trueExpression switch
         {
             Literal => Layout.BasicConcatWithSpace,
             BinaryExpression => Layout.BreakAfterOperator,

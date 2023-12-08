@@ -11,6 +11,12 @@ var someLongVariableName =
     + someMethodCall("with long args")
     + "really long string";
 
+var someLongVariableName = (
+    "a really loooooooooooooooong string"
+    + someMethodCall("with long args")
+    + "really long string"
+);
+
 var samePrecedenceAligns =
     one_________________________________
     + two_______________________________

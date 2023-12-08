@@ -23,7 +23,7 @@ call(undefined, undefined, undefined);
 call(undefined, /*comment*/ undefined, undefined);
 
 call(
-    undefined, // surprise! inner comment
-    undefined,
-    undefined
+	undefined, // surprise! inner comment
+	undefined,
+	undefined
 );

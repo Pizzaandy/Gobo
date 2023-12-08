@@ -1,55 +1,55 @@
 for (;;) {
-    return;
+	return;
 }
 for (;; i++) {
-    return;
+	return;
 }
 for (++j;;) {
-    return;
+	return;
 }
 
 for (
-    foo = bar;
-    ;
-    {
-        foo();
-    }
+	foo = bar;
+	;
+	{
+		foo();
+	}
 ) {
-    return;
+	return;
 }
 
 for (
-    var i = 0;
-    i < 42;
-    {
-        i++;
-    }
+	var i = 0;
+	i < 42;
+	{
+		i++;
+	}
 ) {}
 
 while (condition) {
-    return;
+	return;
 }
 
 while (
-    longStatementName
-    && longerStatementName
-    && evenLongerStatementName
-    && superLongStatementName
+	longStatementName
+	&& longerStatementName
+	&& evenLongerStatementName
+	&& superLongStatementName
 ) {
-    return;
+	return;
 }
 
 do {
-    statement();
+	statement();
 } until (condition)
 
 do {
-    operation();
+	operation();
 } until (
-    longStatementName
-    && longerStatementName
-    && evenLongerStatementName
-    && superLongStatementName
+	longStatementName
+	&& longerStatementName
+	&& evenLongerStatementName
+	&& superLongStatementName
 )
 
 repeat (3) {}

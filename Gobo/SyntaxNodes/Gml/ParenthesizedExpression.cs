@@ -25,7 +25,13 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
                 or ConditionalExpression;
 
     public bool IsRedundant =>
-        Parent is ParenthesizedExpression or ReturnStatement or ThrowStatement or DeleteStatement;
+        Parent
+            is ParenthesizedExpression
+                or ReturnStatement
+                or ThrowStatement
+                or DeleteStatement
+                or AssignmentExpression
+                or VariableDeclarator;
 
     public override Doc PrintNode(PrintContext ctx)
     {

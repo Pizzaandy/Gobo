@@ -1,86 +1,86 @@
 if (true) {
-    return;
+	return;
 }
 
 if (true) {
-    return;
+	return;
 }
 
 if (true) {
-    // indent this!
+	// indent this!
 }
 
 if (condition) {
-    // this comment should be inside the block
+	// this comment should be inside the block
 }
 
 if (true) {
-    DoSomething();
+	DoSomething();
 } else if (false) {
-    DoSomething();
+	DoSomething();
 } else if (condition) {
-    DoSomething();
+	DoSomething();
 } else {
-    DoSomething();
-    if (true) {
-        if (true) {
-            if (true) {
-                if (true) {
-                    return;
-                }
-            }
-        }
-    }
+	DoSomething();
+	if (true) {
+		if (true) {
+			if (true) {
+				if (true) {
+					return;
+				}
+			}
+		}
+	}
 }
 
 if (true) {
-    while (true) {
-        CallMethod(x);
-    }
+	while (true) {
+		CallMethod(x);
+	}
 }
 
 if (someLongCondition != someOtherCondition) {
-    DoSomeLongMethodCall_________________________();
+	DoSomeLongMethodCall_________________________();
 } else if (someLongCondition == someOtherCondition) {
-    DoSomeLongMethodCall_________________________();
+	DoSomeLongMethodCall_________________________();
 } else {
-    DoSomeLongMethodCall________________________________________();
+	DoSomeLongMethodCall________________________________________();
 }
 
 if (
-    longStatementName
-    && longerStatementName
-    && evenLongerStatementName
-    && superLongStatementName
+	longStatementName
+	&& longerStatementName
+	&& evenLongerStatementName
+	&& superLongStatementName
 ) {
-    return;
+	return;
 } else if (
-    longStatementName
-    && longerStatementName
-    && evenLongerStatementName
-    && superLongStatementName
+	longStatementName
+	&& longerStatementName
+	&& evenLongerStatementName
+	&& superLongStatementName
 ) {
-    call();
+	call();
 }
 
 if // comment
 (
-    // torture
-    true // test
+	// torture
+	true // test
 ) {
-    // just
-    // for
-    // fun
+	// just
+	// for
+	// fun
 } // lol
 
 if (condition) {
-    // this comment should be inside the block
-    return;
+	// this comment should be inside the block
+	return;
 }
 
 if (
-    object // this comment should be inside parens
+	object // this comment should be inside parens
 ) {
-    // this comment should be inside the block
-    return;
+	// this comment should be inside the block
+	return;
 }
