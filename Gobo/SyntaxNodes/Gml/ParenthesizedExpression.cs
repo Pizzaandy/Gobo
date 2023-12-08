@@ -29,7 +29,13 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
     public override Doc PrintNode(PrintContext ctx)
     {
         // Always unwrap redundant parens
-        if (Parent is ParenthesizedExpression)
+        if (
+            Parent
+            is ParenthesizedExpression
+                or ReturnStatement
+                or ThrowStatement
+                or DeleteStatement
+        )
         {
             return Expression.Print(ctx);
         }

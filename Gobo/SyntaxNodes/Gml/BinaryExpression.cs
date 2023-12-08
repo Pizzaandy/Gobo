@@ -36,14 +36,20 @@ internal sealed class BinaryExpression : GmlSyntaxNode
     {
         var docs = PrintBinaryExpression(this, ctx);
 
+        var trueParent = Parent;
+        while (trueParent is ParenthesizedExpression)
+        {
+            trueParent = trueParent.Parent;
+        }
+
         var shouldNotIndent =
-            Parent
+            trueParent
                 is AssignmentExpression
                     or VariableDeclarator
                     or IfStatement
                     or DoStatement
                     or WhileStatement
-                    or ParenthesizedExpression
+                    or SwitchStatement
             || Parent is ConditionalExpression conditionalExpression
                 && conditionalExpression.WhenTrue != this
                 && conditionalExpression.WhenFalse != this;
