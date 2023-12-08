@@ -64,7 +64,7 @@ public static partial class GmlFormatter
             parseStart = Stopwatch.GetTimestamp();
         }
 
-        var parseResult = new GmlParser(code).Parse();
+        var parseResult = new GmlParser(code, options.TabWidth).Parse();
 
         var sourceText = new SourceText(code);
         new CommentMapper(sourceText, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
@@ -137,7 +137,7 @@ public static partial class GmlFormatter
 
             try
             {
-                updatedParseResult = new GmlParser(output).Parse();
+                updatedParseResult = new GmlParser(output, options.TabWidth).Parse();
             }
             catch (GmlSyntaxErrorException ex)
             {

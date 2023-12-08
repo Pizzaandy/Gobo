@@ -112,9 +112,9 @@ internal class GmlParser
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
-    public GmlParser(string code)
+    public GmlParser(string code, int tabWidth)
     {
-        lexer = new GmlLexer(code);
+        lexer = new GmlLexer(code, tabWidth);
         token = lexer.NextToken();
         ProcessToken(token);
     }
