@@ -10,10 +10,10 @@ public enum BraceStyle
 
 public class FormatOptions
 {
-    public bool UseTabs { get; set; } = false;
+    public bool UseTabs { get; set; } = true;
     public int TabWidth { get; set; } = 4;
     public int Width { get; set; } = 90;
-    public bool FormatComments { get; set; } = false;
+    public bool FormatComments { get; set; } = true;
 
     [JsonIgnore]
     public BraceStyle BraceStyle { get; set; } = BraceStyle.SameLine;

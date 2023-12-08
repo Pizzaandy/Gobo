@@ -18,6 +18,7 @@
             <input type="checkbox"
                    class="form-check-input"
                    id="useTabs"
+                   checked="@_formatOptions.UseTabs"
                    value="@_formatOptions.UseTabs" @oninput="@OnUseTabsChange" />
             <label for="useTabs" class="text-light form-check-label">Use Tabs</label>
         </div>
@@ -36,6 +37,7 @@
             <input type="checkbox"
                    class="form-check-input"
                    id="formatComments"
+                   checked="@_formatOptions.FormatComments"
                    value="@_formatOptions.FormatComments" @oninput="@OnFormatCommentsChange" />
             <label for="formatComments" class="text-light form-check-label">Format Comments</label>
         </div>
