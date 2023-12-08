@@ -12,9 +12,8 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
         Expression = AsChild(expression);
     }
 
-    public bool IsControlFlowArgument()
-    {
-        return Parent
+    public bool IsControlFlowArgument =>
+        Parent
             is IfStatement
                 or WithStatement
                 or WhileStatement
@@ -24,24 +23,20 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
                 or CatchProduction
                 or SwitchStatement
                 or ConditionalExpression;
-    }
+
+    public bool IsRedundant =>
+        Parent is ParenthesizedExpression or ReturnStatement or ThrowStatement or DeleteStatement;
 
     public override Doc PrintNode(PrintContext ctx)
     {
         // Always unwrap redundant parens
-        if (
-            Parent
-            is ParenthesizedExpression
-                or ReturnStatement
-                or ThrowStatement
-                or DeleteStatement
-        )
+        if (IsRedundant)
         {
             return Expression.Print(ctx);
         }
 
         // Never unwrap parens for control flow arguments
-        if (IsControlFlowArgument())
+        if (IsControlFlowArgument)
         {
             return PrintInParens(ctx, Expression);
         }
