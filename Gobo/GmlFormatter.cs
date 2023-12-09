@@ -66,8 +66,7 @@ public static partial class GmlFormatter
 
         var parseResult = new GmlParser(code, options.TabWidth).Parse();
 
-        var sourceText = new SourceText(code);
-        new CommentMapper(sourceText, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
+        new CommentMapper(code, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
 
         if (getDebugInfo)
         {
@@ -78,7 +77,7 @@ public static partial class GmlFormatter
         GmlSyntaxNode ast = parseResult.Ast;
 
         var initialHash = options.ValidateOutput ? ast.GetHashCode() : -1;
-        var docs = ast.Print(new PrintContext(options, sourceText));
+        var docs = ast.Print(new PrintContext(options, code));
 
         var printOptions = new Printer.DocPrinterOptions()
         {

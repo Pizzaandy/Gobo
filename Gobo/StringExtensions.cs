@@ -1,30 +1,18 @@
 ﻿namespace Gobo;
 
-internal class SourceText
+internal static class StringExtensions
 {
-    public readonly string Text;
-
-    public readonly string? FilePath;
-
-    public int Length => Text.Length;
-
-    public SourceText(string text, string? filePath = null)
+    public static string ReadSpan(this string text, TextSpan span)
     {
-        Text = text;
-        FilePath = filePath;
+        return text.Substring(span.Start, span.Length);
     }
 
-    public string ReadSpan(TextSpan span)
+    public static string ReadSpan(this string text, int start, int end)
     {
-        return Text.Substring(span.Start, span.Length);
+        return text[start..end];
     }
 
-    public string ReadSpan(int start, int end)
-    {
-        return Text[start..end];
-    }
-
-    public int GetLineBreaksToLeft(TextSpan span)
+    public static int GetLineBreaksToLeft(this string text, TextSpan span)
     {
         var start = span.Start - 1;
 
@@ -37,7 +25,7 @@ internal class SourceText
 
         for (var index = start; index >= 0; index--)
         {
-            var character = Text[index];
+            var character = text[index];
             if (character == '\n')
             {
                 lineBreakCount++;
@@ -51,20 +39,20 @@ internal class SourceText
         return lineBreakCount;
     }
 
-    public int GetLineBreaksToRight(TextSpan span)
+    public static int GetLineBreaksToRight(this string text, TextSpan span)
     {
         var end = span.End;
 
-        if (end >= Text.Length - 1)
+        if (end >= text.Length - 1)
         {
             return 0;
         }
 
         var lineBreakCount = 0;
 
-        for (var index = end; index < Text.Length; index++)
+        for (var index = end; index < text.Length; index++)
         {
-            var character = Text[index];
+            var character = text[index];
             if (character == '\n')
             {
                 lineBreakCount++;
