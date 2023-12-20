@@ -795,7 +795,16 @@ internal class GmlParser
         }
 
         Expect(TokenKind.Identifier);
+
         var name = accepted.Text;
+        string? configName = null;
+
+        if (Accept(TokenKind.Colon, skipHiddenTokens: false))
+        {
+            Expect(TokenKind.Identifier);
+            configName = name;
+            name = accepted.Text;
+        }
 
         var tokens = new List<string>();
         bool ignoreNextLineBreak = false;
@@ -852,7 +861,8 @@ internal class GmlParser
         result = new MacroDeclaration(
             GetSpan(start, accepted),
             name,
-            string.Join("", tokens).TrimEnd()
+            string.Join("", tokens).TrimEnd(),
+            configName
         );
         return true;
     }

@@ -5,13 +5,16 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class MacroDeclaration : GmlSyntaxNode
 {
     public string Id { get; set; }
+
+    public string? Config { get; set; }
     public string Body { get; set; }
 
-    public MacroDeclaration(TextSpan span, string id, string body)
+    public MacroDeclaration(TextSpan span, string id, string body, string? configName)
         : base(span)
     {
         Id = id;
         Body = body.ReplaceLineEndings("\n");
+        Config = configName;
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -21,7 +24,9 @@ internal sealed class MacroDeclaration : GmlSyntaxNode
             commentGroup.PrintedRaw = true;
         }
 
-        return Doc.Concat("#macro", " ", Id, " ", Body.TrimEnd());
+        var name = string.IsNullOrEmpty(Config) ? Id : $"{Config}:{Id}";
+
+        return Doc.Concat("#macro", " ", name, " ", Body.TrimEnd());
     }
 
     public override int GetHashCode()
