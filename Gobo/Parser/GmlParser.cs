@@ -801,7 +801,7 @@ internal class GmlParser
 
         if (Accept(TokenKind.Colon, skipHiddenTokens: false))
         {
-            Expect(TokenKind.Identifier);
+            Expect(TokenKind.Identifier, skipHiddenTokens: false);
             configName = name;
             name = accepted.Text;
         }
