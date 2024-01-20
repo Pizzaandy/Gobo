@@ -42,13 +42,9 @@ Gobo uses a custom GML parser to read your code and ensure that formatted code i
 Gobo converts your code into an intermediate "Doc" format to make decisions about wrapping lines and printing comments. The doc printing algorithm is taken from [CSharpier](https://github.com/belav/csharpier), which is itself adapted from Prettier.
 
 ## Limitations
-Gobo cannot parse code that relies on macro expansion to be valid. Common use cases, such as using macros as statements, are supported.
+Gobo cannot parse code that relies on macro expansion to be valid. Any standalone expression will be formatted with a semicolon, even if the expression is a macro.
 ```js
-// fmt-ignore
-{
-    ESCAPE_CHAINED MACROS_LIKE THIS
-}
-
-OTHERWISE_I_WILL;
-ADD_SEMICOLONS;
+THESE_MACROS;
+ARE.VALID;
+BECAUSE_THEY_ARE_EXPRESSIONS()
 ```
