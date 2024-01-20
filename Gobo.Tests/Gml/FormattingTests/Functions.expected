@@ -1,0 +1,15 @@
+function() {}
+
+function foo() {
+	return new (function constructor() constructor {
+		return {};
+	})();
+}
+
+function a(a, b = 1, c = call().property) : b(b) constructor {}
+
+static static_func = function() {
+	function() {}
+	function() {}
+	function() {}
+};

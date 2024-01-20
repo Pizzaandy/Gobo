@@ -1335,8 +1335,15 @@ internal class GmlParser
         {
             if (Accept(TokenKind.Comma))
             {
-                Expect(Parameter(out var parameter));
-                parameters.Add(parameter);
+                if (Accept(TokenKind.CloseParen))
+                {
+                    break;
+                }
+                else
+                {
+                    Expect(Parameter(out var parameter));
+                    parameters.Add(parameter);
+                }
             }
             else if (Accept(TokenKind.CloseParen))
             {
