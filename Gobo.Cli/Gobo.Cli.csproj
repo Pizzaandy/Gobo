@@ -7,7 +7,6 @@
     <Nullable>enable</Nullable>
     <PublishAot>true</PublishAot>
     <AssemblyName>gobo</AssemblyName>
-    <StripSymbols>false</StripSymbols>
   </PropertyGroup>
 
   <ItemGroup>
