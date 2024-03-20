@@ -28,7 +28,22 @@ jobs:
       run: dotnet publish Gobo.Cli/Gobo.Cli.csproj -c Release -o ./publish
 
     - name: Upload artifacts
+      if: matrix.os == 'ubuntu-latest'
       uses: actions/upload-artifact@v2
       with:
-        name: published-files
+        name: gobo-ubuntu
+        path: ./publish
+
+    - name: Upload artifacts
+      if: matrix.os == 'windows-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: gobo-windows
+        path: ./publish
+
+    - name: Upload artifacts
+      if: matrix.os == 'macos-latest'
+      uses: actions/upload-artifact@v2
+      with:
+        name: gobo-macos
         path: ./publish
