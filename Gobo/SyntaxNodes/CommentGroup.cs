@@ -210,29 +210,6 @@ internal class CommentGroup
 
     public static Doc PrintSingleLineComment(PrintContext ctx, string text)
     {
-        if (!ctx.Options.FormatComments)
-        {
-            return text;
-        }
-
-        for (var i = 0; i < Math.Min(4, text.Length); i++)
-        {
-            var character = text[i];
-
-            if (character == '/')
-            {
-                continue;
-            }
-            else if (ShouldAddSpaceBefore(character))
-            {
-                return $"{text[..i]} {text[i..]}";
-            }
-            else
-            {
-                break;
-            }
-        }
-
         return text;
     }
 

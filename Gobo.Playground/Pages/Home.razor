@@ -36,15 +36,6 @@
         <div class="form-check">
             <input type="checkbox"
                    class="form-check-input"
-                   id="formatComments"
-                   checked="@_formatOptions.FormatComments"
-                   value="@_formatOptions.FormatComments" @oninput="@OnFormatCommentsChange" />
-            <label for="formatComments" class="text-light form-check-label">Format Comments</label>
-        </div>
-
-        <div class="form-check">
-            <input type="checkbox"
-                   class="form-check-input"
                    id="showAst"
                    value="@_showAst" @oninput="@OnShowAstChanged" />
             <label for="showAst" class="text-light form-check-label">Show AST</label>
@@ -185,12 +176,6 @@ call()";
     async Task OnUseTabsChange(ChangeEventArgs args)
     {
         _formatOptions.UseTabs = (bool)args.Value;
-        await Format();
-    }
-
-    async Task OnFormatCommentsChange(ChangeEventArgs args)
-    {
-        _formatOptions.FormatComments = (bool)args.Value;
         await Format();
     }
 
