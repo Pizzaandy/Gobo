@@ -270,7 +270,7 @@ internal class GmlParser
     {
         var start = token;
 
-        var statements = AcceptStatementList();
+        var statements = StatementList();
 
         if (!HitEOF)
         {
@@ -280,7 +280,7 @@ internal class GmlParser
         node = new Document(GetSpan(start, accepted), statements);
     }
 
-    private List<GmlSyntaxNode> AcceptStatementList()
+    private List<GmlSyntaxNode> StatementList()
     {
         var statements = new List<GmlSyntaxNode>();
 
@@ -361,7 +361,7 @@ internal class GmlParser
             return false;
         }
 
-        var statements = AcceptStatementList();
+        var statements = StatementList();
 
         Expect(TokenKind.CloseBrace);
 
@@ -385,13 +385,10 @@ internal class GmlParser
 
         if (Accept(TokenKind.Colon))
         {
-            GmlSyntaxNode parentName = GmlSyntaxNode.Empty;
-            GmlSyntaxNode parentArgs = GmlSyntaxNode.Empty;
-            // Parent name cannot be 'constructor'
             Expect(TokenKind.Identifier);
-            parentName = new Identifier(GetSpan(accepted), accepted.Text);
+            GmlSyntaxNode parentName = new Identifier(GetSpan(accepted), accepted.Text);
 
-            Expect(ArgumentList(out parentArgs));
+            Expect(ArgumentList(out GmlSyntaxNode parentArgs));
             Expect(TokenKind.Constructor);
 
             constructorClause = new ConstructorClause(
@@ -654,14 +651,14 @@ internal class GmlParser
             var startToken = accepted;
             Expect(Expression(out var test));
             Expect(TokenKind.Colon);
-            var statements = AcceptStatementList();
+            var statements = StatementList();
             result = new SwitchCase(GetSpan(startToken, accepted), test, statements);
         }
         else if (Accept(TokenKind.Default))
         {
             var startToken = accepted;
             Expect(TokenKind.Colon);
-            var statements = AcceptStatementList();
+            var statements = StatementList();
             result = new SwitchCase(GetSpan(startToken, accepted), GmlSyntaxNode.Empty, statements);
         }
         else

@@ -21,7 +21,7 @@ internal class GmlLexer
     private int index;
     private readonly int tabWidth;
     private int character;
-    private readonly List<char> currentToken = new();
+    private string CurrentToken => text[startIndex..index];
 
     private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
 
@@ -452,7 +452,7 @@ internal class GmlLexer
 
     private TokenKind MatchKeywordOrIdentifier()
     {
-        return string.Join("", currentToken) switch
+        return CurrentToken switch
         {
             "and" => TokenKind.And,
             "or" => TokenKind.Or,
@@ -500,7 +500,7 @@ internal class GmlLexer
 
     private TokenKind MatchDirectiveOrHexLiteral()
     {
-        var text = string.Join("", currentToken);
+        var text = CurrentToken;
         var directive = text switch
         {
             "#macro" => TokenKind.Macro,
@@ -619,8 +619,6 @@ internal class GmlLexer
         character = text[index];
         index++;
 
-        currentToken.Add((char)character);
-
         switch (character)
         {
             case '\n':
@@ -643,13 +641,11 @@ internal class GmlLexer
             Line = lineNumber,
             Column = columnNumber,
             Kind = kind,
-            Text = string.Join("", currentToken),
+            Text = CurrentToken,
             StartIndex = startIndex,
             EndIndex = index,
             ErrorMessage = error
         };
-
-        currentToken.Clear();
 
         return token;
     }

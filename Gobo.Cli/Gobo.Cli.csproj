@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PublishAot>true</PublishAot>
+    <OptimizationPreference>Speed</OptimizationPreference>
+    <PublishTrimmed>true</PublishTrimmed>
     <AssemblyName>gobo</AssemblyName>
   </PropertyGroup>
 

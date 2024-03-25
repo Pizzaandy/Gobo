@@ -132,7 +132,6 @@ internal class CommentGroup
 
     /// <summary>
     /// Prints multiple lines of comments together, accounting for whitespace and padding.
-    /// Setting <paramref name="type"/> to "Dangling" will ensure no padding is added.
     /// </summary>
     public static Doc PrintGroups(
         PrintContext ctx,
@@ -232,15 +231,5 @@ internal class CommentGroup
             $"Following: {FollowingNode?.Kind}",
             $"Id: {Id}\n"
         );
-    }
-
-    /// <summary>
-    /// Check whether a character is:
-    /// a) Not whitespace
-    /// b) Not commonly used to indicate a doc comment.
-    /// </summary>
-    private static bool ShouldAddSpaceBefore(int c)
-    {
-        return c != ' ' && c != '\t' && c != '!';
     }
 }

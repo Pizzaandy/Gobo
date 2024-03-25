@@ -118,7 +118,6 @@ internal class CommentMapper
         var result = new List<CommentGroup>();
         var currentGroup = new List<Token>();
         int lineBreakCount = 0;
-        CommentGroup? lastGroup = null;
 
         void AcceptCommentGroup()
         {
@@ -131,7 +130,6 @@ internal class CommentMapper
             result.Add(newGroup);
 
             currentGroup.Clear();
-            lastGroup = newGroup;
             lineBreakCount = 0;
         }
 
