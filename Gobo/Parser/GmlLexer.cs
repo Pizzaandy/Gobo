@@ -617,14 +617,15 @@ internal class GmlLexer
         character = text[index];
         index++;
 
-        if (character == '\n')
+        switch (character)
         {
-            lineNumber += 1;
-            columnNumber = 0;
-        }
-        else
-        {
-            columnNumber += 1;
+            case '\n':
+                lineNumber += 1;
+                columnNumber = 0;
+                break;
+            default:
+                columnNumber += 1;
+                break;
         }
     }
 

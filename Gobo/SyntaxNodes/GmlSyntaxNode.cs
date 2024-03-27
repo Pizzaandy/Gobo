@@ -23,7 +23,7 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     public List<GmlSyntaxNode> Children { get; set; } = new();
 
     [JsonIgnore]
-    public bool IsEmpty = false;
+    public bool IsEmpty => this is EmptyNode;
 
     [JsonIgnore]
     public bool PrintOwnComments { get; set; } = true;

@@ -8,7 +8,7 @@ namespace Gobo.Parser;
 internal class GmlParseResult
 {
     public GmlSyntaxNode Ast;
-    public List<List<Token>> TriviaGroups;
+    public List<Token[]> TriviaGroups;
 }
 
 internal class GmlSyntaxErrorException : Exception
@@ -31,7 +31,7 @@ internal class GmlParser
 {
     public Token CurrentToken => token;
 
-    public List<List<Token>> TriviaGroups { get; private set; } = new();
+    public List<Token[]> TriviaGroups { get; private set; } = new();
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
     public bool Strict { get; set; } = false;
@@ -265,8 +265,8 @@ internal class GmlParser
         {
             return;
         }
-        TriviaGroups.Add(currentTriviaGroup);
-        currentTriviaGroup = new();
+        TriviaGroups.Add(currentTriviaGroup.ToArray());
+        currentTriviaGroup.Clear();
     }
 
     private void Document(out GmlSyntaxNode node)
@@ -1185,7 +1185,6 @@ internal class GmlParser
     }
 
     // TODO: optimize if needed
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool HandleBinaryExpression(
         BinaryExpressionRule nextRule,
         out GmlSyntaxNode result,
@@ -1199,7 +1198,7 @@ internal class GmlParser
             return false;
         }
 
-        while (!HitEOF && Accept(tokenType))
+        while (Accept(tokenType))
         {
             var @operator = accepted.Text;
             Expect(nextRule(out var right));
@@ -1209,7 +1208,6 @@ internal class GmlParser
         return true;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool HandleBinaryExpression(
         BinaryExpressionRule nextRule,
         out GmlSyntaxNode result,

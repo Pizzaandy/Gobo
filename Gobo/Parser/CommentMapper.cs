@@ -8,7 +8,7 @@ internal class CommentMapper
 
     public List<CommentGroup> CommentGroups { get; set; } = new();
 
-    public CommentMapper(string sourceText, List<List<Token>> triviaGroups)
+    public CommentMapper(string sourceText, List<Token[]> triviaGroups)
     {
         SourceText = sourceText;
         foreach (var triviaGroup in triviaGroups)
@@ -113,7 +113,7 @@ internal class CommentMapper
         return ast;
     }
 
-    private static List<CommentGroup> CreateCommentGroups(List<Token> triviaTokens)
+    private static List<CommentGroup> CreateCommentGroups(Token[] triviaTokens)
     {
         var result = new List<CommentGroup>();
         var currentGroup = new List<Token>();
