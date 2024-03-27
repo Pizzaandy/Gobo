@@ -23,7 +23,7 @@ internal sealed class GlobalVariableStatement : GmlSyntaxNode
         }
         else if (Children.Count > 0)
         {
-            var printedArguments = DelimitedList.Print(ctx, Children, ",");
+            var printedArguments = DelimitedList.Print(ctx, Declarations, ",");
             parts.Add(Doc.Indent(printedArguments));
         }
 

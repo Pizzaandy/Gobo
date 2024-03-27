@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Gobo.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "--skip-write --write-stdout D:\\CS_Projects\\PrettierGML\\Gobo.Benchmarks\\BigFile.gml"
+    }
+  }
+}

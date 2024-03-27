@@ -3,10 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Gobo;
 
-/// <summary>
-/// Immutable abstract representation of a span of text.  For example, in an error diagnostic that reports a
-/// location, it could come from a parsed string, text from a tool editor buffer, etc.
-/// </summary>
 [DataContract]
 public readonly struct TextSpan : IEquatable<TextSpan>, IComparable<TextSpan>
 {

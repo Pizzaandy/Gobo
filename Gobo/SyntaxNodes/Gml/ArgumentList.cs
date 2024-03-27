@@ -45,7 +45,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
                 optionA = Doc.Group("(", Doc.Join(separator, allExceptLast), separator, last, ")");
             }
 
-            var optionB = DelimitedList.PrintInBrackets(ctx, "(", this, ")", ",");
+            var optionB = DelimitedList.PrintInBrackets(ctx, this, "(", Arguments, ")", ",");
 
             result = Doc.ConditionalGroup(optionA, optionB);
         }
@@ -53,8 +53,9 @@ internal sealed class ArgumentList : GmlSyntaxNode
         {
             result = DelimitedList.PrintInBrackets(
                 ctx,
-                "(",
                 this,
+                "(",
+                Arguments,
                 ")",
                 ",",
                 leadingContents: PrintLeadingComments(ctx)

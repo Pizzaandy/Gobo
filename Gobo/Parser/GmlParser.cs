@@ -1,13 +1,14 @@
 ﻿using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
+using System.Runtime.CompilerServices;
 
 namespace Gobo.Parser;
 
-internal struct GmlParseResult
+internal class GmlParseResult
 {
     public GmlSyntaxNode Ast;
-    public List<Token[]> TriviaGroups;
+    public List<List<Token>> TriviaGroups;
 }
 
 internal class GmlSyntaxErrorException : Exception
@@ -30,7 +31,7 @@ internal class GmlParser
 {
     public Token CurrentToken => token;
 
-    public List<Token[]> TriviaGroups { get; private set; } = new();
+    public List<List<Token>> TriviaGroups { get; private set; } = new();
     public int LineNumber { get; private set; } = 1;
     public int ColumnNumber { get; private set; } = 1;
     public bool Strict { get; set; } = false;
@@ -112,9 +113,9 @@ internal class GmlParser
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
-    public GmlParser(string code, int tabWidth)
+    public GmlParser(string code)
     {
-        lexer = new GmlLexer(code, tabWidth);
+        lexer = new GmlLexer(code);
         token = lexer.NextToken();
         ProcessToken(token);
     }
@@ -122,7 +123,7 @@ internal class GmlParser
     public GmlParseResult Parse()
     {
         Document(out var ast);
-        return new GmlParseResult() { Ast = ast, TriviaGroups = TriviaGroups };
+        return new GmlParseResult { Ast = ast, TriviaGroups = TriviaGroups };
     }
 
     private void NextToken()
@@ -217,11 +218,13 @@ internal class GmlParser
         return false;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TextSpan GetSpan(Token firstToken, Token lastToken)
     {
         return new TextSpan(firstToken.StartIndex, lastToken.EndIndex);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static TextSpan GetSpan(Token token)
     {
         return new TextSpan(token.StartIndex, token.EndIndex);
@@ -262,7 +265,7 @@ internal class GmlParser
         {
             return;
         }
-        TriviaGroups.Add(currentTriviaGroup.ToArray());
+        TriviaGroups.Add(currentTriviaGroup);
         currentTriviaGroup.Clear();
     }
 
@@ -305,7 +308,6 @@ internal class GmlParser
     }
 
     #region Statements
-
     private bool Statement(out GmlSyntaxNode result, bool acceptSemicolons = true)
     {
         if (
@@ -1183,6 +1185,7 @@ internal class GmlParser
     }
 
     // TODO: optimize if needed
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool HandleBinaryExpression(
         BinaryExpressionRule nextRule,
         out GmlSyntaxNode result,
@@ -1196,7 +1199,7 @@ internal class GmlParser
             return false;
         }
 
-        while (Accept(tokenType))
+        while (!HitEOF && Accept(tokenType))
         {
             var @operator = accepted.Text;
             Expect(nextRule(out var right));
@@ -1206,6 +1209,7 @@ internal class GmlParser
         return true;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool HandleBinaryExpression(
         BinaryExpressionRule nextRule,
         out GmlSyntaxNode result,
@@ -1668,6 +1672,7 @@ internal class GmlParser
 
         bool endedOnClosingDelimiter = false;
         bool expectDelimiter = false;
+
         while (!HitEOF)
         {
             if (expectDelimiter)

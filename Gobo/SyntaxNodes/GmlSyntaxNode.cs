@@ -23,7 +23,7 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     public List<GmlSyntaxNode> Children { get; set; } = new();
 
     [JsonIgnore]
-    public bool IsEmpty => this is EmptyNode;
+    public bool IsEmpty = false;
 
     [JsonIgnore]
     public bool PrintOwnComments { get; set; } = true;
@@ -172,9 +172,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
         return hashCode.ToHashCode();
     }
-
-    public static implicit operator GmlSyntaxNode(List<GmlSyntaxNode> contents) =>
-        new NodeList(contents);
 
     protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
     {

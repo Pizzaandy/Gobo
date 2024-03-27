@@ -9,7 +9,7 @@ namespace CSharpier.Benchmarks;
 public class Benchmarks
 {
     private readonly string largeCode = File.ReadAllText(
-        Path.Combine(DirectoryFinder.FindParent("Gobo.Benchmarks").FullName, "BigFile.txt")
+        Path.Combine(DirectoryFinder.FindParent("Gobo.Benchmarks").FullName, "BigFile.gml")
     );
 
     [Benchmark]

@@ -30,7 +30,7 @@ internal sealed class MemberIndexExpression : GmlSyntaxNode, IMemberChainable
     public Doc PrintInChain(PrintContext ctx)
     {
         var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
-        var printed = DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",");
+        var printed = DelimitedList.PrintInBrackets(ctx, this, accessor, Properties, "]", ",");
         return printed;
     }
 

@@ -15,6 +15,6 @@ internal sealed class ArrayExpression : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return DelimitedList.PrintInBrackets(ctx, "[", this, "]", ",");
+        return DelimitedList.PrintInBrackets(ctx, this, "[", Elements, "]", ",");
     }
 }

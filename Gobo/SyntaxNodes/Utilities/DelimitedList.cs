@@ -2,12 +2,13 @@
 
 namespace Gobo.SyntaxNodes.PrintHelpers;
 
-internal class DelimitedList
+internal static class DelimitedList
 {
     public static Doc PrintInBrackets(
         PrintContext ctx,
+        GmlSyntaxNode parent,
         string openToken,
-        GmlSyntaxNode arguments,
+        List<GmlSyntaxNode> arguments,
         string closeToken,
         string separator,
         bool allowTrailingSeparator = false,
@@ -19,18 +20,14 @@ internal class DelimitedList
 
         var groupId = Guid.NewGuid().ToString();
 
-        if (
-            arguments.Children.Count == 0
-            && leadingContents is null
-            && !arguments.DanglingComments.Any()
-        )
+        if (arguments.Count == 0 && leadingContents is null && !parent.DanglingComments.Any())
         {
             return Doc.Concat(openToken, closeToken);
         }
 
         leadingContents ??= Doc.Null;
 
-        if (arguments.Children.Count > 0)
+        if (arguments.Count > 0)
         {
             Doc printedArguments = Print(
                 ctx,
@@ -46,9 +43,7 @@ internal class DelimitedList
         }
         else
         {
-            parts.Add(
-                Doc.Indent(Doc.SoftLine, leadingContents, arguments.PrintDanglingComments(ctx))
-            );
+            parts.Add(Doc.Indent(Doc.SoftLine, leadingContents, parent.PrintDanglingComments(ctx)));
         }
 
         parts.Add(Doc.SoftLine);
@@ -59,7 +54,7 @@ internal class DelimitedList
 
     public static Doc Print(
         PrintContext ctx,
-        GmlSyntaxNode list,
+        List<GmlSyntaxNode> nodes,
         string separator,
         bool allowTrailingSeparator = false,
         bool forceBreak = false,
@@ -68,20 +63,20 @@ internal class DelimitedList
     {
         leadingContents ??= Doc.Null;
 
-        if (list.Children.Count == 0 && leadingContents is NullDoc)
+        if (nodes.Count == 0 && leadingContents is NullDoc)
         {
             return Doc.Null;
         }
 
         var parts = new List<Doc> { leadingContents };
 
-        for (var i = 0; i < list.Children.Count; i++)
+        for (var i = 0; i < nodes.Count; i++)
         {
-            var child = list.Children[i];
+            var child = nodes[i];
 
             parts.Add(child.Print(ctx));
 
-            if (i != list.Children.Count - 1)
+            if (i != nodes.Count - 1)
             {
                 parts.Add(separator);
                 parts.Add(forceBreak ? Doc.HardLine : Doc.Line);
