@@ -266,7 +266,7 @@ internal class GmlParser
             return;
         }
         TriviaGroups.Add(currentTriviaGroup);
-        currentTriviaGroup.Clear();
+        currentTriviaGroup = new();
     }
 
     private void Document(out GmlSyntaxNode node)
