@@ -2,7 +2,7 @@
 
 namespace Gobo.SyntaxNodes.GmlExtensions;
 
-internal class TypeAnnotation : GmlSyntaxNode
+internal sealed class TypeAnnotation : GmlSyntaxNode
 {
     public List<string> Types { get; set; }
 

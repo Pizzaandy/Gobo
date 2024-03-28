@@ -27,7 +27,7 @@ internal enum FormatCommandType
 /// <summary>
 /// Represents a sequence of comments with no line breaks between them.
 /// </summary>
-internal class CommentGroup
+internal sealed class CommentGroup
 {
     public string Text => string.Concat(CommentTokens.Select(t => t.Text));
 

@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Gobo.Parser;
 
-internal class GmlParseResult
+internal sealed class GmlParseResult
 {
     public GmlSyntaxNode Ast;
     public List<Token[]> TriviaGroups;
@@ -18,7 +18,7 @@ internal class GmlSyntaxErrorException : Exception
         : base(message) { }
 }
 
-internal class GmlParser
+internal sealed class GmlParser
 {
     public Token CurrentToken => token;
 
@@ -157,6 +157,7 @@ internal class GmlParser
         }
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void Expect(bool returnValue, string? errorMessage = null)
     {
         if (!returnValue)

@@ -3,7 +3,7 @@ using Gobo.SyntaxNodes.Gml.Literals;
 
 namespace Gobo.SyntaxNodes.Gml;
 
-internal class UndefinedArgument : GmlSyntaxNode
+internal sealed class UndefinedArgument : GmlSyntaxNode
 {
     public UndefinedArgument(int position)
         : base(new TextSpan(position, position)) { }

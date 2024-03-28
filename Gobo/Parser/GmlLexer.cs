@@ -22,8 +22,6 @@ internal class GmlLexer
     private int character;
     private string CurrentToken => text[startIndex..index];
 
-    private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
-
     public GmlLexer(string text)
     {
         this.text = text;
@@ -84,7 +82,7 @@ internal class GmlLexer
             case '\t':
                 while (true)
                 {
-                    if (!MatchAny(whitespaces))
+                    if (!MatchAnyWhiteSpace())
                     {
                         break;
                     }
@@ -448,6 +446,7 @@ internal class GmlLexer
         return UnexpectedToken();
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private TokenKind MatchKeywordOrIdentifier()
     {
         return CurrentToken switch
@@ -581,20 +580,22 @@ internal class GmlLexer
         return false;
     }
 
-    private bool MatchAny(char[] expected)
+    private bool MatchAnyWhiteSpace()
     {
-        var next = Peek();
-
-        if (Array.Exists(expected, c => next == c))
+        switch (Peek())
         {
-            Advance();
-            return true;
+            case '\u000B':
+            case '\u000C':
+            case '\u0020':
+            case '\u00A0':
+            case '\t':
+                Advance();
+                return true;
+            default:
+                return false;
         }
-
-        return false;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int Peek(int amount = 1)
     {
         var targetIndex = index + amount - 1;

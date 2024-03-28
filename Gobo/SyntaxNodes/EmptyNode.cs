@@ -2,7 +2,7 @@
 
 namespace Gobo.SyntaxNodes;
 
-internal class EmptyNode : GmlSyntaxNode
+internal sealed class EmptyNode : GmlSyntaxNode
 {
     public static EmptyNode Instance { get; } = new();
 
