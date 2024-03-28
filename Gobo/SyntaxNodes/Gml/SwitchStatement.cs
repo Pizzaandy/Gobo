@@ -11,8 +11,9 @@ internal sealed class SwitchStatement : GmlSyntaxNode
     public SwitchStatement(TextSpan span, GmlSyntaxNode discriminant, GmlSyntaxNode cases)
         : base(span)
     {
-        Discriminant = AsChild(discriminant);
-        Cases = AsChild(cases);
+        Children = [discriminant, cases];
+        Discriminant = discriminant;
+        Cases = cases;
     }
 
     public override Doc PrintNode(PrintContext ctx)

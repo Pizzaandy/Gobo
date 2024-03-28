@@ -10,8 +10,9 @@ internal sealed class StructProperty : GmlSyntaxNode
     public StructProperty(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode initializer)
         : base(span)
     {
-        Name = AsChild(name);
-        Initializer = AsChild(initializer);
+        Children = [name, initializer];
+        Name = name;
+        Initializer = initializer;
     }
 
     public override Doc PrintNode(PrintContext ctx)

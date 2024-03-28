@@ -5,13 +5,13 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class ArgumentList : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Arguments => Children;
+    public GmlSyntaxNode[] Arguments => Children;
     public static Doc EmptyArguments => "()";
 
-    public ArgumentList(TextSpan span, List<GmlSyntaxNode> arguments)
+    public ArgumentList(TextSpan span, GmlSyntaxNode[] arguments)
         : base(span)
     {
-        AsChildren(arguments);
+        Children = arguments;
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -20,7 +20,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
 
         PrintOwnComments = false;
 
-        if (Children.Count == 0 && !DanglingComments.Any())
+        if (Children.Length == 0 && !DanglingComments.Any())
         {
             return EmptyArguments;
         }
@@ -31,7 +31,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
 
             Doc optionA;
 
-            if (Children.Count == 1)
+            if (Children.Length == 1)
             {
                 optionA = Doc.Group("(", Doc.Concat(printedArguments), ")");
             }
@@ -45,7 +45,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
                 optionA = Doc.Group("(", Doc.Join(separator, allExceptLast), separator, last, ")");
             }
 
-            var optionB = DelimitedList.PrintInBrackets(ctx, this, "(", Arguments, ")", ",");
+            var optionB = DelimitedList.PrintInBrackets(ctx, this, "(", Children, ")", ",");
 
             result = Doc.ConditionalGroup(optionA, optionB);
         }
@@ -55,7 +55,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
                 ctx,
                 this,
                 "(",
-                Arguments,
+                Children,
                 ")",
                 ",",
                 leadingContents: PrintLeadingComments(ctx)
@@ -68,7 +68,7 @@ internal sealed class ArgumentList : GmlSyntaxNode
     private bool ShouldBreakOnLastArgument()
     {
         if (
-            Children.Count == 0
+            Children.Length == 0
             || LeadingComments.Any() // The leading comment(s) will end up inside the argument list
             || Children.Any(c => c.Comments.Any(g => g.Placement == CommentPlacement.OwnLine))
         )
@@ -76,12 +76,12 @@ internal sealed class ArgumentList : GmlSyntaxNode
             return false;
         }
 
-        if (Children.Count == 1)
+        if (Children.Length == 1)
         {
             return Children[0] is FunctionDeclaration or StructExpression;
         }
 
         return Children.Last() is FunctionDeclaration or StructExpression
-            && Children.Take(Children.Count - 1).All(arg => arg is not FunctionDeclaration);
+            && Children.Take(Children.Length - 1).All(arg => arg is not FunctionDeclaration);
     }
 }

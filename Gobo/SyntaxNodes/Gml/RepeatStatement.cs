@@ -11,8 +11,9 @@ internal sealed class RepeatStatement : GmlSyntaxNode
     public RepeatStatement(TextSpan span, GmlSyntaxNode test, GmlSyntaxNode body)
         : base(span)
     {
-        Test = AsChild(test);
-        Body = AsChild(body);
+        Children = [test, body];
+        Test = test;
+        Body = body;
     }
 
     public override Doc PrintNode(PrintContext ctx)

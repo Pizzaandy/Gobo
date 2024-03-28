@@ -5,16 +5,16 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class ArrayExpression : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Elements => Children;
+    public GmlSyntaxNode[] Elements => Children;
 
-    public ArrayExpression(TextSpan span, List<GmlSyntaxNode> elements)
+    public ArrayExpression(TextSpan span, GmlSyntaxNode[] elements)
         : base(span)
     {
-        AsChildren(elements);
+        Children = elements;
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return DelimitedList.PrintInBrackets(ctx, this, "[", Elements, "]", ",");
+        return DelimitedList.PrintInBrackets(ctx, this, "[", Children, "]", ",");
     }
 }

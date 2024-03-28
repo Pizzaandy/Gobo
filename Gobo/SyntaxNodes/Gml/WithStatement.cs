@@ -11,8 +11,9 @@ internal sealed class WithStatement : GmlSyntaxNode
     public WithStatement(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode body)
         : base(span)
     {
-        Object = AsChild(@object);
-        Body = AsChild(body);
+        Children = [@object, body];
+        Object = @object;
+        Body = body;
     }
 
     public override Doc PrintNode(PrintContext ctx)

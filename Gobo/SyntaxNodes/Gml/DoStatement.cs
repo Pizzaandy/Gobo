@@ -11,8 +11,9 @@ internal sealed class DoStatement : GmlSyntaxNode
     public DoStatement(TextSpan span, GmlSyntaxNode body, GmlSyntaxNode test)
         : base(span)
     {
-        Body = AsChild(body);
-        Test = AsChild(test);
+        Children = [body, test];
+        Body = body;
+        Test = test;
     }
 
     public override Doc PrintNode(PrintContext ctx)

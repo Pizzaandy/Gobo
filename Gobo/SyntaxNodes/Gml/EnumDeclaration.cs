@@ -10,8 +10,9 @@ internal sealed class EnumDeclaration : GmlSyntaxNode
     public EnumDeclaration(TextSpan span, GmlSyntaxNode name, GmlSyntaxNode members)
         : base(span)
     {
-        Name = AsChild(name);
-        Members = AsChild(members);
+        Children = [name, members];
+        Name = name;
+        Members = Members = members;
     }
 
     public override Doc PrintNode(PrintContext ctx)

@@ -17,9 +17,10 @@ internal sealed class VariableDeclarator : GmlSyntaxNode
     )
         : base(span)
     {
-        Id = AsChild(id);
-        Type = AsChild(type);
-        Initializer = AsChild(initializer);
+        Children = [id, type, initializer];
+        Id = id;
+        Type = type;
+        Initializer = initializer;
     }
 
     public override Doc PrintNode(PrintContext ctx)

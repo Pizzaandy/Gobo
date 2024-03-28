@@ -5,18 +5,18 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class Block : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Statements => Children;
+    public GmlSyntaxNode[] Statements => Children;
     public static Doc EmptyBlock => "{}";
 
-    public Block(TextSpan span, List<GmlSyntaxNode> body)
+    public Block(TextSpan span, GmlSyntaxNode[] body)
         : base(span)
     {
-        AsChildren(body);
+        Children = body;
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        if (Children.Count == 0)
+        if (Children.Length == 0)
         {
             return PrintEmptyBlock(ctx, this);
         }
@@ -62,7 +62,7 @@ internal sealed class Block : GmlSyntaxNode
 
     public override int GetHashCode()
     {
-        if (Children.Count == 1)
+        if (Children.Length == 1)
         {
             return Children.First().GetHashCode();
         }

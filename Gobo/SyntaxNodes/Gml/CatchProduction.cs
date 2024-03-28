@@ -11,8 +11,9 @@ internal sealed class CatchProduction : GmlSyntaxNode
     public CatchProduction(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode body)
         : base(span)
     {
-        Id = AsChild(id);
-        Body = AsChild(body);
+        Children = [id, body];
+        Id = id;
+        Body = body;
     }
 
     public override Doc PrintNode(PrintContext ctx)

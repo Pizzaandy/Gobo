@@ -10,8 +10,9 @@ internal sealed class ConstructorClause : GmlSyntaxNode
     public ConstructorClause(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode arguments)
         : base(span)
     {
-        Id = AsChild(id);
-        Arguments = AsChild(arguments);
+        Children = [id, arguments];
+        Id = id;
+        Arguments = arguments;
     }
 
     public override Doc PrintNode(PrintContext ctx)

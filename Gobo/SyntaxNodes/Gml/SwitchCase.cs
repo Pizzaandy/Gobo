@@ -6,13 +6,14 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class SwitchCase : GmlSyntaxNode
 {
     public GmlSyntaxNode Test { get; set; }
-    public List<GmlSyntaxNode> Statements { get; set; }
+    public GmlSyntaxNode[] Statements { get; set; }
 
-    public SwitchCase(TextSpan span, GmlSyntaxNode test, List<GmlSyntaxNode> statements)
+    public SwitchCase(TextSpan span, GmlSyntaxNode test, GmlSyntaxNode[] statements)
         : base(span)
     {
-        Test = AsChild(test);
-        Statements = AsChildren(statements);
+        Children = [test, .. statements];
+        Test = test;
+        Statements = statements;
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -21,9 +22,9 @@ internal sealed class SwitchCase : GmlSyntaxNode
 
         Doc printedStatements = Doc.Null;
 
-        if (Statements.Count > 0)
+        if (Statements.Length > 0)
         {
-            var onlyBlock = Statements.Count == 1 && Statements.First() is Block;
+            var onlyBlock = Statements.Length == 1 && Statements.First() is Block;
 
             if (onlyBlock)
             {
@@ -44,7 +45,7 @@ internal sealed class SwitchCase : GmlSyntaxNode
         return Doc.Concat(
             caseText,
             Doc.Concat(Test.Print(ctx), ":"),
-            Statements.Count > 0 ? printedStatements : Doc.Null
+            Statements.Length > 0 ? printedStatements : Doc.Null
         );
     }
 }

@@ -5,13 +5,13 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class VariableDeclarationList : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Declarations { get; set; }
+    public GmlSyntaxNode[] Declarations => Children;
     public string Modifier { get; set; }
 
-    public VariableDeclarationList(TextSpan span, List<GmlSyntaxNode> declarations, string modifier)
+    public VariableDeclarationList(TextSpan span, GmlSyntaxNode[] declarations, string modifier)
         : base(span)
     {
-        Declarations = AsChildren(declarations);
+        Children = declarations;
         Modifier = modifier;
     }
 
@@ -19,13 +19,13 @@ internal sealed class VariableDeclarationList : GmlSyntaxNode
     {
         var parts = new List<Doc>() { Modifier, " " };
 
-        if (Children.Count == 1)
+        if (Children.Length == 1)
         {
             parts.Add(Children.First().Print(ctx));
         }
-        else if (Children.Count > 0)
+        else if (Children.Length > 0)
         {
-            var printedArguments = DelimitedList.Print(ctx, Declarations, ",");
+            var printedArguments = DelimitedList.Print(ctx, Children, ",");
             parts.Add(Doc.Indent(printedArguments));
         }
 

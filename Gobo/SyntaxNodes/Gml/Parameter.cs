@@ -16,9 +16,10 @@ internal sealed class Parameter : GmlSyntaxNode
     )
         : base(span)
     {
-        Name = AsChild(name);
-        Type = AsChild(type);
-        Initializer = AsChild(initializer);
+        Children = [name, type, initializer];
+        Name = name;
+        Type = type;
+        Initializer = initializer;
     }
 
     public override Doc PrintNode(PrintContext ctx)

@@ -8,7 +8,7 @@ internal static class DelimitedList
         PrintContext ctx,
         GmlSyntaxNode parent,
         string openToken,
-        List<GmlSyntaxNode> arguments,
+        GmlSyntaxNode[] arguments,
         string closeToken,
         string separator,
         bool allowTrailingSeparator = false,
@@ -20,14 +20,14 @@ internal static class DelimitedList
 
         var groupId = Guid.NewGuid().ToString();
 
-        if (arguments.Count == 0 && leadingContents is null && !parent.DanglingComments.Any())
+        if (arguments.Length == 0 && leadingContents is null && !parent.DanglingComments.Any())
         {
             return Doc.Concat(openToken, closeToken);
         }
 
         leadingContents ??= Doc.Null;
 
-        if (arguments.Count > 0)
+        if (arguments.Length > 0)
         {
             Doc printedArguments = Print(
                 ctx,
@@ -54,7 +54,7 @@ internal static class DelimitedList
 
     public static Doc Print(
         PrintContext ctx,
-        List<GmlSyntaxNode> nodes,
+        GmlSyntaxNode[] nodes,
         string separator,
         bool allowTrailingSeparator = false,
         bool forceBreak = false,
@@ -63,20 +63,20 @@ internal static class DelimitedList
     {
         leadingContents ??= Doc.Null;
 
-        if (nodes.Count == 0 && leadingContents is NullDoc)
+        if (nodes.Length == 0 && leadingContents is NullDoc)
         {
             return Doc.Null;
         }
 
         var parts = new List<Doc> { leadingContents };
 
-        for (var i = 0; i < nodes.Count; i++)
+        for (var i = 0; i < nodes.Length; i++)
         {
             var child = nodes[i];
 
             parts.Add(child.Print(ctx));
 
-            if (i != nodes.Count - 1)
+            if (i != nodes.Length - 1)
             {
                 parts.Add(separator);
                 parts.Add(forceBreak ? Doc.HardLine : Doc.Line);

@@ -11,8 +11,9 @@ internal sealed class CallExpression : GmlSyntaxNode, IMemberChainable
     public CallExpression(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode arguments)
         : base(span)
     {
-        Object = AsChild(@object);
-        Arguments = AsChild(arguments);
+        Children = [@object, arguments];
+        Object = @object;
+        Arguments = arguments;
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -27,6 +28,7 @@ internal sealed class CallExpression : GmlSyntaxNode, IMemberChainable
 
     public void SetObject(GmlSyntaxNode node)
     {
-        Object = AsChild(node);
+        Object = node;
+        Children[0] = node;
     }
 }

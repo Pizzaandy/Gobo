@@ -9,7 +9,8 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
     public ParenthesizedExpression(TextSpan span, GmlSyntaxNode expression)
         : base(span)
     {
-        Expression = AsChild(expression);
+        Children = [expression];
+        Expression = expression;
     }
 
     public bool IsControlFlowArgument =>

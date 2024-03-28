@@ -5,18 +5,18 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class StructExpression : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Properties => Children;
+    public GmlSyntaxNode[] Properties => Children;
     public static string EmptyStruct => "{}";
 
-    public StructExpression(TextSpan span, List<GmlSyntaxNode> properties)
+    public StructExpression(TextSpan span, GmlSyntaxNode[] properties)
         : base(span)
     {
-        AsChildren(properties);
+        Children = properties;
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        if (Children.Count == 0 && !DanglingComments.Any())
+        if (Children.Length == 0 && !DanglingComments.Any())
         {
             return EmptyStruct;
         }
@@ -26,7 +26,7 @@ internal sealed class StructExpression : GmlSyntaxNode
                 ctx,
                 this,
                 "{",
-                Properties,
+                Children,
                 "}",
                 ",",
                 allowTrailingSeparator: true

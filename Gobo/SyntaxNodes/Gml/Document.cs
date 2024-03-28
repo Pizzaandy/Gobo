@@ -5,12 +5,12 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class Document : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Statements => Children;
+    public GmlSyntaxNode[] Statements => Children;
 
-    public Document(TextSpan span, List<GmlSyntaxNode> body)
+    public Document(TextSpan span, GmlSyntaxNode[] body)
         : base(span)
     {
-        AsChildren(body);
+        Children = body;
     }
 
     public Document()

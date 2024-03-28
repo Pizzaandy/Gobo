@@ -253,14 +253,14 @@ internal class CommentMapper
             }
         }
 
-        //result = result.Where(CanAttachComment).ToList();
         result.Sort(new GmlNodeComparer());
+
         return result;
     }
 
     private static bool CanAttachComment(GmlSyntaxNode node)
     {
-        return !(node is EmptyNode or NodeList);
+        return node is not EmptyNode;
     }
 
     private bool IsOwnLineComment(CommentGroup comment)

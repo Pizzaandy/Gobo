@@ -10,8 +10,9 @@ internal sealed class EnumMember : GmlSyntaxNode
     public EnumMember(TextSpan span, GmlSyntaxNode id, GmlSyntaxNode initializer)
         : base(span)
     {
-        Id = AsChild(id);
-        Initializer = AsChild(initializer);
+        Children = [id, initializer];
+        Id = id;
+        Initializer = initializer;
     }
 
     public override Doc PrintNode(PrintContext ctx)

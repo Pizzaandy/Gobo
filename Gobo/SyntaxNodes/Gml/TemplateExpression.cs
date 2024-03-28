@@ -9,7 +9,8 @@ internal sealed class TemplateExpression : GmlSyntaxNode
     public TemplateExpression(TextSpan span, GmlSyntaxNode expression)
         : base(span)
     {
-        Expression = AsChild(expression);
+        Children = [expression];
+        Expression = expression;
     }
 
     public override Doc PrintNode(PrintContext ctx)

@@ -19,10 +19,11 @@ internal sealed class FunctionDeclaration : GmlSyntaxNode
     )
         : base(span)
     {
-        Id = AsChild(id);
-        Parameters = AsChild(parameters);
-        Body = AsChild(body);
-        ConstructorParent = AsChild(constructorClause);
+        Children = [id, parameters, body, constructorClause];
+        Id = id;
+        Parameters = parameters;
+        Body = body;
+        ConstructorParent = constructorClause;
     }
 
     public override Doc PrintNode(PrintContext ctx)

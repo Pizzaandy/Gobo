@@ -19,14 +19,16 @@ internal sealed class AssignmentExpression : GmlSyntaxNode
     )
         : base(span)
     {
+        Children = [left, right, type];
+
         if (@operator == ":=")
         {
             @operator = "=";
         }
         Operator = @operator;
-        Left = AsChild(left);
-        Right = AsChild(right);
-        Type = AsChild(type);
+        Left = left;
+        Right = right;
+        Type = type;
     }
 
     public override Doc PrintNode(PrintContext ctx)

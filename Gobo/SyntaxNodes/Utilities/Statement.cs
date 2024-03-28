@@ -60,12 +60,12 @@ internal static class Statement
         }
     }
 
-    public static Doc PrintStatements(PrintContext ctx, List<GmlSyntaxNode> statements)
+    public static Doc PrintStatements(PrintContext ctx, GmlSyntaxNode[] statements)
     {
-        var parts = new List<Doc>();
+        var parts = new List<Doc>(statements.Length);
         bool nextStatementNeedsLineBreak = false;
 
-        for (var i = 0; i < statements.Count; i++)
+        for (var i = 0; i < statements.Length; i++)
         {
             var child = statements[i];
 
@@ -79,7 +79,7 @@ internal static class Statement
                     || isTopLevelFunctionOrMethod
                     || nextStatementNeedsLineBreak
                 )
-                && child != statements.First();
+                && i != 0;
 
             parts.Add(
                 shouldAddLineBreak

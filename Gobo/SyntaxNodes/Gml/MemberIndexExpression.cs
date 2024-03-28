@@ -6,19 +6,20 @@ namespace Gobo.SyntaxNodes.Gml;
 internal sealed class MemberIndexExpression : GmlSyntaxNode, IMemberChainable
 {
     public GmlSyntaxNode Object { get; set; }
-    public List<GmlSyntaxNode> Properties { get; set; }
+    public GmlSyntaxNode[] Properties { get; set; }
     public string Accessor { get; set; }
 
     public MemberIndexExpression(
         TextSpan span,
         GmlSyntaxNode @object,
-        List<GmlSyntaxNode> properties,
+        GmlSyntaxNode[] properties,
         string accessor
     )
         : base(span)
     {
-        Object = AsChild(@object);
-        Properties = AsChildren(properties);
+        Children = [@object, .. properties];
+        Object = @object;
+        Properties = properties;
         Accessor = accessor;
     }
 
@@ -36,6 +37,7 @@ internal sealed class MemberIndexExpression : GmlSyntaxNode, IMemberChainable
 
     public void SetObject(GmlSyntaxNode node)
     {
-        Object = AsChild(node);
+        Object = node;
+        Children[0] = node;
     }
 }

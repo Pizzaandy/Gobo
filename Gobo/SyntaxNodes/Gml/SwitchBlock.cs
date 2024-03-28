@@ -5,17 +5,17 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class SwitchBlock : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Cases => Children;
+    public GmlSyntaxNode[] Cases => Children;
 
-    public SwitchBlock(TextSpan span, List<GmlSyntaxNode> cases)
+    public SwitchBlock(TextSpan span, GmlSyntaxNode[] cases)
         : base(span)
     {
-        AsChildren(cases);
+        Children = cases;
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        if (Children.Count == 0)
+        if (Children.Length == 0)
         {
             return Block.PrintEmptyBlock(ctx, this);
         }

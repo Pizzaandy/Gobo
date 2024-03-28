@@ -7,7 +7,7 @@ internal interface ISyntaxNode<T>
 
     public abstract T? Parent { get; protected set; }
 
-    public abstract List<T> Children { get; protected set; }
+    public abstract T[] Children { get; protected init; }
 
     /// <summary>
     /// Returns true if a difference is found
@@ -24,7 +24,7 @@ internal interface ISyntaxNode<T>
         // Compare hash codes of terminal nodes
         if (a.GetHashCode() != b.GetHashCode())
         {
-            if (a.Children.Count == 0 && b.Children.Count == 0)
+            if (a.Children.Length == 0 && b.Children.Length == 0)
             {
                 return true;
             }

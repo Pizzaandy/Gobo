@@ -4,12 +4,12 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class TemplateLiteral : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Parts => Children;
+    public GmlSyntaxNode[] Parts => Children;
 
-    public TemplateLiteral(TextSpan span, List<GmlSyntaxNode> atoms)
+    public TemplateLiteral(TextSpan span, GmlSyntaxNode[] atoms)
         : base(span)
     {
-        Children = AsChildren(atoms);
+        Children = atoms;
     }
 
     public override Doc PrintNode(PrintContext ctx)

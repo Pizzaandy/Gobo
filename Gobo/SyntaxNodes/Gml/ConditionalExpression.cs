@@ -16,9 +16,10 @@ internal sealed class ConditionalExpression : GmlSyntaxNode
     )
         : base(span)
     {
-        Test = AsChild(test);
-        WhenTrue = AsChild(whenTrue);
-        WhenFalse = AsChild(whenFalse);
+        Children = [test, whenTrue, whenFalse];
+        Test = test;
+        WhenTrue = whenTrue;
+        WhenFalse = whenFalse;
     }
 
     public override Doc PrintNode(PrintContext ctx)

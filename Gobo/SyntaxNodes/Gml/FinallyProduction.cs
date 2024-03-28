@@ -10,7 +10,8 @@ internal sealed class FinallyProduction : GmlSyntaxNode
     public FinallyProduction(TextSpan span, GmlSyntaxNode body)
         : base(span)
     {
-        Body = AsChild(body);
+        Children = [body];
+        Body = body;
     }
 
     public override Doc PrintNode(PrintContext ctx)

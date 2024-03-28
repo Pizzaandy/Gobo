@@ -5,25 +5,25 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class GlobalVariableStatement : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Declarations => Children;
+    public GmlSyntaxNode[] Declarations => Children;
 
-    public GlobalVariableStatement(TextSpan span, List<GmlSyntaxNode> declarations)
+    public GlobalVariableStatement(TextSpan span, GmlSyntaxNode[] declarations)
         : base(span)
     {
-        AsChildren(declarations);
+        Children = declarations;
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
         var parts = new List<Doc>() { "globalvar", " " };
 
-        if (Children.Count == 1)
+        if (Children.Length == 1)
         {
             parts.Add(Children.First().Print(ctx));
         }
-        else if (Children.Count > 0)
+        else if (Children.Length > 0)
         {
-            var printedArguments = DelimitedList.Print(ctx, Declarations, ",");
+            var printedArguments = DelimitedList.Print(ctx, Children, ",");
             parts.Add(Doc.Indent(printedArguments));
         }
 

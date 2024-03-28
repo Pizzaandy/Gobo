@@ -17,9 +17,10 @@ internal sealed class IfStatement : GmlSyntaxNode
     )
         : base(span)
     {
-        Test = AsChild(test);
-        Consequent = AsChild(consequent);
-        Alternate = AsChild(alternate);
+        Children = [test, consequent, alternate];
+        Test = test;
+        Consequent = consequent;
+        Alternate = alternate;
     }
 
     public override Doc PrintNode(PrintContext ctx)

@@ -20,7 +20,18 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     public GmlSyntaxNode? Parent { get; set; }
 
     [JsonIgnore]
-    public List<GmlSyntaxNode> Children { get; set; } = new();
+    public GmlSyntaxNode[] Children
+    {
+        get => children;
+        init
+        {
+            children = value;
+            foreach (var child in children)
+            {
+                child.Parent = this;
+            }
+        }
+    }
 
     [JsonIgnore]
     public bool IsEmpty => this is EmptyNode;
@@ -39,6 +50,8 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
     [JsonIgnore]
     public IEnumerable<CommentGroup> DanglingComments =>
         Comments.Where(g => g.Type == CommentType.Dangling);
+
+    private GmlSyntaxNode[] children = Array.Empty<GmlSyntaxNode>();
 
     public GmlSyntaxNode() { }
 
@@ -95,13 +108,13 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
     public Doc PrintRaw(PrintContext ctx)
     {
-        Children.ForEach(child => child.MarkCommentsAsPrinted());
+        Children.ToList().ForEach(child => child.MarkCommentsAsPrinted());
         return ctx.SourceText.ReadSpan(Span).ReplaceLineEndings("\n");
     }
 
-    public List<Doc> PrintChildren(PrintContext ctx)
+    public Doc[] PrintChildren(PrintContext ctx)
     {
-        return Children.Select(child => child.Print(ctx)).ToList();
+        return Children.Select(child => child.Print(ctx)).ToArray();
     }
 
     // TODO: Move comment logic?
@@ -156,7 +169,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
             SyntaxNodeSerializerContext.Default.GmlSyntaxNode
         );
         return result;
-        //return Regex.Unescape(result);
     }
 
     public override int GetHashCode()
@@ -173,25 +185,9 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
         return hashCode.ToHashCode();
     }
 
-    protected GmlSyntaxNode AsChild(GmlSyntaxNode child)
-    {
-        Children.Add(child);
-        child.Parent = this;
-        return child;
-    }
-
-    protected List<GmlSyntaxNode> AsChildren(List<GmlSyntaxNode> children)
-    {
-        foreach (var child in children)
-        {
-            AsChild(child);
-        }
-        return children;
-    }
-
     private void MarkCommentsAsPrinted()
     {
         Comments.ForEach(commentGroup => commentGroup.PrintedRaw = true);
-        Children.ForEach(child => child.MarkCommentsAsPrinted());
+        Children.ToList().ForEach(child => child.MarkCommentsAsPrinted());
     }
 }

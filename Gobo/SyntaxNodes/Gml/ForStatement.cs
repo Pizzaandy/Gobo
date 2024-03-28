@@ -19,10 +19,11 @@ internal sealed class ForStatement : GmlSyntaxNode
     )
         : base(span)
     {
-        Init = AsChild(init);
-        Test = AsChild(test);
-        Update = AsChild(update);
-        Body = AsChild(body);
+        Children = [init, test, update, body];
+        Init = init;
+        Test = test;
+        Update = update;
+        Body = body;
     }
 
     public override Doc PrintNode(PrintContext ctx)

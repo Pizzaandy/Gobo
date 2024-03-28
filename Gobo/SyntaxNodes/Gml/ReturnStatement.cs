@@ -9,7 +9,8 @@ internal sealed class ReturnStatement : GmlSyntaxNode
     public ReturnStatement(TextSpan span, GmlSyntaxNode argument)
         : base(span)
     {
-        Argument = AsChild(argument);
+        Children = [argument];
+        Argument = argument;
     }
 
     public override Doc PrintNode(PrintContext ctx)

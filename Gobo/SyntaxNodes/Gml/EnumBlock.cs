@@ -4,24 +4,24 @@ namespace Gobo.SyntaxNodes.Gml;
 
 internal sealed class EnumBlock : GmlSyntaxNode
 {
-    public List<GmlSyntaxNode> Members => Children;
+    public GmlSyntaxNode[] Members => Children;
 
-    public EnumBlock(TextSpan span, List<GmlSyntaxNode> members)
+    public EnumBlock(TextSpan span, GmlSyntaxNode[] members)
         : base(span)
     {
-        AsChildren(members);
+        Children = members;
     }
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        if (Children.Count == 0)
+        if (Children.Length == 0)
         {
             return Block.EmptyBlock;
         }
 
         var parts = new List<Doc>();
 
-        for (var i = 0; i < Children.Count; i++)
+        for (var i = 0; i < Children.Length; i++)
         {
             var member = Children[i];
 
@@ -35,7 +35,7 @@ internal sealed class EnumBlock : GmlSyntaxNode
                 parts.Add(member.Print(ctx));
             }
 
-            if (i != Children.Count - 1)
+            if (i != Children.Length - 1)
             {
                 parts.Add(Doc.HardLine);
             }

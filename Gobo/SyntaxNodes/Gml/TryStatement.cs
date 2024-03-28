@@ -17,9 +17,10 @@ internal sealed class TryStatement : GmlSyntaxNode
     )
         : base(span)
     {
-        Body = AsChild(body);
-        Catch = AsChild(@catch);
-        Finally = AsChild(@finally);
+        Children = [body, @catch, @finally];
+        Body = body;
+        Catch = @catch;
+        Finally = @finally;
     }
 
     public override Doc PrintNode(PrintContext ctx)

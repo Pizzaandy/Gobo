@@ -11,8 +11,9 @@ internal sealed class MemberDotExpression : GmlSyntaxNode, IMemberChainable
     public MemberDotExpression(TextSpan span, GmlSyntaxNode @object, GmlSyntaxNode property)
         : base(span)
     {
-        Object = AsChild(@object);
-        Property = AsChild(property);
+        Children = [@object, property];
+        Object = @object;
+        Property = property;
     }
 
     public override Doc PrintNode(PrintContext ctx)
@@ -34,6 +35,7 @@ internal sealed class MemberDotExpression : GmlSyntaxNode, IMemberChainable
 
     public void SetObject(GmlSyntaxNode node)
     {
-        Object = AsChild(node);
+        Object = node;
+        Children[0] = node;
     }
 }

@@ -1,4 +1,5 @@
-﻿using Gobo.SyntaxNodes;
+﻿using Collections.Pooled;
+using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
 using System.Runtime.CompilerServices;
@@ -17,16 +18,6 @@ internal class GmlSyntaxErrorException : Exception
         : base(message) { }
 }
 
-internal readonly struct GmlSyntaxError
-{
-    public string Message { get; init; }
-
-    public GmlSyntaxError(string message)
-    {
-        Message = message;
-    }
-}
-
 internal class GmlParser
 {
     public Token CurrentToken => token;
@@ -41,6 +32,8 @@ internal class GmlParser
     private Token accepted;
 
     private List<Token> currentTriviaGroup = new();
+    private static GmlSyntaxNode[] emptyNodeArray = Array.Empty<GmlSyntaxNode>();
+
     private bool HitEOF => token.Kind == TokenKind.Eof;
 
     private static readonly TokenKind[] assignmentOperators =
@@ -134,6 +127,7 @@ internal class GmlParser
         ProcessToken(token);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool Accept(TokenKind kind, bool skipHiddenTokens = true)
     {
         if (skipHiddenTokens)
@@ -154,6 +148,7 @@ internal class GmlParser
         return false;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private void Expect(TokenKind kind, bool skipHiddenTokens = true)
     {
         if (!Accept(kind, skipHiddenTokens))
@@ -283,9 +278,9 @@ internal class GmlParser
         node = new Document(GetSpan(start, accepted), statements);
     }
 
-    private List<GmlSyntaxNode> StatementList()
+    private GmlSyntaxNode[] StatementList()
     {
-        var statements = new List<GmlSyntaxNode>();
+        var parts = new PooledList<GmlSyntaxNode>();
 
         while (!HitEOF)
         {
@@ -296,7 +291,7 @@ internal class GmlParser
 
             if (Statement(out var result, acceptSemicolons: false))
             {
-                statements.Add(result);
+                parts.Add(result);
             }
             else
             {
@@ -304,7 +299,7 @@ internal class GmlParser
             }
         }
 
-        return statements;
+        return parts.ToArray();
     }
 
     #region Statements
@@ -312,6 +307,7 @@ internal class GmlParser
     {
         if (
             Block(out result)
+            || AssignmentOrExpressionStatement(out result)
             || IfStatement(out result)
             || FunctionDeclaration(out result)
             || DoStatement(out result)
@@ -331,7 +327,6 @@ internal class GmlParser
             || DeleteStatement(out result)
             || EnumeratorDeclaration(out result)
             || MacroStatement(out result)
-            || AssignmentOrExpressionStatement(out result)
         )
         {
             if (acceptSemicolons)
@@ -441,14 +436,15 @@ internal class GmlParser
                 return false;
             }
 
-            var declarations = new List<GmlSyntaxNode>() { firstDeclaration };
+            var parts = new PooledList<GmlSyntaxNode>();
+            parts.Add(firstDeclaration);
 
             while (!HitEOF)
             {
                 if (Accept(TokenKind.Comma))
                 {
                     Expect(VariableDeclarator(out var variableDeclarator));
-                    declarations.Add(variableDeclarator);
+                    parts.Add(variableDeclarator);
                 }
                 else
                 {
@@ -456,7 +452,11 @@ internal class GmlParser
                 }
             }
 
-            result = new VariableDeclarationList(GetSpan(start, accepted), declarations, modifier);
+            result = new VariableDeclarationList(
+                GetSpan(start, accepted),
+                parts.ToArray(),
+                modifier
+            );
         }
         else if (UnaryExpression(out var left))
         {
@@ -622,16 +622,16 @@ internal class GmlParser
         var blockStart = token;
         Expect(TokenKind.OpenBrace);
 
-        var cases = new List<GmlSyntaxNode>();
+        var parts = new PooledList<GmlSyntaxNode>();
         while (!HitEOF)
         {
             if (SwitchCase(out var switchCase))
             {
-                cases.Add(switchCase);
+                parts.Add(switchCase);
             }
             else if (RegionStatement(out var regionStatement))
             {
-                cases.Add(regionStatement);
+                parts.Add(regionStatement);
             }
             else
             {
@@ -641,7 +641,7 @@ internal class GmlParser
 
         Expect(TokenKind.CloseBrace);
 
-        var caseBlock = new SwitchBlock(GetSpan(blockStart, token), cases);
+        var caseBlock = new SwitchBlock(GetSpan(blockStart, token), parts.ToArray());
         result = new SwitchStatement(GetSpan(start, accepted), condition, caseBlock);
         return true;
     }
@@ -926,12 +926,12 @@ internal class GmlParser
             result = new EnumDeclaration(
                 GetSpan(start, accepted),
                 name,
-                new EnumBlock(GetSpan(startBlock, token), new())
+                new EnumBlock(GetSpan(startBlock, token), emptyNodeArray)
             );
             return true;
         }
 
-        var enumMembers = new List<GmlSyntaxNode>();
+        var parts = new PooledList<GmlSyntaxNode>();
         bool expectDelimiter = false;
 
         while (!HitEOF)
@@ -945,7 +945,7 @@ internal class GmlParser
             {
                 if (RegionStatement(out var regionStatement))
                 {
-                    enumMembers.Add(regionStatement);
+                    parts.Add(regionStatement);
                     continue;
                 }
                 Expect(TokenKind.Comma);
@@ -955,12 +955,12 @@ internal class GmlParser
             {
                 if (RegionStatement(out var regionStatement))
                 {
-                    enumMembers.Add(regionStatement);
+                    parts.Add(regionStatement);
                     continue;
                 }
                 else if (EnumMember(out var enumMember))
                 {
-                    enumMembers.Add(enumMember);
+                    parts.Add(enumMember);
                     expectDelimiter = true;
                 }
                 else
@@ -975,7 +975,7 @@ internal class GmlParser
             ThrowExpected(TokenKind.CloseBrace);
         }
 
-        var enumBlock = new EnumBlock(GetSpan(startBlock, token), enumMembers);
+        var enumBlock = new EnumBlock(GetSpan(startBlock, token), parts.ToArray());
         result = new EnumDeclaration(GetSpan(start, accepted), name, enumBlock);
         return true;
     }
@@ -1070,16 +1070,17 @@ internal class GmlParser
             else if (AcceptAny(accessors))
             {
                 var accessor = accepted.Text;
-                var expressions = new List<GmlSyntaxNode>();
+                var parts = new PooledList<GmlSyntaxNode>();
+
                 Expect(Expression(out var firstExpression));
-                expressions.Add(firstExpression);
+                parts.Add(firstExpression);
 
                 while (!HitEOF)
                 {
                     if (Accept(TokenKind.Comma))
                     {
                         Expect(Expression(out var expression));
-                        expressions.Add(expression);
+                        parts.Add(expression);
                     }
                     else if (Accept(TokenKind.CloseBracket))
                     {
@@ -1094,7 +1095,7 @@ internal class GmlParser
                 @object = new MemberIndexExpression(
                     GetSpan(start, accepted),
                     @object,
-                    expressions,
+                    parts.ToArray(),
                     accessor
                 );
             }
@@ -1323,12 +1324,13 @@ internal class GmlParser
 
         if (Accept(TokenKind.CloseParen))
         {
-            result = new ParameterList(GetSpan(start, accepted), new());
+            result = new ParameterList(GetSpan(start, accepted), emptyNodeArray);
             return true;
         }
 
         Expect(Parameter(out var firstParameter));
-        var parameters = new List<GmlSyntaxNode>() { firstParameter };
+        var parts = new PooledList<GmlSyntaxNode>();
+        parts.Add(firstParameter);
 
         while (!HitEOF)
         {
@@ -1341,7 +1343,7 @@ internal class GmlParser
                 else
                 {
                     Expect(Parameter(out var parameter));
-                    parameters.Add(parameter);
+                    parts.Add(parameter);
                 }
             }
             else if (Accept(TokenKind.CloseParen))
@@ -1356,7 +1358,7 @@ internal class GmlParser
             }
         }
 
-        result = new ParameterList(GetSpan(start, accepted), parameters);
+        result = new ParameterList(GetSpan(start, accepted), parts.ToArray());
         return true;
     }
 
@@ -1396,11 +1398,11 @@ internal class GmlParser
 
         if (Accept(TokenKind.CloseParen))
         {
-            result = new ArgumentList(GetSpan(start, accepted), new());
+            result = new ArgumentList(GetSpan(start, accepted), emptyNodeArray);
             return true;
         }
 
-        var arguments = new List<GmlSyntaxNode>();
+        var parts = new PooledList<GmlSyntaxNode>();
         bool previousChildWasPunctuator = true;
         bool endedOnClosingDelimiter = false;
 
@@ -1415,22 +1417,22 @@ internal class GmlParser
                     return false;
                 }
                 previousChildWasPunctuator = false;
-                arguments.Add(expression);
+                parts.Add(expression);
             }
 
             if (Accept(TokenKind.Comma))
             {
                 if (previousChildWasPunctuator)
                 {
-                    arguments.Add(new UndefinedArgument(token.StartIndex - 1));
+                    parts.Add(new UndefinedArgument(token.StartIndex - 1));
                 }
                 previousChildWasPunctuator = true;
             }
             else if (Accept(TokenKind.CloseParen))
             {
-                if (previousChildWasPunctuator && arguments.Count > 0)
+                if (previousChildWasPunctuator && parts.Count > 0)
                 {
-                    arguments.Add(new UndefinedArgument(token.StartIndex - 1));
+                    parts.Add(new UndefinedArgument(token.StartIndex - 1));
                 }
                 endedOnClosingDelimiter = true;
                 break;
@@ -1448,7 +1450,7 @@ internal class GmlParser
             ThrowExpected(TokenKind.CloseParen);
         }
 
-        result = new ArgumentList(GetSpan(start, accepted), arguments);
+        result = new ArgumentList(GetSpan(start, accepted), parts.ToArray());
         return true;
     }
 
@@ -1501,14 +1503,16 @@ internal class GmlParser
             var textSpan = new TextSpan(fullSpan.Start + 2, fullSpan.End - 1);
 
             var text = new TemplateText(textSpan, accepted.Text[2..^1]);
-            result = new TemplateLiteral(GetSpan(accepted), new List<GmlSyntaxNode>() { text });
+            result = new TemplateLiteral(GetSpan(accepted), new GmlSyntaxNode[] { text });
         }
         else if (Accept(TokenKind.TemplateStart))
         {
             var fullSpan = GetSpan(accepted);
             var textSpan = new TextSpan(fullSpan.Start + 2, fullSpan.End - 1);
             var text = new TemplateText(textSpan, accepted.Text[2..^1]);
-            var atoms = new List<GmlSyntaxNode>() { text };
+
+            var parts = new PooledList<GmlSyntaxNode>();
+            parts.Add(text);
 
             var expressionStart = accepted.EndIndex - 1;
 
@@ -1523,7 +1527,7 @@ internal class GmlParser
 
                 Expect(TokenKind.CloseBrace);
 
-                atoms.Add(
+                parts.Add(
                     new TemplateExpression(
                         new TextSpan(expressionStart, accepted.EndIndex),
                         expression
@@ -1537,7 +1541,7 @@ internal class GmlParser
                     fullSpan = GetSpan(accepted);
                     textSpan = new TextSpan(fullSpan.Start, fullSpan.End - 1);
                     text = new TemplateText(textSpan, accepted.Text[0..^1]);
-                    atoms.Add(text);
+                    parts.Add(text);
                     expressionStart = accepted.EndIndex;
                     continue;
                 }
@@ -1546,22 +1550,22 @@ internal class GmlParser
                     fullSpan = GetSpan(accepted);
                     textSpan = new TextSpan(fullSpan.Start, fullSpan.End - 1);
                     text = new TemplateText(textSpan, accepted.Text[0..^1]);
-                    atoms.Add(text);
+                    parts.Add(text);
 
                     // trim empty text at ends
-                    if (atoms[0] is TemplateText && atoms[0].Span.Length == 0)
+                    if (parts[0] is TemplateText && parts[0].Span.Length == 0)
                     {
-                        atoms.RemoveAt(0);
+                        parts.RemoveAt(0);
                     }
 
-                    if (atoms.Count > 0 && atoms[^1] is TemplateText && atoms[^1].Span.Length == 0)
+                    if (parts.Count > 0 && parts[^1] is TemplateText && parts[^1].Span.Length == 0)
                     {
-                        atoms.RemoveAt(atoms.Count - 1);
+                        parts.RemoveAt(parts.Count - 1);
                     }
 
                     result = new TemplateLiteral(
                         new TextSpan(start.StartIndex, accepted.EndIndex),
-                        atoms
+                        parts.ToArray()
                     );
                     return true;
                 }
@@ -1613,11 +1617,11 @@ internal class GmlParser
 
         if (Accept(TokenKind.CloseBracket))
         {
-            result = new ArrayExpression(GetSpan(start, accepted), new());
+            result = new ArrayExpression(GetSpan(start, accepted), emptyNodeArray);
             return true;
         }
 
-        var elements = new List<GmlSyntaxNode>();
+        var parts = new PooledList<GmlSyntaxNode>();
 
         bool expectDelimiter = false;
         bool endedOnClosingDelimiter = false;
@@ -1631,7 +1635,7 @@ internal class GmlParser
             else
             {
                 Expect(Expression(out var expression));
-                elements.Add(expression);
+                parts.Add(expression);
             }
             expectDelimiter = !expectDelimiter;
 
@@ -1647,7 +1651,7 @@ internal class GmlParser
             ThrowExpected(TokenKind.CloseBrace);
         }
 
-        result = new ArrayExpression(GetSpan(start, accepted), elements);
+        result = new ArrayExpression(GetSpan(start, accepted), parts.ToArray());
         return true;
     }
 
@@ -1662,11 +1666,11 @@ internal class GmlParser
 
         if (Accept(TokenKind.CloseBrace))
         {
-            result = new StructExpression(GetSpan(start, accepted), new());
+            result = new StructExpression(GetSpan(start, accepted), emptyNodeArray);
             return true;
         }
 
-        var properties = new List<GmlSyntaxNode>();
+        var parts = new PooledList<GmlSyntaxNode>();
 
         bool endedOnClosingDelimiter = false;
         bool expectDelimiter = false;
@@ -1680,7 +1684,7 @@ internal class GmlParser
             else
             {
                 Expect(PropertyAssignment(out var property));
-                properties.Add(property);
+                parts.Add(property);
             }
             expectDelimiter = !expectDelimiter;
 
@@ -1696,7 +1700,7 @@ internal class GmlParser
             ThrowExpected(TokenKind.CloseBrace);
         }
 
-        result = new StructExpression(GetSpan(start, accepted), properties);
+        result = new StructExpression(GetSpan(start, accepted), parts.ToArray());
         return true;
     }
 

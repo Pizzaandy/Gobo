@@ -11,12 +11,13 @@ internal sealed class UnaryExpression : GmlSyntaxNode
     public UnaryExpression(TextSpan span, string @operator, GmlSyntaxNode argument, bool isPrefix)
         : base(span)
     {
+        Children = [argument];
         Operator = @operator;
         if (Operator == "not")
         {
             Operator = "!";
         }
-        Argument = AsChild(argument);
+        Argument = argument;
         IsPrefix = isPrefix;
     }
 

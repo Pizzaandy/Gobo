@@ -16,6 +16,8 @@ internal sealed class BinaryExpression : GmlSyntaxNode
     )
         : base(span)
     {
+        Children = [left, right];
+
         Operator = @operator switch
         {
             "and" => "&&",
@@ -28,8 +30,8 @@ internal sealed class BinaryExpression : GmlSyntaxNode
             _ => @operator
         };
 
-        Left = AsChild(left);
-        Right = AsChild(right);
+        Left = left;
+        Right = right;
     }
 
     public override Doc PrintNode(PrintContext ctx)

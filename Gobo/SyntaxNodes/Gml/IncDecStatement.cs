@@ -11,8 +11,9 @@ internal sealed class IncDecStatement : GmlSyntaxNode
     public IncDecStatement(TextSpan span, string @operator, GmlSyntaxNode argument, bool isPrefix)
         : base(span)
     {
+        Children = [argument];
         Operator = @operator;
-        Argument = AsChild(argument);
+        Argument = argument;
         IsPrefix = isPrefix;
     }
 
