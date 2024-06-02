@@ -41,7 +41,24 @@ internal class DelimitedList
                 leadingContents
             );
 
-            var contents = Doc.Concat(forceBreak ? Doc.HardLine : Doc.SoftLine, printedArguments);
+            LineDoc lineBreak = Doc.SoftLine;
+
+            if (forceBreak)
+            {
+                lineBreak = Doc.HardLine;
+            }
+            else if (openToken == "[")
+            {
+                // Special case: add a space between [ and #.
+                int index = arguments.Children[0].Span.Start;
+                char firstCharacter = ctx.SourceText.ReadSpan(index, index + 1)[0];
+                if (firstCharacter == '#')
+                {
+                    lineBreak = Doc.Line;
+                }
+            }
+
+            var contents = Doc.Concat(lineBreak, printedArguments);
             parts.Add(Doc.IndentIfBreak(contents, groupId));
         }
         else

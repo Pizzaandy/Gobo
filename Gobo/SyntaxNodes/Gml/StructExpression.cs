@@ -22,7 +22,14 @@ internal sealed class StructExpression : GmlSyntaxNode
         }
         else
         {
-            return DelimitedList.PrintInBrackets(ctx, "{", this, "}", ",", true);
+            return DelimitedList.PrintInBrackets(
+                ctx,
+                "{",
+                this,
+                "}",
+                ",",
+                allowTrailingSeparator: true
+            );
         }
     }
 }

@@ -12,6 +12,8 @@ var array = [
     item1, item2, item3,
 ]
 
+var hex_edge_case = [ #FFFFFF]
+
 var array = [
     item1, item2, item3, // should break
 ]

@@ -1,0 +1,3 @@
+str = "\\";
+
+var escaped_template = $"\{{a + b}\}";
