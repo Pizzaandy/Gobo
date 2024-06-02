@@ -59,10 +59,8 @@ internal class GmlLexer
                 return Token(TokenKind.TemplateMiddle);
             }
 
-            while (IsTemplateStringCharacter(Peek()) && !HitEof)
-            {
-                Advance();
-            }
+            MatchTemplateStringCharacters();
+
             if (Match('{'))
             {
                 return Token(TokenKind.TemplateMiddle);
@@ -359,10 +357,8 @@ internal class GmlLexer
             case '$':
                 if (Match('"'))
                 {
-                    while (IsTemplateStringCharacter(Peek()) && !HitEof)
-                    {
-                        Advance();
-                    }
+                    MatchTemplateStringCharacters();
+
                     if (Match('{'))
                     {
                         return Token(TokenKind.TemplateStart);
@@ -545,6 +541,23 @@ internal class GmlLexer
         }
     }
 
+    private void MatchTemplateStringCharacters()
+    {
+        static bool IsTemplateStringCharacter(int c)
+        {
+            return c != '"' && c != '{' && c != '\r' && c != '\n';
+        }
+
+        while (IsTemplateStringCharacter(Peek()) && !HitEof)
+        {
+            if (Peek() == '\\')
+            {
+                Advance();
+            }
+            Advance();
+        }
+    }
+
     private static bool IsDigit(int c)
     {
         return c >= '0' && c <= '9';
@@ -563,11 +576,6 @@ internal class GmlLexer
     private static bool IsBinaryDigit(int c)
     {
         return c == '0' || c == '1';
-    }
-
-    private static bool IsTemplateStringCharacter(int c)
-    {
-        return c != '"' && c != '{' && c != '\r' && c != '\n';
     }
 
     private bool Match(int expected)
