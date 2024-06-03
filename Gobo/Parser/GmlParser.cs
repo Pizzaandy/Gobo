@@ -4,7 +4,7 @@ using Gobo.SyntaxNodes.Gml.Literals;
 
 namespace Gobo.Parser;
 
-internal struct GmlParseResult
+internal class GmlParseResult
 {
     public GmlSyntaxNode Ast;
     public List<Token[]> TriviaGroups;
@@ -112,9 +112,9 @@ internal class GmlParser
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
-    public GmlParser(string code, int tabWidth)
+    public GmlParser(string code)
     {
-        lexer = new GmlLexer(code, tabWidth);
+        lexer = new GmlLexer(code);
         token = lexer.NextToken();
         ProcessToken(token);
     }

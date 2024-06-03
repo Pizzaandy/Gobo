@@ -19,16 +19,14 @@ internal class GmlLexer
     private int columnNumber;
     private int startIndex;
     private int index;
-    private readonly int tabWidth;
     private int character;
     private string CurrentToken => text[startIndex..index];
 
     private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
 
-    public GmlLexer(string text, int tabWidth = 4)
+    public GmlLexer(string text)
     {
         this.text = text;
-        this.tabWidth = tabWidth;
         index = 0;
         lineNumber = 1;
     }
@@ -548,7 +546,12 @@ internal class GmlLexer
             return c != '"' && c != '{' && c != '\r' && c != '\n';
         }
 
-        while (IsTemplateStringCharacter(Peek()) && !HitEof)
+        if (character == '\\')
+        {
+            Advance();
+        }
+
+        while (!HitEof && IsTemplateStringCharacter(Peek()))
         {
             if (Peek() == '\\')
             {
@@ -634,7 +637,7 @@ internal class GmlLexer
                 columnNumber = 0;
                 break;
             case '\t':
-                columnNumber += tabWidth;
+                columnNumber += 1;
                 break;
             default:
                 columnNumber += 1;

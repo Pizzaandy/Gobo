@@ -53,8 +53,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
 
     public Doc Print(PrintContext ctx)
     {
-        ctx.Stack.Push(this);
-
         Doc printed;
 
         var hasComments = Comments.Count > 0;
@@ -88,8 +86,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
             printed = PrintWithOwnComments(ctx, printed);
         }
 
-        ctx.Stack.Pop();
-
         return printed;
     }
 
@@ -104,7 +100,6 @@ internal abstract partial class GmlSyntaxNode : ISyntaxNode<GmlSyntaxNode>
         return Children.Select(child => child.Print(ctx)).ToList();
     }
 
-    // TODO: Move comment logic?
     public virtual Doc PrintLeadingComments(
         PrintContext ctx,
         CommentType asType = CommentType.Leading

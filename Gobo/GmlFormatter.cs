@@ -5,10 +5,8 @@ using System.Diagnostics;
 
 namespace Gobo;
 
-public struct FormatResult
+public class FormatResult
 {
-    public static readonly FormatResult Empty = new();
-
     public string Output;
 
     public string Ast = string.Empty;
@@ -23,7 +21,7 @@ public struct FormatResult
         Output = output;
     }
 
-    public override readonly string ToString()
+    public override string ToString()
     {
         var result = "";
 
@@ -64,7 +62,7 @@ public static partial class GmlFormatter
             parseStart = Stopwatch.GetTimestamp();
         }
 
-        var parseResult = new GmlParser(code, options.TabWidth).Parse();
+        var parseResult = new GmlParser(code).Parse();
 
         new CommentMapper(code, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
 
@@ -136,7 +134,7 @@ public static partial class GmlFormatter
 
             try
             {
-                updatedParseResult = new GmlParser(output, options.TabWidth).Parse();
+                updatedParseResult = new GmlParser(output).Parse();
             }
             catch (GmlSyntaxErrorException ex)
             {
@@ -145,7 +143,7 @@ public static partial class GmlFormatter
                 );
             }
 
-            var resultHash = updatedParseResult.Ast.GetHashCode();
+            int resultHash = updatedParseResult.Ast.GetHashCode();
 
             if (initialHash != resultHash)
             {
