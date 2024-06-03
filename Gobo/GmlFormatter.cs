@@ -1,6 +1,7 @@
 ﻿using Gobo.Parser;
 using Gobo.Printer.DocPrinter;
 using Gobo.SyntaxNodes;
+using Gobo.Text;
 using System.Diagnostics;
 
 namespace Gobo;
@@ -48,7 +49,12 @@ public class FormatResult
 
 public static partial class GmlFormatter
 {
-    public static FormatResult Format(string code, FormatOptions options)
+    public static FormatResult Format(string text, FormatOptions options)
+    {
+        return Format(SourceText.From(text), options);
+    }
+
+    public static FormatResult Format(SourceText code, FormatOptions options)
     {
         long parseStart = 0;
         long parseStop = 0;
@@ -134,7 +140,7 @@ public static partial class GmlFormatter
 
             try
             {
-                updatedParseResult = new GmlParser(output).Parse();
+                updatedParseResult = new GmlParser(SourceText.From(output)).Parse();
             }
             catch (GmlSyntaxErrorException ex)
             {
@@ -176,10 +182,10 @@ public static partial class GmlFormatter
         }
     }
 
-    public static bool Check(string code, FormatOptions options)
+    public static bool Check(SourceText code, FormatOptions options)
     {
         var result = Format(code, options);
-        return result.Output == code;
+        return SourceText.From(result.Output).ContentEquals(code);
     }
 
     public static async Task FormatFileAsync(string filePath, FormatOptions options)
@@ -189,7 +195,7 @@ public static partial class GmlFormatter
 
         try
         {
-            var result = Format(input, options);
+            var result = Format(SourceText.From(input), options);
             formatted = result.Output;
         }
         catch (Exception)

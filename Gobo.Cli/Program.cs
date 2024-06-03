@@ -1,6 +1,7 @@
 ﻿using DocoptNet;
 using Gobo;
 using Gobo.Cli;
+using Gobo.Text;
 using System.Diagnostics;
 
 const string usage =
@@ -152,7 +153,7 @@ static async Task CheckFile(
     IDictionary<string, ArgValue> arguments
 )
 {
-    var input = await File.ReadAllTextAsync(filePath);
+    var input = SourceText.From(await File.ReadAllTextAsync(filePath));
     bool success;
 
     try

@@ -1,6 +1,7 @@
 ﻿using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
+using Gobo.Text;
 
 namespace Gobo.Parser;
 
@@ -112,9 +113,9 @@ internal class GmlParser
 
     private delegate bool BinaryExpressionRule(out GmlSyntaxNode node);
 
-    public GmlParser(string code)
+    public GmlParser(SourceText sourceText)
     {
-        lexer = new GmlLexer(code);
+        lexer = new GmlLexer(sourceText);
         token = lexer.NextToken();
         ProcessToken(token);
     }
