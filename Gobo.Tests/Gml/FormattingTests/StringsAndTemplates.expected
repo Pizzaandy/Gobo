@@ -1,3 +1,5 @@
 str = "\\";
 
 var escaped_template = $"\{{a + b}\}";
+
+var more_escapes = $"\"{link_list[link_index]}\"";

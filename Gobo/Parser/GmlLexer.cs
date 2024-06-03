@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Gobo.Text;
+using System.Runtime.CompilerServices;
 
 namespace Gobo.Parser;
 
@@ -14,19 +15,17 @@ internal class GmlLexer
     public bool HitEof { get; private set; } = false;
     public LexerMode Mode { get; set; } = LexerMode.Default;
 
-    private readonly string text;
+    private readonly SourceText sourceText;
     private int lineNumber;
     private int columnNumber;
     private int startIndex;
     private int index;
     private int character;
-    private string CurrentToken => text[startIndex..index];
+    private string CurrentToken => sourceText.ReadSpan(startIndex, index);
 
-    private static readonly char[] whitespaces = { '\u000B', '\u000C', '\u0020', '\u00A0', '\t' };
-
-    public GmlLexer(string text)
+    public GmlLexer(SourceText source)
     {
-        this.text = text;
+        sourceText = source;
         index = 0;
         lineNumber = 1;
     }
@@ -82,7 +81,7 @@ internal class GmlLexer
             case '\t':
                 while (true)
                 {
-                    if (!MatchAny(whitespaces))
+                    if (!MatchAnyWhitespace())
                     {
                         break;
                     }
@@ -594,40 +593,45 @@ internal class GmlLexer
         return false;
     }
 
-    private bool MatchAny(char[] expected)
+    private bool MatchAnyWhitespace()
     {
         var next = Peek();
 
-        if (Array.Exists(expected, c => next == c))
+        bool matched = next switch
+        {
+            '\u000B' or '\u000C' or '\u0020' or '\u00A0' or '\t' => true,
+            _ => false
+        };
+
+        if (matched)
         {
             Advance();
-            return true;
         }
 
-        return false;
+        return matched;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int Peek(int amount = 1)
     {
         var targetIndex = index + amount - 1;
-        if (targetIndex >= text.Length)
+        if (targetIndex >= sourceText.Length)
         {
             return -1;
         }
-        return text[targetIndex];
+        return sourceText[targetIndex];
     }
 
     private void Advance()
     {
-        if (index >= text.Length)
+        if (index >= sourceText.Length)
         {
             HitEof = true;
             character = -1;
             return;
         }
 
-        character = text[index];
+        character = sourceText[index];
         index++;
 
         switch (character)

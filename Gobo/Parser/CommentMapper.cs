@@ -1,14 +1,15 @@
 ﻿using Gobo.SyntaxNodes;
+using Gobo.Text;
 
 namespace Gobo.Parser;
 
 internal class CommentMapper
 {
-    public string SourceText { get; set; }
+    public SourceText SourceText { get; set; }
 
     public List<CommentGroup> CommentGroups { get; set; } = new();
 
-    public CommentMapper(string sourceText, List<Token[]> triviaGroups)
+    public CommentMapper(SourceText sourceText, List<Token[]> triviaGroups)
     {
         SourceText = sourceText;
         foreach (var triviaGroup in triviaGroups)
