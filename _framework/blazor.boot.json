@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Gobo.Playground",
   "resources": {
-    "hash": "sha256-UH7g9kYtBt/tCl6OmfLXg3fx0p7h+9hUvHXAbEvaTRQ=",
+    "hash": "sha256-m+7gbD8RL7RRRzmhTzx5GHgfB00u1RJ/ZwvM7IC7IFo=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.anr06xvywq.js": "sha256-qsoiZXKQDqhNiOYpkpO0ekOPL1CJyVskP5E4v4RYQC0="
     },
@@ -9,11 +9,11 @@
       "dotnet.runtime.8.0.6.ft3vm0pt8p.js": "sha256-+E96dgYQl8OrHQb4yNZ7QwNr3SZzLSP8lwKRzwSiMsw="
     },
     "wasmNative": {
-      "dotnet.native.wasm": "sha256-vKzEkbqL+7ffHcdfzNQojdgz8s8AA8iUjgyrCslFSFs="
+      "dotnet.native.wasm": "sha256-8ixSQigSPzZ4Z+xFAts7jGsAEKQpJVdZm4BoY7WNld4="
     },
     "assembly": {
-      "Gobo.Playground.wasm": "sha256-Q3iH8RgJg2xRLUivn0qWSX/dcwVg2w4o4DrvmnDK6D8=",
-      "gobolib.wasm": "sha256-KDkElcQS6aBitKJZ3TrxEP13JZY8iuNC5xwq6a1iM0I=",
+      "Gobo.Playground.wasm": "sha256-5g8e20ut9OJA/vY6Db5We0OmHsnTCf6tyTqrntDyPlQ=",
+      "gobolib.wasm": "sha256-4dhg7FmfUSyd9vtBpWrPgFlhSc/L+y9fldCItpkVnXM=",
       "Microsoft.AspNetCore.Components.wasm": "sha256-qIqf1fBIn2juIKaRyuT99WnyvK8W5VHiptPtP9LhOcE=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-RNAqR0ff+baVaIhI+uEcLo9eT+pxGnBEvkCzqD+3roM=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-Ws5szf6fWPAXna+XyWsAhavx+WDFcA/91DQ7iPRPCMs=",
@@ -36,7 +36,7 @@
       "System.Memory.wasm": "sha256-05mq1d5+fl+Jf5Opq0AK/NVhyxi2j4gf2wsx7fffDws=",
       "System.Net.Http.wasm": "sha256-dSXFvvXeO8FkvTjaA1DMeL0pt81/52s75cqDtZqU0JU=",
       "System.Net.Primitives.wasm": "sha256-yarnBbF9PRPSOzw+onC4dZYqBZ30U2LeuOOtjzoz3/0=",
-      "System.Private.CoreLib.wasm": "sha256-0CIae4M1APat56BlKGhBDNxgjOGTIbrCw9L0w+IkX/M=",
+      "System.Private.CoreLib.wasm": "sha256-ZFkHWfB3GVWqDh3g9JJp9JaRia/bLP8vnvInegnPmBs=",
       "System.Private.Uri.wasm": "sha256-szqrigZ1zyG81U8wWObBoB4GMx7U/OteDamdElPyuSo=",
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-ohmTG2LKnaLiLU/QRRbUrParj93c0o4hJ9BDNBVdzco=",
       "System.Runtime.Serialization.Primitives.wasm": "sha256-n+hewJUgandVizPMm0sRs7EIEKd34rqrEn1LV+fiRVw=",
