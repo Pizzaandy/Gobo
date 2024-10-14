@@ -9,6 +9,8 @@
     <OptimizationPreference>Speed</OptimizationPreference>
     <PublishTrimmed>true</PublishTrimmed>
     <AssemblyName>gobo</AssemblyName>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
