@@ -30,21 +30,21 @@ jobs:
 
     - name: Upload artifacts
       if: matrix.os == 'ubuntu-20.04'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: gobo-ubuntu
         path: ./publish
 
     - name: Upload artifacts
       if: matrix.os == 'windows-latest'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: gobo-windows
         path: ./publish
 
     - name: Upload artifacts
       if: matrix.os == 'macos-latest'
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: gobo-macos
         path: ./publish
