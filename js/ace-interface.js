@@ -7,6 +7,7 @@
     editor.session.setMode(defineMode);
     editor.session.setTabSize(tabSize);
     editor.renderer.setScrollMargin(10, 10);
+    editor.commands.removeCommands(["openCommandPalette", "showSettingsMenu"]);
 
     editor.setOptions({
         autoScrollEditorIntoView: true
