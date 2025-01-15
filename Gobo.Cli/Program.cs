@@ -29,22 +29,22 @@ return await Docopt
         result => OnError(result.Usage)
     );
 
-static async Task<int> ShowHelp(string help)
+static Task<int> ShowHelp(string help)
 {
     Console.WriteLine(help);
-    return 0;
+    return Task.FromResult(0);
 }
 
-static async Task<int> ShowVersion(string version)
+static Task<int> ShowVersion(string version)
 {
     Console.WriteLine(version);
-    return 0;
+    return Task.FromResult(0);
 }
 
-static async Task<int> OnError(string usage)
+static Task<int> OnError(string usage)
 {
     Console.Error.WriteLine(usage);
-    return 1;
+    return Task.FromResult(1);
 }
 
 // TODO: Clean this up...

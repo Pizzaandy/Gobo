@@ -2,15 +2,17 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>gobo</AssemblyName>
+    
     <PublishAot>true</PublishAot>
     <OptimizationPreference>Speed</OptimizationPreference>
-    <PublishTrimmed>true</PublishTrimmed>
-    <AssemblyName>gobo</AssemblyName>
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
+    <AllowedReferenceRelatedFileExtensions>*.pdb</AllowedReferenceRelatedFileExtensions>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
