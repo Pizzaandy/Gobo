@@ -446,7 +446,10 @@ internal class GmlParser
             {
                 if (Accept(TokenKind.Comma))
                 {
-                    Expect(VariableDeclarator(out var variableDeclarator));
+                    if (!VariableDeclarator(out var variableDeclarator))
+                    {
+                        break;
+                    }
                     declarations.Add(variableDeclarator);
                 }
                 else
@@ -884,7 +887,7 @@ internal class GmlParser
             GmlSyntaxNode identifier = GmlSyntaxNode.Empty;
             if (Accept(TokenKind.OpenParen))
             {
-                Expect(Identifier(out identifier));
+                Expect(Identifier(out identifier, allowParentheses: true));
                 Expect(TokenKind.CloseParen);
             }
             Expect(Statement(out var body));
@@ -1002,7 +1005,7 @@ internal class GmlParser
     {
         var start = token;
 
-        if (!Identifier(out var identifier))
+        if (!Identifier(out var identifier, allowParentheses: true))
         {
             result = GmlSyntaxNode.Empty;
             return false;
@@ -1451,18 +1454,33 @@ internal class GmlParser
         return true;
     }
 
-    private bool Identifier(out GmlSyntaxNode result)
+    private bool Identifier(out GmlSyntaxNode result, bool allowParentheses = false)
     {
+        var start = token;
         result = GmlSyntaxNode.Empty;
 
-        if (Accept(TokenKind.Identifier))
+        if (Accept(TokenKind.Identifier) || Accept(TokenKind.Constructor))
         {
             result = new Identifier(GetSpan(accepted), accepted.Text);
             return true;
         }
-        else if (Accept(TokenKind.Constructor))
+        else if (allowParentheses && Accept(TokenKind.OpenParen))
         {
-            result = new Identifier(GetSpan(accepted), accepted.Text);
+            var parenCount = 1;
+            while (Accept(TokenKind.OpenParen))
+            {
+                parenCount++;
+            }
+
+            Expect(Accept(TokenKind.Identifier) || Accept(TokenKind.Constructor));
+            var text = accepted.Text;
+
+            for (var i = 0; i < parenCount; i++)
+            {
+                Expect(TokenKind.CloseParen);
+            }
+
+            result = new Identifier(GetSpan(start, accepted), text);
             return true;
         }
         else

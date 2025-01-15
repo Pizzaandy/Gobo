@@ -16,3 +16,8 @@ cond = !(condition || bar && baz);
 
 // '!' should be inside
 if (!(condition || bar && +baz)) {}
+
+var unwrap_me = 1;
+static unwrap_me_twice = 2;
+
+try {} catch (bar) {}

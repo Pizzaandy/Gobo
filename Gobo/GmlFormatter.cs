@@ -27,21 +27,31 @@ public class FormatResult
         var result = "";
 
         if (Ast != string.Empty)
+        {
             result += $"--- ABSTRACT SYNTAX TREE ---\n\n{Ast}\n\n";
+        }
 
         if (DocTree != string.Empty)
+        {
             result += $"--- DOC TREE ---\n\n{DocTree}\n\n";
+        }
 
         result += $"--- PRINTED OUTPUT ---\n{Output}\n\n";
 
         if (ParseTimeMs != null)
+        {
             result += $"Parse: {ParseTimeMs} ms\n";
+        }
 
         if (FormatTimeMs != null)
+        {
             result += $"Format: {FormatTimeMs} ms\n";
+        }
 
         if (TotalTimeMs != null)
+        {
             result += $"Total: {TotalTimeMs} ms\n";
+        }
 
         return result;
     }
