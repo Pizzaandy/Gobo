@@ -1,6 +1,6 @@
 namespace Gobo.Printer.DocTypes;
 
-internal class HardLine : LineDoc, IBreakParent
+internal sealed class HardLine : LineDoc, IBreakParent
 {
     public bool SkipBreakIfFirstInGroup { get; }
 

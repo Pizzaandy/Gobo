@@ -1,6 +1,6 @@
 namespace Gobo.Printer.DocTypes;
 
-internal class Concat : Doc
+internal sealed class Concat : Doc
 {
     public IList<Doc> Contents { get; set; }
 

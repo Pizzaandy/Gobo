@@ -1,6 +1,6 @@
 namespace Gobo.Printer.DocTypes;
 
-internal class ConditionalGroup : Group
+internal sealed class ConditionalGroup : Group
 {
     public ConditionalGroup(Doc[] options)
     {

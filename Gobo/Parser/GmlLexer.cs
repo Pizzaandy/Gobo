@@ -1,5 +1,4 @@
 ﻿using Gobo.Text;
-using System.Runtime.CompilerServices;
 
 namespace Gobo.Parser;
 
@@ -611,7 +610,6 @@ internal class GmlLexer
         return matched;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private int Peek(int amount = 1)
     {
         var targetIndex = index + amount - 1;

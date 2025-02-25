@@ -1,6 +1,6 @@
 namespace Gobo.Printer.DocTypes;
 
-internal class Region : Doc
+internal sealed class Region : Doc
 {
     public Region(string text)
     {

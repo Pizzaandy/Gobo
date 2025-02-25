@@ -10,10 +10,8 @@ public abstract class SourceText
     private const int CharBufferSize = 32 * 1024;
     private const int CharBufferCount = 5;
 
-    private static readonly ObjectPool<char[]> s_charArrayPool = new ObjectPool<char[]>(
-        () => new char[CharBufferSize],
-        CharBufferCount
-    );
+    private static readonly ObjectPool<char[]> s_charArrayPool =
+        new(() => new char[CharBufferSize], CharBufferCount);
 
     public abstract string ReadSpan(TextSpan span);
 

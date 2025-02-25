@@ -1,6 +1,6 @@
 namespace Gobo.Printer.DocTypes;
 
-internal class AlwaysFits : Doc
+internal sealed class AlwaysFits : Doc
 {
     public readonly Doc Contents;
 

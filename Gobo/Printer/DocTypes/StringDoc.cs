@@ -1,6 +1,6 @@
 namespace Gobo.Printer.DocTypes;
 
-internal class StringDoc : Doc
+internal sealed class StringDoc : Doc
 {
     public string Value { get; }
     public bool IsDirective { get; }

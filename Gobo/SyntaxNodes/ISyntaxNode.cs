@@ -43,7 +43,7 @@ internal interface ISyntaxNode<T>
             }
         }
 
-        difference = (default(T), default(T));
+        difference = (default, default);
         return false;
     }
 }
