@@ -30,6 +30,11 @@ internal static class MemberChain
 
         FlattenAndPrintNodes(ctx, node, printedNodes);
 
+        if (ctx.Options.FlatExpressions)
+        {
+            return Doc.ForceFlat(printedNodes.Select(x => x.Doc).ToArray());
+        }
+
         var groups = printedNodes.Any(o => o.Node is CallExpression)
             ? GroupPrintedNodesPrettierStyle(printedNodes)
             : GroupPrintedNodesOnLines(printedNodes);

@@ -61,7 +61,9 @@ internal sealed class ArgumentList : GmlSyntaxNode
             );
         }
 
-        return Doc.Concat(result, PrintTrailingComments(ctx));
+        var printed = Doc.Concat(result, PrintTrailingComments(ctx));
+
+        return ctx.Options.FlatExpressions ? Doc.ForceFlat(printed) : printed;
     }
 
     private bool ShouldBreakOnLastArgument()

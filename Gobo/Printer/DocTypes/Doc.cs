@@ -31,6 +31,8 @@ internal abstract class Doc
 
     public static readonly LineDoc SoftLine = new() { Type = LineDoc.LineType.Soft };
 
+    public static readonly Trim Trim = new();
+
     public static readonly CollapsedSpace CollapsedSpace = new();
 
     public static Doc Concat(IList<Doc> contents) =>

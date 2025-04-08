@@ -10,7 +10,7 @@ internal class UndefinedArgument : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        return Doc.Null;
+        return Doc.Trim;
     }
 
     public override int GetHashCode()

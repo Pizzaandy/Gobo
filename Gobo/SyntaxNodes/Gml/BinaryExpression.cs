@@ -42,6 +42,11 @@ internal sealed class BinaryExpression : GmlSyntaxNode
             trueParent = trueParent.Parent;
         }
 
+        if (ctx.Options.FlatExpressions)
+        {
+            return Doc.ForceFlat(docs);
+        }
+
         var shouldNotIndent =
             trueParent
                 is AssignmentExpression

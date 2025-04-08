@@ -81,7 +81,7 @@ internal sealed class ParenthesizedExpression : GmlSyntaxNode
 
     public static Doc PrintInParens(PrintContext ctx, GmlSyntaxNode node)
     {
-        if (ShouldNotBreak(node) && node.Comments.Count == 0)
+        if (ctx.Options.FlatExpressions || (ShouldNotBreak(node) && node.Comments.Count == 0))
         {
             return Doc.Concat("(", node.Print(ctx), ")");
         }

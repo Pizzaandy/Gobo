@@ -46,8 +46,9 @@ internal sealed class ConditionalExpression : GmlSyntaxNode
                 : Doc.Indent(innerContents)
         };
 
-        return Parent is ConditionalExpression
-            ? Doc.Concat(outerContents)
-            : Doc.Group(outerContents);
+        var printed =
+            Parent is ConditionalExpression ? Doc.Concat(outerContents) : Doc.Group(outerContents);
+
+        return ctx.Options.FlatExpressions ? Doc.ForceFlat(printed) : printed;
     }
 }

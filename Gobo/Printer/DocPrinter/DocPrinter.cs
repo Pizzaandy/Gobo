@@ -136,6 +136,10 @@ internal class DocPrinter
         {
             Push(indentDoc.Contents, mode, Indenter.IncreaseIndent(indent));
         }
+        else if (doc is Trim)
+        {
+            CurrentWidth -= Output.TrimTrailingWhitespace();
+        }
         else if (doc is CollapsedSpace)
         {
             CurrentWidth -= Output.TrimTrailingWhitespacePreserveIndent(indent);

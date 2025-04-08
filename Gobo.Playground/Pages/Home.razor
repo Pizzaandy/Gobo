@@ -41,6 +41,15 @@
             <label for="showAst" class="text-light form-check-label">Show AST</label>
         </div>
 
+        <div class="form-check">
+            <input type="checkbox"
+                   class="form-check-input"
+                   id="flatExpressions"
+                   checked="@_formatOptions.FlatExpressions"
+                   value="@_formatOptions.FlatExpressions" @oninput="@OnFlatExpressionsChange" />
+            <label for="flatExpressions" class="text-light form-check-label">Flat Expressions</label>
+        </div>
+
         <a class="btn btn-outline-light mt-auto" href="https://github.com/Pizzaandy/Gobo" target="_blank">
             <i class="bi-github"></i> GitHub
         </a>
@@ -176,6 +185,12 @@ call()";
     async Task OnUseTabsChange(ChangeEventArgs args)
     {
         _formatOptions.UseTabs = (bool)args.Value;
+        await Format();
+    }
+
+    async Task OnFlatExpressionsChange(ChangeEventArgs args)
+    {
+        _formatOptions.FlatExpressions = (bool)args.Value;
         await Format();
     }
 

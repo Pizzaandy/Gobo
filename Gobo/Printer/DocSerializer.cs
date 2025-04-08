@@ -1,5 +1,5 @@
-using System.Text;
 using Gobo.Printer.DocTypes;
+using System.Text;
 
 namespace Gobo.Printer;
 
@@ -41,6 +41,11 @@ internal static class DocSerializer
             result.AppendLine();
             AppendIndent();
             result.Append(')');
+        }
+        else if (doc is Trim)
+        {
+            AppendIndent();
+            result.Append("Doc.Trim");
         }
         else if (doc is CollapsedSpace)
         {

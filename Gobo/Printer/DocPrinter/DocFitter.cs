@@ -25,7 +25,7 @@ internal static class DocFitter
 
         var output = new StringBuilder();
 
-        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0;)
+        for (var x = 0; x < remainingCommands.Count || newCommands.Count > 0; )
         {
             if (remainingWidth < 0)
             {
@@ -84,6 +84,10 @@ internal static class DocFitter
                 else if (currentDoc is IndentDoc indent)
                 {
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
+                }
+                else if (currentDoc is Trim)
+                {
+                    remainingWidth += output.TrimTrailingWhitespace();
                 }
                 else if (currentDoc is CollapsedSpace)
                 {
