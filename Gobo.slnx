@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Gobo.Benchmarks/Gobo.Benchmarks.csproj" />
+  <Project Path="Gobo.Cli/Gobo.Cli.csproj" />
+  <Project Path="Gobo.Playground/Gobo.Playground.csproj" />
+  <Project Path="Gobo.Tests/Gobo.Tests.csproj" />
+  <Project Path="Gobo/Gobo.csproj" />
+</Solution>
