@@ -18,9 +18,9 @@ var _float = 3_141.59; // same as 3141.59
 var _hexadec = 0xDEAD_BEEF; // same as 0xDEADBEEF
 var _binary = 0b01101000_01101001; // same as 0b0110100001101001
 
-call(, , );
+call(,,);
 
-call(, /*comment*/ , );
+call(, /*comment*/,);
 
 call(
 	, // surprise! inner comment

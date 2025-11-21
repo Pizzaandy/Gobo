@@ -1,6 +1,6 @@
+using System.Text;
 using Gobo.Printer.DocTypes;
 using Gobo.Printer.Utilities;
-using System.Text;
 
 namespace Gobo.Printer.DocPrinter;
 
@@ -52,7 +52,7 @@ internal class DocPrinter
         {
             Output = printer.Print(),
             CommentsPrinted = printer.CommentsPrinted,
-            CommentsPrintedTwice = printer.CommentsPrintedTwice
+            CommentsPrintedTwice = printer.CommentsPrintedTwice,
         };
     }
 
@@ -136,9 +136,9 @@ internal class DocPrinter
         {
             Push(indentDoc.Contents, mode, Indenter.IncreaseIndent(indent));
         }
-        else if (doc is Trim)
+        else if (doc is TrimHorizontal)
         {
-            CurrentWidth -= Output.TrimTrailingWhitespace();
+            CurrentWidth -= Output.TrimTrailingWhitespacePreserveIndent(indent);
         }
         else if (doc is CollapsedSpace)
         {
@@ -479,5 +479,5 @@ internal enum PrintMode
 {
     Flat,
     Break,
-    ForceFlat
+    ForceFlat,
 }

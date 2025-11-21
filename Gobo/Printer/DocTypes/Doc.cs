@@ -22,8 +22,10 @@ internal abstract class Doc
 
     public static readonly HardLine HardLineIfNoPreviousLine = new(true);
 
-    public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup =
-        new(true, true);
+    public static readonly HardLine HardLineIfNoPreviousLineSkipBreakIfFirstInGroup = new(
+        true,
+        true
+    );
 
     public static readonly LiteralLine LiteralLine = new();
 
@@ -31,7 +33,7 @@ internal abstract class Doc
 
     public static readonly LineDoc SoftLine = new() { Type = LineDoc.LineType.Soft };
 
-    public static readonly Trim Trim = new();
+    public static readonly TrimHorizontal TrimHorizontal = new();
 
     public static readonly CollapsedSpace CollapsedSpace = new();
 
@@ -180,7 +182,7 @@ internal abstract class Doc
 internal enum CommentFormat
 {
     SingleLine,
-    MultiLine
+    MultiLine,
 }
 
 interface IHasContents

@@ -1,5 +1,5 @@
-using Gobo.Printer.DocTypes;
 using System.Text;
+using Gobo.Printer.DocTypes;
 
 namespace Gobo.Printer;
 
@@ -42,7 +42,7 @@ internal static class DocSerializer
             AppendIndent();
             result.Append(')');
         }
-        else if (doc is Trim)
+        else if (doc is TrimHorizontal)
         {
             AppendIndent();
             result.Append("Doc.Trim");

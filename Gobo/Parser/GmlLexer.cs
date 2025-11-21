@@ -499,7 +499,7 @@ internal class GmlLexer
             "#region" => TokenKind.Region,
             "#endregion" => TokenKind.EndRegion,
             "#define" => TokenKind.Define,
-            _ => TokenKind.UnknownDirective
+            _ => TokenKind.UnknownDirective,
         };
 
         if (directive is TokenKind.UnknownDirective)
@@ -599,7 +599,7 @@ internal class GmlLexer
         bool matched = next switch
         {
             '\u000B' or '\u000C' or '\u0020' or '\u00A0' or '\t' => true,
-            _ => false
+            _ => false,
         };
 
         if (matched)
@@ -657,7 +657,7 @@ internal class GmlLexer
             Text = CurrentToken,
             StartIndex = startIndex,
             EndIndex = index,
-            ErrorMessage = error
+            ErrorMessage = error,
         };
 
         return token;

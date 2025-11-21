@@ -1,6 +1,6 @@
+using System.Text;
 using Gobo.Printer.DocTypes;
 using Gobo.Printer.Utilities;
-using System.Text;
 
 namespace Gobo.Printer.DocPrinter;
 
@@ -85,9 +85,9 @@ internal static class DocFitter
                 {
                     Push(indent.Contents, currentMode, indenter.IncreaseIndent(currentIndent));
                 }
-                else if (currentDoc is Trim)
+                else if (currentDoc is TrimHorizontal)
                 {
-                    remainingWidth += output.TrimTrailingWhitespace();
+                    remainingWidth += output.TrimTrailingWhitespacePreserveIndent(currentIndent);
                 }
                 else if (currentDoc is CollapsedSpace)
                 {
