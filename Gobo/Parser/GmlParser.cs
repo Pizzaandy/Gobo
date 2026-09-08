@@ -1,4 +1,4 @@
-﻿using Gobo.SyntaxNodes;
+using Gobo.SyntaxNodes;
 using Gobo.SyntaxNodes.Gml;
 using Gobo.SyntaxNodes.Gml.Literals;
 using Gobo.Text;
@@ -204,6 +204,56 @@ internal class GmlParser
     private void ThrowDefaultSyntaxError()
     {
         ThrowUnexpected(CurrentToken);
+    }
+
+    /// <summary>
+    /// Accepts a keyword where a name is expected, as in '_data.mod' and '{ static: 1 }'.
+    /// </summary>
+    private bool AcceptName()
+    {
+        if (Accept(TokenKind.Identifier) || Accept(TokenKind.Constructor))
+        {
+            return true;
+        }
+
+        if (!IsNameShaped(token.Text))
+        {
+            return false;
+        }
+
+        accepted = token;
+        NextToken();
+        return true;
+    }
+
+    private bool MemberName(out GmlSyntaxNode result)
+    {
+        if (AcceptName())
+        {
+            result = new Identifier(GetSpan(accepted), accepted.Text);
+            return true;
+        }
+
+        result = GmlSyntaxNode.Empty;
+        return false;
+    }
+
+    private static bool IsNameShaped(string? text)
+    {
+        if (string.IsNullOrEmpty(text) || (!char.IsLetter(text[0]) && text[0] != '_'))
+        {
+            return false;
+        }
+
+        foreach (var character in text)
+        {
+            if (!char.IsLetterOrDigit(character) && character != '_')
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private bool AcceptAny(TokenKind[] types)
@@ -513,13 +563,26 @@ internal class GmlParser
         Accept(TokenKind.Then);
         Expect(Statement(out var statement));
 
+        // Regions may sit between the branches of an if/else chain.
+        var trailingRegions = new List<GmlSyntaxNode>();
+        while (RegionStatement(out var regionStatement))
+        {
+            trailingRegions.Add(regionStatement);
+        }
+
         GmlSyntaxNode alternate = GmlSyntaxNode.Empty;
         if (Accept(TokenKind.Else))
         {
             Expect(Statement(out alternate));
         }
 
-        result = new IfStatement(GetSpan(start, accepted), condition, statement, alternate);
+        result = new IfStatement(
+            GetSpan(start, accepted),
+            condition,
+            statement,
+            alternate,
+            trailingRegions
+        );
         return true;
     }
 
@@ -748,12 +811,14 @@ internal class GmlParser
 
     private bool RegionStatement(out GmlSyntaxNode result)
     {
-        var start = token;
         result = GmlSyntaxNode.Empty;
         if (!(Accept(TokenKind.Region) || Accept(TokenKind.EndRegion)))
         {
             return false;
         }
+
+        // Span from the directive itself, so comments in front of it are not swallowed.
+        var start = accepted;
 
         bool isEndRegion = accepted.Kind == TokenKind.EndRegion;
 
@@ -1102,7 +1167,7 @@ internal class GmlParser
             }
             else if (Accept(TokenKind.Dot))
             {
-                Expect(Identifier(out var identifier));
+                Expect(MemberName(out var identifier));
                 @object = new MemberDotExpression(GetSpan(start, accepted), @object, identifier);
             }
             else if (ArgumentList(out var arguments))
@@ -1722,9 +1787,7 @@ internal class GmlParser
         GmlSyntaxNode name;
         GmlSyntaxNode initializer = GmlSyntaxNode.Empty;
 
-        if (
-            Accept(TokenKind.Identifier) || Accept(TokenKind.Constructor) || Accept(TokenKind.Noone)
-        )
+        if (AcceptName())
         {
             name = new Identifier(GetSpan(accepted), accepted.Text);
         }

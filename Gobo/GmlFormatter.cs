@@ -1,6 +1,7 @@
-﻿using Gobo.Parser;
+using Gobo.Parser;
 using Gobo.Printer.DocPrinter;
 using Gobo.SyntaxNodes;
+using Gobo.Transforms;
 using Gobo.Text;
 using System.Diagnostics;
 
@@ -66,6 +67,25 @@ public static partial class GmlFormatter
 
     public static FormatResult Format(SourceText code, FormatOptions options)
     {
+        if (!JsDocPass.ShouldRun(options) && !CommentPass.ShouldRun(options))
+        {
+            return FormatCore(code, options, applyJsDoc: false);
+        }
+
+        // Doc comments are written into the source, so the source has to be settled first.
+        // A body without braces gets them in this pass, and only then is it safe to write a
+        // region above a function that sits inside one.
+        var braced = FormatCore(code, options, applyJsDoc: false);
+
+        return FormatCore(SourceText.From(braced.Output), options, applyJsDoc: true);
+    }
+
+    private static FormatResult FormatCore(
+        SourceText code,
+        FormatOptions options,
+        bool applyJsDoc
+    )
+    {
         long parseStart = 0;
         long parseStop = 0;
         long formatStart = 0;
@@ -81,6 +101,31 @@ public static partial class GmlFormatter
         var parseResult = new GmlParser(code).Parse();
 
         new CommentMapper(code, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
+
+        RenameLocals(parseResult.Ast, options);
+
+        // Names are settled before the doc comments are written, so that a generated
+        // '@param' matches the parameter it documents.
+        if (applyJsDoc)
+        {
+            var rewritten = JsDocPass.ShouldRun(options)
+                ? JsDocPass.Apply(code, parseResult.Ast, options)
+                : null;
+
+            if (CommentPass.ShouldRun(options))
+            {
+                rewritten = CommentPass.Apply(rewritten ?? code.ReadSpan(0, code.Length), options)
+                    ?? rewritten;
+            }
+
+            if (rewritten is not null)
+            {
+                code = SourceText.From(rewritten);
+                parseResult = new GmlParser(code).Parse();
+                new CommentMapper(code, parseResult.TriviaGroups).AttachComments(parseResult.Ast);
+                RenameLocals(parseResult.Ast, options);
+            }
+        }
 
         if (getDebugInfo)
         {
@@ -189,6 +234,14 @@ public static partial class GmlFormatter
         else
         {
             return new FormatResult(output);
+        }
+    }
+
+    private static void RenameLocals(GmlSyntaxNode ast, FormatOptions options)
+    {
+        if (options.PrefixLocalVariables || options.PrefixStaticVariables)
+        {
+            LocalVariablePrefixer.Run(ast, options);
         }
     }
 

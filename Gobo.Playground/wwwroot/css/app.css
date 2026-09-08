@@ -1,6 +1,81 @@
+:root {
+    --side-panel-width: 200px;
+}
+
 .side-panel {
-    flex: 0 0 200px;
+    flex: 0 0 var(--side-panel-width);
     overflow: auto;
+}
+
+/* Rendered outside the scrolling side panel, which would otherwise clip it. */
+.option-tip {
+    position: fixed;
+    z-index: 30;
+    width: max-content;
+    max-width: min(46rem, calc(100vw - 2rem));
+    padding: 0.7rem 0.8rem;
+    background: #1b1f24;
+    border: 1px solid #39414c;
+    border-radius: 4px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+    color: #dfe4ea;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.option-tip .tip-title {
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.2rem;
+}
+
+.option-tip .tip-desc {
+    max-width: 34rem;
+}
+
+.option-tip hr {
+    border: 0;
+    border-top: 1px solid #39414c;
+    margin: 0.6rem 0;
+    opacity: 1;
+}
+
+.option-tip .tip-code {
+    display: grid;
+    /* Equal columns whatever the number of examples, so they fill the box. */
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 0.6rem;
+}
+
+/* Grid cells stretch to the tallest row, and the columns are even, so making the cell a
+   flex column gives both examples the same width and the same height. */
+.option-tip .tip-code > div {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.option-tip .tip-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #7b8794;
+    margin-bottom: 0.2rem;
+}
+
+.option-tip pre {
+    margin: 0;
+    padding: 0.45rem 0.55rem;
+    background: #14171b;
+    border-radius: 3px;
+    color: #cfd6de;
+    font-size: 0.72rem;
+    line-height: 1.35;
+    white-space: pre;
+    overflow-x: auto;
+    tab-size: 4;
+    flex: 1;
 }
 
 .valid.modified:not([type=checkbox]) {

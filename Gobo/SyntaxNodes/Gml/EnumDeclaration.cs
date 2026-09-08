@@ -1,4 +1,4 @@
-﻿using Gobo.Printer.DocTypes;
+using Gobo.Printer.DocTypes;
 
 namespace Gobo.SyntaxNodes.Gml;
 
@@ -20,7 +20,7 @@ internal sealed class EnumDeclaration : GmlSyntaxNode
             "enum",
             " ",
             Name.Print(ctx),
-            ctx.Options.BraceStyle == BraceStyle.NewLine
+            ctx.Options.BraceStyle != BraceStyle.SameLine
                 ? Doc.HardLineIfNoPreviousLine
                 : Doc.CollapsedSpace,
             Members.Print(ctx)

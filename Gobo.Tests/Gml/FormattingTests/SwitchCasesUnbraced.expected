@@ -1,0 +1,33 @@
+switch (phase) {
+	case PHASE.start:
+		anim_sprite = spr_jab;
+		attack_frame = 2;
+		anim_frame = 0;
+		break;
+	case 1:
+		var _abc = 123 + argument;
+		break;
+	case 2:
+		return true;
+	case 3:
+		break;
+	case 4:
+	case 5: {
+		one();
+		break;
+	}
+	case 6: {
+		only_one();
+		break;
+	}
+	case 7:
+		if (thing) {
+			nested();
+		}
+		break;
+	default: {
+		fallback();
+		other();
+		break;
+	}
+}

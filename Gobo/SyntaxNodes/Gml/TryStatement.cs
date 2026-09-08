@@ -1,4 +1,4 @@
-﻿using Gobo.Printer.DocTypes;
+using Gobo.Printer.DocTypes;
 using Gobo.SyntaxNodes.PrintHelpers;
 
 namespace Gobo.SyntaxNodes.Gml;
@@ -24,10 +24,12 @@ internal sealed class TryStatement : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        Doc leadingWhitespace =
-            ctx.Options.BraceStyle == BraceStyle.NewLine
-                ? Doc.HardLineIfNoPreviousLine
-                : Doc.CollapsedSpace;
+        var keywordOnNewLine =
+            ctx.Options.ElseOnNewLine || ctx.Options.BraceStyle != BraceStyle.SameLine;
+
+        Doc leadingWhitespace = keywordOnNewLine
+            ? Doc.HardLineIfNoPreviousLine
+            : Doc.CollapsedSpace;
 
         var parts = new List<Doc>
         {

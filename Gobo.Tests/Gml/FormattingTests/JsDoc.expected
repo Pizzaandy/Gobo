@@ -1,0 +1,63 @@
+#region jsDoc
+/// @category Gameplay
+/*
+Prose about the script.
+*/
+#endregion
+function item_spawn_script() {
+	spawn();
+}
+
+#region jsDoc
+/// @param {String} initial_state		Initial state
+#endregion
+function SnowState(_initState, _execEnter = true) constructor {
+	#region jsDoc
+	/// @param {String} event
+	/// @returns {SnowState} self
+	/// @self SnowState
+	#endregion
+	__add_event_method = function(_event) {
+		return self;
+	};
+
+	#region jsDoc
+	/// @function plain_method
+	/// @description <desc>
+	/// @param {Any} _a			<desc>
+	/// @param {Any} [_b]		<desc>
+	/// @returns {Any}
+	/// @self SnowState
+	#endregion
+	static plain_method = function(_a, _b = 1) {
+		return _a + _b;
+	};
+
+	value = 1;
+}
+
+#region jsDoc
+/// @function undocumented
+/// @description <desc>
+/// @param {Any} _first			<desc>
+/// @param {Any} [_second]		<desc>
+/// @returns {Any}
+#endregion
+function undocumented(_first, _second = 2) {
+	return _first;
+}
+
+#region jsDoc
+/// @function no_return_here
+/// @description <desc>
+#endregion
+function no_return_here() {
+	do_something();
+}
+
+#region jsDoc
+/// @function already_wrapped
+#endregion
+function already_wrapped() {
+	return 1;
+}

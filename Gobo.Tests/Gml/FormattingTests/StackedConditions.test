@@ -1,0 +1,17 @@
+if (_node[0] != undefined)
+&& (!__char_is_alphanumeric(__peekUTF8(_char_index))) {
+	one();
+}
+
+if (a) && (b) {
+	two();
+}
+
+if (a && b) {
+	three();
+}
+
+while (_token.name != _name)
+&& (variable_struct_exists(_globalMacros, _token.name)) {
+	four();
+}

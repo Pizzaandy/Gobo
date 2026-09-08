@@ -1,4 +1,4 @@
-﻿using Gobo.Printer.DocTypes;
+using Gobo.Printer.DocTypes;
 using Gobo.SyntaxNodes.PrintHelpers;
 
 namespace Gobo.SyntaxNodes.Gml;
@@ -29,7 +29,10 @@ internal sealed class MemberIndexExpression : GmlSyntaxNode, IMemberChainable
 
     public Doc PrintInChain(PrintContext ctx)
     {
-        var accessor = Accessor.Length > 1 ? Accessor + " " : Accessor;
+        var printedAccessor =
+            ctx.Options.RemoveArrayCopyAccessor && Accessor == "[@" ? "[" : Accessor;
+
+        var accessor = printedAccessor.Length > 1 ? printedAccessor + " " : printedAccessor;
         var printed = DelimitedList.PrintInBrackets(ctx, accessor, Properties, "]", ",");
         return printed;
     }

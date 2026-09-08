@@ -1,0 +1,37 @@
+/// @category Gameplay
+/*
+Prose about the script.
+*/
+function item_spawn_script() {
+	spawn();
+}
+
+/// @param {String} initial_state		Initial state
+function SnowState(_initState, _execEnter = true) constructor {
+	/// @param {String} event
+	/// @returns {SnowState} self
+	__add_event_method = function(_event) {
+		return self;
+	};
+
+	static plain_method = function(_a, _b = 1) {
+		return _a + _b;
+	};
+
+	value = 1;
+}
+
+function undocumented(_first, _second = 2) {
+	return _first;
+}
+
+function no_return_here() {
+	do_something();
+}
+
+#region jsDoc
+/// @function already_wrapped
+#endregion
+function already_wrapped() {
+	return 1;
+}

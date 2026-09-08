@@ -1,4 +1,4 @@
-﻿using Gobo.Printer.DocTypes;
+using Gobo.Printer.DocTypes;
 using Gobo.SyntaxNodes.PrintHelpers;
 
 namespace Gobo.SyntaxNodes.Gml;
@@ -27,14 +27,17 @@ internal sealed class ForStatement : GmlSyntaxNode
 
     public override Doc PrintNode(PrintContext ctx)
     {
-        var items = new Doc[]
+        // GameMaker cannot parse a for header that spans lines: a '++' after a line break
+        // reads as a statement rather than as part of the condition. It stays on one line
+        // however long it gets.
+        var header = new List<Doc>
         {
             Init.Print(ctx),
             ";",
-            Test.IsEmpty ? Doc.IfBreak(Doc.Line, Doc.Null) : Doc.Line,
+            Test.IsEmpty ? Doc.Null : " ",
             Test.Print(ctx),
             ";",
-            Update.IsEmpty ? Doc.IfBreak(Doc.Line, Doc.Null) : Doc.Line,
+            Update.IsEmpty ? Doc.Null : " ",
             Update.Print(ctx)
         };
 
@@ -42,10 +45,7 @@ internal sealed class ForStatement : GmlSyntaxNode
             "for",
             " ",
             "(",
-            Doc.Group(
-                Doc.Indent(Doc.IfBreak(Doc.Line, Doc.Null), Doc.Concat(items)),
-                Doc.IfBreak(Doc.Line, Doc.Null)
-            ),
+            Doc.ForceFlat(header),
             ") ",
             Statement.EnsureStatementInBlock(ctx, Body)
         );

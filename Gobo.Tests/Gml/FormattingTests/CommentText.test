@@ -1,0 +1,12 @@
+///@category Gameplay
+///@param {buffer} buffer					The buffer to write to
+///@desc Writes the input to the buffer
+///@param {int} device_number				The device number
+///@param {bool} [count_pressed]			Whether pressed inputs count
+///@return {bool} Whether it worked
+function game_local_input_write(_buffer, _device_number, _count_pressed = false) {
+	//Permanent hurtboxes
+	//----------------------------------------
+	//another note
+	return true;
+}

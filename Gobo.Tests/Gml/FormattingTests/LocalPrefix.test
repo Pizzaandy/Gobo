@@ -1,0 +1,33 @@
+function scr_jab() {
+	var run = true;
+	var _phase = attack_phase;
+	var jabbuffer = 8;
+	if (run && check_jump()) {
+		run = false;
+	}
+	other.run = 1;
+	var obj = { run, phase: _phase };
+	return jabbuffer;
+}
+
+function outer(alpha, _beta) {
+	var value = alpha + _beta;
+
+	var inner = function(alpha) {
+		return alpha;
+	};
+
+	return inner(value);
+}
+
+function taken(count) {
+	var _count = 1;
+	return count + _count;
+}
+
+function statics() constructor {
+	static shared = 0;
+	static get_shared = function() {
+		return shared;
+	};
+}

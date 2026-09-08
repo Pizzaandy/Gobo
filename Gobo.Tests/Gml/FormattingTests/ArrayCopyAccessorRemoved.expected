@@ -1,0 +1,4 @@
+value = array[0];
+value = array[i][j];
+value = grid[# x, y];
+value = map[? key];

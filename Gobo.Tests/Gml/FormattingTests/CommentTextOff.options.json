@@ -1,0 +1,8 @@
+{
+	"spaceAfterCommentMarker": false,
+	"normalizeJsDocTags": false,
+	"sortJsDocTags": false,
+	"alignJsDocDescriptions": false,
+	"generateMissingJsDoc": false,
+	"wrapJsDocInRegion": false
+}

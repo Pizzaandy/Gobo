@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Data;
+using System.Text.Json;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
@@ -10,13 +11,12 @@ namespace Gobo.Tests;
 /// </summary>
 public class FormattingTests
 {
-    private readonly FormatOptions options = FormatOptions.DefaultTestOptions;
-
     private readonly ITestOutputHelper output;
 
     public const string TestFileExtension = ".test";
     public const string ExpectedFileExtension = ".expected";
     public const string ActualFileExtension = ".actual";
+    public const string OptionsFileExtension = ".options.json";
 
     public FormattingTests(ITestOutputHelper output)
     {
@@ -43,6 +43,8 @@ public class FormattingTests
 
         var input = await File.ReadAllTextAsync(testFilePath);
 
+        var options = await ReadOptionsAsync(testFilePath);
+
         var firstPass = GmlFormatter.Format(input, options);
 
         output.WriteLine(firstPass.ToString());
@@ -67,6 +69,37 @@ public class FormattingTests
         {
             throw new XunitException($"Formatting error on second pass:\n{secondDiff}");
         }
+    }
+
+    /// <summary>
+    /// A test may sit next to '[test name].options.json' to format with its own settings.
+    /// </summary>
+    private static async Task<FormatOptions> ReadOptionsAsync(string testFilePath)
+    {
+        var optionsFilePath = testFilePath.Replace(TestFileExtension, OptionsFileExtension);
+
+        if (!Path.Exists(optionsFilePath))
+        {
+            return FormatOptions.DefaultTestOptions;
+        }
+
+        var json = await File.ReadAllTextAsync(optionsFilePath);
+
+        FormatOptions options;
+
+        try
+        {
+            options =
+                JsonSerializer.Deserialize(json, FormatOptionsSerializer.Default.FormatOptions)
+                ?? throw new XunitException($"{optionsFilePath} deserialized to null.");
+        }
+        catch (JsonException ex)
+        {
+            throw new XunitException($"{optionsFilePath} could not be parsed:\n{ex.Message}");
+        }
+
+        options.GetDebugInfo = true;
+        return options;
     }
 }
 

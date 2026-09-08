@@ -1,0 +1,23 @@
+var _i = 0;
+repeat (array_length(_keys)) {
+	var _key = _keys[_i];
+	process(_key);
+	_i += 1;
+}
+
+var _j = array_length(node) - 1;
+repeat (array_length(node)) {
+	check(node[_j]);
+	_j--;
+}
+
+repeat (3) {
+	normal();
+}
+
+var _a = 1;
+var _b = 2;
+
+while (running) {
+	step();
+}

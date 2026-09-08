@@ -1,13 +1,29 @@
 function() {}
 
+#region jsDoc
+/// @function foo
+/// @description <desc>
+/// @returns {Any}
+#endregion
 function foo() {
 	return new (function constructor() constructor {
 		return {};
 	})();
 }
 
-function a(a, b = 1, c = call().property) : b(b) constructor {}
+#region jsDoc
+/// @function a
+/// @description <desc>
+/// @param {Any} _a			<desc>
+/// @param {Any} [_b]		<desc>
+/// @param {Any} [_c]		<desc>
+#endregion
+function a(_a, _b = 1, _c = call().property) : b(_b) constructor {}
 
+#region jsDoc
+/// @function static_func
+/// @description <desc>
+#endregion
 static static_func = function() {
 	function() {}
 	function() {}

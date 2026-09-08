@@ -1,4 +1,4 @@
-﻿using DocoptNet;
+using DocoptNet;
 using Gobo;
 using Gobo.Cli;
 using Gobo.Text;
@@ -153,12 +153,12 @@ static async Task CheckFile(
     IDictionary<string, ArgValue> arguments
 )
 {
-    var input = SourceText.From(await File.ReadAllTextAsync(filePath));
-    bool success;
+    var input = await File.ReadAllTextAsync(filePath);
+    FormatResult result;
 
     try
     {
-        success = GmlFormatter.Check(input, options);
+        result = GmlFormatter.Format(input, options);
     }
     catch (Exception e)
     {
@@ -167,7 +167,9 @@ static async Task CheckFile(
         return;
     }
 
-    if (!success)
+    // Output is always LF, so compare against the input in the same terms. Line endings are
+    // git's to decide, not the formatter's.
+    if (input.ReplaceLineEndings("\n") != result.Output)
     {
         Console.WriteLine($"[Warn] {filePath}");
     }

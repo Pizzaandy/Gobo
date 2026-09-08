@@ -1,0 +1,24 @@
+#region jsDoc
+/// @function check_jump
+/// @description <desc>
+/// @returns {Any}
+#endregion
+function check_jump()
+	{
+	if (on_ground())
+		{
+		if (input_pressed(INPUT.jump))
+			{
+			state_set(PLAYER_STATE.jumpsquat);
+			return true;
+			}
+		else
+			{
+			return false;
+			}
+		}
+	switch (_phase)
+		{
+		case 1: one(); break;
+		}
+	}

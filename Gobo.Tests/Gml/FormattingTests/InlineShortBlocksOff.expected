@@ -1,0 +1,51 @@
+if (surface_exists(rainSurfaceA)) {
+	surface_free(rainSurfaceA);
+}
+if (surface_exists(rainSurfaceB)) {
+	surface_free(rainSurfaceB);
+}
+
+if (string_char_at(_rel_path, _c) == "/") {
+	_slash = _c;
+	break;
+}
+if (_yy_str == undefined) {
+	_i++;
+	continue;
+}
+
+while (_running) {
+	step();
+}
+
+if (_a) {
+	one();
+	two();
+}
+
+if (_b) {
+	// a comment keeps its line
+	one();
+}
+
+if (_c) {
+	if (_d) {
+		nested();
+	}
+}
+
+if (some_condition_with_a_long_name && another_condition_here) {
+	call_something_quite_long(_with, _arguments, _here);
+}
+
+for (var _i = 0; _i < 10; _i++) {
+	do_thing(_i);
+}
+
+#region jsDoc
+/// @function keeps_its_shape
+/// @description <desc>
+#endregion
+function keeps_its_shape() {
+	one();
+}

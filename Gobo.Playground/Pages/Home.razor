@@ -1,4 +1,7 @@
-﻿@page "/"
+@page "/"
+@using System.Globalization;
+@using System.Net;
+@using System.Linq;
 @using Gobo;
 @using Gobo.Playground.Shared;
 @inject IJSRuntime JSRuntime
@@ -33,6 +36,19 @@
             </div>
         }
 
+        <div class="pb-2 pt-1"
+             @onmousemove="@(args => ShowTip(OptionCatalog.BraceStyle, args))"
+             @onmouseout="@(() => _hovered = null)">
+            <label for="braceStyle" class="text-light">Brace Style</label>
+            <select class="form-select form-select-sm"
+                    id="braceStyle"
+                    @onchange="@OnBraceStyleChange">
+                <option value="SameLine" selected="@(_formatOptions.BraceStyle == BraceStyle.SameLine)">Same Line</option>
+                <option value="NewLine" selected="@(_formatOptions.BraceStyle == BraceStyle.NewLine)">New Line</option>
+                <option value="NewLineIndented" selected="@(_formatOptions.BraceStyle == BraceStyle.NewLineIndented)">New Line Indented</option>
+            </select>
+        </div>
+
         <div class="form-check">
             <input type="checkbox"
                    class="form-check-input"
@@ -41,19 +57,47 @@
             <label for="showAst" class="text-light form-check-label">Show AST</label>
         </div>
 
-        <div class="form-check">
-            <input type="checkbox"
-                   class="form-check-input"
-                   id="flatExpressions"
-                   checked="@_formatOptions.FlatExpressions"
-                   value="@_formatOptions.FlatExpressions" @oninput="@OnFlatExpressionsChange" />
-            <label for="flatExpressions" class="text-light form-check-label">Flat Expressions</label>
-        </div>
+        @foreach (var optionGroup in _optionGroups)
+        {
+            <div class="text-secondary text-uppercase small pt-3">@optionGroup.Key</div>
 
-        <a class="btn btn-outline-light mt-auto" href="https://github.com/Pizzaandy/Gobo" target="_blank">
+            @foreach (var option in optionGroup)
+            {
+                <div class="form-check"
+                     @onmousemove="@(args => ShowTip(option.Tip, args))"
+                     @onmouseout="@(() => _hovered = null)">
+                    <input type="checkbox"
+                           class="form-check-input"
+                           id="@option.Id"
+                           checked="@option.Get()"
+                           @onchange="@(args => OnToggleChange(option, args))" />
+                    <label for="@option.Id" class="text-light form-check-label">@option.Label</label>
+                </div>
+            }
+        }
+
+        <a class="btn btn-outline-light mt-4" href="https://github.com/tinkerer-red/Gobo" target="_blank">
             <i class="bi-github"></i> GitHub
         </a>
     </div>
+
+    @if (_hovered is not null)
+    {
+        <div class="option-tip" style="@TipPosition()">
+            <div class="tip-title">@_hovered.Title</div>
+            <div class="tip-desc">@_hovered.Description</div>
+            <hr />
+            <div class="tip-code">
+                @foreach (var example in _hovered.Examples)
+                {
+                    <div>
+                        <div class="tip-label">@example.Label</div>
+                        <pre class="ace-one-dark">@Highlight(example.Code)</pre>
+                    </div>
+                }
+            </div>
+        </div>
+    }
 
     <div id="panels" class="flex-grow-1 vh-100">
         <div class="row h-100 g-0">
@@ -110,6 +154,8 @@ call()";
             await inputEditor.SetWidth(_formatOptions.Width);
             await outputEditor.SetWidth(_formatOptions.Width);
             await Format();
+            await HighlightExamples();
+            StateHasChanged();
         }
     }
 
@@ -188,9 +234,67 @@ call()";
         await Format();
     }
 
-    async Task OnFlatExpressionsChange(ChangeEventArgs args)
+    Tip? _hovered;
+    double _tipX;
+    double _tipY;
+
+    void ShowTip(Tip tip, MouseEventArgs args)
     {
-        _formatOptions.FlatExpressions = (bool)args.Value;
+        _hovered = tip;
+        _tipX = args.ClientX + 16;
+        _tipY = args.ClientY + 16;
+    }
+
+    // Clamped against the box's own maximum size rather than its measured size, which keeps
+    // it on screen without a round trip to JavaScript to measure it.
+    string TipPosition()
+    {
+        var left = _tipX.ToString(CultureInfo.InvariantCulture);
+        var top = _tipY.ToString(CultureInfo.InvariantCulture);
+        return $"left: min({left}px, calc(100vw - 47rem));"
+            + $" top: min({top}px, calc(100vh - 18rem));";
+    }
+
+    readonly Dictionary<string, MarkupString> _highlighted = new();
+
+    MarkupString Highlight(string code)
+    {
+        return _highlighted.TryGetValue(code, out var html)
+            ? html
+            : new MarkupString(WebUtility.HtmlEncode(code));
+    }
+
+    // Ace tokenizes the examples once, so the tooltips and the editors colour code the same way.
+    async Task HighlightExamples()
+    {
+        var tips = OptionCatalog.For(_formatOptions).Select(option => option.Tip)
+            .Append(OptionCatalog.BraceStyle);
+
+        foreach (var snippet in tips.SelectMany(tip => tip.Examples).Select(e => e.Code).Distinct())
+        {
+            var html = await JSRuntime.InvokeAsync<string>("highlightGml", snippet);
+            _highlighted[snippet] = new MarkupString(html);
+        }
+    }
+
+    IEnumerable<IGrouping<string, FormatOption>> _optionGroups =>
+        OptionCatalog.For(_formatOptions).GroupBy(option => option.Group);
+
+    async Task OnToggleChange(FormatOption option, ChangeEventArgs args)
+    {
+        option.Set(args.Value is true);
+        await Format();
+    }
+
+    async Task OnBraceStyleChange(ChangeEventArgs args)
+    {
+        _formatOptions.BraceStyle = args.Value?.ToString() switch
+        {
+            "NewLine" => BraceStyle.NewLine,
+            "NewLineIndented" => BraceStyle.NewLineIndented,
+            _ => BraceStyle.SameLine,
+        };
+
         await Format();
     }
 

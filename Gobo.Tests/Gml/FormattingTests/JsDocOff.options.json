@@ -1,0 +1,5 @@
+{
+	"wrapJsDocInRegion": false,
+	"addSelfToMethods": false,
+	"generateMissingJsDoc": false
+}

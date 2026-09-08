@@ -1,0 +1,68 @@
+#region jsDoc
+/// @function scr_jab
+/// @description <desc>
+/// @returns {Any}
+#endregion
+function scr_jab() {
+	var run = true;
+	var _phase = attack_phase;
+	var _jabbuffer = 8;
+	if (run && check_jump()) {
+		run = false;
+	}
+	other.run = 1;
+	var _obj = {run, phase: _phase};
+	return _jabbuffer;
+}
+
+#region jsDoc
+/// @function outer
+/// @description <desc>
+/// @param {Any} alpha		<desc>
+/// @param {Any} _beta		<desc>
+/// @returns {Any}
+#endregion
+function outer(alpha, _beta) {
+	var _value = alpha + _beta;
+
+	#region jsDoc
+	/// @function _inner
+	/// @description <desc>
+	/// @param {Any} _alpha		<desc>
+	/// @returns {Any}
+	#endregion
+	var _inner = function(_alpha) {
+		return _alpha;
+	};
+
+	return _inner(_value);
+}
+
+#region jsDoc
+/// @function taken
+/// @description <desc>
+/// @param {Any} count		<desc>
+/// @returns {Any}
+#endregion
+function taken(count) {
+	var _count = 1;
+	return count + _count;
+}
+
+#region jsDoc
+/// @function statics
+/// @description <desc>
+#endregion
+function statics() constructor {
+	static __shared = 0;
+
+	#region jsDoc
+	/// @function get_shared
+	/// @description <desc>
+	/// @returns {Any}
+	/// @self statics
+	#endregion
+	static get_shared = function() {
+		return __shared;
+	};
+}

@@ -1,0 +1,15 @@
+if (a) {
+	one();
+} else if (b) {
+	two();
+} else {
+	three();
+}
+
+try {
+	one();
+} catch (_e) {
+	two();
+} finally {
+	three();
+}

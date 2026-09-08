@@ -1,4 +1,4 @@
-﻿using Gobo.Text;
+using Gobo.Text;
 
 namespace Gobo.Parser;
 
@@ -112,6 +112,12 @@ internal class GmlLexer
 
                         if (!Match('*'))
                         {
+                            if (HitEof)
+                            {
+                                // GameMaker reads the rest of the file as comment.
+                                return Token(TokenKind.MultiLineComment);
+                            }
+
                             return UnexpectedToken();
                         }
 

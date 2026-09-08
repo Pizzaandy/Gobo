@@ -2,9 +2,7 @@ if (true) {
 	return;
 }
 
-if (true) {
-	return;
-}
+if (true) { return; }
 
 if (true) {
 	// indent this!
@@ -16,11 +14,14 @@ if (condition) {
 
 if (true) {
 	DoSomething();
-} else if (false) {
+}
+else if (false) {
 	DoSomething();
-} else if (condition) {
+}
+else if (condition) {
 	DoSomething();
-} else {
+}
+else {
 	DoSomething();
 	if (true) {
 		if (true) {
@@ -41,25 +42,24 @@ if (true) {
 
 if (someLongCondition != someOtherCondition) {
 	DoSomeLongMethodCall_________________________();
-} else if (someLongCondition == someOtherCondition) {
+}
+else if (someLongCondition == someOtherCondition) {
 	DoSomeLongMethodCall_________________________();
-} else {
+}
+else {
 	DoSomeLongMethodCall________________________________________();
 }
 
-if (
-	longStatementName
-	&& longerStatementName
-	&& evenLongerStatementName
-	&& superLongStatementName
-) {
+if (longStatementName)
+&& (longerStatementName)
+&& (evenLongerStatementName)
+&& (superLongStatementName) {
 	return;
-} else if (
-	longStatementName
-	&& longerStatementName
-	&& evenLongerStatementName
-	&& superLongStatementName
-) {
+}
+else if (longStatementName)
+&& (longerStatementName)
+&& (evenLongerStatementName)
+&& (superLongStatementName) {
 	call();
 }
 

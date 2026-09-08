@@ -1,0 +1,14 @@
+#region jsDoc
+/// @category Gameplay
+/// @description Writes the input to the buffer
+/// @param {Id.Buffer} buffer			The buffer to write to
+/// @param {Real} device_number			The device number
+/// @param {Bool} [count_pressed]		Whether pressed inputs count
+/// @returns {Bool} Whether it worked
+#endregion
+function game_local_input_write(_buffer, _device_number, _count_pressed = false) {
+	// Permanent hurtboxes
+	//----------------------------------------
+	// another note
+	return true;
+}

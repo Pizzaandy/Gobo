@@ -1,32 +1,32 @@
-var someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
+var _someVar = "a string" + thatIsJust(shortEnough) + "to not wrap";
 
-var someLongVariableName =
+var _someLongVariableName =
 	"a long string with just concatenation"
 	+ "will break this way"
 	+ "because of reasons such as the fact it is too long";
 
-var someLongVariableName =
+var _someLongVariableName =
 	"a really loooooooooooooooong string"
 	+ someMethodCall("with long args")
 	+ "really long string";
 
-var someLongVariableName =
+var _someLongVariableName =
 	"a really loooooooooooooooong string"
 	+ someMethodCall("with long args")
 	+ "really long string";
 
-var samePrecedenceAligns =
+var _samePrecedenceAligns =
 	one_________________________________
 	+ two_______________________________
 	- three_____________________________
 	+ four______________________________;
 
-var coalesceIsSpecial =
+var _coalesceIsSpecial =
 	someValue_________________________
 	?? someOtherValue_______________________
 	?? someOtherValue_______________________;
 
-coalesceIsSpecial ??=
+_coalesceIsSpecial ??=
 	someValue_________________________
 	?? someOtherValue_______________________
 	?? someOtherValue_______________________;
@@ -36,34 +36,34 @@ CallSomeLongMethodWithStringConcatenationThatShouldNotBreak(
 	output.ToString()
 );
 
-var commentsDontBreakBinary =
+var _commentsDontBreakBinary =
 	// shouldn't break next line
 	true || false;
 
-var commentsDontBreakBinary =
+var _commentsDontBreakBinary =
 	// shouldn't break next line
 	// shouldn't break next line
 	true || false;
 
-var conditionalIndentation = someBoolean
+var _conditionalIndentation = someBoolean
 	? someLongValue____________________________________
 		+ someLongValue____________________________________
 	: someLongValue____________________________________
 		+ someLongValue____________________________________;
 
-var someValue =
+var _someValue =
 	value1__________________ == value2_________________
 	!= (value3_______________________ == value4___________________);
 
-if (
-	one == two
-	|| someValue_______________
+if (one == two)
+|| (
+	someValue_______________
 		== thisWillIndent_______________________________________________________________
 ) {}
 
-while (
-	one == two
-	|| someValue_______________
+while (one == two)
+|| (
+	someValue_______________
 		== thisWillIndent_______________________________________________________________
 ) {}
 
@@ -87,29 +87,29 @@ CallMethod(
 	"SecondParameter"
 );
 
-var someVariable =
+var _someVariable =
 	CallMethod(
 		someParameter_____________________________________,
 		someParameter_____________________________________
 	)
-	&& CallMethod() == someValue;
+	&& CallMethod() == _someValue;
 
-var someValue =
+var _someValue =
 	someLongThing___________________________.someLongThing_____________ ?? someOtherThing;
 
-if (
-	one - two == three
-	|| one + two == three
-	|| one * two == three
-	|| one / two == three
-	|| one % two == three
-	|| one != three
-	|| one < two
-	|| one > two
-	|| one <= two
-	|| one >= two
-	|| one - two > three
-	|| someLongThing - someOtherLongThing__________________________________
+if (one - two == three)
+|| (one + two == three)
+|| (one * two == three)
+|| (one / two == three)
+|| (one % two == three)
+|| (one != three)
+|| (one < two)
+|| (one > two)
+|| (one <= two)
+|| (one >= two)
+|| (one - two > three)
+|| (
+	someLongThing - someOtherLongThing__________________________________
 		> anotherLongThing
 ) {}
 
@@ -120,9 +120,9 @@ if (
 	) == 0
 ) {}
 
-if (
-	someValue
-	&& CallSomeMethod(
+if (_someValue)
+&& (
+	CallSomeMethod(
 		someParameter_____________________________________,
 		someParameter_____________________________________
 	) == 0
@@ -133,7 +133,20 @@ if (
 		someParameter_____________________________________,
 		someParameter_____________________________________
 	) == 0
-	&& someValue
+)
+&& (_someValue) {}
+
+if (
+	CallMethod(
+		someParameter_____________________________________,
+		someParameter_____________________________________
+	)
+)
+&& (
+	CallMethod(
+		someParameter_____________________________________,
+		someParameter_____________________________________
+	)
 ) {}
 
 if (
@@ -141,54 +154,44 @@ if (
 		someParameter_____________________________________,
 		someParameter_____________________________________
 	)
-	&& CallMethod(
-		someParameter_____________________________________,
-		someParameter_____________________________________
-	)
-) {}
-
-if (
-	CallMethod(
-		someParameter_____________________________________,
-		someParameter_____________________________________
-	) || CallMethod(shortValue, "shortValue")
-) {}
+)
+|| (CallMethod(shortValue, "shortValue")) {}
 
 if (
 	CallMethod(
 		someParameter_____________________________________,
 		someParameter_____________________________________
 	)
-	|| CallMethod(shortValue, "shortValue")
-	|| CallMethod(shortValue1, "shortValue1")
-) {}
+)
+|| (CallMethod(shortValue, "shortValue"))
+|| (CallMethod(shortValue1, "shortValue1")) {}
 
 if (
 	CallSomeMethod(someParameter)
 	== someLongerValue_______________________________________________________________
 ) {}
 
-return someValue != someOtherValue
+return _someValue != someOtherValue
 	&& someLongValue_____________________ == someOtherLongValue_____________________;
 
-var someValue =
+var _someValue =
 	CallSomething(
 		someLongValue__________________________________________,
 		someLongValue__________________________________________
 	) == someOtherValue;
 
-var coalesce =
+var _coalesce =
 	CallSomething(
 		someLongValue__________________________________________,
 		someLongValue__________________________________________
 	) ?? someOtherValue;
 
 UglyButConsistentWithPrettier(
-	someValue
+	_someValue
 		== someLongThing__________________________________________________________________
 		|| someOtherValue
 			== someOtherLongThing________________________________________________,
 	secondParameter
 );
 
-var x = one >> two;
+var _x = one >> two;

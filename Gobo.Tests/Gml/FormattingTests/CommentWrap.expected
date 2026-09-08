@@ -1,0 +1,14 @@
+#region jsDoc
+/// @description A helper function that gets the input of a local player and writes it to
+///	the given buffer, which is a very long sentence indeed
+/// @param {String} name		This description is deliberately far longer than the print
+///								width allows so that it has to be broken onto another line
+#endregion
+function wrapped(_name) {
+	if (_name != "") {
+		// This is a very long prose comment that also runs well past the configured print
+		// width and should therefore be wrapped
+		return true;
+	}
+	return false;
+}
